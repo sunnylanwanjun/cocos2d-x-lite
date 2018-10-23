@@ -98,7 +98,7 @@ namespace se {
          *  @return A JavaScript Typed Array Object whose data is empty, or nullptr if there is an error.
          *  @note The return value (non-null) has to be released manually.
          */
-        static Object* createTypedArray(TypedArrayType type, size_t byteLength);
+        static Object* createEmptyTypedArray(TypedArrayType type, size_t byteLength);
         
         /**
          *  @brief Creates a JavaScript Array Buffer object from an existing pointer.

@@ -30,7 +30,7 @@ _bufferSize(40960)
 ,_curPos(0)
 ,_readPos(0)
 ,_arrayType(arrayType){
-    _typeArray = se::Object::createTypedArray(_arrayType, _bufferSize);
+    _typeArray = se::Object::createEmptyTypedArray(_arrayType, _bufferSize);
     _typeArray->root();
     _typeArray->getTypedArrayData(&_buffer, (size_t*)&_bufferSize);
 }
@@ -131,7 +131,7 @@ void IOBuffer::checkSpace(int needLen){
     if(hasLen<needLen){
         int addLen = needLen - hasLen + 128;
         int newLen = _bufferSize + addLen;
-        se::Object* newTypeBuffer = se::Object::createTypedArray(_arrayType, newLen);
+        se::Object* newTypeBuffer = se::Object::createEmptyTypedArray(_arrayType, newLen);
         newTypeBuffer->root();
         
         uint8_t* newBuffer = nullptr;

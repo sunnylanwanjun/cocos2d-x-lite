@@ -210,7 +210,7 @@ namespace se {
         return obj;
     }
     
-    Object* Object::createTypedArray(TypedArrayType type, size_t byteLength)
+    Object* Object::createEmptyTypedArray(TypedArrayType type, size_t byteLength)
     {
         if (type == TypedArrayType::NONE)
         {
