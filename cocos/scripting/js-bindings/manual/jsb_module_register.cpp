@@ -23,8 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#define USE_SPINE 1
-
 #include "cocos/scripting/js-bindings/manual/jsb_module_register.hpp"
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
@@ -43,7 +41,6 @@
 #include "cocos/scripting/js-bindings/manual/jsb_renderer_manual.hpp"
 #endif
 
-#include "cocos/scripting/js-bindings/manual/jsb_creator_manual.hpp"
 #if USE_NET_WORK
 #include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_network_auto.hpp"
 #include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.hpp"
@@ -144,8 +141,6 @@ bool jsb_register_all_modules()
 #if USE_WEB_VIEW && (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     se->addRegisterCallback(register_all_webview);
 #endif
-
-    se->addRegisterCallback(register_all_creator_manual);
     
     se->addAfterCleanupHook([](){
         PoolManager::getInstance()->getCurrentPool()->clear();

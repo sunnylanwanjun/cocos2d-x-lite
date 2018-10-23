@@ -3,21 +3,6 @@
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
-extern se::Object* __jsb_spine_Texture2D_proto;
-extern se::Class* __jsb_spine_Texture2D_class;
-
-bool js_register_spine_Texture2D(se::Object* obj);
-bool register_all_cocos2dx_spine(se::Object* obj);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getRealTextureIndex);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParamCallback);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsHigh);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsWide);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsHigh);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsWide);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setRealTextureIndex);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParameters);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_Texture2D);
-
 extern se::Object* __jsb_spine_SkeletonRenderer_proto;
 extern se::Class* __jsb_spine_SkeletonRenderer_class;
 
@@ -74,4 +59,19 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonAnimation_createWithBinaryFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonAnimation_create);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonAnimation_createWithJsonFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonAnimation_SkeletonAnimation);
+
+extern se::Object* __jsb_spine_Texture2D_proto;
+extern se::Class* __jsb_spine_Texture2D_class;
+
+bool js_register_spine_Texture2D(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getRealTextureIndex);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParamCallback);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsHigh);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsWide);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsHigh);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsWide);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setRealTextureIndex);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParameters);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_Texture2D);
 

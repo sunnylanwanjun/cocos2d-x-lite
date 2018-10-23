@@ -28,10 +28,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_ATTACHMENTVERTICES_H_
-#define SPINE_ATTACHMENTVERTICES_H_
+#pragma once
 
-#include "cocos2d.h"
 #include "spine/jsb/spine-adapter.h"
 
 namespace spine {
@@ -46,5 +44,3 @@ namespace spine {
     };
     
 }
-
-#endif /* SPINE_ATTACHMENTVERTICES_H_ */

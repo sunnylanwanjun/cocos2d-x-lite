@@ -173,10 +173,6 @@
 		04355909217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */; };
 		0435590E217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
 		0435590F217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
-		04355910217EAE7900B9C056 /* jsb_creator_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590B217EAE7800B9C056 /* jsb_creator_manual.hpp */; };
-		04355911217EAE7900B9C056 /* jsb_creator_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590B217EAE7800B9C056 /* jsb_creator_manual.hpp */; };
-		04355912217EAE7900B9C056 /* jsb_creator_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590C217EAE7800B9C056 /* jsb_creator_manual.cpp */; };
-		04355913217EAE7900B9C056 /* jsb_creator_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590C217EAE7800B9C056 /* jsb_creator_manual.cpp */; };
 		04355914217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
 		04355915217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
 		1A14FD912080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
@@ -1059,8 +1055,6 @@
 		04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_spine_auto.hpp; sourceTree = "<group>"; };
 		04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_spine_auto.cpp; sourceTree = "<group>"; };
 		0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
-		0435590B217EAE7800B9C056 /* jsb_creator_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_creator_manual.hpp; sourceTree = "<group>"; };
-		0435590C217EAE7800B9C056 /* jsb_creator_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_creator_manual.cpp; sourceTree = "<group>"; };
 		0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
 		1551A33F158F2AB200E66CFE /* libcocos2d Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1551A342158F2AB200E66CFE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2155,8 +2149,6 @@
 				469302DF2046AE05004A3D6C /* jsb_classtype.hpp */,
 				1A29D76D205665D100168D9A /* jsb_cocos2dx_manual.cpp */,
 				1A29D76E205665D100168D9A /* jsb_cocos2dx_manual.hpp */,
-				0435590C217EAE7800B9C056 /* jsb_creator_manual.cpp */,
-				0435590B217EAE7800B9C056 /* jsb_creator_manual.hpp */,
 				0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */,
 				0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */,
 				469302DA2046AE05004A3D6C /* jsb_conversions.cpp */,
@@ -2631,7 +2623,6 @@
 				40CEAEB820CFDC47007A3281 /* CCReachability.h in Headers */,
 				ED30579B1BEC77B70083C3ED /* ConvertUTF.h in Headers */,
 				46FDDA75202ACC6A00931238 /* Config.h in Headers */,
-				04355910217EAE7900B9C056 /* jsb_creator_manual.hpp in Headers */,
 				469303822046AE05004A3D6C /* Value.hpp in Headers */,
 				46FDDAC3202ACC6A00931238 /* FrameBuffer.h in Headers */,
 				4617863D20522469008256E1 /* HttpResponse.h in Headers */,
@@ -2990,7 +2981,6 @@
 				46FDDADA202ACC6A00931238 /* Program.h in Headers */,
 				46FDDAC4202ACC6A00931238 /* FrameBuffer.h in Headers */,
 				46FDDAD2202ACC6A00931238 /* Texture.h in Headers */,
-				04355911217EAE7900B9C056 /* jsb_creator_manual.hpp in Headers */,
 				469303992046AE05004A3D6C /* HelperMacros.h in Headers */,
 				1AAAC8EE205CB6E9005321B9 /* AudioCache.h in Headers */,
 				1A28FF721F20AFAB007A1D9D /* SRHash.h in Headers */,
@@ -3314,7 +3304,6 @@
 				46AE3FE92092F3A600F3A228 /* inspector_socket_server.cc in Sources */,
 				1A28FF6F1F20AFAB007A1D9D /* SRError.m in Sources */,
 				1A28FF531F20AFAB007A1D9D /* SRIOConsumer.m in Sources */,
-				04355912217EAE7900B9C056 /* jsb_creator_manual.cpp in Sources */,
 				04355868217EAE1B00B9C056 /* TransformConstraint.c in Sources */,
 				1A29D784205666B200168D9A /* LocalStorage.cpp in Sources */,
 				0435586C217EAE1B00B9C056 /* SkeletonBounds.c in Sources */,
@@ -3481,7 +3470,6 @@
 				043558BB217EAE1B00B9C056 /* SkeletonBinary.c in Sources */,
 				1A52DB7D205BCDD000350EE3 /* Utils.cpp in Sources */,
 				1A29D770205665D200168D9A /* jsb_cocos2dx_manual.cpp in Sources */,
-				04355913217EAE7900B9C056 /* jsb_creator_manual.cpp in Sources */,
 				043558CB217EAE1B00B9C056 /* Atlas.c in Sources */,
 				46AE3FF02092F3A600F3A228 /* inspector_agent.cc in Sources */,
 				1A52DAF9205BB81400350EE3 /* CCThreadPool.cpp in Sources */,

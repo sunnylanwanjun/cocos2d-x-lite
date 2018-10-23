@@ -1974,11 +1974,6 @@ bool std_string_to_seval(const std::string& v, se::Value* ret)
     return true;
 }
 
-bool seobject_to_seval(se::Object* v, se::Value* ret){
-    ret->setObject(v);
-    return true;
-}
-
 bool Vec2_to_seval(const cocos2d::Vec2& v, se::Value* ret)
 {
     assert(ret != nullptr);

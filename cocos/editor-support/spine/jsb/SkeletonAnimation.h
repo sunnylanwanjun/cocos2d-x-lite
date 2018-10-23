@@ -27,13 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
-
-#ifndef SPINE_SKELETONANIMATION_H_
-#define SPINE_SKELETONANIMATION_H_
-
+#pragma once
 #include "spine/spine.h"
 #include "spine/jsb/SkeletonRenderer.h"
-#include "cocos2d.h"
 
 namespace spine {
 
@@ -122,5 +118,3 @@ private:
 };
 
 }
-
-#endif /* SPINE_SKELETONANIMATION_H_ */

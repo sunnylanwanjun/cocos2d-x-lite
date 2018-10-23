@@ -28,11 +28,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_SKELETONRENDERER_H_
-#define SPINE_SKELETONRENDERER_H_
+#pragma once
 
 #include "spine/spine.h"
-#include "cocos2d.h"
+#include "base/CCRef.h"
+#include "base/ccTypes.h"
 #include <vector>
 #include "scripting/js-bindings/jswrapper/Object.hpp"
 
@@ -133,5 +133,3 @@ protected:
 };
 
 }
-
-#endif /* SPINE_SKELETONRENDERER_H_ */

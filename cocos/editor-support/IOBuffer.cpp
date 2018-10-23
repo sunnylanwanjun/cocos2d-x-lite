@@ -23,13 +23,14 @@
  ****************************************************************************/
 #include "IOBuffer.hpp"
 
-namespace cocos2d{
+NS_CC_BEGIN
 
-IOBuffer::IOBuffer(se::Object::TypedArrayType arrayType):_bufferSize(40960),
-_curPos(0),
-_readPos(0),
-_arrayType(arrayType){
-    _typeArray = se::Object::createTypedArray(_arrayType, nullptr, _bufferSize);
+IOBuffer::IOBuffer(se::Object::TypedArrayType arrayType):
+_bufferSize(40960)
+,_curPos(0)
+,_readPos(0)
+,_arrayType(arrayType){
+    _typeArray = se::Object::createTypedArray(_arrayType, _bufferSize);
     _typeArray->root();
     _typeArray->getTypedArrayData(&_buffer, (size_t*)&_bufferSize);
 }
@@ -113,15 +114,15 @@ void IOBuffer::reset(){
     _readPos = 0;
 }
 
-se::Object* IOBuffer::getTypeArray(){
+se::Object* IOBuffer::getTypeArray() const {
     return _typeArray;
 }
 
-int IOBuffer::length(){
+int IOBuffer::length() const {
     return _curPos;
 }
 
-int IOBuffer::getCurPos(){
+int IOBuffer::getCurPos() const {
     return _curPos;
 }
 
@@ -130,7 +131,7 @@ void IOBuffer::checkSpace(int needLen){
     if(hasLen<needLen){
         int addLen = needLen - hasLen + 128;
         int newLen = _bufferSize + addLen;
-        se::Object* newTypeBuffer = se::Object::createTypedArray(_arrayType, nullptr, newLen);
+        se::Object* newTypeBuffer = se::Object::createTypedArray(_arrayType, newLen);
         newTypeBuffer->root();
         
         uint8_t* newBuffer = nullptr;
@@ -145,5 +146,5 @@ void IOBuffer::checkSpace(int needLen){
         _bufferSize = newLen;
     }
 }
-    
-}
+
+NS_CC_END

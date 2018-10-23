@@ -31,6 +31,8 @@
 #include "spine/jsb/spine-cocos2dx.h"
 #include "spine/extension.h"
 #include "spine/jsb/spine-adapter.h"
+#include "base/CCData.h"
+#include "platform/CCFileUtils.h"
 
 namespace spine {
 	static CustomTextureLoader _customTextureLoader = nullptr;

@@ -21,10 +21,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef spine_adapter_h
-#define spine_adapter_h
+#pragma once
 
-#include "cocos2d.h"
+#include "math/Vec2.h"
+#include "base/ccTypes.h"
 #include "scripting/js-bindings/jswrapper/SeApi.h"
 #include <functional>
 
@@ -131,5 +131,3 @@ namespace spine{
         texParamCallback _texParamCallback;
     };
 }
-
-#endif /* spine_adapter_h */

@@ -62,8 +62,6 @@ scripting/js-bindings/manual/jsb_socketio.cpp \
 scripting/js-bindings/manual/jsb_websocket.cpp \
 scripting/js-bindings/manual/jsb_xmlhttprequest.cpp \
 scripting/js-bindings/manual/jsb_platform_android.cpp \
-scripting/js-bindings/manual/jsb_spine_manual.cpp \
-scripting/js-bindings/manual/jsb_creator_manual.cpp \
 scripting/js-bindings/manual/jsb_helper.cpp \
 scripting/js-bindings/jswrapper/config.cpp \
 scripting/js-bindings/jswrapper/HandleObject.cpp \
@@ -167,6 +165,11 @@ LOCAL_STATIC_LIBRARIES += cocos_network_static
 LOCAL_STATIC_LIBRARIES += cocos_extension_static
 endif # USE_NET_WORK
 
+ifeq ($(USE_SPINE),1)
+LOCAL_SRC_FILES += \
+scripting/js-bindings/manual/jsb_spine_manual.cpp
+LOCAL_STATIC_LIBRARIES += spine_static
+endif # USE_SPINE
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/.. \
@@ -194,7 +197,6 @@ LOCAL_STATIC_LIBRARIES += cocos_tiff_static
 LOCAL_STATIC_LIBRARIES += cocos_webp_static
 LOCAL_STATIC_LIBRARIES += cocos_zlib_static
 LOCAL_STATIC_LIBRARIES += v8_static
-LOCAL_STATIC_LIBRARIES += spine_static
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dxandroid_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cpufeatures

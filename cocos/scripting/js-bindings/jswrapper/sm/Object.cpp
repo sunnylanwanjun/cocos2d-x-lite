@@ -142,6 +142,69 @@ namespace se {
         return obj;
     }
 
+    Object* Object::createTypedArray(TypedArrayType type, size_t byteLength)
+    {
+        if (type == TypedArrayType::NONE)
+        {
+            SE_LOGE("Don't pass se::Object::TypedArrayType::NONE to createTypedArray API!");
+            return nullptr;
+        }
+        
+        if (type == TypedArrayType::UINT8_CLAMPED)
+        {
+            SE_LOGE("Doesn't support to create Uint8ClampedArray with Object::createTypedArray API!");
+            return nullptr;
+        }
+        
+        JSObject* arr = nullptr;
+        void* tmpData = nullptr;
+        bool isShared = false;
+        JS::AutoCheckCannotGC nogc;
+        
+        switch (type) {
+            case TypedArrayType::INT8:
+                arr = JS_NewInt8Array(__cx, (uint32_t)byteLength);
+                tmpData = JS_GetInt8ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::INT16:
+                arr = JS_NewInt16Array(__cx, (uint32_t)byteLength/2);
+                tmpData = JS_GetInt16ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::INT32:
+                arr = JS_NewInt32Array(__cx, (uint32_t)byteLength/4);
+                tmpData = JS_GetInt32ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::UINT8:
+                arr = JS_NewUint8Array(__cx, (uint32_t)byteLength);
+                tmpData = JS_GetUint8ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::UINT16:
+                arr = JS_NewUint16Array(__cx, (uint32_t)byteLength/2);
+                tmpData = JS_GetUint16ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::UINT32:
+                arr = JS_NewUint32Array(__cx, (uint32_t)byteLength/4);
+                tmpData = JS_GetUint32ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::FLOAT32:
+                arr = JS_NewFloat32Array(__cx, (uint32_t)byteLength/4);
+                tmpData = JS_GetFloat32ArrayData(arr, &isShared, nogc);
+                break;
+            case TypedArrayType::FLOAT64:
+                arr = JS_NewFloat64Array(__cx, (uint32_t)byteLength/8);
+                tmpData = JS_GetFloat64ArrayData(arr, &isShared, nogc);
+                break;
+            default:
+                assert(false); // Should never go here.
+                break;
+        }
+        
+        memset(tmpData, 0, byteLength);
+        
+        Object* obj = Object::_createJSObject(nullptr, arr);
+        return obj;
+    }
+    
     Object* Object::createTypedArray(TypedArrayType type, void* data, size_t byteLength)
     {
         if (type == TypedArrayType::NONE)
@@ -199,11 +262,7 @@ namespace se {
                 break;
         }
 
-        if(data){
-            memcpy(tmpData, (const void*)data, byteLength);
-        }else{
-            memset(tmpData, 0, byteLength);
-        }
+        memcpy(tmpData, (const void*)data, byteLength);
 
         Object* obj = Object::_createJSObject(nullptr, arr);
         return obj;

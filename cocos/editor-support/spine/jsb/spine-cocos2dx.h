@@ -28,11 +28,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_COCOS2DX_H_
-#define SPINE_COCOS2DX_H_
+#pragma once
 
 #include "spine/spine.h"
-#include "cocos2d.h"
 #include "spine/jsb/Cocos2dAttachmentLoader.h"
 #include "spine/jsb/SkeletonRenderer.h"
 #include "spine/jsb/SkeletonAnimation.h"
@@ -43,5 +41,3 @@ namespace spine {
 	// set custom texture loader for _spAtlasPage_createTexture
 	void spAtlasPage_setCustomTextureLoader(CustomTextureLoader texLoader);
 }
-
-#endif /* SPINE_COCOS2DX_H_ */

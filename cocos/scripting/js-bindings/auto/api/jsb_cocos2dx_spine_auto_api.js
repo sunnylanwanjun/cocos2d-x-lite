@@ -1,0 +1,620 @@
+/**
+ * @module cocos2dx_spine
+ */
+var jsbspine = jsbspine || {};
+
+/**
+ * @class SkeletonRenderer
+ */
+jsbspine.Skeleton = {
+
+/**
+ * @method setTimeScale
+ * @param {float} arg0
+ */
+setTimeScale : function (
+float 
+)
+{
+},
+
+/**
+ * @method setOpacityModifyRGB
+ * @param {bool} arg0
+ */
+setOpacityModifyRGB : function (
+bool 
+)
+{
+},
+
+/**
+ * @method setAttachment
+* @param {String|String} str
+* @param {char|String} char
+* @return {bool|bool}
+*/
+setAttachment : function(
+str,
+str 
+)
+{
+    return false;
+},
+
+/**
+ * @method setBonesToSetupPose
+ */
+setBonesToSetupPose : function (
+)
+{
+},
+
+/**
+ * @method isOpacityModifyRGB
+ * @return {bool}
+ */
+isOpacityModifyRGB : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setDebugSlotsEnabled
+ * @param {bool} arg0
+ */
+setDebugSlotsEnabled : function (
+bool 
+)
+{
+},
+
+/**
+ * @method initWithJsonFile
+* @param {String|String} str
+* @param {String|spAtlas} str
+* @param {float|float} float
+*/
+initWithJsonFile : function(
+str,
+spatlas,
+float 
+)
+{
+},
+
+/**
+ * @method setToSetupPose
+ */
+setToSetupPose : function (
+)
+{
+},
+
+/**
+ * @method setSlotsToSetupPose
+ */
+setSlotsToSetupPose : function (
+)
+{
+},
+
+/**
+ * @method initWithBinaryFile
+* @param {String|String} str
+* @param {String|spAtlas} str
+* @param {float|float} float
+*/
+initWithBinaryFile : function(
+str,
+spatlas,
+float 
+)
+{
+},
+
+/**
+ * @method getDebugData
+ * @return {se::Object}
+ */
+getDebugData : function (
+)
+{
+    return se::Object;
+},
+
+/**
+ * @method updateWorldTransform
+ */
+updateWorldTransform : function (
+)
+{
+},
+
+/**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
+ * @method getAttachment
+ * @param {String} arg0
+ * @param {String} arg1
+ * @return {spAttachment}
+ */
+getAttachment : function (
+str, 
+str 
+)
+{
+    return spAttachment;
+},
+
+/**
+ * @method getRenderData
+ * @return {se::Object}
+ */
+getRenderData : function (
+)
+{
+    return se::Object;
+},
+
+/**
+ * @method getIndiceData
+ * @return {se::Object}
+ */
+getIndiceData : function (
+)
+{
+    return se::Object;
+},
+
+/**
+ * @method initialize
+ */
+initialize : function (
+)
+{
+},
+
+/**
+ * @method setDebugBonesEnabled
+ * @param {bool} arg0
+ */
+setDebugBonesEnabled : function (
+bool 
+)
+{
+},
+
+/**
+ * @method getTimeScale
+ * @return {float}
+ */
+getTimeScale : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setColor
+ * @param {color4b_object} arg0
+ */
+setColor : function (
+color4b 
+)
+{
+},
+
+/**
+ * @method setSkin
+* @param {char|String} char
+* @return {bool|bool}
+*/
+setSkin : function(
+str 
+)
+{
+    return false;
+},
+
+/**
+ * @method findSlot
+ * @param {String} arg0
+ * @return {spSlot}
+ */
+findSlot : function (
+str 
+)
+{
+    return spSlot;
+},
+
+/**
+ * @method getSkeleton
+ * @return {spSkeleton}
+ */
+getSkeleton : function (
+)
+{
+    return spSkeleton;
+},
+
+/**
+ * @method findBone
+ * @param {String} arg0
+ * @return {spBone}
+ */
+findBone : function (
+str 
+)
+{
+    return spBone;
+},
+
+/**
+ * @method createWithFile
+* @param {String|String} str
+* @param {spAtlas|String} spatlas
+* @param {float|float} float
+* @return {sp.SkeletonRenderer|sp.SkeletonRenderer|sp.SkeletonRenderer}
+*/
+createWithFile : function(
+str,
+str,
+float 
+)
+{
+    return sp.SkeletonRenderer;
+},
+
+/**
+ * @method SkeletonRenderer
+ * @constructor
+* @param {spSkeletonData|String|String} spskeletondata
+* @param {bool|spAtlas|String} bool
+* @param {float|float} float
+*/
+SkeletonRenderer : function(
+str,
+str,
+float 
+)
+{
+},
+
+};
+
+/**
+ * @class SkeletonAnimation
+ */
+jsbspine.SkeletonAnimation = {
+
+/**
+ * @method setAnimation
+ * @param {int} arg0
+ * @param {String} arg1
+ * @param {bool} arg2
+ * @return {spTrackEntry}
+ */
+setAnimation : function (
+int, 
+str, 
+bool 
+)
+{
+    return spTrackEntry;
+},
+
+/**
+ * @method findAnimation
+ * @param {String} arg0
+ * @return {spAnimation}
+ */
+findAnimation : function (
+str 
+)
+{
+    return spAnimation;
+},
+
+/**
+ * @method setMix
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {float} arg2
+ */
+setMix : function (
+str, 
+str, 
+float 
+)
+{
+},
+
+/**
+ * @method setDisposeListener
+ * @param {function} arg0
+ */
+setDisposeListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method setAnimationStateData
+ * @param {spAnimationStateData} arg0
+ */
+setAnimationStateData : function (
+spanimationstatedata 
+)
+{
+},
+
+/**
+ * @method setEndListener
+ * @param {function} arg0
+ */
+setEndListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method getState
+ * @return {spAnimationState}
+ */
+getState : function (
+)
+{
+    return spAnimationState;
+},
+
+/**
+ * @method setCompleteListener
+ * @param {function} arg0
+ */
+setCompleteListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method getCurrent
+ * @return {spTrackEntry}
+ */
+getCurrent : function (
+)
+{
+    return spTrackEntry;
+},
+
+/**
+ * @method setEventListener
+ * @param {function} arg0
+ */
+setEventListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method clearTrack
+ */
+clearTrack : function (
+)
+{
+},
+
+/**
+ * @method setInterruptListener
+ * @param {function} arg0
+ */
+setInterruptListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method addAnimation
+ * @param {int} arg0
+ * @param {String} arg1
+ * @param {bool} arg2
+ * @param {float} arg3
+ * @return {spTrackEntry}
+ */
+addAnimation : function (
+int, 
+str, 
+bool, 
+float 
+)
+{
+    return spTrackEntry;
+},
+
+/**
+ * @method clearTracks
+ */
+clearTracks : function (
+)
+{
+},
+
+/**
+ * @method setStartListener
+ * @param {function} arg0
+ */
+setStartListener : function (
+func 
+)
+{
+},
+
+/**
+ * @method createWithBinaryFile
+* @param {String|String} str
+* @param {String|spAtlas} str
+* @param {float|float} float
+* @return {sp.SkeletonAnimation|sp.SkeletonAnimation}
+*/
+createWithBinaryFile : function(
+str,
+spatlas,
+float 
+)
+{
+    return sp.SkeletonAnimation;
+},
+
+/**
+ * @method create
+ * @return {sp.SkeletonAnimation}
+ */
+create : function (
+)
+{
+    return sp.SkeletonAnimation;
+},
+
+/**
+ * @method createWithJsonFile
+* @param {String|String} str
+* @param {String|spAtlas} str
+* @param {float|float} float
+* @return {sp.SkeletonAnimation|sp.SkeletonAnimation}
+*/
+createWithJsonFile : function(
+str,
+spatlas,
+float 
+)
+{
+    return sp.SkeletonAnimation;
+},
+
+/**
+ * @method SkeletonAnimation
+ * @constructor
+* @param {spSkeletonData|String|String} spskeletondata
+* @param {bool|spAtlas|String} bool
+* @param {float|float} float
+*/
+SkeletonAnimation : function(
+str,
+str,
+float 
+)
+{
+},
+
+};
+
+/**
+ * @class Texture2D
+ */
+jsbspine.Texture2D = {
+
+/**
+ * @method getRealTextureIndex
+ * @return {int}
+ */
+getRealTextureIndex : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setTexParamCallback
+ * @param {function} arg0
+ */
+setTexParamCallback : function (
+func 
+)
+{
+},
+
+/**
+ * @method setPixelsHigh
+ * @param {int} arg0
+ */
+setPixelsHigh : function (
+int 
+)
+{
+},
+
+/**
+ * @method setPixelsWide
+ * @param {int} arg0
+ */
+setPixelsWide : function (
+int 
+)
+{
+},
+
+/**
+ * @method getPixelsHigh
+ * @return {int}
+ */
+getPixelsHigh : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getPixelsWide
+ * @return {int}
+ */
+getPixelsWide : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setRealTextureIndex
+ * @param {int} arg0
+ */
+setRealTextureIndex : function (
+int 
+)
+{
+},
+
+/**
+ * @method setTexParameters
+ * @param {sp.Texture2D::_TexParams} arg0
+ */
+setTexParameters : function (
+_texparams 
+)
+{
+},
+
+/**
+ * @method Texture2D
+ * @constructor
+ */
+Texture2D : function (
+)
+{
+},
+
+};

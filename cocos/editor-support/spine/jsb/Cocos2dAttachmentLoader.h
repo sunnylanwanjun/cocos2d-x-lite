@@ -28,8 +28,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_COCOS2DATTACHMENTLOADER_H_
-#define SPINE_COCOS2DATTACHMENTLOADER_H_
+#pragma once
 
 #include "spine/AtlasAttachmentLoader.h"
 
@@ -44,5 +43,3 @@ typedef struct Cocos2dAttachmentLoader {
 Cocos2dAttachmentLoader* Cocos2dAttachmentLoader_create (spAtlas* atlas);
 
 }
-
-#endif /* SPINE_COCOS2DATTACHMENTLOADER_H_ */

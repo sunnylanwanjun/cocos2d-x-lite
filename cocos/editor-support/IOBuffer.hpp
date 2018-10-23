@@ -21,106 +21,105 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef IOBuffer_h
-#define IOBuffer_h
-#include "scripting/js-bindings/jswrapper/SeApi.h"
+#pragma once
+#include "scripting/js-bindings/jswrapper/Object.hpp"
 #include <vector>
-#include "cocos2d.h"
+#include "base/ccMacros.h"
 
-namespace cocos2d{
+NS_CC_BEGIN
+/**
+ * IOBuffer write/read bytes with js array buffer.
+ */
+class IOBuffer{
+public:
     /**
-     * IOBuffer write/read bytes with js array buffer.
+     *  @brief IOBuffer constructor.
+     *  @param[in] arrayType The type array will be create.
      */
-    class IOBuffer{
-    public:
-        /**
-         *  @brief IOBuffer constructor.
-         *  @param[in] arrayType The type array will be create.
-         */
-        IOBuffer(se::Object::TypedArrayType arrayType);
-        /**
-         *  @brief IOBuffer destructor.
-         */
-        ~IOBuffer();
-        /**
-         *  @brief Write float into buffer.
-         *  @param[in] pos The buffer pos begin to write.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeFloat32(int pos,float val);
-        /**
-         *  @brief Write uint32 into buffer.
-         *  @param[in] pos The buffer pos begin to write.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint32(int pos,uint32_t val);
-        /**
-         *  @brief Write bytes into buffer.
-         *  @param[in] bytes A data pointer,the data will be copy.
-         *  @param[in] bytesLen The length of the data.
-         */
-        void writeBytes(const char* bytes,int bytesLen);
-        /**
-         *  @brief Write uint32 into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint32(uint32_t val);
-        /**
-         *  @brief Write float into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeFloat32(float val);
-        /**
-         *  @brief Write uint16_t into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint16(uint16_t val);
+    IOBuffer(se::Object::TypedArrayType arrayType);
+    /**
+     *  @brief IOBuffer destructor.
+     */
+    ~IOBuffer();
+    /**
+     *  @brief Write float into buffer.
+     *  @param[in] pos The buffer pos begin to write.
+     *  @param[in] val The value write into buffer.
+     */
+    void writeFloat32(int pos,float val);
+    /**
+     *  @brief Write uint32 into buffer.
+     *  @param[in] pos The buffer pos begin to write.
+     *  @param[in] val The value write into buffer.
+     */
+    void writeUint32(int pos,uint32_t val);
+    /**
+     *  @brief Write bytes into buffer.
+     *  @param[in] bytes A data pointer,the data will be copy.
+     *  @param[in] bytesLen The length of the data.
+     */
+    void writeBytes(const char* bytes,int bytesLen);
+    /**
+     *  @brief Write uint32 into buffer.
+     *  @param[in] val The value write into buffer.
+     */
+    void writeUint32(uint32_t val);
+    /**
+     *  @brief Write float into buffer.
+     *  @param[in] val The value write into buffer.
+     */
+    void writeFloat32(float val);
+    /**
+     *  @brief Write uint16_t into buffer.
+     *  @param[in] val The value write into buffer.
+     */
+    void writeUint16(uint16_t val);
 
-        /**
-         *  @brief Get uint32 from buffer.
-         *  @return The value read from buffer.
-         */
-        uint32_t getUint32();
-        /**
-         *  @brief Get uint16 from buffer.
-         *  @return The value read from buffer.
-         */
-        uint16_t getUint16();
-        /**
-         *  @brief Get float32 from buffer.
-         *  @return The value read from buffer.
-         */
-        float getFloat32();
-        /**
-         *  @brief Get uint8 from buffer.
-         *  @return The value read from buffer.
-         */
-        char getUint8();
-        /**
-         *  @brief Reset buffer write/read pointer.
-         */
-        void reset();
-        /**
-         *  @brief Get JS type array.
-         */
-        se::Object* getTypeArray();
-        /**
-         *  @brief Get length of buffer.
-         */
-        int length();
-        /**
-         *  @brief Get current write position.
-         */
-        int getCurPos();
-    private:
-        void checkSpace(int needLen);
-    private:
-        se::Object::TypedArrayType  _arrayType;
-        uint8_t*                    _buffer;
-        int                         _bufferSize;
-        int                         _curPos;
-        int                         _readPos;
-        se::Object*                 _typeArray;
-    };
-}
-#endif /* IOBuffer_h */
+    /**
+     *  @brief Get uint32 from buffer.
+     *  @return The value read from buffer.
+     */
+    uint32_t getUint32();
+    /**
+     *  @brief Get uint16 from buffer.
+     *  @return The value read from buffer.
+     */
+    uint16_t getUint16();
+    /**
+     *  @brief Get float32 from buffer.
+     *  @return The value read from buffer.
+     */
+    float getFloat32();
+    /**
+     *  @brief Get uint8 from buffer.
+     *  @return The value read from buffer.
+     */
+    char getUint8();
+    /**
+     *  @brief Reset buffer write/read pointer.
+     */
+    void reset();
+    /**
+     *  @brief Get JS type array.
+     */
+    se::Object* getTypeArray() const;
+    /**
+     *  @brief Get length of buffer.
+     */
+    int length() const;
+    /**
+     *  @brief Get current write position.
+     */
+    int getCurPos() const;
+private:
+    void checkSpace(int needLen);
+private:
+    se::Object::TypedArrayType  _arrayType;
+    uint8_t*                    _buffer;
+    int                         _bufferSize;
+    int                         _curPos;
+    int                         _readPos;
+    se::Object*                 _typeArray;
+};
+
+NS_CC_END
