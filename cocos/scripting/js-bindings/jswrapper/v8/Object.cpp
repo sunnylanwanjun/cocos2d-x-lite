@@ -225,7 +225,12 @@ namespace se {
         }
 
         v8::Local<v8::ArrayBuffer> jsobj = v8::ArrayBuffer::New(__isolate, byteLength);
-        memcpy(jsobj->GetContents().Data(), data, byteLength);
+        if(data){
+            memcpy(jsobj->GetContents().Data(), data, byteLength);
+        }else{
+            memset(jsobj->GetContents().Data(), 0, byteLength);
+        }
+        
         v8::Local<v8::Object> arr;
         switch (type) {
             case TypedArrayType::INT8:

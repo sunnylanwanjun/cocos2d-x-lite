@@ -145,7 +145,12 @@ namespace se {
         int elementSize = 0;
         if (JsNoError == JsGetTypedArrayStorage(jsobj, &buffer, &bufferLength, &arrType, &elementSize))
         {
-            memcpy((void*)buffer, data, byteLength);
+            if(data){
+                memcpy((void*)buffer, data, byteLength);
+            }else{
+                memcpy((void*)buffer, 0, byteLength);
+            }
+            
             obj = Object::_createJSObject(nullptr, jsobj);
         }
 

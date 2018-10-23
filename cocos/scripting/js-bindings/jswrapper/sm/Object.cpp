@@ -199,7 +199,11 @@ namespace se {
                 break;
         }
 
-        memcpy(tmpData, (const void*)data, byteLength);
+        if(data){
+            memcpy(tmpData, (const void*)data, byteLength);
+        }else{
+            memset(tmpData, 0, byteLength);
+        }
 
         Object* obj = Object::_createJSObject(nullptr, arr);
         return obj;

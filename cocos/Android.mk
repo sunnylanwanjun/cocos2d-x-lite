@@ -50,6 +50,7 @@ base/CCRenderTexture.cpp \
 storage/local-storage/LocalStorage-android.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_auto.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.cpp \
+scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.cpp \
 scripting/js-bindings/manual/JavaScriptJavaBridge.cpp \
 scripting/js-bindings/manual/jsb_opengl_manual.cpp \
 scripting/js-bindings/manual/jsb_opengl_utils.cpp \
@@ -61,6 +62,9 @@ scripting/js-bindings/manual/jsb_socketio.cpp \
 scripting/js-bindings/manual/jsb_websocket.cpp \
 scripting/js-bindings/manual/jsb_xmlhttprequest.cpp \
 scripting/js-bindings/manual/jsb_platform_android.cpp \
+scripting/js-bindings/manual/jsb_spine_manual.cpp \
+scripting/js-bindings/manual/jsb_creator_manual.cpp \
+scripting/js-bindings/manual/jsb_helper.cpp \
 scripting/js-bindings/jswrapper/config.cpp \
 scripting/js-bindings/jswrapper/HandleObject.cpp \
 scripting/js-bindings/jswrapper/MappingUtils.cpp \
@@ -81,7 +85,6 @@ scripting/js-bindings/event/EventDispatcher.cpp \
 ../external/sources/ConvertUTF/ConvertUTFWrapper.cpp \
 ../external/sources/ConvertUTF/ConvertUTF.c \
 ui/edit-box/EditBox-android.cpp
-
 # only compile v8 debugger in DEBUG mode
 ifeq ($(NDK_DEBUG),1)
 LOCAL_SRC_FILES += \
@@ -99,7 +102,6 @@ scripting/js-bindings/jswrapper/v8/debugger/http_parser.c
 LOCAL_STATIC_LIBRARIES += uv_static
 LOCAL_STATIC_LIBRARIES += v8_inspector
 endif
-
 # opengl bindings depend on GFXUtils "_JSB_GL_CHECK"
 LOCAL_SRC_FILES += \
 renderer/gfx/GFXUtils.cpp
@@ -192,6 +194,7 @@ LOCAL_STATIC_LIBRARIES += cocos_tiff_static
 LOCAL_STATIC_LIBRARIES += cocos_webp_static
 LOCAL_STATIC_LIBRARIES += cocos_zlib_static
 LOCAL_STATIC_LIBRARIES += v8_static
+LOCAL_STATIC_LIBRARIES += spine_static
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dxandroid_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cpufeatures
@@ -214,6 +217,7 @@ include $(BUILD_STATIC_LIBRARY)
 #==============================================================
 #$(call import-module,.)
 $(call import-module,android)
+$(call import-module,editor-support/spine)
 $(call import-module,platform/android)
 $(call import-module,audio/android)
 $(call import-module,network)

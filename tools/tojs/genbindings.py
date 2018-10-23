@@ -152,6 +152,7 @@ def main():
                     'cocos2dx_network.ini' : ('cocos2dx_network', 'jsb_cocos2dx_network_auto'),
                     'gfx.ini': ('gfx', 'jsb_gfx_auto'),
                     'renderer.ini': ('renderer', 'jsb_renderer_auto'),
+                    'cocos2dx_spine.ini': ('cocos2dx_spine','jsb_cocos2dx_spine_auto'),
                     }
         target = 'spidermonkey'
         generator_py = '%s/generator.py' % cxx_generator_root
