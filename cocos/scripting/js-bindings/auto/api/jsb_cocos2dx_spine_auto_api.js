@@ -4,7 +4,7 @@
 var jsbspine = jsbspine || {};
 
 /**
- * @class SkeletonRenderer
+ * @class SpineRenderer
  */
 jsbspine.Skeleton = {
 
@@ -265,7 +265,7 @@ str
 * @param {String|String} str
 * @param {spAtlas|String} spatlas
 * @param {float|float} float
-* @return {sp.SkeletonRenderer|sp.SkeletonRenderer|sp.SkeletonRenderer}
+* @return {sp.SpineRenderer|sp.SpineRenderer|sp.SpineRenderer}
 */
 createWithFile : function(
 str,
@@ -273,17 +273,17 @@ str,
 float 
 )
 {
-    return sp.SkeletonRenderer;
+    return sp.SpineRenderer;
 },
 
 /**
- * @method SkeletonRenderer
+ * @method SpineRenderer
  * @constructor
 * @param {spSkeletonData|String|String} spskeletondata
 * @param {bool|spAtlas|String} bool
 * @param {float|float} float
 */
-SkeletonRenderer : function(
+SpineRenderer : function(
 str,
 str,
 float 
@@ -294,9 +294,9 @@ float
 };
 
 /**
- * @class SkeletonAnimation
+ * @class SpineAnimation
  */
-jsbspine.SkeletonAnimation = {
+jsbspine.SpineAnimation = {
 
 /**
  * @method setAnimation
@@ -469,7 +469,7 @@ func
 * @param {String|String} str
 * @param {String|spAtlas} str
 * @param {float|float} float
-* @return {sp.SkeletonAnimation|sp.SkeletonAnimation}
+* @return {sp.SpineAnimation|sp.SpineAnimation}
 */
 createWithBinaryFile : function(
 str,
@@ -477,17 +477,17 @@ spatlas,
 float 
 )
 {
-    return sp.SkeletonAnimation;
+    return sp.SpineAnimation;
 },
 
 /**
  * @method create
- * @return {sp.SkeletonAnimation}
+ * @return {sp.SpineAnimation}
  */
 create : function (
 )
 {
-    return sp.SkeletonAnimation;
+    return sp.SpineAnimation;
 },
 
 /**
@@ -495,7 +495,7 @@ create : function (
 * @param {String|String} str
 * @param {String|spAtlas} str
 * @param {float|float} float
-* @return {sp.SkeletonAnimation|sp.SkeletonAnimation}
+* @return {sp.SpineAnimation|sp.SpineAnimation}
 */
 createWithJsonFile : function(
 str,
@@ -503,17 +503,17 @@ spatlas,
 float 
 )
 {
-    return sp.SkeletonAnimation;
+    return sp.SpineAnimation;
 },
 
 /**
- * @method SkeletonAnimation
+ * @method SpineAnimation
  * @constructor
 * @param {spSkeletonData|String|String} spskeletondata
 * @param {bool|spAtlas|String} bool
 * @param {float|float} float
 */
-SkeletonAnimation : function(
+SpineAnimation : function(
 str,
 str,
 float 

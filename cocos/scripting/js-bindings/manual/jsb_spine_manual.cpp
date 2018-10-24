@@ -37,9 +37,9 @@
 #include "cocos/scripting/js-bindings/manual/jsb_global.h"
 #include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
 #include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.hpp"
-#include "spine/jsb/spine-adapter.h"
-#include "spine/jsb/SkeletonRenderer.h"
-#include "spine/jsb/spine-cocos2dx.h"
+#include "spine-creator-support/spine-adapter.h"
+#include "spine-creator-support/SpineRenderer.h"
+#include "spine-creator-support/spine-cocos2dx.h"
 
 #include "cocos2d.h"
 #include "cocos/editor-support/spine/spine.h"
@@ -375,7 +375,7 @@ static bool js_register_spine_initSkeletonRenderer(se::State& s)
     }
     bool ok = false;
     
-    spine::SkeletonRenderer* node = nullptr;
+    spine::SpineRenderer* node = nullptr;
     ok = seval_to_native_ptr(args[0], &node);
     SE_PRECONDITION2(ok, false, "js_creator_sp_initSkeletonRenderer: Converting 'sgNode' failed!");
     

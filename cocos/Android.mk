@@ -219,7 +219,7 @@ include $(BUILD_STATIC_LIBRARY)
 #==============================================================
 #$(call import-module,.)
 $(call import-module,android)
-$(call import-module,editor-support/spine)
+$(call import-module,editor-support/spine-creator-support)
 $(call import-module,platform/android)
 $(call import-module,audio/android)
 $(call import-module,network)
