@@ -515,26 +515,26 @@
     <ClCompile Include="..\cocos\editor-support\spine\VertexAttachment.c">
       <Filter>editor-support\spine</Filter>
     </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\AttachmentVertices.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\Cocos2dAttachmentLoader.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\SkeletonAnimation.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\SkeletonRenderer.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\spine-adapter.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cocos\editor-support\spine\jsb\spine-cocos2dx.cpp">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClCompile>
     <ClCompile Include="..\cocos\editor-support\IOBuffer.cpp">
       <Filter>editor-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\CreatorAttachmentLoader.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\spine-adapter.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\SpineAnimation.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\SpineRenderer.cpp">
+      <Filter>editor-support\spine-creator-support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1169,26 +1169,26 @@
     <ClInclude Include="..\cocos\editor-support\spine\TransformConstraintData.h">
       <Filter>editor-support\spine</Filter>
     </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\AttachmentVertices.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\Cocos2dAttachmentLoader.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\SkeletonAnimation.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\SkeletonRenderer.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\spine-adapter.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\spine\jsb\spine-cocos2dx.h">
-      <Filter>editor-support\spine\jsb</Filter>
-    </ClInclude>
     <ClInclude Include="..\cocos\editor-support\IOBuffer.hpp">
       <Filter>editor-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.h">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\CreatorAttachmentLoader.h">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\spine-adapter.h">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\SpineAnimation.h">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.h">
+      <Filter>editor-support\spine-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\SpineRenderer.h">
+      <Filter>editor-support\spine-creator-support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1288,8 +1288,8 @@
     <Filter Include="editor-support\spine">
       <UniqueIdentifier>{ef8ae632-2316-46bd-9b18-ae9414d6028b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="editor-support\spine\jsb">
-      <UniqueIdentifier>{3fc90247-5cd9-4024-a02a-25df6e39417e}</UniqueIdentifier>
+    <Filter Include="editor-support\spine-creator-support">
+      <UniqueIdentifier>{114fa741-97f8-4fb6-b6ba-da80116305a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
