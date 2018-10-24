@@ -60,8 +60,6 @@ static _TrackEntryListeners* getListeners (spTrackEntry* entry) {
 	}
 	return (_TrackEntryListeners*)entry->rendererObject;
 }
-    
-//
 
 SpineAnimation* SpineAnimation::create(){
     SpineAnimation* skeleton = new SpineAnimation();
@@ -114,8 +112,6 @@ void SpineAnimation::initialize () {
 	_state = spAnimationState_create(spAnimationStateData_create(_skeleton->data));
 	_state->rendererObject = this;
 	_state->listener = animationCallback;
-
-	_spAnimationState* stateInternal = (_spAnimationState*)_state;
 }
 
 SpineAnimation::SpineAnimation ()
@@ -170,7 +166,7 @@ void SpineAnimation::setMix (const std::string& fromAnimation, const std::string
 spTrackEntry* SpineAnimation::setAnimation (int trackIndex, const std::string& name, bool loop) {
 	spAnimation* animation = spSkeletonData_findAnimation(_skeleton->data, name.c_str());
 	if (!animation) {
-		//log("Spine: Animation not found: %s", name.c_str());
+		log("Spine: Animation not found: %s", name.c_str());
 		return 0;
 	}
 	return spAnimationState_setAnimation(_state, trackIndex, animation, loop);
@@ -179,7 +175,7 @@ spTrackEntry* SpineAnimation::setAnimation (int trackIndex, const std::string& n
 spTrackEntry* SpineAnimation::addAnimation (int trackIndex, const std::string& name, bool loop, float delay) {
 	spAnimation* animation = spSkeletonData_findAnimation(_skeleton->data, name.c_str());
 	if (!animation) {
-		//log("Spine: Animation not found: %s", name.c_str());
+		log("Spine: Animation not found: %s", name.c_str());
 		return 0;
 	}
 	return spAnimationState_addAnimation(_state, trackIndex, animation, loop, delay);
