@@ -35,11 +35,11 @@ using std::max;
 
 using namespace spine;
 
-static cocos2d::IOBuffer * _vertexBuffer;
-static cocos2d::IOBuffer * _indiceBuffer;
-static cocos2d::IOBuffer * _debugBuffer;
+static cocos2d::IOBuffer * _vertexBuffer = nullptr;
+static cocos2d::IOBuffer * _indiceBuffer = nullptr;
+static cocos2d::IOBuffer * _debugBuffer = nullptr;
 
-SpineRenderer* SpineRenderer::create(){
+SpineRenderer* SpineRenderer::create () {
     SpineRenderer* skeleton = new SpineRenderer();
     skeleton->autorelease();
     return skeleton;
@@ -85,50 +85,18 @@ void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkel
 	_ownsSkeletonData = ownsSkeletonData;
 }
 
-SpineRenderer::SpineRenderer ()
-	: _atlas(nullptr)
-    , _attachmentLoader(nullptr)
-    , _worldVertices(nullptr)
-    , _timeScale(1)
-    , _debugBones(false)
-    , _nodeColor(cocos2d::Color4B::WHITE)
-    , _premultipliedAlpha(false)
-    , _debugSlots(false){
+SpineRenderer::SpineRenderer () {
 }
 
-SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
-    : _atlas(nullptr)
-    , _attachmentLoader(nullptr)
-    , _worldVertices(nullptr)
-    , _timeScale(1)
-    , _debugBones(false)
-    , _nodeColor(cocos2d::Color4B::WHITE)
-    , _premultipliedAlpha(false)
-    , _debugSlots(false){
+SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData) {
 	initWithData(skeletonData, ownsSkeletonData);
 }
 
-SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
-    : _atlas(nullptr)
-    , _attachmentLoader(nullptr)
-    , _worldVertices(nullptr)
-    , _timeScale(1)
-    , _debugBones(false)
-    , _nodeColor(cocos2d::Color4B::WHITE)
-    , _premultipliedAlpha(false)
-    , _debugSlots(false){
+SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale) {
 	initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
-SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
-    : _atlas(nullptr)
-    , _attachmentLoader(nullptr)
-    , _worldVertices(nullptr)
-    , _timeScale(1)
-    , _debugBones(false)
-    , _nodeColor(cocos2d::Color4B::WHITE)
-    , _premultipliedAlpha(false)
-    , _debugSlots(false){
+SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale) {
 	initWithJsonFile(skeletonDataFile, atlasFile, scale);
 }
 
@@ -142,7 +110,6 @@ SpineRenderer::~SpineRenderer () {
 
 void SpineRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData) {
 	setSkeletonData(skeletonData, ownsSkeletonData);
-
 	initialize();
 }
 
@@ -157,7 +124,6 @@ void SpineRenderer::initWithJsonFile (const std::string& skeletonDataFile, spAtl
 	spSkeletonJson_dispose(json);
 
 	setSkeletonData(skeletonData, true);
-
 	initialize();
 }
 
@@ -174,7 +140,6 @@ void SpineRenderer::initWithJsonFile (const std::string& skeletonDataFile, const
 	spSkeletonJson_dispose(json);
 
 	setSkeletonData(skeletonData, true);
-
 	initialize();
 }
     
@@ -189,7 +154,6 @@ void SpineRenderer::initWithBinaryFile (const std::string& skeletonDataFile, spA
     spSkeletonBinary_dispose(binary);
     
     setSkeletonData(skeletonData, true);
-    
     initialize();
 }
 
@@ -206,7 +170,6 @@ void SpineRenderer::initWithBinaryFile (const std::string& skeletonDataFile, con
     spSkeletonBinary_dispose(binary);
     
     setSkeletonData(skeletonData, true);
-    
     initialize();
 }
 
@@ -214,7 +177,7 @@ void SpineRenderer::update (float deltaTime) {
 	spSkeleton_update(_skeleton, deltaTime * _timeScale);
 }
 
-se_object_ptr SpineRenderer::getRenderData(){
+se_object_ptr SpineRenderer::getRenderData () {
     
     _skeleton->r = _nodeColor.r / (float)255;
     _skeleton->g = _nodeColor.g / (float)255;
@@ -448,15 +411,15 @@ bool SpineRenderer::setAttachment (const std::string& slotName, const char* atta
 	return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName) ? true : false;
 }
 
-se_object_ptr SpineRenderer::getIndiceData(){
+se_object_ptr SpineRenderer::getIndiceData() const {
     return _indiceBuffer->getTypeArray();
 }
 
-se_object_ptr SpineRenderer::getDebugData(){
+se_object_ptr SpineRenderer::getDebugData() const {
     return _debugBuffer->getTypeArray();
 }
 
-spSkeleton* SpineRenderer::getSkeleton () {
+spSkeleton* SpineRenderer::getSkeleton () const {
 	return _skeleton;
 }
 
@@ -468,15 +431,15 @@ float SpineRenderer::getTimeScale () const {
 	return _timeScale;
 }
 
-void SpineRenderer::setColor(cocos2d::Color4B& color){
+void SpineRenderer::setColor (cocos2d::Color4B& color) {
     _nodeColor = color;
 }
 
-void SpineRenderer::setDebugBonesEnabled(bool enabled){
+void SpineRenderer::setDebugBonesEnabled (bool enabled) {
     _debugBones = enabled;
 }
 
-void SpineRenderer::setDebugSlotsEnabled(bool enabled){
+void SpineRenderer::setDebugSlotsEnabled (bool enabled) {
     _debugSlots = enabled;
 }
     

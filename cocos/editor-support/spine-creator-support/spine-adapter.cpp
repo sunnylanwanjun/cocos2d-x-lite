@@ -25,11 +25,7 @@
 
 using namespace spine;
 
-Texture2D::Texture2D():
-_pixelsWide(0)
-,_pixelsHigh(0)
-,_realTextureIndex(0)
-,_texParamCallback(nullptr){
+Texture2D::Texture2D(){
     
 }
 

@@ -104,7 +104,6 @@ SpineAnimation* SpineAnimation::createWithBinaryFile (const std::string& skeleto
 	return node;
 }
 
-
 void SpineAnimation::initialize () {
 	super::initialize();
 

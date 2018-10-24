@@ -120,14 +120,14 @@ namespace spine{
     private:
         
         /** width in pixels */
-        int _pixelsWide;
+        int             _pixelsWide = 0;
         
         /** height in pixels */
-        int _pixelsHigh;
+        int             _pixelsHigh = 0;
         
         /** js texture */
-        int _realTextureIndex;
+        int             _realTextureIndex = 0;
         
-        texParamCallback _texParamCallback;
+        texParamCallback _texParamCallback = nullptr;
     };
 }

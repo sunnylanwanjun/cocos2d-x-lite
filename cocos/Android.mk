@@ -50,7 +50,6 @@ base/CCRenderTexture.cpp \
 storage/local-storage/LocalStorage-android.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_auto.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.cpp \
-scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.cpp \
 scripting/js-bindings/manual/JavaScriptJavaBridge.cpp \
 scripting/js-bindings/manual/jsb_opengl_manual.cpp \
 scripting/js-bindings/manual/jsb_opengl_utils.cpp \
@@ -167,7 +166,8 @@ endif # USE_NET_WORK
 
 ifeq ($(USE_SPINE),1)
 LOCAL_SRC_FILES += \
-scripting/js-bindings/manual/jsb_spine_manual.cpp
+scripting/js-bindings/manual/jsb_spine_manual.cpp \
+scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.cpp
 LOCAL_STATIC_LIBRARIES += spine_static
 endif # USE_SPINE
 

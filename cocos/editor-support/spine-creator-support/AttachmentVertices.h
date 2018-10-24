@@ -28,12 +28,15 @@
 #include "base/ccMacros.h"
 
 namespace spine{
+    /**
+     *  Store attachment vertex and indice list
+     */
     class AttachmentVertices {
     public:
         AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
         virtual ~AttachmentVertices ();
         
-        Texture2D* _texture;
-        Triangles* _triangles;
+        Texture2D* _texture = nullptr;
+        Triangles* _triangles = nullptr;
     };
 }

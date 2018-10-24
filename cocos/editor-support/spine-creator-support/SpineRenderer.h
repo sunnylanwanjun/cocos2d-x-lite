@@ -37,19 +37,18 @@ class AttachmentVertices;
 /* Draws a skeleton. */
 class SpineRenderer: public cocos2d::Ref {
 public:
-    static SpineRenderer* create();
+    static SpineRenderer* create ();
 	static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
 	static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
 	static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
     virtual void update (float deltaTime);
 
-	spSkeleton* getSkeleton();
+	spSkeleton* getSkeleton() const;
 
-	void setTimeScale(float scale);
-	float getTimeScale() const;
+	void setTimeScale (float scale);
+	float getTimeScale () const;
 
-	// --- Convenience methods for common Skeleton_* functions.
 	void updateWorldTransform ();
 
 	void setToSetupPose ();
@@ -78,13 +77,20 @@ public:
 
     /** Returns render data,it's a Uint32Array
       * format is |material length|blend src|blend dst|vertex length|indice length|x|y|u|v|color4b|.....*/
-    se_object_ptr getRenderData();
+    se_object_ptr getRenderData ();
     /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
-    se_object_ptr getIndiceData();
+    se_object_ptr getIndiceData () const;
     /** Returns debug data,it's a Float32Array,
      * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
-    se_object_ptr getDebugData();
+    se_object_ptr getDebugData () const;
 
+    void setColor (cocos2d::Color4B& color);
+    void setDebugBonesEnabled (bool enabled);
+    void setDebugSlotsEnabled (bool enabled);
+    
+    void setOpacityModifyRGB (bool value);
+    bool isOpacityModifyRGB () const;
+    
 CC_CONSTRUCTOR_ACCESS:
 	SpineRenderer ();
 	SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
@@ -100,30 +106,24 @@ CC_CONSTRUCTOR_ACCESS:
     void initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
 	virtual void initialize ();
-
-    void setColor(cocos2d::Color4B& color);
-    void setDebugBonesEnabled(bool enabled);
-    void setDebugSlotsEnabled(bool enabled);
-    
-    void setOpacityModifyRGB (bool value);
-    bool isOpacityModifyRGB () const;
     
 protected:
 	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
     virtual AttachmentVertices* getAttachmentVertices (spRegionAttachment* attachment) const;
     virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;
 
-	bool _ownsSkeletonData;
-	spAtlas* _atlas;
-	spAttachmentLoader* _attachmentLoader;
-	float* _worldVertices;
-	spSkeleton* _skeleton;
-	float _timeScale;
+	bool                _ownsSkeletonData = true;
+	spAtlas*            _atlas = nullptr;
+	spAttachmentLoader* _attachmentLoader = nullptr;
+	float*              _worldVertices = nullptr;
+	spSkeleton*         _skeleton = nullptr;
+	float               _timeScale = 1;
     
-	bool _debugSlots;
-	bool _debugBones;
-    cocos2d::Color4B _nodeColor;
-    bool _premultipliedAlpha;
+	bool                _debugSlots = false;
+	bool                _debugBones = false;
+    cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
+    bool                _premultipliedAlpha = false;
+    
 };
 
 }

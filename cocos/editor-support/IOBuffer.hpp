@@ -79,22 +79,22 @@ public:
      *  @brief Get uint32 from buffer.
      *  @return The value read from buffer.
      */
-    uint32_t getUint32();
+    uint32_t readUint32();
     /**
      *  @brief Get uint16 from buffer.
      *  @return The value read from buffer.
      */
-    uint16_t getUint16();
+    uint16_t readUint16();
     /**
      *  @brief Get float32 from buffer.
      *  @return The value read from buffer.
      */
-    float getFloat32();
+    float readFloat32();
     /**
      *  @brief Get uint8 from buffer.
      *  @return The value read from buffer.
      */
-    char getUint8();
+    char readUint8();
     /**
      *  @brief Reset buffer write/read pointer.
      */
@@ -114,12 +114,12 @@ public:
 private:
     void checkSpace(int needLen);
 private:
-    se::Object::TypedArrayType  _arrayType;
-    uint8_t*                    _buffer;
-    int                         _bufferSize;
-    int                         _curPos;
-    int                         _readPos;
-    se::Object*                 _typeArray;
+    se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
+    uint8_t*                    _buffer = nullptr;
+    int                         _bufferSize = 40960;
+    int                         _curPos = 0;
+    int                         _readPos = 0;
+    se::Object*                 _typeArray = nullptr;
 };
 
 NS_CC_END

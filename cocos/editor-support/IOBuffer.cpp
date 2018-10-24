@@ -26,10 +26,7 @@
 NS_CC_BEGIN
 
 IOBuffer::IOBuffer(se::Object::TypedArrayType arrayType):
-_bufferSize(40960)
-,_curPos(0)
-,_readPos(0)
-,_arrayType(arrayType){
+_arrayType(arrayType){
     _typeArray = se::Object::createEmptyTypedArray(_arrayType, _bufferSize);
     _typeArray->root();
     _typeArray->getTypedArrayData(&_buffer, (size_t*)&_bufferSize);
@@ -38,6 +35,7 @@ _bufferSize(40960)
 IOBuffer::~IOBuffer(){
     _typeArray->unroot();
     _typeArray->decRef();
+    _typeArray = nullptr;
 }
 
 void IOBuffer::writeUint32(int pos,uint32_t val){
@@ -45,8 +43,8 @@ void IOBuffer::writeUint32(int pos,uint32_t val){
         CCLOG("se::IOBuffer writeUint32 has out of range");
         return;
     }
-    uint32_t* pBuffer = (uint32_t*)(_buffer+pos);
-    *pBuffer = val;
+    uint32_t* buffer = (uint32_t*)(_buffer+pos);
+    *buffer = val;
 }
 
 void IOBuffer::writeBytes(const char* bytes,int bytesLen){
@@ -57,8 +55,8 @@ void IOBuffer::writeBytes(const char* bytes,int bytesLen){
 
 void IOBuffer::writeUint32(uint32_t val){
     checkSpace(sizeof(uint32_t));
-    uint32_t* pBuffer = (uint32_t*)(_buffer+_curPos);
-    *pBuffer = val;
+    uint32_t* buffer = (uint32_t*)(_buffer+_curPos);
+    *buffer = val;
     _curPos+=sizeof(uint32_t);
 }
 
@@ -67,46 +65,46 @@ void IOBuffer::writeFloat32(int pos,float val){
         CCLOG("se::IOBuffer writeFloat32 has out of range");
         return;
     }
-    float* pBuffer = (float*)(_buffer+pos);
-    *pBuffer = val;
+    float* buffer = (float*)(_buffer+pos);
+    *buffer = val;
 }
 
 void IOBuffer::writeFloat32(float val){
     checkSpace(sizeof(float));
-    float* pBuffer = (float*)(_buffer+_curPos);
-    *pBuffer = val;
+    float* buffer = (float*)(_buffer+_curPos);
+    *buffer = val;
     _curPos+=sizeof(float);
 }
 
 void IOBuffer::writeUint16(uint16_t val){
     checkSpace(sizeof(uint16_t));
-    uint16_t* pBuffer = (uint16_t*)(_buffer+_curPos);
-    *pBuffer = val;
+    uint16_t* buffer = (uint16_t*)(_buffer+_curPos);
+    *buffer = val;
     _curPos+=sizeof(uint16_t);
 }
 
-uint32_t IOBuffer::getUint32(){
-    uint32_t* pBuffer = (uint32_t*)(_buffer+_readPos);
+uint32_t IOBuffer::readUint32(){
+    uint32_t* buffer = (uint32_t*)(_buffer+_readPos);
     _readPos+=sizeof(uint32_t);
-    return *pBuffer;
+    return *buffer;
 }
 
-uint16_t IOBuffer::getUint16(){
-    uint16_t* pBuffer = (uint16_t*)(_buffer+_readPos);
+uint16_t IOBuffer::readUint16(){
+    uint16_t* buffer = (uint16_t*)(_buffer+_readPos);
     _readPos+=sizeof(uint16_t);
-    return *pBuffer;
+    return *buffer;
 }
 
-float IOBuffer::getFloat32(){
-    float* pBuffer = (float*)(_buffer+_readPos);
+float IOBuffer::readFloat32(){
+    float* buffer = (float*)(_buffer+_readPos);
     _readPos+=sizeof(float);
-    return *pBuffer;
+    return *buffer;
 }
 
-char IOBuffer::getUint8(){
-    char* pBuffer = (char*)(_buffer+_readPos);
+char IOBuffer::readUint8(){
+    char* buffer = (char*)(_buffer+_readPos);
     _readPos+=sizeof(char);
-    return *pBuffer;
+    return *buffer;
 }
 
 void IOBuffer::reset(){

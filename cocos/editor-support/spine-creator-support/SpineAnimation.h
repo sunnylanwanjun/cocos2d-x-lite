@@ -96,16 +96,14 @@ CC_CONSTRUCTOR_ACCESS:
 	virtual void initialize () override;
 
 protected:
-	spAnimationState* _state;
-
-	bool _ownsAnimationStateData;
-
-	StartListener _startListener;
-    InterruptListener _interruptListener;
-	EndListener _endListener;
-    DisposeListener _disposeListener;
-	CompleteListener _completeListener;
-	EventListener _eventListener;
+	spAnimationState*       _state = nullptr;
+	bool                    _ownsAnimationStateData = false;
+	StartListener           _startListener = nullptr;
+    InterruptListener       _interruptListener = nullptr;
+	EndListener             _endListener = nullptr;
+    DisposeListener         _disposeListener = nullptr;
+	CompleteListener        _completeListener = nullptr;
+	EventListener           _eventListener = nullptr;
 
 private:
 	typedef SpineRenderer super;
