@@ -2802,6 +2802,7 @@ bool std_vector_RenderTarget_to_seval(const std::vector<cocos2d::renderer::Rende
 #endif // USE_GFX_RENDERER > 0
 
 // Spine conversions
+#if USE_SPINE
 bool speventdata_to_seval(const spEventData* v, se::Value* ret)
 {
     assert(ret != nullptr);
@@ -3085,3 +3086,4 @@ bool sptrackentry_to_seval(const spTrackEntry* v, se::Value* ret)
 {
     return native_ptr_to_rooted_seval<spTrackEntry>((spTrackEntry*)v, ret);
 }
+#endif

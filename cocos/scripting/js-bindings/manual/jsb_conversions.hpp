@@ -33,7 +33,11 @@
 #include "renderer/renderer/Renderer.h"
 #include "network/CCDownloader.h"
 #include "extensions/cocos-ext.h"
+
+#if USE_SPINE
 #include "cocos/editor-support/spine/spine.h"
+#endif
+
 //#include "Box2D/Box2D.h"
 
 #define SE_PRECONDITION2_VOID(condition, ...) \
@@ -579,6 +583,7 @@ bool Vector_to_seval(const cocos2d::Vector<T*>& v, se::Value* ret)
 //}
 
 // Spine conversions
+#if USE_SPINE
 bool speventdata_to_seval(const spEventData* v, se::Value* ret);
 bool spevent_to_seval(const spEvent* v, se::Value* ret);
 bool spbonedata_to_seval(const spBoneData* v, se::Value* ret);
@@ -591,6 +596,7 @@ bool sptimeline_to_seval(const spTimeline* v, se::Value* ret);
 bool spanimationstate_to_seval(const spAnimationState* v, se::Value* ret);
 bool spanimation_to_seval(const spAnimation* v, se::Value* ret);
 bool sptrackentry_to_seval(const spTrackEntry* v, se::Value* ret);
+#endif
 
 //
 //// Box2d
