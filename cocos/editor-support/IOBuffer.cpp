@@ -54,14 +54,14 @@ void IOBuffer::writeBytes (const char* bytes, int bytesLen) {
 }
 
 void IOBuffer::writeUint32 ( uint32_t val ) {
-    checkSpace(sizeof(uint32_t));
+    checkSpace(sizeof(val));
     uint32_t* buffer = (uint32_t*)(_buffer + _curPos);
     *buffer = val;
-    _curPos += sizeof(uint32_t);
+    _curPos += sizeof(val);
 }
 
 void IOBuffer::writeFloat32 (int pos, float val) {
-    if (_bufferSize < pos + sizeof(float)) {
+    if (_bufferSize < pos + sizeof(val)) {
         CCLOG("se::IOBuffer writeFloat32 has out of range");
         return;
     }
@@ -70,17 +70,17 @@ void IOBuffer::writeFloat32 (int pos, float val) {
 }
 
 void IOBuffer::writeFloat32 (float val) {
-    checkSpace(sizeof(float));
+    checkSpace(sizeof(val));
     float* buffer = (float*)(_buffer + _curPos);
     *buffer = val;
-    _curPos += sizeof(float);
+    _curPos += sizeof(val);
 }
 
 void IOBuffer::writeUint16 (uint16_t val) {
-    checkSpace(sizeof(uint16_t));
+    checkSpace(sizeof(val));
     uint16_t* buffer = (uint16_t*)(_buffer + _curPos);
     *buffer = val;
-    _curPos += sizeof(uint16_t);
+    _curPos += sizeof(val);
 }
 
 uint32_t IOBuffer::readUint32 () {
