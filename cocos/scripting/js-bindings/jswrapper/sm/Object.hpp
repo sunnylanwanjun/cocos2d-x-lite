@@ -82,7 +82,8 @@ namespace se {
         };
 
         /**
-         *  @brief Creates a JavaScript Typed Array Object with specified format from an existing pointer.
+         *  @brief Creates a JavaScript Typed Array Object with specified format from an existing pointer,
+                   if provide a null pointer,then will create a empty JavaScript Typed Array Object.
          *  @param[in] type The format of typed array.
          *  @param[in] data A pointer to the byte buffer to be used as the backing store of the Typed Array object.
          *  @param[in] byteLength The number of bytes pointed to by the parameter bytes.
@@ -91,15 +92,6 @@ namespace se {
          */
         static Object* createTypedArray(TypedArrayType type, void* data, size_t byteLength);
 
-        /**
-         *  @brief Creates a JavaScript Typed Array Object with empty data.
-         *  @param[in] type The format of typed array.
-         *  @param[in] length The Typed Array can contain how many bytes.
-         *  @return A JavaScript Typed Array Object whose data is empty, or nullptr if there is an error.
-         *  @note The return value (non-null) has to be released manually.
-         */
-        static Object* createEmptyTypedArray(TypedArrayType type, size_t byteLength);
-        
         /**
          *  @brief Creates a JavaScript Array Buffer object from an existing pointer.
          *  @param[in] bytes A pointer to the byte buffer to be used as the backing store of the Typed Array object.

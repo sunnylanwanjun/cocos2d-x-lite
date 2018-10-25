@@ -25,111 +25,111 @@
 
 NS_CC_BEGIN
 
-IOBuffer::IOBuffer(se::Object::TypedArrayType arrayType):
-_arrayType(arrayType){
-    _typeArray = se::Object::createEmptyTypedArray(_arrayType, _bufferSize);
+IOBuffer::IOBuffer (se::Object::TypedArrayType arrayType)
+: _arrayType(arrayType){
+    _typeArray = se::Object::createTypedArray(_arrayType, nullptr, _bufferSize);
     _typeArray->root();
     _typeArray->getTypedArrayData(&_buffer, (size_t*)&_bufferSize);
 }
 
-IOBuffer::~IOBuffer(){
+IOBuffer::~IOBuffer () {
     _typeArray->unroot();
     _typeArray->decRef();
     _typeArray = nullptr;
 }
 
-void IOBuffer::writeUint32(int pos,uint32_t val){
-    if(_bufferSize<pos+sizeof(uint32_t)){
+void IOBuffer::writeUint32 (int pos, uint32_t val){
+    if (_bufferSize < pos + sizeof(val)) {
         CCLOG("se::IOBuffer writeUint32 has out of range");
         return;
     }
-    uint32_t* buffer = (uint32_t*)(_buffer+pos);
+    uint32_t* buffer = (uint32_t*)(_buffer + pos);
     *buffer = val;
 }
 
-void IOBuffer::writeBytes(const char* bytes,int bytesLen){
+void IOBuffer::writeBytes (const char* bytes, int bytesLen) {
     checkSpace(bytesLen);
-    memcpy(_buffer+_curPos,bytes,bytesLen);
-    _curPos+=bytesLen;
+    memcpy(_buffer + _curPos, bytes, bytesLen);
+    _curPos += bytesLen;
 }
 
-void IOBuffer::writeUint32(uint32_t val){
+void IOBuffer::writeUint32 ( uint32_t val ) {
     checkSpace(sizeof(uint32_t));
-    uint32_t* buffer = (uint32_t*)(_buffer+_curPos);
+    uint32_t* buffer = (uint32_t*)(_buffer + _curPos);
     *buffer = val;
-    _curPos+=sizeof(uint32_t);
+    _curPos += sizeof(uint32_t);
 }
 
-void IOBuffer::writeFloat32(int pos,float val){
-    if(_bufferSize<pos+sizeof(float)){
+void IOBuffer::writeFloat32 (int pos, float val) {
+    if (_bufferSize < pos + sizeof(float)) {
         CCLOG("se::IOBuffer writeFloat32 has out of range");
         return;
     }
-    float* buffer = (float*)(_buffer+pos);
+    float* buffer = (float*)(_buffer + pos);
     *buffer = val;
 }
 
-void IOBuffer::writeFloat32(float val){
+void IOBuffer::writeFloat32 (float val) {
     checkSpace(sizeof(float));
-    float* buffer = (float*)(_buffer+_curPos);
+    float* buffer = (float*)(_buffer + _curPos);
     *buffer = val;
-    _curPos+=sizeof(float);
+    _curPos += sizeof(float);
 }
 
-void IOBuffer::writeUint16(uint16_t val){
+void IOBuffer::writeUint16 (uint16_t val) {
     checkSpace(sizeof(uint16_t));
-    uint16_t* buffer = (uint16_t*)(_buffer+_curPos);
+    uint16_t* buffer = (uint16_t*)(_buffer + _curPos);
     *buffer = val;
-    _curPos+=sizeof(uint16_t);
+    _curPos += sizeof(uint16_t);
 }
 
-uint32_t IOBuffer::readUint32(){
-    uint32_t* buffer = (uint32_t*)(_buffer+_readPos);
-    _readPos+=sizeof(uint32_t);
+uint32_t IOBuffer::readUint32 () {
+    uint32_t* buffer = (uint32_t*)(_buffer + _readPos);
+    _readPos += sizeof(uint32_t);
     return *buffer;
 }
 
-uint16_t IOBuffer::readUint16(){
-    uint16_t* buffer = (uint16_t*)(_buffer+_readPos);
-    _readPos+=sizeof(uint16_t);
+uint16_t IOBuffer::readUint16 () {
+    uint16_t* buffer = (uint16_t*)(_buffer + _readPos);
+    _readPos += sizeof(uint16_t);
     return *buffer;
 }
 
-float IOBuffer::readFloat32(){
-    float* buffer = (float*)(_buffer+_readPos);
-    _readPos+=sizeof(float);
+float IOBuffer::readFloat32 () {
+    float* buffer = (float*)(_buffer + _readPos);
+    _readPos += sizeof(float);
     return *buffer;
 }
 
-char IOBuffer::readUint8(){
-    char* buffer = (char*)(_buffer+_readPos);
-    _readPos+=sizeof(char);
+char IOBuffer::readUint8 () {
+    char* buffer = (char*)(_buffer + _readPos);
+    _readPos += sizeof(char);
     return *buffer;
 }
 
-void IOBuffer::reset(){
+void IOBuffer::reset () {
     _curPos = 0;
     _readPos = 0;
 }
 
-se::Object* IOBuffer::getTypeArray() const {
+se::Object* IOBuffer::getTypeArray () const {
     return _typeArray;
 }
 
-int IOBuffer::length() const {
+int IOBuffer::length () const {
     return _curPos;
 }
 
-int IOBuffer::getCurPos() const {
+int IOBuffer::getCurPos () const {
     return _curPos;
 }
 
-void IOBuffer::checkSpace(int needLen){
+void IOBuffer::checkSpace (int needLen) {
     int hasLen = _bufferSize - _curPos;
-    if(hasLen<needLen){
+    if (hasLen < needLen) {
         int addLen = needLen - hasLen + 128;
         int newLen = _bufferSize + addLen;
-        se::Object* newTypeBuffer = se::Object::createEmptyTypedArray(_arrayType, newLen);
+        se::Object* newTypeBuffer = se::Object::createTypedArray(_arrayType, nullptr, newLen);
         newTypeBuffer->root();
         
         uint8_t* newBuffer = nullptr;

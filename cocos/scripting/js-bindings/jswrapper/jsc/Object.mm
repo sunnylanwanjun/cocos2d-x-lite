@@ -138,144 +138,6 @@ namespace se {
         return obj;
     }
 
-    Object* Object::createEmptyTypedArray(TypedArrayType type, size_t byteLength)
-    {
-        if (type == TypedArrayType::NONE)
-        {
-            SE_LOGE("Don't pass se::Object::TypedArrayType::NONE to createTypedArray API!");
-            return nullptr;
-        }
-        
-        if (type == TypedArrayType::UINT8_CLAMPED)
-        {
-            SE_LOGE("Doesn't support to create Uint8ClampedArray with Object::createTypedArray API!");
-            return nullptr;
-        }
-        
-#if (__MAC_OS_X_VERSION_MAX_ALLOWED >= 101200 || __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000)
-        if (isSupportTypedArrayAPI())
-        {
-            void* copiedData = malloc(byteLength);
-            memset(copiedData, 0, byteLength);
-            
-            JSValueRef exception = nullptr;
-            JSTypedArrayType jscTypedArrayType = kJSTypedArrayTypeNone;
-            Type objectType = Type::UNKNOWN;
-            switch (type) {
-                case TypedArrayType::INT8:
-                    objectType = Type::TYPED_ARRAY_INT8;
-                    jscTypedArrayType = kJSTypedArrayTypeInt8Array;
-                    break;
-                case TypedArrayType::INT16:
-                    objectType = Type::TYPED_ARRAY_INT16;
-                    jscTypedArrayType = kJSTypedArrayTypeInt16Array;
-                    break;
-                case TypedArrayType::INT32:
-                    objectType = Type::TYPED_ARRAY_INT32;
-                    jscTypedArrayType = kJSTypedArrayTypeInt32Array;
-                    break;
-                case TypedArrayType::UINT8:
-                    objectType = Type::TYPED_ARRAY_UINT8;
-                    jscTypedArrayType = kJSTypedArrayTypeUint8Array;
-                    break;
-                case TypedArrayType::UINT8_CLAMPED:
-                    objectType = Type::TYPED_ARRAY_UINT8_CLAMPED;
-                    jscTypedArrayType = kJSTypedArrayTypeUint8ClampedArray;
-                    break;
-                case TypedArrayType::UINT16:
-                    objectType = Type::TYPED_ARRAY_UINT16;
-                    jscTypedArrayType = kJSTypedArrayTypeUint16Array;
-                    break;
-                case TypedArrayType::UINT32:
-                    objectType = Type::TYPED_ARRAY_UINT32;
-                    jscTypedArrayType = kJSTypedArrayTypeUint32Array;
-                    break;
-                case TypedArrayType::FLOAT32:
-                    objectType = Type::TYPED_ARRAY_FLOAT32;
-                    jscTypedArrayType = kJSTypedArrayTypeFloat32Array;
-                    break;
-                case TypedArrayType::FLOAT64:
-                    objectType = Type::TYPED_ARRAY_FLOAT64;
-                    jscTypedArrayType = kJSTypedArrayTypeFloat64Array;
-                    break;
-                default:
-                    break;
-            }
-            JSObjectRef jsobj = JSObjectMakeTypedArrayWithBytesNoCopy(__cx, jscTypedArrayType, copiedData, byteLength, myJSTypedArrayBytesDeallocator, nullptr, &exception);
-            if (exception != nullptr)
-            {
-                ScriptEngine::getInstance()->_clearException(exception);
-                return nullptr;
-            }
-            Object* obj = Object::_createJSObject(nullptr, jsobj);
-            if (obj != nullptr)
-                obj->_type = objectType;
-            return obj;
-        }
-#endif
-        size_t numElements = 0;
-        EJJSTypedArrayType jscTypedArrayType = kEJJSTypedArrayTypeNone;
-        Type objectType = Type::UNKNOWN;
-        switch (type) {
-            case TypedArrayType::INT8:
-                objectType = Type::TYPED_ARRAY_INT8;
-                jscTypedArrayType = kEJJSTypedArrayTypeInt8Array;
-                numElements = byteLength;
-                break;
-            case TypedArrayType::INT16:
-                objectType = Type::TYPED_ARRAY_INT16;
-                jscTypedArrayType = kEJJSTypedArrayTypeInt16Array;
-                numElements = byteLength / 2;
-                break;
-            case TypedArrayType::INT32:
-                objectType = Type::TYPED_ARRAY_INT32;
-                jscTypedArrayType = kEJJSTypedArrayTypeInt32Array;
-                numElements = byteLength / 4;
-                break;
-            case TypedArrayType::UINT8:
-                objectType = Type::TYPED_ARRAY_UINT8;
-                jscTypedArrayType = kEJJSTypedArrayTypeUint8Array;
-                numElements = byteLength;
-                break;
-            case TypedArrayType::UINT8_CLAMPED:
-                objectType = Type::TYPED_ARRAY_UINT8_CLAMPED;
-                jscTypedArrayType = kEJJSTypedArrayTypeUint8ClampedArray;
-                numElements = byteLength;
-                break;
-            case TypedArrayType::UINT16:
-                objectType = Type::TYPED_ARRAY_UINT16;
-                jscTypedArrayType = kEJJSTypedArrayTypeUint16Array;
-                numElements = byteLength / 2;
-                break;
-            case TypedArrayType::UINT32:
-                objectType = Type::TYPED_ARRAY_UINT32;
-                jscTypedArrayType = kEJJSTypedArrayTypeUint32Array;
-                numElements = byteLength / 4;
-                break;
-            case TypedArrayType::FLOAT32:
-                objectType = Type::TYPED_ARRAY_FLOAT32;
-                jscTypedArrayType = kEJJSTypedArrayTypeFloat32Array;
-                numElements = byteLength / 4;
-                break;
-            case TypedArrayType::FLOAT64:
-                objectType = Type::TYPED_ARRAY_FLOAT64;
-                jscTypedArrayType = kEJJSTypedArrayTypeFloat64Array;
-                numElements = byteLength / 8;
-                break;
-            default:
-                break;
-        }
-        
-        JSObjectRef ret = EJJSObjectMakeTypedArray(__cx, jscTypedArrayType, numElements);
-        NSData* nsData = [NSData dataWithBytes:nullptr length:byteLength];
-        EJJSObjectSetTypedArrayData(__cx, ret, nsData);
-        
-        Object* obj = Object::_createJSObject(nullptr, ret);
-        if (obj != nullptr)
-            obj->_type = objectType;
-        return obj;
-    }
-    
     Object* Object::createTypedArray(TypedArrayType type, void* data, size_t byteLength)
     {
         if (type == TypedArrayType::NONE)
@@ -294,10 +156,13 @@ namespace se {
         if (isSupportTypedArrayAPI())
         {
             void* copiedData = malloc(byteLength);
-            if (data)
+            //If data has content,then will copy data into buffer,or will only clear buffer.
+            if (data){
                 memcpy(copiedData, data, byteLength);
-            else
+            }
+            else{
                 memset(copiedData, 0, byteLength);
+            }
             
             JSValueRef exception = nullptr;
             JSTypedArrayType jscTypedArrayType = kJSTypedArrayTypeNone;

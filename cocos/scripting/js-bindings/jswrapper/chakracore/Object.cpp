@@ -145,83 +145,19 @@ namespace se {
         int elementSize = 0;
         if (JsNoError == JsGetTypedArrayStorage(jsobj, &buffer, &bufferLength, &arrType, &elementSize))
         {
-            memcpy((void*)buffer, data, byteLength);
+            //If data has content,then will copy data into buffer,or will only clear buffer.
+            if (data) {
+                memcpy((void*)buffer, data, byteLength);
+            }else{
+                memset((void*)buffer, 0, byteLength);
+            }
+            
             obj = Object::_createJSObject(nullptr, jsobj);
         }
 
         return obj;
     }
 
-    Object* Object::createEmptyTypedArray(TypedArrayType type, size_t byteLength){
-        if (type == TypedArrayType::NONE)
-        {
-            SE_LOGE("Don't pass se::Object::TypedArrayType::NONE to createTypedArray API!");
-            return nullptr;
-        }
-        
-        if (type == TypedArrayType::UINT8_CLAMPED)
-        {
-            SE_LOGE("Doesn't support to create Uint8ClampedArray with Object::createTypedArray API!");
-            return nullptr;
-        }
-        
-        JsTypedArrayType typedArrayType;
-        size_t elementLength = 0;
-        
-        switch (type) {
-            case TypedArrayType::INT8:
-                typedArrayType = JsArrayTypeInt8;
-                elementLength = byteLength;
-                break;
-            case TypedArrayType::INT16:
-                typedArrayType = JsArrayTypeInt16;
-                elementLength = byteLength / 2;
-                break;
-            case TypedArrayType::INT32:
-                typedArrayType = JsArrayTypeInt32;
-                elementLength = byteLength / 4;
-                break;
-            case TypedArrayType::UINT8:
-                typedArrayType = JsArrayTypeUint8;
-                elementLength = byteLength;
-                break;
-            case TypedArrayType::UINT16:
-                typedArrayType = JsArrayTypeUint16;
-                elementLength = byteLength / 2;
-                break;
-            case TypedArrayType::UINT32:
-                typedArrayType = JsArrayTypeUint32;
-                elementLength = byteLength / 4;
-                break;
-            case TypedArrayType::FLOAT32:
-                typedArrayType = JsArrayTypeFloat32;
-                elementLength = byteLength / 4;
-                break;
-            case TypedArrayType::FLOAT64:
-                typedArrayType = JsArrayTypeFloat64;
-                elementLength = byteLength / 8;
-                break;
-            default:
-                assert(false); // Should never go here.
-                break;
-        }
-        
-        Object* obj = nullptr;
-        JsValueRef jsobj;
-        _CHECK(JsCreateTypedArray(typedArrayType, JS_INVALID_REFERENCE, 0, (unsigned int)elementLength, &jsobj));
-        ChakraBytePtr buffer = nullptr;
-        unsigned int bufferLength = 0;
-        JsTypedArrayType arrType;
-        int elementSize = 0;
-        if (JsNoError == JsGetTypedArrayStorage(jsobj, &buffer, &bufferLength, &arrType, &elementSize))
-        {
-            memset((void*)buffer, 0, byteLength);
-            obj = Object::_createJSObject(nullptr, jsobj);
-        }
-        
-        return obj;
-    }
-    
     Object* Object::createUint8TypedArray(uint8_t* data, size_t dataCount)
     {
         return createTypedArray(TypedArrayType::UINT8, data, dataCount);

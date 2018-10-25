@@ -34,7 +34,8 @@ namespace spine {
 
 class AttachmentVertices;
 
-/* Draws a skeleton. */
+/** Draws a skeleton.
+ */
 class SpineRenderer: public cocos2d::Ref {
 public:
     static SpineRenderer* create ();

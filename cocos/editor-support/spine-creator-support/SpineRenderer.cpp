@@ -35,9 +35,9 @@ using std::max;
 
 using namespace spine;
 
-static cocos2d::IOBuffer * _vertexBuffer = nullptr;
-static cocos2d::IOBuffer * _indiceBuffer = nullptr;
-static cocos2d::IOBuffer * _debugBuffer = nullptr;
+static cocos2d::IOBuffer* _vertexBuffer = nullptr;
+static cocos2d::IOBuffer* _indiceBuffer = nullptr;
+static cocos2d::IOBuffer* _debugBuffer = nullptr;
 
 SpineRenderer* SpineRenderer::create () {
     SpineRenderer* skeleton = new SpineRenderer();
@@ -187,12 +187,12 @@ se_object_ptr SpineRenderer::getRenderData () {
     Color4F color;
     AttachmentVertices* attachmentVertices = nullptr;
     
-    int preBlendSrc=-1;
-    int preBlendDst=-1;
-    int preTextureIndex=-1;
-    int curBlendSrc=-1;
-    int curBlendDst=-1;
-    int curTextureIndex=-1;
+    int preBlendSrc = -1;
+    int preBlendDst = -1;
+    int preTextureIndex = -1;
+    int curBlendSrc = -1;
+    int curBlendDst = -1;
+    int curTextureIndex = -1;
     
     int preVSegWritePos = -1;
     int preISegWritePos = -1;
@@ -208,7 +208,7 @@ se_object_ptr SpineRenderer::getRenderData () {
     
     //reserved 4 bytes to save material len
     _vertexBuffer->writeUint32(0);
-    if(_debugSlots){
+    if (_debugSlots) {
         //reserved 4 bytes to save debug slots len
         _debugBuffer->writeUint32(0);
     }
@@ -276,9 +276,9 @@ se_object_ptr SpineRenderer::getRenderData () {
         
         //jsb
         curTextureIndex = attachmentVertices->_texture->getRealTextureIndex();
-        if(preTextureIndex!=curTextureIndex||preBlendDst!=curBlendDst||preBlendSrc!=curBlendSrc){
+        if (preTextureIndex != curTextureIndex || preBlendDst != curBlendDst || preBlendSrc != curBlendSrc) {
             
-            if(preVSegWritePos!=-1){
+            if (preVSegWritePos != -1) {
                 _vertexBuffer->writeUint32(preVSegWritePos,curVSegLen);
                 _vertexBuffer->writeUint32(preISegWritePos,curISegLen);
             }
@@ -323,9 +323,9 @@ se_object_ptr SpineRenderer::getRenderData () {
         _vertexBuffer->writeBytes((char*)attachmentVertices->_triangles->verts,
                                attachmentVertices->_triangles->vertCount*sizeof(spine::V2F_T2F_C4B));
         
-        if(curVSegLen>0){
-            for(int ii=0,nn=attachmentVertices->_triangles->indexCount;ii<nn;ii++){
-                _indiceBuffer->writeUint16(attachmentVertices->_triangles->indices[ii]+curVSegLen);
+        if (curVSegLen > 0) {
+            for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++) {
+                _indiceBuffer->writeUint16(attachmentVertices->_triangles->indices[ii] + curVSegLen);
             }
         }else{
             _indiceBuffer->writeBytes((char*)attachmentVertices->_triangles->indices,
@@ -335,18 +335,20 @@ se_object_ptr SpineRenderer::getRenderData () {
         curVSegLen += attachmentVertices->_triangles->vertCount;
         curISegLen += attachmentVertices->_triangles->indexCount;
     }
-    if(_debugSlots){
+    
+    if (_debugSlots) {
         //add 0.1 is avoid precision trouble
-        _debugBuffer->writeFloat32(0,debugSlotsLen+0.1);
+        _debugBuffer->writeFloat32(0, debugSlotsLen+0.1);
     }
+    
     _vertexBuffer->writeUint32(0, materialLen);
-    if(preVSegWritePos!=-1){
-        _vertexBuffer->writeUint32(preVSegWritePos,curVSegLen);
-        _vertexBuffer->writeUint32(preISegWritePos,curISegLen);
+    if (preVSegWritePos != -1) {
+        _vertexBuffer->writeUint32(preVSegWritePos, curVSegLen);
+        _vertexBuffer->writeUint32(preISegWritePos, curISegLen);
     }
     
     if (_debugBones) {
-        _debugBuffer->writeFloat32(_skeleton->bonesCount*4+0.1);
+        _debugBuffer->writeFloat32(_skeleton->bonesCount*4 + 0.1);
         for (int i = 0, n = _skeleton->bonesCount; i < n; i++) {
             spBone *bone = _skeleton->bones[i];
             float x = bone->data->length * bone->a + bone->worldX;
@@ -376,9 +378,11 @@ void SpineRenderer::updateWorldTransform () {
 void SpineRenderer::setToSetupPose () {
 	spSkeleton_setToSetupPose(_skeleton);
 }
+
 void SpineRenderer::setBonesToSetupPose () {
 	spSkeleton_setBonesToSetupPose(_skeleton);
 }
+
 void SpineRenderer::setSlotsToSetupPose () {
 	spSkeleton_setSlotsToSetupPose(_skeleton);
 }
