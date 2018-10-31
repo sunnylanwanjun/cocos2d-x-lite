@@ -24,7 +24,7 @@
 
 #include "spine-creator-support/spine-cocos2dx.h"
 #include "spine/extension.h"
-#include "spine-creator-support/spine-adapter.h"
+#include "editor-adapter.h"
 #include "base/CCData.h"
 #include "platform/CCFileUtils.h"
 
@@ -36,6 +36,7 @@ namespace spine {
 }
 
 using namespace spine;
+using namespace editor;
 USING_NS_CC;
 
 GLuint wrap (spAtlasWrap wrap) {

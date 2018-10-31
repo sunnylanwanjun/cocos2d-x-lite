@@ -14,10 +14,10 @@ void CCTextureAtlasData::_onClear()
 
 TextureData* CCTextureAtlasData::createTexture() const
 {
-    return BaseObject::borrowObject<CCTextureData>();
+    return (TextureData*)BaseObject::borrowObject<CCTextureData>();
 }
 
-void CCTextureAtlasData::setRenderTexture(cocos2d::Texture2D* value)
+void CCTextureAtlasData::setRenderTexture(editor::Texture2D* value)
 {
     if (_renderTexture == value) 
     {
@@ -43,7 +43,7 @@ void CCTextureAtlasData::setRenderTexture(cocos2d::Texture2D* value)
                 );
                 cocos2d::Vec2 offset(0.0f, 0.0f);
                 cocos2d::Size originSize(rect.size.width, rect.size.height);
-                textureData->spriteFrame = cocos2d::SpriteFrame::createWithTexture(_renderTexture, rect, textureData->rotated, offset, originSize); // TODO multiply textureAtlas
+                textureData->spriteFrame = editor::SpriteFrame::createWithTexture(_renderTexture, rect, textureData->rotated, offset, originSize); // TODO multiply textureAtlas
                 textureData->spriteFrame->retain();
             }
         }

@@ -25,6 +25,9 @@
 
 #include "dragonBones/DragonBonesHeaders.h"
 #include "cocos2d.h"
+#include "editor-adapter.h"
+#include "math/CCGeometry.h"
+#include "math/Mat4.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -40,11 +43,20 @@ DRAGONBONES_NAMESPACE_BEGIN
 class CCSlot : public Slot
 {
     BIND_CLASS_TYPE_A(CCSlot);
-
+public:
+    cocos2d::Mat4 _worldMatrix;
+    bool _worldMatDirty = true;
+    
 private:
-    float _textureScale;
-    cocos2d::Node* _renderDisplay;
-
+    float _textureScale = 1.0f;
+    editor::Triangles _triangles;
+    cocos2d::Rect _boundsRect;
+    cocos2d::Mat4 _localMatrix;
+    cocos2d::Color4B _color;
+private:
+    void disposeTriangles();
+    void calculWorldMatrix();
+    void adjustTriangles(const unsigned vertexCount, const unsigned indicesCount);
 protected:
     virtual void _onClear() override;
     virtual void _initDisplay(void* value, bool isRetain) override;
@@ -59,34 +71,12 @@ public:
     virtual void _updateVisible() override;
     virtual void _updateBlendMode() override;
     virtual void _updateColor() override;
-
+    void updateWorldMatrix();
 protected:
     virtual void _updateFrame() override;
     virtual void _updateMesh() override;
     virtual void _updateTransform() override;
     virtual void _identityTransform() override;
-
-public:
-    /**
-     * The display object that the slot displays at this time.
-     * @see #display
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * 插槽此时显示的显示对象。
-     * @see #display
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    inline cocos2d::Node* getCCDisplay() const
-    {
-        return static_cast<cocos2d::Node*>(_display);
-    }
-    inline void setCCDisplay(cocos2d::Node* value)
-    {
-        setDisplay(value, DisplayType::Image);
-    }
 };
 
 DRAGONBONES_NAMESPACE_END

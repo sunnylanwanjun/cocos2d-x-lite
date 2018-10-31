@@ -25,10 +25,9 @@
 
 #include "math/Vec2.h"
 #include "base/ccTypes.h"
-#include "scripting/js-bindings/jswrapper/SeApi.h"
 #include <functional>
 
-namespace spine{
+namespace editor{
     /** @struct Tex2F
      * A TEXCOORD composed of 2 floats: u, y
      */
@@ -41,7 +40,6 @@ namespace spine{
      * A Vec2 with a vertex point, a tex coord point and a color 4B.
      */
     struct V2F_T2F_C4B {
-    public:
         /// vertices (3F)
         cocos2d::Vec2     vertices;            // 12 bytes
         
@@ -55,19 +53,22 @@ namespace spine{
     struct Triangles
     {
         /**Vertex data pointer.*/
-        V2F_T2F_C4B* verts;
+        V2F_T2F_C4B* verts = nullptr;
         /**Index data pointer.*/
-        unsigned short* indices;
+        unsigned short* indices = nullptr;
         /**The number of vertices.*/
-        int vertCount;
+        int vertCount = 0;
         /**The number of indices.*/
-        int indexCount;
+        int indexCount = 0;
     };
     
-    class Texture2D:public cocos2d::Ref{
+    ///////////////////////////////////////////////////////////////////////
+    // adapt to editor texture,this is a texture delegate,not real texture
+    ///////////////////////////////////////////////////////////////////////
+    class Texture2D : public cocos2d::Ref {
     public:
         Texture2D();
-        ~Texture2D();
+        virtual ~Texture2D();
         /**
          Extension to set the Min / Mag filter
          */
@@ -129,5 +130,45 @@ namespace spine{
         int             _realTextureIndex = 0;
         
         texParamCallback _texParamCallback = nullptr;
+    };
+    
+    ///////////////////////////////////////////////////////////////////////
+    // adapt to editor sprite frame
+    ///////////////////////////////////////////////////////////////////////
+    class SpriteFrame : public cocos2d::Ref {
+    public:
+        static SpriteFrame* createWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect);
+        static SpriteFrame* createWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect, bool rotated, const cocos2d::Vec2& offset, const cocos2d::Size& originalSize);
+        
+        SpriteFrame();
+        virtual ~SpriteFrame();
+        
+        /** Initializes a SpriteFrame with a texture, rect in points.
+         It is assumed that the frame was not trimmed.
+         */
+        bool initWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect);
+        
+        /** Initializes a SpriteFrame with a texture, rect, rotated, offset and originalSize in pixels.
+         The originalSize is the size in points of the frame before being trimmed.
+         */
+        bool initWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect, bool rotated, const cocos2d::Vec2& offset, const cocos2d::Size& originalSize);
+        
+        /** Get texture of the frame.
+         *
+         * @return The texture of the sprite frame.
+         */
+        Texture2D* getTexture();
+        /** Set texture of the frame, the texture is retained.
+         *
+         * @param pobTexture The texture of the sprite frame.
+         */
+        void setTexture(Texture2D* pobTexture);
+    protected:
+        cocos2d::Vec2   _anchorPoint;
+        cocos2d::Rect   _rectInPixels;
+        bool            _rotated = false;
+        cocos2d::Vec2   _offsetInPixels;
+        cocos2d::Size   _originalSizeInPixels;
+        Texture2D*      _texture = nullptr;
     };
 }

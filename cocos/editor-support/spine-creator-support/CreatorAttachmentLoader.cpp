@@ -28,6 +28,7 @@
 
 USING_NS_CC;
 using namespace spine;
+using namespace editor;
 
 static unsigned short quadTriangles[6] = {0, 1, 2, 2, 3, 0};
 

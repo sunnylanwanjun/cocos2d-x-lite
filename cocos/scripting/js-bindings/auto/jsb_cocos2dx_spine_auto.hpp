@@ -9,14 +9,14 @@ extern se::Class* __jsb_spine_SpineRenderer_class;
 bool js_register_spine_SpineRenderer(se::Object* obj);
 bool register_all_cocos2dx_spine(se::Object* obj);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setTimeScale);
-SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setOpacityModifyRGB);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setAttachment);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setBonesToSetupPose);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setSlotsToSetupPose);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_isOpacityModifyRGB);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setDebugSlotsEnabled);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_initWithJsonFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setToSetupPose);
-SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setSlotsToSetupPose);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_setOpacityModifyRGB);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_initWithBinaryFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_getDebugData);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineRenderer_updateWorldTransform);
@@ -59,19 +59,4 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_createWithBinaryFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_create);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_createWithJsonFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_SpineAnimation);
-
-extern se::Object* __jsb_spine_Texture2D_proto;
-extern se::Class* __jsb_spine_Texture2D_class;
-
-bool js_register_spine_Texture2D(se::Object* obj);
-bool register_all_cocos2dx_spine(se::Object* obj);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getRealTextureIndex);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParamCallback);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsHigh);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setPixelsWide);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsHigh);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_getPixelsWide);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setRealTextureIndex);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_setTexParameters);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Texture2D_Texture2D);
 

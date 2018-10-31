@@ -33,6 +33,7 @@ USING_NS_CC;
 using std::min;
 using std::max;
 
+using namespace editor;
 using namespace spine;
 
 static cocos2d::IOBuffer* _vertexBuffer = nullptr;
@@ -321,7 +322,7 @@ se_object_ptr SpineRenderer::getRenderData () {
         }
         
         _vertexBuffer->writeBytes((char*)attachmentVertices->_triangles->verts,
-                               attachmentVertices->_triangles->vertCount*sizeof(spine::V2F_T2F_C4B));
+                               attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
         
         if (curVSegLen > 0) {
             for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++) {

@@ -2,6 +2,7 @@
 #include "dragonBones-creator-support/CCTextureAtlasData.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
+#include "platform/CCFileUtils.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -21,56 +22,7 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
 
         if (textureAtlas != nullptr)
         {
-            static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(static_cast<cocos2d::Texture2D*>(textureAtlas));
-        }
-        else 
-        {
-            const auto textureCache = cocos2d::Director::getInstance()->getTextureCache();
-            auto texture = textureCache->getTextureForKey(textureAtlasData->imagePath);
-            if (texture == nullptr)
-            {
-                const auto defaultPixelFormat = cocos2d::Texture2D::getDefaultAlphaPixelFormat();
-                auto pixelFormat = defaultPixelFormat;
-                switch (textureAtlasData->format)
-                {
-                    case TextureFormat::RGBA8888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA8888;
-                        break;
-
-                    case TextureFormat::BGRA8888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::BGRA8888;
-                        break;
-
-                    case TextureFormat::RGBA4444:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA4444;
-                        break;
-
-                    case TextureFormat::RGB888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB888;
-                        break;
-
-                    case TextureFormat::RGB565:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB565;
-                        break;
-
-                    case TextureFormat::RGBA5551:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB5A1;
-                        break;
-
-                    case TextureFormat::DEFAULT:
-                    default:
-                        break;
-                }
-
-                cocos2d::Texture2D::setDefaultAlphaPixelFormat(pixelFormat);
-                texture = textureCache->addImage(textureAtlasData->imagePath);
-                if (texture != nullptr)
-                {
-                    cocos2d::Texture2D::setDefaultAlphaPixelFormat(defaultPixelFormat);
-                }
-            }
-
-            static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(texture);
+            static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(static_cast<editor::Texture2D*>(textureAtlas));
         }
     }
     else
@@ -86,10 +38,8 @@ Armature* CCFactory::_buildArmature(const BuildArmaturePackage& dataPackage) con
     const auto armature = BaseObject::borrowObject<Armature>();
     const auto armatureDisplay = CCArmatureDisplay::create();
 
-    // ??? why retain
+    // will release when armature destructor
     armatureDisplay->retain();
-    armatureDisplay->setCascadeOpacityEnabled(true);
-    armatureDisplay->setCascadeColorEnabled(true);
 
     armature->init(
         dataPackage.armature,
@@ -102,16 +52,10 @@ Armature* CCFactory::_buildArmature(const BuildArmaturePackage& dataPackage) con
 Slot* CCFactory::_buildSlot(const BuildArmaturePackage& dataPackage, const SlotData* slotData, Armature* armature) const
 {
     const auto slot = BaseObject::borrowObject<CCSlot>();
-    const auto rawDisplay = DBCCSprite::create();
-
-    rawDisplay->setCascadeOpacityEnabled(true);
-    rawDisplay->setCascadeColorEnabled(true);
-    rawDisplay->setAnchorPoint(cocos2d::Vec2::ZERO);
-    rawDisplay->setLocalZOrder(slotData->zOrder);
 
     slot->init(
         slotData, armature,
-        rawDisplay, rawDisplay
+        slot, slot
     );
 
     return slot;
@@ -170,29 +114,9 @@ TextureAtlasData* CCFactory::loadTextureAtlasData(const std::string& filePath, c
     return static_cast<CCTextureAtlasData*>(BaseFactory::parseTextureAtlasData(data.c_str(), nullptr, name, scale));
 }
 
-CCArmatureDisplay* CCFactory::buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName, const std::string& skinName, const std::string& textureAtlasName) const
+Armature* CCFactory::buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName, const std::string& skinName, const std::string& textureAtlasName) const
 {
-    const auto armature = buildArmature(armatureName, dragonBonesName, skinName, textureAtlasName);
-    if (armature != nullptr)
-    {
-        _dragonBones->getClock()->add(armature);
-
-        return static_cast<CCArmatureDisplay*>(armature->getDisplay());
-    }
-
-    return nullptr;
-}
-
-cocos2d::Sprite* CCFactory::getTextureDisplay(const std::string& textureName, const std::string& dragonBonesName) const
-{
-    const auto textureData = static_cast<CCTextureData*>(_getTextureData(dragonBonesName, textureName));
-    if (textureData != nullptr && textureData->spriteFrame != nullptr)
-    {
-        const auto display = cocos2d::Sprite::createWithSpriteFrame(textureData->spriteFrame);
-        return display;
-    }
-
-    return nullptr;
+    return buildArmature(armatureName, dragonBonesName, skinName, textureAtlasName);
 }
 
 DRAGONBONES_NAMESPACE_END

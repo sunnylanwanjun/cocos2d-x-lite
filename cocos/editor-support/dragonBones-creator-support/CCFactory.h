@@ -24,8 +24,9 @@
 #define DRAGONBONES_CC_FACTORY_H
 
 #include "dragonBones/DragonBonesHeaders.h"
-#include "cocos2d.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
+#include "platform/CCApplication.h"
+#include "base/CCScheduler.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -85,7 +86,7 @@ public:
             _dragonBonesInstance = new DragonBones(eventManager);
             _dragonBonesInstance->yDown = false;
 
-            cocos2d::Director::getInstance()->getScheduler()->schedule(
+            cocos2d::Application::getInstance()->getScheduler()->schedule(
                 [&](float passedTime)
                 {
                     _dragonBonesInstance->advanceTime(passedTime);
@@ -163,22 +164,7 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual CCArmatureDisplay* buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string& textureAtlasName = "") const;
-    /**
-     * - Create the display object with the specified texture.
-     * @param textureName - The texture data name.
-     * @param textureAtlasName - The texture atlas data name. (Of not set, all texture atlas data will be searched)
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * - 创建带有指定贴图的显示对象。
-     * @param textureName - 贴图数据名称。
-     * @param textureAtlasName - 贴图集数据名称。 （如果未设置，将检索所有的贴图集数据）
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    virtual cocos2d::Sprite* getTextureDisplay(const std::string& textureName, const std::string& dragonBonesName = "") const;
+    virtual Armature* buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string& textureAtlasName = "") const;
     /**
      * - A global sound event manager.
      * Sound events can be listened to uniformly from the manager.
@@ -209,6 +195,14 @@ public:
     static WorldClock* getClock()
     {
         return _dragonBonesInstance->getClock();
+    }
+    
+    void add(Armature* armature){
+        _dragonBonesInstance->getClock()->add(armature);
+    }
+    
+    void remove(Armature* armature){
+        _dragonBonesInstance->getClock()->remove(armature);
     }
 };
 

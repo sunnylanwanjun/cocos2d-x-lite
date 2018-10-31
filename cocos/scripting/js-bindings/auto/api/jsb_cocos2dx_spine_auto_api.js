@@ -19,16 +19,6 @@ float
 },
 
 /**
- * @method setOpacityModifyRGB
- * @param {bool} arg0
- */
-setOpacityModifyRGB : function (
-bool 
-)
-{
-},
-
-/**
  * @method setAttachment
 * @param {String|String} str
 * @param {char|String} char
@@ -46,6 +36,14 @@ str
  * @method setBonesToSetupPose
  */
 setBonesToSetupPose : function (
+)
+{
+},
+
+/**
+ * @method setSlotsToSetupPose
+ */
+setSlotsToSetupPose : function (
 )
 {
 },
@@ -93,9 +91,11 @@ setToSetupPose : function (
 },
 
 /**
- * @method setSlotsToSetupPose
+ * @method setOpacityModifyRGB
+ * @param {bool} arg0
  */
-setSlotsToSetupPose : function (
+setOpacityModifyRGB : function (
+bool 
 )
 {
 },
@@ -517,102 +517,6 @@ SpineAnimation : function(
 str,
 str,
 float 
-)
-{
-},
-
-};
-
-/**
- * @class Texture2D
- */
-jsbspine.Texture2D = {
-
-/**
- * @method getRealTextureIndex
- * @return {int}
- */
-getRealTextureIndex : function (
-)
-{
-    return 0;
-},
-
-/**
- * @method setTexParamCallback
- * @param {function} arg0
- */
-setTexParamCallback : function (
-func 
-)
-{
-},
-
-/**
- * @method setPixelsHigh
- * @param {int} arg0
- */
-setPixelsHigh : function (
-int 
-)
-{
-},
-
-/**
- * @method setPixelsWide
- * @param {int} arg0
- */
-setPixelsWide : function (
-int 
-)
-{
-},
-
-/**
- * @method getPixelsHigh
- * @return {int}
- */
-getPixelsHigh : function (
-)
-{
-    return 0;
-},
-
-/**
- * @method getPixelsWide
- * @return {int}
- */
-getPixelsWide : function (
-)
-{
-    return 0;
-},
-
-/**
- * @method setRealTextureIndex
- * @param {int} arg0
- */
-setRealTextureIndex : function (
-int 
-)
-{
-},
-
-/**
- * @method setTexParameters
- * @param {sp.Texture2D::_TexParams} arg0
- */
-setTexParameters : function (
-_texparams 
-)
-{
-},
-
-/**
- * @method Texture2D
- * @constructor
- */
-Texture2D : function (
 )
 {
 },

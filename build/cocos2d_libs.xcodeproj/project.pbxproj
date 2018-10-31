@@ -151,8 +151,6 @@
 		0435590F217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
 		04355914217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
 		04355915217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
-		046E03EB21804E6B00B24E2D /* spine-adapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E03DF21804E6A00B24E2D /* spine-adapter.h */; };
-		046E03EC21804E6B00B24E2D /* spine-adapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E03DF21804E6A00B24E2D /* spine-adapter.h */; };
 		046E03ED21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EE21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EF21804E6B00B24E2D /* SpineAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E121804E6A00B24E2D /* SpineAnimation.cpp */; };
@@ -173,8 +171,6 @@
 		046E03FE21804E6B00B24E2D /* AttachmentVertices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E821804E6A00B24E2D /* AttachmentVertices.cpp */; };
 		046E03FF21804E6B00B24E2D /* CreatorAttachmentLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E03E921804E6A00B24E2D /* CreatorAttachmentLoader.h */; };
 		046E040021804E6B00B24E2D /* CreatorAttachmentLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E03E921804E6A00B24E2D /* CreatorAttachmentLoader.h */; };
-		046E040121804E6B00B24E2D /* spine-adapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03EA21804E6B00B24E2D /* spine-adapter.cpp */; };
-		046E040221804E6B00B24E2D /* spine-adapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03EA21804E6B00B24E2D /* spine-adapter.cpp */; };
 		046E06142185B37100B24E2D /* CCArmatureDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E060B2185B37000B24E2D /* CCArmatureDisplay.h */; };
 		046E06152185B37100B24E2D /* CCArmatureDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E060B2185B37000B24E2D /* CCArmatureDisplay.h */; };
 		046E06162185B37100B24E2D /* CCSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E060C2185B37000B24E2D /* CCSlot.cpp */; };
@@ -331,6 +327,14 @@
 		046E06F22185B4A500B24E2D /* BinaryDataParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E06E72185B4A500B24E2D /* BinaryDataParser.h */; };
 		046E06F32185B4A500B24E2D /* DataParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E06E82185B4A500B24E2D /* DataParser.h */; };
 		046E06F42185B4A500B24E2D /* DataParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E06E82185B4A500B24E2D /* DataParser.h */; };
+		046E06F72189990700B24E2D /* editor-adapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E06F52189990700B24E2D /* editor-adapter.cpp */; };
+		046E06F82189990700B24E2D /* editor-adapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E06F52189990700B24E2D /* editor-adapter.cpp */; };
+		046E06F92189990700B24E2D /* editor-adapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E06F62189990700B24E2D /* editor-adapter.h */; };
+		046E06FA2189990700B24E2D /* editor-adapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 046E06F62189990700B24E2D /* editor-adapter.h */; };
+		046E06FD2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E06FB2189999500B24E2D /* jsb_cocos2dx_editor_support_auto.cpp */; };
+		046E06FE2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E06FB2189999500B24E2D /* jsb_cocos2dx_editor_support_auto.cpp */; };
+		046E06FF2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046E06FC2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp */; };
+		046E07002189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046E06FC2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp */; };
 		1A14FD912080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD922080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD932080B4E300E10ABE /* CCGLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A14FD902080B4E300E10ABE /* CCGLUtils.h */; };
@@ -1200,7 +1204,6 @@
 		04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_spine_auto.cpp; sourceTree = "<group>"; };
 		0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
 		0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
-		046E03DF21804E6A00B24E2D /* spine-adapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "spine-adapter.h"; path = "../cocos/editor-support/spine-creator-support/spine-adapter.h"; sourceTree = "<group>"; };
 		046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreatorAttachmentLoader.cpp; path = "../cocos/editor-support/spine-creator-support/CreatorAttachmentLoader.cpp"; sourceTree = "<group>"; };
 		046E03E121804E6A00B24E2D /* SpineAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpineAnimation.cpp; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.cpp"; sourceTree = "<group>"; };
 		046E03E221804E6A00B24E2D /* SpineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpineAnimation.h; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.h"; sourceTree = "<group>"; };
@@ -1211,7 +1214,6 @@
 		046E03E721804E6A00B24E2D /* AttachmentVertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AttachmentVertices.h; path = "../cocos/editor-support/spine-creator-support/AttachmentVertices.h"; sourceTree = "<group>"; };
 		046E03E821804E6A00B24E2D /* AttachmentVertices.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AttachmentVertices.cpp; path = "../cocos/editor-support/spine-creator-support/AttachmentVertices.cpp"; sourceTree = "<group>"; };
 		046E03E921804E6A00B24E2D /* CreatorAttachmentLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreatorAttachmentLoader.h; path = "../cocos/editor-support/spine-creator-support/CreatorAttachmentLoader.h"; sourceTree = "<group>"; };
-		046E03EA21804E6B00B24E2D /* spine-adapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "spine-adapter.cpp"; path = "../cocos/editor-support/spine-creator-support/spine-adapter.cpp"; sourceTree = "<group>"; };
 		046E060B2185B37000B24E2D /* CCArmatureDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCArmatureDisplay.h; path = "../cocos/editor-support/dragonBones-creator-support/CCArmatureDisplay.h"; sourceTree = "<group>"; };
 		046E060C2185B37000B24E2D /* CCSlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCSlot.cpp; path = "../cocos/editor-support/dragonBones-creator-support/CCSlot.cpp"; sourceTree = "<group>"; };
 		046E060D2185B37000B24E2D /* CCTextureAtlasData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCTextureAtlasData.h; path = "../cocos/editor-support/dragonBones-creator-support/CCTextureAtlasData.h"; sourceTree = "<group>"; };
@@ -1290,6 +1292,10 @@
 		046E06E62185B4A500B24E2D /* BinaryDataParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryDataParser.cpp; path = "../cocos/editor-support/dragonBones/parser/BinaryDataParser.cpp"; sourceTree = "<group>"; };
 		046E06E72185B4A500B24E2D /* BinaryDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BinaryDataParser.h; path = "../cocos/editor-support/dragonBones/parser/BinaryDataParser.h"; sourceTree = "<group>"; };
 		046E06E82185B4A500B24E2D /* DataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataParser.h; path = "../cocos/editor-support/dragonBones/parser/DataParser.h"; sourceTree = "<group>"; };
+		046E06F52189990700B24E2D /* editor-adapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "editor-adapter.cpp"; path = "../cocos/editor-support/editor-adapter.cpp"; sourceTree = "<group>"; };
+		046E06F62189990700B24E2D /* editor-adapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "editor-adapter.h"; path = "../cocos/editor-support/editor-adapter.h"; sourceTree = "<group>"; };
+		046E06FB2189999500B24E2D /* jsb_cocos2dx_editor_support_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_editor_support_auto.cpp; sourceTree = "<group>"; };
+		046E06FC2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_editor_support_auto.hpp; sourceTree = "<group>"; };
 		1551A33F158F2AB200E66CFE /* libcocos2d Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1551A342158F2AB200E66CFE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CCGLUtils.cpp; sourceTree = "<group>"; };
@@ -1817,6 +1823,8 @@
 				046E03DE2180456A00B24E2D /* spine-creator-support */,
 				04355814217EADF300B9C056 /* IOBuffer.cpp */,
 				04355815217EADF300B9C056 /* IOBuffer.hpp */,
+				046E06F52189990700B24E2D /* editor-adapter.cpp */,
+				046E06F62189990700B24E2D /* editor-adapter.h */,
 				04355812217EADB900B9C056 /* spine */,
 			);
 			name = "editor-support";
@@ -1906,8 +1914,6 @@
 				046E03E221804E6A00B24E2D /* SpineAnimation.h */,
 				046E03E621804E6A00B24E2D /* SpineRenderer.cpp */,
 				046E03E521804E6A00B24E2D /* SpineRenderer.h */,
-				046E03EA21804E6B00B24E2D /* spine-adapter.cpp */,
-				046E03DF21804E6A00B24E2D /* spine-adapter.h */,
 				046E03E321804E6A00B24E2D /* spine-cocos2dx.cpp */,
 				046E03E421804E6A00B24E2D /* spine-cocos2dx.h */,
 			);
@@ -2502,6 +2508,8 @@
 		469302512046AE05004A3D6C /* auto */ = {
 			isa = PBXGroup;
 			children = (
+				046E06FB2189999500B24E2D /* jsb_cocos2dx_editor_support_auto.cpp */,
+				046E06FC2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp */,
 				04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */,
 				04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */,
 				40AEF7BD216DF21B00729AA5 /* jsb_video_auto.cpp */,
@@ -3206,11 +3214,11 @@
 				46AE3FE32092F3A600F3A228 /* inspector_agent.h in Headers */,
 				46AE3FEB2092F3A600F3A228 /* node_mutex.h in Headers */,
 				046E063B2185B41100B24E2D /* WorldClock.h in Headers */,
+				046E06F92189990700B24E2D /* editor-adapter.h in Headers */,
 				04355878217EAE1B00B9C056 /* RegionAttachment.h in Headers */,
 				4617864320522469008256E1 /* HttpRequest.h in Headers */,
 				1A28FF651F20AFAB007A1D9D /* SRPinningSecurityPolicy.h in Headers */,
 				46FDDA85202ACC6A00931238 /* View.h in Headers */,
-				046E03EB21804E6B00B24E2D /* spine-adapter.h in Headers */,
 				46AE3FF72092F3A600F3A228 /* util-inl.h in Headers */,
 				1AAAC875205CB647005321B9 /* jsb_cocos2dx_audioengine_auto.hpp in Headers */,
 				1A28FF951F20AFAB007A1D9D /* SocketRocket.h in Headers */,
@@ -3244,6 +3252,7 @@
 				4617866D2052609B008256E1 /* jsb_cocos2dx_network_auto.hpp in Headers */,
 				043558CE217EAE1B00B9C056 /* SlotData.h in Headers */,
 				50ABC00F1926664800A911A9 /* CCFileUtils.h in Headers */,
+				046E06FF2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp in Headers */,
 				1A28FF4D1F20AFAB007A1D9D /* SRDelegateController.h in Headers */,
 				043558BE217EAE1B00B9C056 /* SkeletonJson.h in Headers */,
 				46FDDB9F202ADDCE00931238 /* CCVector.h in Headers */,
@@ -3346,6 +3355,7 @@
 				1A29D77E2056667800168D9A /* csscolorparser.hpp in Headers */,
 				043558C7217EAE1B00B9C056 /* SkeletonData.h in Headers */,
 				46FDDA9C202ACC6A00931238 /* Effect.h in Headers */,
+				046E07002189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp in Headers */,
 				04355873217EAE1B00B9C056 /* extension.h in Headers */,
 				04355889217EAE1B00B9C056 /* BoundingBoxAttachment.h in Headers */,
 				46AE40062092F3A600F3A228 /* inspector_socket.h in Headers */,
@@ -3477,6 +3487,7 @@
 				469303872046AE05004A3D6C /* Object.hpp in Headers */,
 				1A28FF5E1F20AFAB007A1D9D /* SRProxyConnect.h in Headers */,
 				469303AD2046AE05004A3D6C /* Utils.hpp in Headers */,
+				046E06FA2189990700B24E2D /* editor-adapter.h in Headers */,
 				1A28FF4E1F20AFAB007A1D9D /* SRDelegateController.h in Headers */,
 				469301D0203FC696004A3D6C /* CCConfiguration.h in Headers */,
 				46FDDB6E202ADDCE00931238 /* etc1.h in Headers */,
@@ -3530,7 +3541,6 @@
 				46FDDB84202ADDCE00931238 /* ccRandom.h in Headers */,
 				1AAAC8EA205CB6E9005321B9 /* AudioMacros.h in Headers */,
 				46AE400A2092F3A600F3A228 /* node_debug_options.h in Headers */,
-				046E03EC21804E6B00B24E2D /* spine-adapter.h in Headers */,
 				4617862620522469008256E1 /* CCDownloader.h in Headers */,
 				46FDDBD2202ADDCE00931238 /* ccUTF8.h in Headers */,
 				1A14FD942080B4E300E10ABE /* CCGLUtils.h in Headers */,
@@ -3768,7 +3778,6 @@
 				1A28FF671F20AFAB007A1D9D /* SRPinningSecurityPolicy.m in Sources */,
 				469303BE2046AE05004A3D6C /* jsb_renderer_auto.cpp in Sources */,
 				50ABC0191926664800A911A9 /* CCSAXParser.cpp in Sources */,
-				046E040121804E6B00B24E2D /* spine-adapter.cpp in Sources */,
 				1A28FF571F20AFAB007A1D9D /* SRIOConsumerPool.m in Sources */,
 				46FDDB7B202ADDCE00931238 /* CCRef.cpp in Sources */,
 				46FDDB8D202ADDCE00931238 /* ccTypes.cpp in Sources */,
@@ -3838,6 +3847,7 @@
 				043558A4217EAE1B00B9C056 /* Event.c in Sources */,
 				1A52DB24205BCD9200350EE3 /* ObjectWrap.cpp in Sources */,
 				1AAAC8F1205CB6E9005321B9 /* AudioEngine.cpp in Sources */,
+				046E06F72189990700B24E2D /* editor-adapter.cpp in Sources */,
 				46FDDAE5202ACC6B00931238 /* IndexBuffer.cpp in Sources */,
 				1A29D76F205665D200168D9A /* jsb_cocos2dx_manual.cpp in Sources */,
 				50ABC00D1926664800A911A9 /* CCFileUtils.cpp in Sources */,
@@ -3883,6 +3893,7 @@
 				46FDDA95202ACC6A00931238 /* RendererUtils.cpp in Sources */,
 				1A28FF9D1F20AFAB007A1D9D /* SRWebSocket.m in Sources */,
 				46FDDB8F202ADDCE00931238 /* ccUtils.cpp in Sources */,
+				046E06FD2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.cpp in Sources */,
 				046E065C2185B41B00B24E2D /* Constraint.cpp in Sources */,
 				1A29D796205666F500168D9A /* jsb_opengl_utils.cpp in Sources */,
 				BA21055A21009A2600E19975 /* AssetsManagerEx.cpp in Sources */,
@@ -3931,10 +3942,10 @@
 				1A28FF581F20AFAB007A1D9D /* SRIOConsumerPool.m in Sources */,
 				469303C72046AE05004A3D6C /* jsb_gfx_auto.cpp in Sources */,
 				46AE3FF22092F3A600F3A228 /* SHA1.cpp in Sources */,
-				046E040221804E6B00B24E2D /* spine-adapter.cpp in Sources */,
 				ED30579E1BEC77BD0083C3ED /* ConvertUTFWrapper.cpp in Sources */,
 				046E06892185B44A00B24E2D /* BaseFactory.cpp in Sources */,
 				1A28FF801F20AFAB007A1D9D /* SRMutex.m in Sources */,
+				046E06FE2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.cpp in Sources */,
 				46AE400C2092F3A600F3A228 /* env.cc in Sources */,
 				0435587B217EAE1B00B9C056 /* Slot.c in Sources */,
 				46FDDC69202D733800931238 /* CCApplication-ios.mm in Sources */,
@@ -3956,6 +3967,7 @@
 				46FDDBFC202ADDCE00931238 /* ccCArray.cpp in Sources */,
 				04355817217EADF300B9C056 /* IOBuffer.cpp in Sources */,
 				46FDDB7C202ADDCE00931238 /* CCRef.cpp in Sources */,
+				046E06F82189990700B24E2D /* editor-adapter.cpp in Sources */,
 				469301D2203FC696004A3D6C /* CCConfiguration.cpp in Sources */,
 				461DCA5920C7E4BA00B22827 /* JavaScriptObjCBridge.mm in Sources */,
 				46FDDAB2202ACC6A00931238 /* DeviceGraphics.cpp in Sources */,

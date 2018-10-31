@@ -26,11 +26,11 @@
 
 namespace spine {
     
-    AttachmentVertices::AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount) {
+    AttachmentVertices::AttachmentVertices (editor::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount) {
         _texture = texture;
         
-        _triangles = new Triangles();
-        _triangles->verts = new V2F_T2F_C4B[verticesCount];
+        _triangles = new editor::Triangles();
+        _triangles->verts = new editor::V2F_T2F_C4B[verticesCount];
         _triangles->vertCount = verticesCount;
         _triangles->indices = triangles;
         _triangles->indexCount = trianglesCount;

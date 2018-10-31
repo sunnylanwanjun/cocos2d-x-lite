@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "spine-creator-support/spine-adapter.h"
+#include "editor-adapter.h"
 #include "base/ccMacros.h"
 
 namespace spine{
@@ -33,10 +33,10 @@ namespace spine{
      */
     class AttachmentVertices {
     public:
-        AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
+        AttachmentVertices (editor::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
         virtual ~AttachmentVertices ();
         
-        Texture2D* _texture = nullptr;
-        Triangles* _triangles = nullptr;
+        editor::Texture2D* _texture = nullptr;
+        editor::Triangles* _triangles = nullptr;
     };
 }

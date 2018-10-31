@@ -33,20 +33,6 @@ CCArmatureDisplay::~CCArmatureDisplay()
         }
         delete &idArr;
     }
-    if(_parent){
-        _parent->removeChild(this);
-    }
-}
-
-void CCArmatureDisplay::removeChild(CCArmatureDisplay* child){
-    auto it = _children.find(child);
-    if (it != _children.end()) {
-        _children.erase(it);
-    }
-}
-
-void CCArmatureDisplay::addChild(CCArmatureDisplay* child){
-    _children.pushBack(child);
 }
 
 void CCArmatureDisplay::dbInit(Armature* armature)

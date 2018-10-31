@@ -29,6 +29,7 @@
 #include <map>
 #include <vector>
 #include "CCVector.h"
+#include "dragonBones-creator-support/CCSlot.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -108,18 +109,12 @@ public:
     }
     
     /**
-     * remove child ArmatureDisplay
+     * 
      */
-    void removeChild(CCArmatureDisplay* child);
-    /**
-     * add child ArmatureDisplay
-     */
-    void addChild(CCArmatureDisplay* child);
+    
 private:
-    CCArmatureDisplay* _parent = nullptr;
     std::function<void(EventObject*)> _eventCallback = nullptr;
     std::map<std::string,std::vector<uint32_t>*> _listenerIDMap;
-    cocos2d::Vector<CCArmatureDisplay*> _children;
 };
 
 /**
