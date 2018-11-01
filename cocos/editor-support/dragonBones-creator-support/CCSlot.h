@@ -43,16 +43,16 @@ DRAGONBONES_NAMESPACE_BEGIN
 class CCSlot : public Slot
 {
     BIND_CLASS_TYPE_A(CCSlot);
-public:
-    cocos2d::Mat4 _worldMatrix;
-    bool _worldMatDirty = true;
     
+public:
+    cocos2d::Mat4 worldMatrix;
+    bool _worldMatDirty = true;
+    editor::Triangles triangles;
+    cocos2d::Color4B color;
+    cocos2d::Rect boundsRect;
 private:
     float _textureScale = 1.0f;
-    editor::Triangles _triangles;
-    cocos2d::Rect _boundsRect;
     cocos2d::Mat4 _localMatrix;
-    cocos2d::Color4B _color;
 private:
     void disposeTriangles();
     void calculWorldMatrix();
@@ -72,6 +72,7 @@ public:
     virtual void _updateBlendMode() override;
     virtual void _updateColor() override;
     void updateWorldMatrix();
+    editor::Texture2D* getTexture() const;
 protected:
     virtual void _updateFrame() override;
     virtual void _updateMesh() override;

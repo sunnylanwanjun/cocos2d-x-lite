@@ -164,7 +164,7 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual Armature* buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string& textureAtlasName = "") const;
+    virtual CCArmatureDisplay* buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string& textureAtlasName = "") const;
     /**
      * - A global sound event manager.
      * Sound events can be listened to uniformly from the manager.

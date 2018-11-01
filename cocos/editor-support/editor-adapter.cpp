@@ -26,49 +26,61 @@
 
 namespace editor {
 
-    Texture2D::Texture2D(){
+    Texture2D::Texture2D()
+    {
         
     }
 
-    Texture2D::~Texture2D(){
+    Texture2D::~Texture2D()
+    {
         
     }
 
-    int Texture2D::getPixelsWide() const{
+    int Texture2D::getPixelsWide() const
+    {
         return _pixelsWide;
     }
 
-    int Texture2D::getPixelsHigh() const{
+    int Texture2D::getPixelsHigh() const
+    {
         return _pixelsHigh;
     }
 
-    void Texture2D::setPixelsWide(int wide){
+    void Texture2D::setPixelsWide(int wide)
+    {
         this->_pixelsWide = wide;
     }
 
-    void Texture2D::setPixelsHigh(int high){
+    void Texture2D::setPixelsHigh(int high)
+    {
         this->_pixelsHigh = high;
     }
 
-    int Texture2D::getRealTextureIndex() const{
+    int Texture2D::getRealTextureIndex() const
+    {
         return this->_realTextureIndex;
     }
 
-    void Texture2D::setRealTextureIndex(int textureIndex){
+    void Texture2D::setRealTextureIndex(int textureIndex)
+    {
         this->_realTextureIndex = textureIndex;
     }
 
-    void Texture2D::setTexParamCallback(const texParamCallback& callback){
+    void Texture2D::setTexParamCallback(const texParamCallback& callback)
+    {
         this->_texParamCallback = callback;
     }
 
-    void Texture2D::setTexParameters(const TexParams& texParams){
-        if(_texParamCallback){
+    void Texture2D::setTexParameters(const TexParams& texParams)
+    {
+        if (_texParamCallback)
+        {
             _texParamCallback(this->_realTextureIndex,texParams.minFilter,texParams.magFilter,texParams.wrapS,texParams.wrapT);
         }
     }
 
-    SpriteFrame* SpriteFrame::createWithTexture(Texture2D *texture, const cocos2d::Rect& rect){
+    SpriteFrame* SpriteFrame::createWithTexture(Texture2D *texture, const cocos2d::Rect& rect)
+    {
         SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
         spriteFrame->initWithTexture(texture, rect);
         spriteFrame->autorelease();
@@ -76,7 +88,8 @@ namespace editor {
         return spriteFrame;
     }
     
-    SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const cocos2d::Rect& rect, bool rotated, const cocos2d::Vec2& offset, const cocos2d::Size& originalSize){
+    SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const cocos2d::Rect& rect, bool rotated, const cocos2d::Vec2& offset, const cocos2d::Size& originalSize)
+    {
         SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
         spriteFrame->initWithTexture(texture, rect, rotated, offset, originalSize);
         spriteFrame->autorelease();
@@ -107,23 +120,28 @@ namespace editor {
         return true;
     }
     
-    SpriteFrame::SpriteFrame(){
+    SpriteFrame::SpriteFrame()
+    {
         
     }
     
-    SpriteFrame::~SpriteFrame(){
+    SpriteFrame::~SpriteFrame()
+    {
         CC_SAFE_RELEASE(_texture);
     }
     
-    void SpriteFrame::setTexture(Texture2D * texture){
-        if( _texture != texture ) {
+    void SpriteFrame::setTexture(Texture2D * texture)
+    {
+        if( _texture != texture )
+        {
             CC_SAFE_RELEASE(_texture);
             CC_SAFE_RETAIN(texture);
             _texture = texture;
         }
     }
     
-    Texture2D* SpriteFrame::getTexture(){
+    Texture2D* SpriteFrame::getTexture()
+    {
         return _texture;
     }
 }

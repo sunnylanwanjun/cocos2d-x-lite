@@ -28,8 +28,8 @@
 #include "scripting/js-bindings/event/EventDispatcher.h"
 #include <map>
 #include <vector>
-#include "CCVector.h"
 #include "dragonBones-creator-support/CCSlot.h"
+#include "IOBuffer.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -46,9 +46,10 @@ public:
      * @internal
      */
     static CCArmatureDisplay* create();
-public:
-    bool debugDraw = false;
-
+    
+private:
+    void traverseArmature(Armature* armature);
+    
 protected:
     bool _debugDraw = false;
     Armature* _armature = nullptr;
@@ -57,7 +58,6 @@ public:
     CCArmatureDisplay();
     virtual ~CCArmatureDisplay();
 
-public:
     /**
      * @inheritDoc
      */
@@ -77,10 +77,7 @@ public:
     /**
      * @inheritDoc
      */
-    inline virtual bool hasDBEventListener(const std::string& type) const override
-    {
-        return _eventCallback != nullptr;
-    }
+    virtual bool hasDBEventListener(const std::string& type) const override;
     /**
      * @inheritDoc
      */
@@ -108,43 +105,65 @@ public:
         return _armature->getAnimation();
     }
     
-    /**
-     * 
-     */
+    /** Returns render data,it's a Uint32Array
+     * format is |material length|blend src|blend dst|vertex length|indice length|x|y|u|v|color4b|.....*/
+    se_object_ptr getRenderData() const
+    {
+        return _vertexBuffer.getTypeArray();
+    }
     
+    /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
+    se_object_ptr getIndiceData() const
+    {
+        return _indiceBuffer.getTypeArray();
+    }
+    
+    /** Returns debug data,it's a Float32Array,
+     * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
+    se_object_ptr getDebugData() const
+    {
+        return _debugBuffer.getTypeArray();
+    }
+    
+    void setColor(cocos2d::Color4B& color)
+    {
+        _nodeColor = color;
+    }
+    
+    void setDebugBonesEnabled(bool enabled)
+    {
+        _debugDraw = enabled;
+    }
+    
+    void setOpacityModifyRGB (bool value)
+    {
+        _premultipliedAlpha = value;
+    }
 private:
-    std::function<void(EventObject*)> _eventCallback = nullptr;
     std::map<std::string,std::vector<uint32_t>*> _listenerIDMap;
+    editor::IOBuffer _vertexBuffer;
+    editor::IOBuffer _indiceBuffer;
+    editor::IOBuffer _debugBuffer;
+    cocos2d::Color4B _nodeColor = cocos2d::Color4B::WHITE;
+    
+    int _preBlendSrc = -1;
+    int _preBlendDst = -1;
+    int _preTextureIndex = -1;
+    int _curBlendSrc = -1;
+    int _curBlendDst = -1;
+    int _curTextureIndex = -1;
+    
+    int _preVSegWritePos = -1;
+    int _preISegWritePos = -1;
+    int _curVSegLen = 0;
+    int _curISegLen = 0;
+    
+    int _debugSlotsLen = 0;
+    int _materialLen = 0;
+    
+    bool _premultipliedAlpha = false;
+    cocos2d::Color4B _finalColor = cocos2d::Color4B::WHITE;
 };
-
-/**
- * @internal
- */
-//class DBCCSprite : public cocos2d::Sprite
-//{
-//    DRAGONBONES_DISALLOW_COPY_AND_ASSIGN(DBCCSprite)
-//
-//public:
-//    static DBCCSprite* create();
-//
-//protected:
-//    DBCCSprite() {}
-//    virtual ~DBCCSprite() {}
-//    /**
-//     * Modify for polyInfo rect
-//     */
-//    bool _checkVisibility(const cocos2d::Mat4& transform, const cocos2d::Size& size, const cocos2d::Rect& rect);
-//
-//public:
-//    /**
-//     * Modify for polyInfo rect
-//     */
-//    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
-//    /**
-//     * Modify for cocos2dx 3.7, 3.8, 3.9
-//     */
-//    cocos2d::PolygonInfo& getPolygonInfoModify();
-//};
 
 DRAGONBONES_NAMESPACE_END
 #endif // DRAGONBONES_CC_ARMATURE_DISPLAY_CONTAINER_H

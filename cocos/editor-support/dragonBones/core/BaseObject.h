@@ -24,6 +24,7 @@
 #define DRAGONBONES_BASE_OBJECT_H
 
 #include "DragonBones.h"
+#include <vector>
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -40,6 +41,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  */
 class BaseObject
 {
+public:
+    typedef std::function<void(BaseObject*,int)> RecycleOrDestroyCallback;
 private:
     static unsigned _hashCode;
     static unsigned _defaultMaxCount;
@@ -47,7 +50,9 @@ private:
     static std::map<std::size_t, std::vector<BaseObject*>> _poolsMap;
     static void _returnObject(BaseObject *object);
 
+    static RecycleOrDestroyCallback _recycleOrDestroyCallback;
 public:
+    static void setObjectRecycleOrDestroyCallback(const RecycleOrDestroyCallback& cb);
     /**
      * - Set the maximum cache count of the specify object pool.
      * @param objectConstructor - The specify class. (Set all object pools max cache count if not set)
@@ -109,7 +114,8 @@ public:
 
         return object;
     }
-
+    
+    static std::vector<dragonBones::BaseObject*>& getAllObjects();
 public:
     /**
      * - A unique identification number assigned to the object.
@@ -124,16 +130,14 @@ public:
     const unsigned hashCode;
 
 private:
+    static std::vector<dragonBones::BaseObject*> __allDragonBonesObjects;
     bool _isInPool;
 
 public:
-    virtual ~BaseObject() {}
+    virtual ~BaseObject();
 
 protected:
-    BaseObject() :
-        hashCode(BaseObject::_hashCode++),
-        _isInPool(false)
-    {}
+    BaseObject();
 
     virtual void _onClear() = 0;
 
@@ -150,6 +154,7 @@ public:
      * @language zh_CN
      */
     void returnToPool();
+    inline bool isInPool() const { return _isInPool; }
 };
 
 DRAGONBONES_NAMESPACE_END

@@ -27,11 +27,12 @@
 #include "base/ccTypes.h"
 #include <functional>
 
-namespace editor{
+namespace editor {
     /** @struct Tex2F
      * A TEXCOORD composed of 2 floats: u, y
      */
-    struct Tex2F {
+    struct Tex2F
+    {
         GLfloat u;
         GLfloat v;
     };
@@ -39,7 +40,8 @@ namespace editor{
     /** @struct V2F_T2F_C4B
      * A Vec2 with a vertex point, a tex coord point and a color 4B.
      */
-    struct V2F_T2F_C4B {
+    struct V2F_T2F_C4B
+    {
         /// vertices (3F)
         cocos2d::Vec2     vertices;            // 12 bytes
         
@@ -65,14 +67,16 @@ namespace editor{
     ///////////////////////////////////////////////////////////////////////
     // adapt to editor texture,this is a texture delegate,not real texture
     ///////////////////////////////////////////////////////////////////////
-    class Texture2D : public cocos2d::Ref {
+    class Texture2D : public cocos2d::Ref
+    {
     public:
         Texture2D();
         virtual ~Texture2D();
         /**
          Extension to set the Min / Mag filter
          */
-        typedef struct _TexParams {
+        typedef struct _TexParams
+        {
             GLuint    minFilter;
             GLuint    magFilter;
             GLuint    wrapS;
@@ -135,7 +139,8 @@ namespace editor{
     ///////////////////////////////////////////////////////////////////////
     // adapt to editor sprite frame
     ///////////////////////////////////////////////////////////////////////
-    class SpriteFrame : public cocos2d::Ref {
+    class SpriteFrame : public cocos2d::Ref
+    {
     public:
         static SpriteFrame* createWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect);
         static SpriteFrame* createWithTexture(Texture2D* pobTexture, const cocos2d::Rect& rect, bool rotated, const cocos2d::Vec2& offset, const cocos2d::Size& originalSize);

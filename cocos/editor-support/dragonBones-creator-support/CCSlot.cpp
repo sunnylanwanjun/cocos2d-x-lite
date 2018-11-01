@@ -10,35 +10,43 @@ void CCSlot::_onClear()
     disposeTriangles();
 }
 
-void CCSlot::disposeTriangles(){
-    if (_triangles.verts) {
-        delete[] _triangles.verts;
-        _triangles.verts = nullptr;
+void CCSlot::disposeTriangles()
+{
+    if (triangles.verts)
+    {
+        delete[] triangles.verts;
+        triangles.verts = nullptr;
     }
-    if (_triangles.indices) {
-        delete[] _triangles.indices;
-        _triangles.indices = nullptr;
+    if (triangles.indices)
+    {
+        delete[] triangles.indices;
+        triangles.indices = nullptr;
     }
-    _triangles.indexCount = 0;
-    _triangles.vertCount = 0;
+    triangles.indexCount = 0;
+    triangles.vertCount = 0;
 }
 
-void CCSlot::adjustTriangles(const unsigned vertexCount, const unsigned indicesCount){
-    if (_triangles.vertCount < vertexCount) {
-        if (_triangles.verts) {
-            delete[] _triangles.verts;
+void CCSlot::adjustTriangles(const unsigned vertexCount, const unsigned indicesCount)
+{
+    if (triangles.vertCount < vertexCount)
+    {
+        if (triangles.verts)
+        {
+            delete[] triangles.verts;
         }
-        _triangles.verts = new editor::V2F_T2F_C4B[vertexCount];
+        triangles.verts = new editor::V2F_T2F_C4B[vertexCount];
     }
-    _triangles.vertCount = vertexCount;
+    triangles.vertCount = vertexCount;
     
-    if (_triangles.indexCount < indicesCount) {
-        if (_triangles.indices) {
-            delete[] _triangles.indices;
+    if (triangles.indexCount < indicesCount)
+    {
+        if (triangles.indices)
+        {
+            delete[] triangles.indices;
         }
-        _triangles.indices = new unsigned short[indicesCount];
+        triangles.indices = new unsigned short[indicesCount];
     }
-    _triangles.indexCount = indicesCount;
+    triangles.indexCount = indicesCount;
 }
 
 void CCSlot::_initDisplay(void* value, bool isRetain)
@@ -76,6 +84,16 @@ void CCSlot::_updateZOrder()
     
 }
 
+editor::Texture2D* CCSlot::getTexture() const
+{
+    const auto currentTextureData = static_cast<CCTextureData*>(_textureData);
+    if (!currentTextureData || !currentTextureData->spriteFrame)
+    {
+        return nullptr;
+    }
+    return currentTextureData->spriteFrame->getTexture();
+}
+
 void CCSlot::_updateFrame()
 {
     const auto currentVerticesData = (_deformVertices != nullptr && _display == _meshDisplay) ? _deformVertices->verticesData : nullptr;
@@ -108,12 +126,12 @@ void CCSlot::_updateFrame()
                 const unsigned indicesCount = triangleCount * 3;
                 adjustTriangles(vertexCount, indicesCount);
                 
-                auto vertices = _triangles.verts;
-                auto vertexIndices = _triangles.indices;
-                _boundsRect.origin.x = 999999.0f;
-                _boundsRect.origin.y = 999999.0f;
-                _boundsRect.size.width = -999999.0f;
-                _boundsRect.size.height = -999999.0f;
+                auto vertices = triangles.verts;
+                auto vertexIndices = triangles.indices;
+                boundsRect.origin.x = 999999.0f;
+                boundsRect.origin.y = 999999.0f;
+                boundsRect.size.width = -999999.0f;
+                boundsRect.size.height = -999999.0f;
                 
                 for (std::size_t i = 0, l = vertexCount * 2; i < l; i += 2)
                 {
@@ -139,29 +157,29 @@ void CCSlot::_updateFrame()
 
                     vertexData.colors = cocos2d::Color4B::WHITE;
 
-                    if (_boundsRect.origin.x > x)
+                    if (boundsRect.origin.x > x)
                     {
-                        _boundsRect.origin.x = x;
+                        boundsRect.origin.x = x;
                     }
 
-                    if (_boundsRect.size.width < x)
+                    if (boundsRect.size.width < x)
                     {
-                        _boundsRect.size.width = x;
+                        boundsRect.size.width = x;
                     }
 
-                    if (_boundsRect.origin.y > -y)
+                    if (boundsRect.origin.y > -y)
                     {
-                        _boundsRect.origin.y = -y;
+                        boundsRect.origin.y = -y;
                     }
 
-                    if (_boundsRect.size.height < -y)
+                    if (boundsRect.size.height < -y)
                     {
-                        _boundsRect.size.height = -y;
+                        boundsRect.size.height = -y;
                     }
                 }
 
-                _boundsRect.size.width -= _boundsRect.origin.x;
-                _boundsRect.size.height -= _boundsRect.origin.y;
+                boundsRect.size.width -= boundsRect.origin.x;
+                boundsRect.size.height -= boundsRect.origin.y;
 
                 for (std::size_t i = 0; i < triangleCount * 3; ++i)
                 {
@@ -196,12 +214,12 @@ void CCSlot::_updateMesh()
 
     const auto hasFFD = !deformVertices.empty();
     const auto textureData = static_cast<CCTextureData*>(_textureData);
-    const auto vertices = _triangles.verts;
+    const auto vertices = triangles.verts;
     
-    _boundsRect.origin.x = 999999.0f;
-    _boundsRect.origin.y = 999999.0f;
-    _boundsRect.size.width = -999999.0f;
-    _boundsRect.size.height = -999999.0f;
+    boundsRect.origin.x = 999999.0f;
+    boundsRect.origin.y = 999999.0f;
+    boundsRect.size.width = -999999.0f;
+    boundsRect.size.height = -999999.0f;
 
     if (!textureData)
     {
@@ -216,7 +234,7 @@ void CCSlot::_updateMesh()
         const auto vertexCount = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
         int weightFloatOffset = intArray[weightData->offset + (unsigned)BinaryOffset::WeigthFloatOffset];
 
-        if (vertexCount > _triangles.vertCount) {
+        if (vertexCount > triangles.vertCount) {
             return;
         }
         
@@ -261,24 +279,24 @@ void CCSlot::_updateMesh()
             vertexPosition.x = xG;
             vertexPosition.y = -yG;
 
-            if (_boundsRect.origin.x > xG)
+            if (boundsRect.origin.x > xG)
             {
-                _boundsRect.origin.x = xG;
+                boundsRect.origin.x = xG;
             }
 
-            if (_boundsRect.size.width < xG)
+            if (boundsRect.size.width < xG)
             {
-                _boundsRect.size.width = xG;
+                boundsRect.size.width = xG;
             }
 
-            if (_boundsRect.origin.y > -yG)
+            if (boundsRect.origin.y > -yG)
             {
-                _boundsRect.origin.y = -yG;
+                boundsRect.origin.y = -yG;
             }
 
-            if (_boundsRect.size.height < -yG)
+            if (boundsRect.size.height < -yG)
             {
-                _boundsRect.size.height = -yG;
+                boundsRect.size.height = -yG;
             }
         }
     }
@@ -290,7 +308,7 @@ void CCSlot::_updateMesh()
         const auto vertexCount = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
         int vertexOffset = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshFloatOffset];
 
-        if (vertexCount > _triangles.vertCount) {
+        if (vertexCount > triangles.vertCount) {
             return;
         }
         
@@ -311,30 +329,30 @@ void CCSlot::_updateMesh()
             vertexPosition.x = xG;
             vertexPosition.y = -yG;
 
-            if (_boundsRect.origin.x > xG)
+            if (boundsRect.origin.x > xG)
             {
-                _boundsRect.origin.x = xG;
+                boundsRect.origin.x = xG;
             }
 
-            if (_boundsRect.size.width < xG)
+            if (boundsRect.size.width < xG)
             {
-                _boundsRect.size.width = xG;
+                boundsRect.size.width = xG;
             }
 
-            if (_boundsRect.origin.y > -yG)
+            if (boundsRect.origin.y > -yG)
             {
-                _boundsRect.origin.y = -yG;
+                boundsRect.origin.y = -yG;
             }
 
-            if (_boundsRect.size.height < -yG)
+            if (boundsRect.size.height < -yG)
             {
-                _boundsRect.size.height = -yG;
+                boundsRect.size.height = -yG;
             }
         }
     }
 
-    _boundsRect.size.width -= _boundsRect.origin.x;
-    _boundsRect.size.height -= _boundsRect.origin.y;
+    boundsRect.size.width -= boundsRect.origin.x;
+    boundsRect.size.height -= boundsRect.origin.y;
 
     if (weightData != nullptr) 
     {
@@ -371,34 +389,42 @@ void CCSlot::_updateTransform()
     _worldMatDirty = true;
 }
 
-void CCSlot::updateWorldMatrix(){
+void CCSlot::updateWorldMatrix()
+{
     if (!_armature)return;
     
     CCSlot* parent = (CCSlot*)_armature->getParent();
-    if (parent) {
+    if (parent)
+    {
         parent->updateWorldMatrix();
     }
     
-    if (_worldMatDirty) {
+    if (_worldMatDirty)
+    {
         calculWorldMatrix();
         
-        auto childArmature = getChildArmature();
+        Armature* childArmature = getChildArmature();
         if(!childArmature)return;
         
-        auto slots = childArmature->getSlots();
-        for (int i = 0; i < slots.size(); i++) {
+        auto& slots = childArmature->getSlots();
+        for (int i = 0; i < slots.size(); i++)
+        {
             CCSlot* slot = (CCSlot*)slots[i];
             slot->_worldMatDirty = true;
         }
     }
 }
 
-void CCSlot::calculWorldMatrix(){
+void CCSlot::calculWorldMatrix()
+{
     CCSlot* parent = (CCSlot*)_armature->getParent();
-    if (parent) {
-        _worldMatrix = parent->_worldMatrix * _localMatrix;
-    } else {
-        _worldMatrix = _localMatrix;
+    if (parent)
+    {
+        worldMatrix = parent->worldMatrix * _localMatrix;
+    }
+    else
+    {
+        worldMatrix = _localMatrix;
     }
     
     _worldMatDirty = false;
@@ -435,10 +461,10 @@ void CCSlot::_updateBlendMode()
 
 void CCSlot::_updateColor()
 {
-    _color.r = _colorTransform.redMultiplier * 255.0f;
-    _color.g = _colorTransform.greenMultiplier * 255.0f;
-    _color.b = _colorTransform.blueMultiplier * 255.0f;
-    _color.a = _colorTransform.alphaMultiplier * 255.0f;
+    color.r = _colorTransform.redMultiplier * 255.0f;
+    color.g = _colorTransform.greenMultiplier * 255.0f;
+    color.b = _colorTransform.blueMultiplier * 255.0f;
+    color.a = _colorTransform.alphaMultiplier * 255.0f;
 }
 
 DRAGONBONES_NAMESPACE_END

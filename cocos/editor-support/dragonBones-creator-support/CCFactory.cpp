@@ -114,9 +114,17 @@ TextureAtlasData* CCFactory::loadTextureAtlasData(const std::string& filePath, c
     return static_cast<CCTextureAtlasData*>(BaseFactory::parseTextureAtlasData(data.c_str(), nullptr, name, scale));
 }
 
-Armature* CCFactory::buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName, const std::string& skinName, const std::string& textureAtlasName) const
+CCArmatureDisplay* CCFactory::buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName, const std::string& skinName, const std::string& textureAtlasName) const
 {
-    return buildArmature(armatureName, dragonBonesName, skinName, textureAtlasName);
+    const auto armature = buildArmature(armatureName, dragonBonesName, skinName, textureAtlasName);
+    if (armature != nullptr)
+    {
+        _dragonBones->getClock()->add(armature);
+
+        return static_cast<CCArmatureDisplay*>(armature->getDisplay());
+    }
+
+    return nullptr;
 }
 
 DRAGONBONES_NAMESPACE_END
