@@ -136,6 +136,38 @@ void CCArmatureDisplay::dbUpdate()
     }
 }
 
+cocos2d::Vec2 CCArmatureDisplay::convertToWorldSpace(const cocos2d::Vec2& pos) const
+{
+    CCSlot* slot = (CCSlot*)_armature->getParent();
+    if (!slot)
+    {
+        return pos;
+    }
+    cocos2d::Vec2 newPos;
+    slot->updateWorldMatrix();
+    cocos2d::Mat4& worldMatrix = slot->worldMatrix;
+    newPos.x = pos.x * worldMatrix.m[0] + pos.y * worldMatrix.m[4] + worldMatrix.m[12];
+    newPos.y = pos.x * worldMatrix.m[1] + pos.y * worldMatrix.m[11] + worldMatrix.m[13];
+    return newPos;
+}
+
+CCArmatureDisplay* CCArmatureDisplay::getRootDisplay()
+{
+    Slot* slot = _armature->getParent();
+    if (!slot)
+    {
+        return this;
+    }
+    
+    Slot* parentSlot = slot->_armature->getParent();
+    while (parentSlot)
+    {
+        slot = parentSlot;
+        parentSlot = parentSlot->_armature->getParent();
+    }
+    return (CCArmatureDisplay*)slot->_armature->getDisplay();
+}
+
 void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
     auto& slots = _armature->getSlots();

@@ -28,6 +28,7 @@
 #include "scripting/js-bindings/event/EventDispatcher.h"
 #include <map>
 #include <vector>
+
 #include "dragonBones-creator-support/CCSlot.h"
 #include "IOBuffer.h"
 
@@ -139,6 +140,16 @@ public:
     {
         _premultipliedAlpha = value;
     }
+    
+    typedef std::function<void(se_object_ptr, se_object_ptr, se_object_ptr)> bufferChangeCallback;
+    void setBufferChangeCallback(bufferChangeCallback callback)
+    {
+        _changeBufferCallback = callback;
+    }
+    
+    cocos2d::Vec2 convertToWorldSpace(const cocos2d::Vec2& pos) const;
+    CCArmatureDisplay* getRootDisplay();
+    
 private:
     std::map<std::string,std::vector<uint32_t>*> _listenerIDMap;
     editor::IOBuffer _vertexBuffer;
@@ -163,6 +174,7 @@ private:
     
     bool _premultipliedAlpha = false;
     cocos2d::Color4B _finalColor = cocos2d::Color4B::WHITE;
+    bufferChangeCallback _changeBufferCallback = nullptr;
 };
 
 DRAGONBONES_NAMESPACE_END

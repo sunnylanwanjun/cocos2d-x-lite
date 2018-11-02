@@ -67,7 +67,16 @@ public:
 
         return CCFactory::_factory;
     }
-
+    
+    static void destroyInstance()
+    {
+        if (CCFactory::_factory)
+        {
+            delete CCFactory::_factory;
+        }
+        CCFactory::_factory = nullptr;
+    }
+    
 protected:
     std::string _prevPath;
 

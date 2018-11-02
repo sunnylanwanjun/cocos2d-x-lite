@@ -43,18 +43,6 @@ int
  */
 jsbDragonBones.Matrix = {
 
-/**
- * @method transformRectangle
- * @param {dragonBones::Rectangle} arg0
- * @param {bool} arg1
- */
-transformRectangle : function (
-rectangle, 
-bool 
-)
-{
-},
-
 };
 
 /**
@@ -188,20 +176,6 @@ createRectangle : function (
 jsbDragonBones.ArmatureData = {
 
 /**
- * @method getCacheFrame
- * @param {dragonBones::Matrix} arg0
- * @param {dragonBones::Transform} arg1
- * @param {unsigned int} arg2
- */
-getCacheFrame : function (
-matrix, 
-transform, 
-int 
-)
-{
-},
-
-/**
  * @method getBone
  * @param {String} arg0
  * @return {dragonBones::BoneData}
@@ -333,20 +307,6 @@ getAnimationNames : function (
 )
 {
     return new Array();
-},
-
-/**
- * @method setCacheFrame
- * @param {dragonBones::Matrix} arg0
- * @param {dragonBones::Transform} arg1
- * @return {int}
- */
-setCacheFrame : function (
-matrix, 
-transform 
-)
-{
-    return 0;
 },
 
 /**
@@ -862,18 +822,6 @@ worldclock
 },
 
 /**
- * @method _sortZOrder
- * @param {short} arg0
- * @param {unsigned int} arg1
- */
-_sortZOrder : function (
-short, 
-int 
-)
-{
-},
-
-/**
  * @method _bufferAction
  * @param {dragonBones::EventObject} arg0
  * @param {bool} arg1
@@ -919,22 +867,6 @@ getName : function (
  * @method dispose
  */
 dispose : function (
-)
-{
-},
-
-/**
- * @method init
- * @param {dragonBones::ArmatureData} arg0
- * @param {dragonBones::IArmatureProxy} arg1
- * @param {void} arg2
- * @param {dragonBones::DragonBones} arg3
- */
-init : function (
-armaturedata, 
-iarmatureproxy, 
-void, 
-dragonbones 
 )
 {
 },
@@ -1002,18 +934,6 @@ point
 },
 
 /**
- * @method getBoneByDisplay
- * @param {void} arg0
- * @return {dragonBones::Bone}
- */
-getBoneByDisplay : function (
-void 
-)
-{
-    return dragonBones::Bone;
-},
-
-/**
  * @method setCacheFrameRate
  * @param {unsigned int} arg0
  */
@@ -1054,6 +974,16 @@ bool
 },
 
 /**
+ * @method getArmatureData
+ * @return {dragonBones::ArmatureData}
+ */
+getArmatureData : function (
+)
+{
+    return dragonBones::ArmatureData;
+},
+
+/**
  * @method _addSlot
  * @param {dragonBones::Slot} arg0
  */
@@ -1074,6 +1004,16 @@ float
 },
 
 /**
+ * @method getAnimation
+ * @return {dragonBones::Animation}
+ */
+getAnimation : function (
+)
+{
+    return dragonBones::Animation;
+},
+
+/**
  * @method getParent
  * @return {dragonBones::Slot}
  */
@@ -1081,28 +1021,6 @@ getParent : function (
 )
 {
     return dragonBones::Slot;
-},
-
-/**
- * @method getSlotByDisplay
- * @param {void} arg0
- * @return {dragonBones::Slot}
- */
-getSlotByDisplay : function (
-void 
-)
-{
-    return dragonBones::Slot;
-},
-
-/**
- * @method setReplacedTexture
- * @param {void} arg0
- */
-setReplacedTexture : function (
-void 
-)
-{
 },
 
 /**
@@ -1343,6 +1261,16 @@ str
 removeAllBoneMask : function (
 )
 {
+},
+
+/**
+ * @method getAnimationData
+ * @return {dragonBones::AnimationData}
+ */
+getAnimationData : function (
+)
+{
+    return dragonBones::AnimationData;
 },
 
 /**
@@ -1601,22 +1529,6 @@ int
 )
 {
     return false;
-},
-
-/**
- * @method init
- * @param {dragonBones::SlotData} arg0
- * @param {dragonBones::Armature} arg1
- * @param {void} arg2
- * @param {void} arg3
- */
-init : function (
-slotdata, 
-armature, 
-void, 
-void 
-)
-{
 },
 
 /**
@@ -2302,6 +2214,28 @@ str
 },
 
 /**
+ * @method replaceSlotDisplay
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @param {String} arg3
+ * @param {dragonBones::Slot} arg4
+ * @param {int} arg5
+ * @return {bool}
+ */
+replaceSlotDisplay : function (
+str, 
+str, 
+str, 
+str, 
+slot, 
+int 
+)
+{
+    return false;
+},
+
+/**
  * @method changeSkin
  * @param {dragonBones::Armature} arg0
  * @param {dragonBones::SkinData} arg1
@@ -2410,6 +2344,28 @@ updateWorldMatrix : function (
 jsbDragonBones.CCArmatureDisplay = {
 
 /**
+ * @method getAnimation
+ * @return {dragonBones::Animation}
+ */
+getAnimation : function (
+)
+{
+    return dragonBones::Animation;
+},
+
+/**
+ * @method convertToWorldSpace
+ * @param {vec2_object} arg0
+ * @return {vec2_object}
+ */
+convertToWorldSpace : function (
+vec2 
+)
+{
+    return cc.Vec2;
+},
+
+/**
  * @method hasDBEventListener
  * @param {String} arg0
  * @return {bool}
@@ -2451,6 +2407,16 @@ str,
 func 
 )
 {
+},
+
+/**
+ * @method getRootDisplay
+ * @return {dragonBones::CCArmatureDisplay}
+ */
+getRootDisplay : function (
+)
+{
+    return dragonBones::CCArmatureDisplay;
 },
 
 /**
@@ -2549,6 +2515,16 @@ getArmature : function (
 )
 {
     return dragonBones::Armature;
+},
+
+/**
+ * @method setBufferChangeCallback
+ * @param {function} arg0
+ */
+setBufferChangeCallback : function (
+func 
+)
+{
 },
 
 /**
