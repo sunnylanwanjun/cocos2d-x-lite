@@ -48,6 +48,7 @@ public:
     cocos2d::Mat4 worldMatrix;
     bool _worldMatDirty = true;
     editor::Triangles triangles;
+    editor::V2F_T2F_C4B* worldVerts = nullptr;
     cocos2d::Color4B color;
     cocos2d::Rect boundsRect;
 private:

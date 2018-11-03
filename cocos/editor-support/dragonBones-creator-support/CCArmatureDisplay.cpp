@@ -170,7 +170,7 @@ CCArmatureDisplay* CCArmatureDisplay::getRootDisplay()
 
 void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
-    auto& slots = _armature->getSlots();
+    auto& slots = armature->getSlots();
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {
         CCSlot* slot = (CCSlot*)slots[i];
@@ -240,26 +240,28 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             _materialLen++;
         }
         
-        _finalColor.a *= _nodeColor.a * slot->color.a * 255;
+        _finalColor.a = _nodeColor.a * slot->color.a * 255;
         float multiplier = _premultipliedAlpha ? slot->color.a : 255;
-        _finalColor.r *= _nodeColor.r * slot->color.r * multiplier;
-        _finalColor.g *= _nodeColor.g * slot->color.g * multiplier;
-        _finalColor.b *= _nodeColor.b * slot->color.b * multiplier;
+        _finalColor.r = _nodeColor.r * slot->color.r * multiplier;
+        _finalColor.g = _nodeColor.g * slot->color.g * multiplier;
+        _finalColor.b = _nodeColor.b * slot->color.b * multiplier;
         
         editor::Triangles& triangles = slot->triangles;
         cocos2d::Mat4& worldMatrix = slot->worldMatrix;
+        editor::V2F_T2F_C4B* worldTriangles = slot->worldVerts;
         for (int v = 0, w = 0, vn = triangles.vertCount; v < vn; ++v, w += 2)
         {
             editor::V2F_T2F_C4B* vertex = triangles.verts + v;
-            vertex->vertices.x = vertex->vertices.x * worldMatrix.m[0] + vertex->vertices.y * worldMatrix.m[4] + worldMatrix.m[12];
-            vertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[11] + worldMatrix.m[13];
-            vertex->colors.r = (GLubyte)_finalColor.r;
-            vertex->colors.g = (GLubyte)_finalColor.g;
-            vertex->colors.b = (GLubyte)_finalColor.b;
-            vertex->colors.a = (GLubyte)_finalColor.a;
+            editor::V2F_T2F_C4B* worldVertex = worldTriangles + v;
+            worldVertex->vertices.x = vertex->vertices.x * worldMatrix.m[0] + vertex->vertices.y * worldMatrix.m[4] + worldMatrix.m[12];
+            worldVertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[11] + worldMatrix.m[13];
+            worldVertex->colors.r = (GLubyte)_finalColor.r;
+            worldVertex->colors.g = (GLubyte)_finalColor.g;
+            worldVertex->colors.b = (GLubyte)_finalColor.b;
+            worldVertex->colors.a = (GLubyte)_finalColor.a;
         }
         
-        _vertexBuffer.writeBytes((char*)triangles.verts,triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
+        _vertexBuffer.writeBytes((char*)worldTriangles,triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
         
         if (_curVSegLen > 0)
         {

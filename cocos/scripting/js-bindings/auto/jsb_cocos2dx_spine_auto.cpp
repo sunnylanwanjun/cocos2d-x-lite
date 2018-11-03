@@ -1750,7 +1750,7 @@ bool js_register_cocos2dx_spine_SpineAnimation(se::Object* obj)
     __jsb_spine_SpineAnimation_proto = cls->getProto();
     __jsb_spine_SpineAnimation_class = cls;
 
-    jsb_set_extend_property("jsbspine", "SpineAnimation");
+    jsb_set_extend_property("jsbSpine", "SpineAnimation");
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
@@ -1759,11 +1759,11 @@ bool register_all_cocos2dx_spine(se::Object* obj)
 {
     // Get the ns
     se::Value nsVal;
-    if (!obj->getProperty("jsbspine", &nsVal))
+    if (!obj->getProperty("jsbSpine", &nsVal))
     {
         se::HandleObject jsobj(se::Object::createPlainObject());
         nsVal.setObject(jsobj);
-        obj->setProperty("jsbspine", nsVal);
+        obj->setProperty("jsbSpine", nsVal);
     }
     se::Object* ns = nsVal.toObject();
 

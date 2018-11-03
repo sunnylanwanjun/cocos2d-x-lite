@@ -12,6 +12,10 @@ void CCSlot::_onClear()
 
 void CCSlot::disposeTriangles()
 {
+    if (worldVerts){
+        delete[] worldVerts;
+        worldVerts = nullptr;
+    }
     if (triangles.verts)
     {
         delete[] triangles.verts;
@@ -35,6 +39,12 @@ void CCSlot::adjustTriangles(const unsigned vertexCount, const unsigned indicesC
             delete[] triangles.verts;
         }
         triangles.verts = new editor::V2F_T2F_C4B[vertexCount];
+        
+        if (worldVerts)
+        {
+            delete[] worldVerts;
+        }
+        worldVerts = new editor::V2F_T2F_C4B[vertexCount];
     }
     triangles.vertCount = vertexCount;
     
@@ -94,6 +104,181 @@ editor::Texture2D* CCSlot::getTexture() const
     return currentTextureData->spriteFrame->getTexture();
 }
 
+//void CCSlot::_updateFrame()
+//{
+//    if (this->_display && this->_displayIndex >= 0)
+//    {
+//        const unsigned displayIndex = this->_displayIndex;
+//        const auto& rawDisplayDatas = *(this->_rawDisplayDatas);
+//        const auto rawDisplayData = displayIndex < rawDisplayDatas.size() ? rawDisplayDatas[displayIndex] : nullptr;
+//        const auto displayData = displayIndex <  this->_displayDatas.size() ?  this->_displayDatas[displayIndex] : nullptr;
+//        const auto currentDisplayData = displayData ? displayData : rawDisplayData;
+//        const auto currentTextureData = static_cast<CCTextureData*>(this->_textureData);
+//
+//        if (currentTextureData)
+//        {
+//            auto texture = (editor::Texture2D*)(this->_armature->getReplacedTexture());
+//            if (!texture)
+//            {
+//                texture = static_cast<CCTextureAtlasData*>(currentTextureData->parent)->getRenderTexture();
+//            }
+//
+//
+//            if (this->_meshData && this->_display == this->_meshDisplay)
+//            {
+//                const auto& region = currentTextureData->region;
+//                const auto& textureAtlasSize = currentTextureData->texture->getTexture()->getContentSizeInPixels();
+//                auto displayVertices = new cocos2d::V3F_C4B_T2F[(unsigned)(this->_meshData->uvs.size() / 2)]; // does cocos2dx release it?
+//                auto vertexIndices = new unsigned short[this->_meshData->vertexIndices.size()]; // does cocos2dx release it?
+//                cocos2d::Rect boundsRect(999999.f, 999999.f, -999999.f, -999999.f);
+//
+//                if (this->_meshData != rawDisplayData->mesh && rawDisplayData && rawDisplayData != currentDisplayData)
+//                {
+//                    this->_pivotX = rawDisplayData->transform.x - currentDisplayData->transform.x;
+//                    this->_pivotY = rawDisplayData->transform.y - currentDisplayData->transform.y;
+//                }
+//                else
+//                {
+//                    this->_pivotX = 0.f;
+//                    this->_pivotY = 0.f;
+//                }
+//
+//                for (std::size_t i = 0, l = this->_meshData->uvs.size(); i < l; i += 2)
+//                {
+//                    const auto iH = (unsigned)(i / 2);
+//                    const auto x = this->_meshData->vertices[i];
+//                    const auto y = this->_meshData->vertices[i + 1];
+//                    cocos2d::V3F_C4B_T2F vertexData;
+//                    vertexData.vertices.set(x, -y, 0.f);
+//                    vertexData.texCoords.u = (region.x + this->_meshData->uvs[i] * region.width) / textureAtlasSize.width;
+//                    vertexData.texCoords.v = (region.y + this->_meshData->uvs[i + 1] * region.height) / textureAtlasSize.height;
+//                    vertexData.colors = cocos2d::Color4B::WHITE;
+//                    displayVertices[iH] = vertexData;
+//
+//                    if (boundsRect.origin.x > x)
+//                    {
+//                        boundsRect.origin.x = x;
+//                    }
+//
+//                    if (boundsRect.size.width < x)
+//                    {
+//                        boundsRect.size.width = x;
+//                    }
+//
+//                    if (boundsRect.origin.y > -y)
+//                    {
+//                        boundsRect.origin.y = -y;
+//                    }
+//
+//                    if (boundsRect.size.height < -y)
+//                    {
+//                        boundsRect.size.height = -y;
+//                    }
+//                }
+//
+//                boundsRect.size.width -= boundsRect.origin.x;
+//                boundsRect.size.height -= boundsRect.origin.y;
+//
+//                for (std::size_t i = 0, l = this->_meshData->vertexIndices.size(); i < l; ++i)
+//                {
+//                    vertexIndices[i] = this->_meshData->vertexIndices[i];
+//                }
+//
+//                // In cocos2dx render meshDisplay and frameDisplay are the same display
+//                if (currentTextureData->texture)
+//                {
+//                    frameDisplay->setSpriteFrame(currentTextureData->texture); // polygonInfo will be override
+//                    if (texture != currentTextureData->texture->getTexture())
+//                    {
+//                        frameDisplay->setTexture(texture); // Relpace texture // polygonInfo will be override
+//                    }
+//                }
+//
+//                //
+//                cocos2d::PolygonInfo polygonInfo;
+//                auto& triangles = polygonInfo.triangles;
+//                triangles.verts = displayVertices;
+//                triangles.indices = vertexIndices;
+//                triangles.vertCount = (unsigned)(this->_meshData->uvs.size() / 2);
+//                triangles.indexCount = (unsigned)(this->_meshData->vertexIndices.size());
+//#if COCOS2D_VERSION >= 0x00031400
+//                polygonInfo.setRect(boundsRect);
+//#else
+//                polygonInfo.rect = boundsRect; // Copy
+//#endif
+//                frameDisplay->setContentSize(boundsRect.size);
+//                frameDisplay->setPolygonInfo(polygonInfo);
+//                frameDisplay->setColor(frameDisplay->getColor()); // Backup
+//
+//                if (this->_meshData->skinned)
+//                {
+//                    frameDisplay->setPosition(0.f, 0.f);
+//                    frameDisplay->setRotation(0.f);
+//                    frameDisplay->setRotationSkewX(0.f);
+//                    frameDisplay->setRotationSkewY(0.f);
+//                    frameDisplay->setScale(1.f, 1.f);
+//                }
+//            }
+//            else
+//            {
+//                const auto scale = this->_armature->getArmatureData().scale;
+//                this->_pivotX = currentDisplayData->pivot.x;
+//                this->_pivotY = currentDisplayData->pivot.y;
+//
+//                if (currentDisplayData->isRelativePivot)
+//                {
+//                    const auto& rectData = currentTextureData->frame ? *currentTextureData->frame : currentTextureData->region;
+//                    auto width = rectData.width * scale;
+//                    auto height = rectData.height * scale;
+//                    if (!currentTextureData->frame && currentTextureData->rotated)
+//                    {
+//                        width = rectData.height;
+//                        height = rectData.width;
+//                    }
+//
+//                    this->_pivotX *= width;
+//                    this->_pivotY *= height;
+//                }
+//
+//                if (currentTextureData->frame)
+//                {
+//                    this->_pivotX += currentTextureData->frame->x * scale;
+//                    this->_pivotY += currentTextureData->frame->y * scale;
+//                }
+//
+//                if (rawDisplayData && rawDisplayData != currentDisplayData)
+//                {
+//                    this->_pivotX += rawDisplayData->transform.x - currentDisplayData->transform.x;
+//                    this->_pivotY += rawDisplayData->transform.y - currentDisplayData->transform.y;
+//                }
+//
+//                this->_pivotY -= currentTextureData->region.height * this->_armature->getArmatureData().scale;
+//
+//                frameDisplay->setSpriteFrame(currentTextureData->texture); // polygonInfo will be override
+//
+//                if (texture != currentTextureData->texture->getTexture())
+//                {
+//                    frameDisplay->setTexture(texture); // Relpace texture // polygonInfo will be override
+//                }
+//
+//                this->_blendModeDirty = true; // Relpace texture // blendMode will be override
+//            }
+//
+//            this->_updateVisible();
+//
+//            return;
+//        }
+//    }
+//
+//    this->_pivotX = 0.f;
+//    this->_pivotY = 0.f;
+//
+//    frameDisplay->setTexture(nullptr);
+//    frameDisplay->setTextureRect(cocos2d::Rect::ZERO);
+//    frameDisplay->setVisible(false);
+//    frameDisplay->setPosition(this->origin.x, this->origin.y);
+//}
+
 void CCSlot::_updateFrame()
 {
     const auto currentVerticesData = (_deformVertices != nullptr && _display == _meshDisplay) ? _deformVertices->verticesData : nullptr;
@@ -103,6 +288,11 @@ void CCSlot::_updateFrame()
     {
         if (currentTextureData->spriteFrame != nullptr)
         {
+            const auto& region = currentTextureData->region;
+            const auto texture = currentTextureData->spriteFrame->getTexture();
+            const auto textureWidth = texture->getPixelsWide();
+            const auto textureHeight = texture->getPixelsHigh();
+            
             if (currentVerticesData != nullptr) // Mesh.
             {
                 const auto data = currentVerticesData->data;
@@ -114,25 +304,20 @@ void CCSlot::_updateFrame()
 
                 if (vertexOffset < 0)
                 {
-                    vertexOffset += 65536; // Fixed out of bouds bug. 
+                    vertexOffset += 65536; // Fixed out of bouds bug.
                 }
 
                 const unsigned uvOffset = vertexOffset + vertexCount * 2;
-
-                const auto& region = currentTextureData->region;
-                const auto texture = currentTextureData->spriteFrame->getTexture();
-                const auto textureWidth = texture->getPixelsWide();
-                const auto textureHeight = texture->getPixelsHigh();
                 const unsigned indicesCount = triangleCount * 3;
                 adjustTriangles(vertexCount, indicesCount);
-                
                 auto vertices = triangles.verts;
                 auto vertexIndices = triangles.indices;
+                
                 boundsRect.origin.x = 999999.0f;
                 boundsRect.origin.y = 999999.0f;
                 boundsRect.size.width = -999999.0f;
                 boundsRect.size.height = -999999.0f;
-                
+
                 for (std::size_t i = 0, l = vertexCount * 2; i < l; i += 2)
                 {
                     const auto iH = i / 2;
@@ -189,12 +374,40 @@ void CCSlot::_updateFrame()
                 _textureScale = 1.0f;
 
                 const auto isSkinned = currentVerticesData->weight != nullptr;
-                if (isSkinned) 
+                if (isSkinned)
                 {
                     _identityTransform();
                 }
+            } else {
+                adjustTriangles(4, 6);
+                auto vertices = triangles.verts;
+                auto vertexIndices = triangles.indices;
+                
+                float l = region.x / textureWidth;
+                float b = (region.y + region.height) / textureHeight;
+                float r = (region.x + region.width) / textureWidth;
+                float t = region.y / textureHeight;
+                
+                vertices[0].texCoords.u = l; vertices[0].texCoords.v = b;
+                vertices[1].texCoords.u = r; vertices[1].texCoords.v = b;
+                vertices[2].texCoords.u = l; vertices[2].texCoords.v = t;
+                vertices[3].texCoords.u = r; vertices[3].texCoords.v = t;
+                
+                vertices[0].vertices.x = vertices[2].vertices.x = 0;
+                vertices[1].vertices.x = vertices[3].vertices.x = region.width;
+                vertices[0].vertices.y = vertices[1].vertices.y = 0;
+                vertices[2].vertices.y = vertices[3].vertices.y = region.height;
+                
+                vertexIndices[0] = 0;
+                vertexIndices[1] = 1;
+                vertexIndices[2] = 2;
+                vertexIndices[3] = 1;
+                vertexIndices[4] = 3;
+                vertexIndices[5] = 2;
             }
 
+            memcpy(worldVerts, triangles.verts, triangles.vertCount * sizeof(editor::V2F_T2F_C4B));
+            
             _visibleDirty = true;
             _blendModeDirty = true; // Relpace texture will override blendMode and color.
             _colorDirty = true;
