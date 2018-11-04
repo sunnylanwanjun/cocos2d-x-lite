@@ -147,11 +147,17 @@ public:
         _changeBufferCallback = callback;
     }
     
-    cocos2d::Vec2 convertToWorldSpace(const cocos2d::Vec2& pos) const;
+    typedef std::function<void(EventObject*)> dbEventCallback;
+    void setDBEventCallback(dbEventCallback callback)
+    {
+        _dbEventCallback = callback;
+    }
+    
+    cocos2d::Vec2 convertRootSpace(const cocos2d::Vec2& pos) const;
     CCArmatureDisplay* getRootDisplay();
     
 private:
-    std::map<std::string,std::vector<uint32_t>*> _listenerIDMap;
+    std::map<std::string,bool> _listenerIDMap;
     editor::IOBuffer _vertexBuffer;
     editor::IOBuffer _indiceBuffer;
     editor::IOBuffer _debugBuffer;
@@ -175,6 +181,7 @@ private:
     bool _premultipliedAlpha = false;
     cocos2d::Color4B _finalColor = cocos2d::Color4B::WHITE;
     bufferChangeCallback _changeBufferCallback = nullptr;
+    dbEventCallback _dbEventCallback = nullptr;
 };
 
 DRAGONBONES_NAMESPACE_END

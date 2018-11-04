@@ -2354,18 +2354,6 @@ getAnimation : function (
 },
 
 /**
- * @method convertToWorldSpace
- * @param {vec2_object} arg0
- * @return {vec2_object}
- */
-convertToWorldSpace : function (
-vec2 
-)
-{
-    return cc.Vec2;
-},
-
-/**
  * @method hasDBEventListener
  * @param {String} arg0
  * @return {bool}
@@ -2458,6 +2446,16 @@ bool
 },
 
 /**
+ * @method setDBEventCallback
+ * @param {function} arg0
+ */
+setDBEventCallback : function (
+func 
+)
+{
+},
+
+/**
  * @method getRenderData
  * @return {se::Object}
  */
@@ -2538,6 +2536,18 @@ getDebugData : function (
 },
 
 /**
+ * @method convertRootSpace
+ * @param {vec2_object} arg0
+ * @return {vec2_object}
+ */
+convertRootSpace : function (
+vec2 
+)
+{
+    return cc.Vec2;
+},
+
+/**
  * @method create
  * @return {dragonBones::CCArmatureDisplay}
  */
@@ -2571,6 +2581,20 @@ getSoundEventManager : function (
 )
 {
     return dragonBones::CCArmatureDisplay;
+},
+
+/**
+ * @method getTextureAtlasDataByIndex
+ * @param {String} arg0
+ * @param {int} arg1
+ * @return {dragonBones::CCTextureAtlasData}
+ */
+getTextureAtlasDataByIndex : function (
+str, 
+int 
+)
+{
+    return dragonBones::CCTextureAtlasData;
 },
 
 /**
@@ -2609,6 +2633,18 @@ str
 )
 {
     return dragonBones::CCArmatureDisplay;
+},
+
+/**
+ * @method removeTextureAtlasDataByIndex
+ * @param {String} arg0
+ * @param {int} arg1
+ */
+removeTextureAtlasDataByIndex : function (
+str, 
+int 
+)
+{
 },
 
 /**

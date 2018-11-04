@@ -29,6 +29,9 @@
 #include "base/CCScheduler.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
+
+class CCTextureAtlasData;
+
 /**
  * The Cocos2d factory.
  * @version DragonBones 3.0
@@ -213,6 +216,10 @@ public:
     void remove(Armature* armature){
         _dragonBonesInstance->getClock()->remove(armature);
     }
+    
+    void removeTextureAtlasDataByIndex(const std::string& name, int textureIndex);
+    
+    CCTextureAtlasData* getTextureAtlasDataByIndex(const std::string& name, int textureIndex) const;
 };
 
 DRAGONBONES_NAMESPACE_END

@@ -127,4 +127,44 @@ CCArmatureDisplay* CCFactory::buildArmatureDisplay(const std::string& armatureNa
     return nullptr;
 }
 
+void CCFactory::removeTextureAtlasDataByIndex(const std::string& name, int textureIndex)
+{
+    const auto iterator = _textureAtlasDataMap.find(name);
+    if (iterator != _textureAtlasDataMap.end())
+    {
+        auto& textureAtlasDataList = iterator->second;
+        for (auto it = textureAtlasDataList.begin(); it != textureAtlasDataList.end(); it++)
+        {
+            editor::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
+            if (texture && texture->getRealTextureIndex() == textureIndex)
+            {
+                textureAtlasDataList.erase(it);
+                break;
+            }
+        }
+        if (textureAtlasDataList.size() == 0)
+        {
+            _textureAtlasDataMap.erase(iterator);
+        }
+    }
+}
+
+CCTextureAtlasData* CCFactory::getTextureAtlasDataByIndex(const std::string& name, int textureIndex) const
+{
+    const auto iterator = _textureAtlasDataMap.find(name);
+    if (iterator != _textureAtlasDataMap.end())
+    {
+        auto& textureAtlasDataList = iterator->second;
+        for (auto it = textureAtlasDataList.begin(); it != textureAtlasDataList.end(); it++)
+        {
+            editor::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
+            if (texture && texture->getRealTextureIndex() == textureIndex)
+            {
+                return (CCTextureAtlasData*)*it;
+            }
+        }
+    }
+    return nullptr;
+}
+
 DRAGONBONES_NAMESPACE_END

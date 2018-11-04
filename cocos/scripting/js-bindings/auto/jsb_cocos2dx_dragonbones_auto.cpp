@@ -492,6 +492,34 @@ static bool js_cocos2dx_dragonbones_TextureAtlasData_addTexture(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_TextureAtlasData_addTexture)
 
+static bool js_cocos2dx_dragonbones_TextureAtlasData_get_name(se::State& s)
+{
+    dragonBones::TextureAtlasData* cobj = (dragonBones::TextureAtlasData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_TextureAtlasData_get_name : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= std_string_to_seval(cobj->name, &jsret);
+    s.rval() = jsret;
+    return true;
+}
+SE_BIND_PROP_GET(js_cocos2dx_dragonbones_TextureAtlasData_get_name)
+
+static bool js_cocos2dx_dragonbones_TextureAtlasData_set_name(se::State& s)
+{
+    const auto& args = s.args();
+    dragonBones::TextureAtlasData* cobj = (dragonBones::TextureAtlasData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_TextureAtlasData_set_name : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    std::string arg0;
+    ok &= seval_to_std_string(args[0], &arg0);
+    SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_TextureAtlasData_set_name : Error processing new value");
+    cobj->name = arg0;
+    return true;
+}
+SE_BIND_PROP_SET(js_cocos2dx_dragonbones_TextureAtlasData_set_name)
+
 
 extern se::Object* __jsb_dragonBones_BaseObject_proto;
 
@@ -500,6 +528,7 @@ bool js_register_cocos2dx_dragonbones_TextureAtlasData(se::Object* obj)
 {
     auto cls = se::Class::create("TextureAtlasData", obj, __jsb_dragonBones_BaseObject_proto, nullptr);
 
+    cls->defineProperty("name", _SE(js_cocos2dx_dragonbones_TextureAtlasData_get_name), _SE(js_cocos2dx_dragonbones_TextureAtlasData_set_name));
     cls->defineFunction("createTexture", _SE(js_cocos2dx_dragonbones_TextureAtlasData_createTexture));
     cls->defineFunction("getTexture", _SE(js_cocos2dx_dragonbones_TextureAtlasData_getTexture));
     cls->defineFunction("addTexture", _SE(js_cocos2dx_dragonbones_TextureAtlasData_addTexture));
@@ -6114,27 +6143,6 @@ static bool js_cocos2dx_dragonbones_CCArmatureDisplay_getAnimation(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_getAnimation)
 
-static bool js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace(se::State& s)
-{
-    dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        cocos2d::Vec2 arg0;
-        ok &= seval_to_Vec2(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace : Error processing arguments");
-        cocos2d::Vec2 result = cobj->convertToWorldSpace(arg0);
-        ok &= Vec2_to_seval(result, &s.rval());
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace : Error processing arguments");
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace)
-
 static bool js_cocos2dx_dragonbones_CCArmatureDisplay_hasDBEventListener(se::State& s)
 {
     dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
@@ -6339,6 +6347,54 @@ static bool js_cocos2dx_dragonbones_CCArmatureDisplay_setOpacityModifyRGB(se::St
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setOpacityModifyRGB)
+
+static bool js_cocos2dx_dragonbones_CCArmatureDisplay_setDBEventCallback(se::State& s)
+{
+    dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setDBEventCallback : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        std::function<void (dragonBones::EventObject *)> arg0;
+        do {
+            if (args[0].isObject() && args[0].toObject()->isFunction())
+            {
+                se::Value jsThis(s.thisObject());
+                se::Value jsFunc(args[0]);
+                jsThis.toObject()->attachObject(jsFunc.toObject());
+                auto lambda = [=](dragonBones::EventObject* larg0) -> void {
+                    se::ScriptEngine::getInstance()->clearException();
+                    se::AutoHandleScope hs;
+        
+                    CC_UNUSED bool ok = true;
+                    se::ValueArray args;
+                    args.resize(1);
+                    ok &= native_ptr_to_rooted_seval<dragonBones::EventObject>((dragonBones::EventObject*)larg0, &args[0]);
+                    se::Value rval;
+                    se::Object* thisObj = jsThis.isObject() ? jsThis.toObject() : nullptr;
+                    se::Object* funcObj = jsFunc.toObject();
+                    bool succeed = funcObj->call(args, thisObj, &rval);
+                    if (!succeed) {
+                        se::ScriptEngine::getInstance()->clearException();
+                    }
+                };
+                arg0 = lambda;
+            }
+            else
+            {
+                arg0 = nullptr;
+            }
+        } while(false)
+        ;
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setDBEventCallback : Error processing arguments");
+        cobj->setDBEventCallback(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setDBEventCallback)
 
 static bool js_cocos2dx_dragonbones_CCArmatureDisplay_getRenderData(se::State& s)
 {
@@ -6546,6 +6602,27 @@ static bool js_cocos2dx_dragonbones_CCArmatureDisplay_getDebugData(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_getDebugData)
 
+static bool js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace(se::State& s)
+{
+    dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        cocos2d::Vec2 arg0;
+        ok &= seval_to_Vec2(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace : Error processing arguments");
+        cocos2d::Vec2 result = cobj->convertRootSpace(arg0);
+        ok &= Vec2_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace)
+
 static bool js_cocos2dx_dragonbones_CCArmatureDisplay_create(se::State& s)
 {
     const auto& args = s.args();
@@ -6591,7 +6668,6 @@ bool js_register_cocos2dx_dragonbones_CCArmatureDisplay(se::Object* obj)
     auto cls = se::Class::create("CCArmatureDisplay", obj, nullptr, _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_constructor));
 
     cls->defineFunction("getAnimation", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getAnimation));
-    cls->defineFunction("convertToWorldSpace", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_convertToWorldSpace));
     cls->defineFunction("hasDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_hasDBEventListener));
     cls->defineFunction("setColor", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setColor));
     cls->defineFunction("dbInit", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dbInit));
@@ -6601,6 +6677,7 @@ bool js_register_cocos2dx_dragonbones_CCArmatureDisplay(se::Object* obj)
     cls->defineFunction("dispatchDBEvent", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dispatchDBEvent));
     cls->defineFunction("dispose", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dispose));
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setOpacityModifyRGB));
+    cls->defineFunction("setDBEventCallback", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setDBEventCallback));
     cls->defineFunction("getRenderData", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getRenderData));
     cls->defineFunction("setDebugBonesEnabled", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setDebugBonesEnabled));
     cls->defineFunction("removeDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_removeDBEventListener));
@@ -6609,6 +6686,7 @@ bool js_register_cocos2dx_dragonbones_CCArmatureDisplay(se::Object* obj)
     cls->defineFunction("armature", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getArmature));
     cls->defineFunction("setBufferChangeCallback", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setBufferChangeCallback));
     cls->defineFunction("getDebugData", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getDebugData));
+    cls->defineFunction("convertRootSpace", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_convertRootSpace));
     cls->defineStaticFunction("create", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_create));
     cls->defineFinalizeFunction(_SE(js_dragonBones_CCArmatureDisplay_finalize));
     cls->install();
@@ -6641,6 +6719,29 @@ static bool js_cocos2dx_dragonbones_CCFactory_getSoundEventManager(se::State& s)
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCFactory_getSoundEventManager)
+
+static bool js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex(se::State& s)
+{
+    dragonBones::CCFactory* cobj = (dragonBones::CCFactory*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        std::string arg0;
+        int arg1 = 0;
+        ok &= seval_to_std_string(args[0], &arg0);
+        do { int32_t tmp = 0; ok &= seval_to_int32(args[1], &tmp); arg1 = (int)tmp; } while(false);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex : Error processing arguments");
+        dragonBones::CCTextureAtlasData* result = cobj->getTextureAtlasDataByIndex(arg0, arg1);
+        ok &= native_ptr_to_rooted_seval<dragonBones::CCTextureAtlasData>((dragonBones::CCTextureAtlasData*)result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex)
 
 static bool js_cocos2dx_dragonbones_CCFactory_remove(se::State& s)
 {
@@ -6740,6 +6841,27 @@ static bool js_cocos2dx_dragonbones_CCFactory_buildArmatureDisplay(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCFactory_buildArmatureDisplay)
 
+static bool js_cocos2dx_dragonbones_CCFactory_removeTextureAtlasDataByIndex(se::State& s)
+{
+    dragonBones::CCFactory* cobj = (dragonBones::CCFactory*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCFactory_removeTextureAtlasDataByIndex : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        std::string arg0;
+        int arg1 = 0;
+        ok &= seval_to_std_string(args[0], &arg0);
+        do { int32_t tmp = 0; ok &= seval_to_int32(args[1], &tmp); arg1 = (int)tmp; } while(false);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCFactory_removeTextureAtlasDataByIndex : Error processing arguments");
+        cobj->removeTextureAtlasDataByIndex(arg0, arg1);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCFactory_removeTextureAtlasDataByIndex)
+
 static bool js_cocos2dx_dragonbones_CCFactory_getClock(se::State& s)
 {
     const auto& args = s.args();
@@ -6806,9 +6928,11 @@ bool js_register_cocos2dx_dragonbones_CCFactory(se::Object* obj)
     auto cls = se::Class::create("CCFactory", obj, __jsb_dragonBones_BaseFactory_proto, _SE(js_cocos2dx_dragonbones_CCFactory_constructor));
 
     cls->defineFunction("getSoundEventManager", _SE(js_cocos2dx_dragonbones_CCFactory_getSoundEventManager));
+    cls->defineFunction("getTextureAtlasDataByIndex", _SE(js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex));
     cls->defineFunction("remove", _SE(js_cocos2dx_dragonbones_CCFactory_remove));
     cls->defineFunction("add", _SE(js_cocos2dx_dragonbones_CCFactory_add));
     cls->defineFunction("buildArmatureDisplay", _SE(js_cocos2dx_dragonbones_CCFactory_buildArmatureDisplay));
+    cls->defineFunction("removeTextureAtlasDataByIndex", _SE(js_cocos2dx_dragonbones_CCFactory_removeTextureAtlasDataByIndex));
     cls->defineStaticFunction("getClock", _SE(js_cocos2dx_dragonbones_CCFactory_getClock));
     cls->defineStaticFunction("getInstance", _SE(js_cocos2dx_dragonbones_CCFactory_getFactory));
     cls->defineFinalizeFunction(_SE(js_dragonBones_CCFactory_finalize));

@@ -33,15 +33,6 @@ CCArmatureDisplay::CCArmatureDisplay()
 CCArmatureDisplay::~CCArmatureDisplay()
 {
     dispose();
-    for (auto it : _listenerIDMap)
-    {
-        std::vector<uint32_t>& idArr = *(it.second);
-        for (auto i : idArr)
-        {
-            EventDispatcher::removeCustomEventListener(it.first, i);
-        }
-        delete &idArr;
-    }
 }
 
 void CCArmatureDisplay::dbInit(Armature* armature)
@@ -66,6 +57,9 @@ void CCArmatureDisplay::dispose(bool disposeProxy)
 
 void CCArmatureDisplay::dbUpdate()
 {
+    if (this->_armature->getParent())
+        return;
+    
     _vertexBuffer.reset();
     _debugBuffer.reset();
     _indiceBuffer.reset();
@@ -136,7 +130,7 @@ void CCArmatureDisplay::dbUpdate()
     }
 }
 
-cocos2d::Vec2 CCArmatureDisplay::convertToWorldSpace(const cocos2d::Vec2& pos) const
+cocos2d::Vec2 CCArmatureDisplay::convertRootSpace(const cocos2d::Vec2& pos) const
 {
     CCSlot* slot = (CCSlot*)_armature->getParent();
     if (!slot)
@@ -147,7 +141,7 @@ cocos2d::Vec2 CCArmatureDisplay::convertToWorldSpace(const cocos2d::Vec2& pos) c
     slot->updateWorldMatrix();
     cocos2d::Mat4& worldMatrix = slot->worldMatrix;
     newPos.x = pos.x * worldMatrix.m[0] + pos.y * worldMatrix.m[4] + worldMatrix.m[12];
-    newPos.y = pos.x * worldMatrix.m[1] + pos.y * worldMatrix.m[11] + worldMatrix.m[13];
+    newPos.y = pos.x * worldMatrix.m[1] + pos.y * worldMatrix.m[5] + worldMatrix.m[13];
     return newPos;
 }
 
@@ -254,7 +248,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             editor::V2F_T2F_C4B* vertex = triangles.verts + v;
             editor::V2F_T2F_C4B* worldVertex = worldTriangles + v;
             worldVertex->vertices.x = vertex->vertices.x * worldMatrix.m[0] + vertex->vertices.y * worldMatrix.m[4] + worldMatrix.m[12];
-            worldVertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[11] + worldMatrix.m[13];
+            worldVertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[5] + worldMatrix.m[13];
             worldVertex->colors.r = (GLubyte)_finalColor.r;
             worldVertex->colors.g = (GLubyte)_finalColor.g;
             worldVertex->colors.b = (GLubyte)_finalColor.b;
@@ -288,35 +282,10 @@ bool CCArmatureDisplay::hasDBEventListener(const std::string& type) const
 
 void CCArmatureDisplay::addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
 {
-    auto lambda = [callback](const CustomEvent& event) -> void
-    {
-        callback(static_cast<EventObject*>(event.args[0].ptrVal));
-    };
-    
-    uint32_t listenerID = EventDispatcher::addCustomEventListener(type, lambda);
-    auto it = _listenerIDMap.find(type);
-    if (it != _listenerIDMap.end())
-    {
-        auto idArr = it->second;
-        idArr->push_back(listenerID);
-    }
-    else
-    {
-        auto idArr = new std::vector<uint32_t>;
-        idArr->push_back(listenerID);
-        _listenerIDMap[type] = idArr;
-    }
+    _listenerIDMap[type] = true;
 }
 
 void CCArmatureDisplay::dispatchDBEvent(const std::string& type, EventObject* value)
-{
-    CustomEvent customEvent;
-    customEvent.name = type;
-    customEvent.args[0].ptrVal = (void*)value;
-    EventDispatcher::dispatchCustomEvent(customEvent);
-}
-
-void CCArmatureDisplay::removeDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
 {
     auto it = _listenerIDMap.find(type);
     if (it == _listenerIDMap.end())
@@ -324,13 +293,19 @@ void CCArmatureDisplay::removeDBEventListener(const std::string& type, const std
         return;
     }
     
-    std::vector<uint32_t>& idArr = *(it->second);
-    for (auto i : idArr)
+    if (_dbEventCallback)
     {
-        EventDispatcher::removeCustomEventListener(type, i);
+        _dbEventCallback(value);
     }
-    delete &idArr;
-    _listenerIDMap.erase(it);
+}
+
+void CCArmatureDisplay::removeDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
+{
+    auto it = _listenerIDMap.find(type);
+    if (it != _listenerIDMap.end())
+    {
+        _listenerIDMap.erase(it);
+    }
 }
 
 DRAGONBONES_NAMESPACE_END
