@@ -343,6 +343,10 @@
 		046E0710218B01EF00B24E2D /* jsb_dragonbones_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E070D218B01EF00B24E2D /* jsb_dragonbones_manual.cpp */; };
 		046E0711218B01EF00B24E2D /* jsb_dragonbones_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046E070E218B01EF00B24E2D /* jsb_dragonbones_manual.hpp */; };
 		046E0712218B01EF00B24E2D /* jsb_dragonbones_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046E070E218B01EF00B24E2D /* jsb_dragonbones_manual.hpp */; };
+		04AF62FF219190ED00AED9DE /* TypeArrayPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04AF62FD219190ED00AED9DE /* TypeArrayPool.cpp */; };
+		04AF6300219190ED00AED9DE /* TypeArrayPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04AF62FD219190ED00AED9DE /* TypeArrayPool.cpp */; };
+		04AF6301219190ED00AED9DE /* TypeArrayPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 04AF62FE219190ED00AED9DE /* TypeArrayPool.h */; };
+		04AF6302219190ED00AED9DE /* TypeArrayPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 04AF62FE219190ED00AED9DE /* TypeArrayPool.h */; };
 		1A14FD912080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD922080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD932080B4E300E10ABE /* CCGLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A14FD902080B4E300E10ABE /* CCGLUtils.h */; };
@@ -1308,6 +1312,8 @@
 		046E0708218B015000B24E2D /* jsb_cocos2dx_dragonbones_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_dragonbones_auto.hpp; sourceTree = "<group>"; };
 		046E070D218B01EF00B24E2D /* jsb_dragonbones_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_dragonbones_manual.cpp; sourceTree = "<group>"; };
 		046E070E218B01EF00B24E2D /* jsb_dragonbones_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_dragonbones_manual.hpp; sourceTree = "<group>"; };
+		04AF62FD219190ED00AED9DE /* TypeArrayPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TypeArrayPool.cpp; path = "../cocos/editor-support/TypeArrayPool.cpp"; sourceTree = "<group>"; };
+		04AF62FE219190ED00AED9DE /* TypeArrayPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TypeArrayPool.h; path = "../cocos/editor-support/TypeArrayPool.h"; sourceTree = "<group>"; };
 		1551A33F158F2AB200E66CFE /* libcocos2d Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcocos2d Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1551A342158F2AB200E66CFE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CCGLUtils.cpp; sourceTree = "<group>"; };
@@ -1838,6 +1844,8 @@
 				046E06F52189990700B24E2D /* editor-adapter.cpp */,
 				046E06F62189990700B24E2D /* editor-adapter.h */,
 				04355812217EADB900B9C056 /* spine */,
+				04AF62FD219190ED00AED9DE /* TypeArrayPool.cpp */,
+				04AF62FE219190ED00AED9DE /* TypeArrayPool.h */,
 			);
 			name = "editor-support";
 			sourceTree = "<group>";
@@ -3190,6 +3198,7 @@
 				5027253A190BF1B900AAF4ED /* cocos2d.h in Headers */,
 				046E06542185B41B00B24E2D /* Bone.h in Headers */,
 				046E06DF2185B49F00B24E2D /* DragonBonesData.h in Headers */,
+				04AF6301219190ED00AED9DE /* TypeArrayPool.h in Headers */,
 				46AE3FE52092F3A600F3A228 /* base64.h in Headers */,
 				046E061E2185B37100B24E2D /* CCDragonBonesHeaders.h in Headers */,
 				50ABBD421925AB0000A911A9 /* CCMathBase.h in Headers */,
@@ -3464,6 +3473,7 @@
 				46FDDBCC202ADDCE00931238 /* ZipUtils.h in Headers */,
 				046E06462185B41100B24E2D /* IAnimatable.h in Headers */,
 				046E06E02185B49F00B24E2D /* DragonBonesData.h in Headers */,
+				04AF6302219190ED00AED9DE /* TypeArrayPool.h in Headers */,
 				46FDDB50202ADDCE00931238 /* CCValue.h in Headers */,
 				043558D7217EAE1B00B9C056 /* PathConstraintData.h in Headers */,
 				46FDDADA202ACC6A00931238 /* Program.h in Headers */,
@@ -3882,6 +3892,7 @@
 				046E069B2185B45300B24E2D /* Point.cpp in Sources */,
 				043558AE217EAE1B00B9C056 /* EventData.c in Sources */,
 				046E06E92185B4A500B24E2D /* JSONDataParser.cpp in Sources */,
+				04AF62FF219190ED00AED9DE /* TypeArrayPool.cpp in Sources */,
 				1A28FF731F20AFAB007A1D9D /* SRHash.m in Sources */,
 				46FDDAB3202ACC6A00931238 /* VertexBuffer.cpp in Sources */,
 				046E06722185B42500B24E2D /* BaseObject.cpp in Sources */,
@@ -4155,6 +4166,7 @@
 				1A28FF841F20AFAB007A1D9D /* SRRandom.m in Sources */,
 				46FDDA96202ACC6A00931238 /* RendererUtils.cpp in Sources */,
 				046E06232185B37100B24E2D /* CCTextureAtlasData.cpp in Sources */,
+				04AF6300219190ED00AED9DE /* TypeArrayPool.cpp in Sources */,
 				046E06CE2185B49F00B24E2D /* CanvasData.cpp in Sources */,
 				469303952046AE05004A3D6C /* RefCounter.cpp in Sources */,
 				46FDDABC202ACC6A00931238 /* VertexFormat.cpp in Sources */,

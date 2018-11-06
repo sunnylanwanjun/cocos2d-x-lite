@@ -13,6 +13,7 @@ bool DragonBones::yDown = true;
 bool DragonBones::debug = false;
 bool DragonBones::debugDraw = false;
 bool DragonBones::webAssembly = false;
+bool DragonBones::checkInPool = false;
 
 DragonBones::DragonBones(IEventDispatcher* eventManager) :
     _events(),
@@ -34,6 +35,7 @@ DragonBones::~DragonBones()
     _clock = nullptr;
     _eventManager = nullptr;
 }
+
 void DragonBones::advanceTime(float passedTime)
 {
     if (!_objects.empty())
@@ -42,10 +44,10 @@ void DragonBones::advanceTime(float passedTime)
         {
             object->returnToPool();
         }
-
+        
         _objects.clear();
     }
-
+    
     if (!_events.empty())
     {
         for (std::size_t i = 0; i < _events.size(); ++i)
@@ -77,7 +79,12 @@ void DragonBones::bufferEvent(EventObject* value)
 
 void DragonBones::bufferObject(BaseObject* object)
 {
-    _objects.push_back(object);
+    if(object == nullptr || object->isInPool())return;
+    auto it = std::find(_objects.begin(), _objects.end(), object);
+    if (it != _objects.end())
+    {
+        _objects.push_back(object);
+    }
 }
 
 WorldClock* DragonBones::getClock()

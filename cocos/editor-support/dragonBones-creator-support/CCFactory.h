@@ -51,6 +51,11 @@ private:
     static CCFactory* _factory;
 
 public:
+    static bool isInit()
+    {
+        return _factory != nullptr;
+    }
+    
     /**
      * A global factory instance that can be used directly.
      * @version DragonBones 4.7
@@ -71,13 +76,19 @@ public:
         return CCFactory::_factory;
     }
     
-    static void destroyInstance()
+    static void destroyFactory()
     {
-        if (CCFactory::_factory)
+        if (_dragonBonesInstance)
         {
-            delete CCFactory::_factory;
+            delete _dragonBonesInstance;
+            _dragonBonesInstance = nullptr;
         }
-        CCFactory::_factory = nullptr;
+        
+        if (_factory)
+        {
+            delete _factory;
+            _factory = nullptr;
+        }
     }
     
 protected:
@@ -96,22 +107,31 @@ public:
             eventManager->retain();
 
             _dragonBonesInstance = new DragonBones(eventManager);
-            _dragonBonesInstance->yDown = false;
+            // _dragonBonesInstance->yDown = false;
 
             cocos2d::Application::getInstance()->getScheduler()->schedule(
                 [&](float passedTime)
                 {
                     _dragonBonesInstance->advanceTime(passedTime);
                 },
-                this, 0.0f, false, "dragonBonesClock"
+                this, 0, false, "dragonBonesClock"
             );
         }
 
         _dragonBones = _dragonBonesInstance;
     }
+    
+    void stopSchedule()
+    {
+        cocos2d::Application::getInstance()->getScheduler()->unschedule("dragonBonesClock", this);
+    }
+    
+    /*
+     this function is call by jsb_dragonbones_manual,when gc is trigger.
+     */
     virtual ~CCFactory() 
     {
-        clear();
+        clear(false);
     }
 
 protected:

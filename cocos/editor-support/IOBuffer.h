@@ -22,11 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "scripting/js-bindings/jswrapper/Object.hpp"
+#include "TypeArrayPool.h"
 #include <vector>
 #include "base/ccMacros.h"
 
 namespace editor {
+    
     /**
      * IOBuffer write/read bytes with js array buffer.
      */

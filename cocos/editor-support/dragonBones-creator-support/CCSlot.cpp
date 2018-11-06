@@ -104,181 +104,6 @@ editor::Texture2D* CCSlot::getTexture() const
     return currentTextureData->spriteFrame->getTexture();
 }
 
-//void CCSlot::_updateFrame()
-//{
-//    if (this->_display && this->_displayIndex >= 0)
-//    {
-//        const unsigned displayIndex = this->_displayIndex;
-//        const auto& rawDisplayDatas = *(this->_rawDisplayDatas);
-//        const auto rawDisplayData = displayIndex < rawDisplayDatas.size() ? rawDisplayDatas[displayIndex] : nullptr;
-//        const auto displayData = displayIndex <  this->_displayDatas.size() ?  this->_displayDatas[displayIndex] : nullptr;
-//        const auto currentDisplayData = displayData ? displayData : rawDisplayData;
-//        const auto currentTextureData = static_cast<CCTextureData*>(this->_textureData);
-//
-//        if (currentTextureData)
-//        {
-//            auto texture = (editor::Texture2D*)(this->_armature->getReplacedTexture());
-//            if (!texture)
-//            {
-//                texture = static_cast<CCTextureAtlasData*>(currentTextureData->parent)->getRenderTexture();
-//            }
-//
-//
-//            if (this->_meshData && this->_display == this->_meshDisplay)
-//            {
-//                const auto& region = currentTextureData->region;
-//                const auto& textureAtlasSize = currentTextureData->texture->getTexture()->getContentSizeInPixels();
-//                auto displayVertices = new cocos2d::V3F_C4B_T2F[(unsigned)(this->_meshData->uvs.size() / 2)]; // does cocos2dx release it?
-//                auto vertexIndices = new unsigned short[this->_meshData->vertexIndices.size()]; // does cocos2dx release it?
-//                cocos2d::Rect boundsRect(999999.f, 999999.f, -999999.f, -999999.f);
-//
-//                if (this->_meshData != rawDisplayData->mesh && rawDisplayData && rawDisplayData != currentDisplayData)
-//                {
-//                    this->_pivotX = rawDisplayData->transform.x - currentDisplayData->transform.x;
-//                    this->_pivotY = rawDisplayData->transform.y - currentDisplayData->transform.y;
-//                }
-//                else
-//                {
-//                    this->_pivotX = 0.f;
-//                    this->_pivotY = 0.f;
-//                }
-//
-//                for (std::size_t i = 0, l = this->_meshData->uvs.size(); i < l; i += 2)
-//                {
-//                    const auto iH = (unsigned)(i / 2);
-//                    const auto x = this->_meshData->vertices[i];
-//                    const auto y = this->_meshData->vertices[i + 1];
-//                    cocos2d::V3F_C4B_T2F vertexData;
-//                    vertexData.vertices.set(x, -y, 0.f);
-//                    vertexData.texCoords.u = (region.x + this->_meshData->uvs[i] * region.width) / textureAtlasSize.width;
-//                    vertexData.texCoords.v = (region.y + this->_meshData->uvs[i + 1] * region.height) / textureAtlasSize.height;
-//                    vertexData.colors = cocos2d::Color4B::WHITE;
-//                    displayVertices[iH] = vertexData;
-//
-//                    if (boundsRect.origin.x > x)
-//                    {
-//                        boundsRect.origin.x = x;
-//                    }
-//
-//                    if (boundsRect.size.width < x)
-//                    {
-//                        boundsRect.size.width = x;
-//                    }
-//
-//                    if (boundsRect.origin.y > -y)
-//                    {
-//                        boundsRect.origin.y = -y;
-//                    }
-//
-//                    if (boundsRect.size.height < -y)
-//                    {
-//                        boundsRect.size.height = -y;
-//                    }
-//                }
-//
-//                boundsRect.size.width -= boundsRect.origin.x;
-//                boundsRect.size.height -= boundsRect.origin.y;
-//
-//                for (std::size_t i = 0, l = this->_meshData->vertexIndices.size(); i < l; ++i)
-//                {
-//                    vertexIndices[i] = this->_meshData->vertexIndices[i];
-//                }
-//
-//                // In cocos2dx render meshDisplay and frameDisplay are the same display
-//                if (currentTextureData->texture)
-//                {
-//                    frameDisplay->setSpriteFrame(currentTextureData->texture); // polygonInfo will be override
-//                    if (texture != currentTextureData->texture->getTexture())
-//                    {
-//                        frameDisplay->setTexture(texture); // Relpace texture // polygonInfo will be override
-//                    }
-//                }
-//
-//                //
-//                cocos2d::PolygonInfo polygonInfo;
-//                auto& triangles = polygonInfo.triangles;
-//                triangles.verts = displayVertices;
-//                triangles.indices = vertexIndices;
-//                triangles.vertCount = (unsigned)(this->_meshData->uvs.size() / 2);
-//                triangles.indexCount = (unsigned)(this->_meshData->vertexIndices.size());
-//#if COCOS2D_VERSION >= 0x00031400
-//                polygonInfo.setRect(boundsRect);
-//#else
-//                polygonInfo.rect = boundsRect; // Copy
-//#endif
-//                frameDisplay->setContentSize(boundsRect.size);
-//                frameDisplay->setPolygonInfo(polygonInfo);
-//                frameDisplay->setColor(frameDisplay->getColor()); // Backup
-//
-//                if (this->_meshData->skinned)
-//                {
-//                    frameDisplay->setPosition(0.f, 0.f);
-//                    frameDisplay->setRotation(0.f);
-//                    frameDisplay->setRotationSkewX(0.f);
-//                    frameDisplay->setRotationSkewY(0.f);
-//                    frameDisplay->setScale(1.f, 1.f);
-//                }
-//            }
-//            else
-//            {
-//                const auto scale = this->_armature->getArmatureData().scale;
-//                this->_pivotX = currentDisplayData->pivot.x;
-//                this->_pivotY = currentDisplayData->pivot.y;
-//
-//                if (currentDisplayData->isRelativePivot)
-//                {
-//                    const auto& rectData = currentTextureData->frame ? *currentTextureData->frame : currentTextureData->region;
-//                    auto width = rectData.width * scale;
-//                    auto height = rectData.height * scale;
-//                    if (!currentTextureData->frame && currentTextureData->rotated)
-//                    {
-//                        width = rectData.height;
-//                        height = rectData.width;
-//                    }
-//
-//                    this->_pivotX *= width;
-//                    this->_pivotY *= height;
-//                }
-//
-//                if (currentTextureData->frame)
-//                {
-//                    this->_pivotX += currentTextureData->frame->x * scale;
-//                    this->_pivotY += currentTextureData->frame->y * scale;
-//                }
-//
-//                if (rawDisplayData && rawDisplayData != currentDisplayData)
-//                {
-//                    this->_pivotX += rawDisplayData->transform.x - currentDisplayData->transform.x;
-//                    this->_pivotY += rawDisplayData->transform.y - currentDisplayData->transform.y;
-//                }
-//
-//                this->_pivotY -= currentTextureData->region.height * this->_armature->getArmatureData().scale;
-//
-//                frameDisplay->setSpriteFrame(currentTextureData->texture); // polygonInfo will be override
-//
-//                if (texture != currentTextureData->texture->getTexture())
-//                {
-//                    frameDisplay->setTexture(texture); // Relpace texture // polygonInfo will be override
-//                }
-//
-//                this->_blendModeDirty = true; // Relpace texture // blendMode will be override
-//            }
-//
-//            this->_updateVisible();
-//
-//            return;
-//        }
-//    }
-//
-//    this->_pivotX = 0.f;
-//    this->_pivotY = 0.f;
-//
-//    frameDisplay->setTexture(nullptr);
-//    frameDisplay->setTextureRect(cocos2d::Rect::ZERO);
-//    frameDisplay->setVisible(false);
-//    frameDisplay->setPosition(this->origin.x, this->origin.y);
-//}
-
 void CCSlot::_updateFrame()
 {
     const auto currentVerticesData = (_deformVertices != nullptr && _display == _meshDisplay) ? _deformVertices->verticesData : nullptr;
@@ -380,6 +205,40 @@ void CCSlot::_updateFrame()
                 }
             } else {
                 adjustTriangles(4, 6);
+                
+//                const auto scale = this->_armature->getArmatureData()->scale;
+//                this->_pivotX = currentDisplayData->pivot.x;
+//                this->_pivotY = currentDisplayData->pivot.y;
+//                
+//                if (currentDisplayData->isRelativePivot)
+//                {
+//                    const auto& rectData = currentTextureData->frame ? *currentTextureData->frame : currentTextureData->region;
+//                    auto width = rectData.width * scale;
+//                    auto height = rectData.height * scale;
+//                    if (!currentTextureData->frame && currentTextureData->rotated)
+//                    {
+//                        width = rectData.height;
+//                        height = rectData.width;
+//                    }
+//                    
+//                    this->_pivotX *= width;
+//                    this->_pivotY *= height;
+//                }
+//                
+//                if (currentTextureData->frame)
+//                {
+//                    this->_pivotX += currentTextureData->frame->x * scale;
+//                    this->_pivotY += currentTextureData->frame->y * scale;
+//                }
+//                
+//                if (rawDisplayData && rawDisplayData != currentDisplayData)
+//                {
+//                    this->_pivotX += rawDisplayData->transform.x - currentDisplayData->transform.x;
+//                    this->_pivotY += rawDisplayData->transform.y - currentDisplayData->transform.y;
+//                }
+//                
+//                this->_pivotY -= currentTextureData->region.height * this->_armature->getArmatureData()->scale;
+                
                 auto vertices = triangles.verts;
                 auto vertexIndices = triangles.indices;
                 
@@ -538,7 +397,7 @@ void CCSlot::_updateMesh()
 
             auto& vertex = vertices[iH];
             auto& vertexPosition = vertex.vertices;
-
+ 
             vertexPosition.x = xG;
             vertexPosition.y = -yG;
 
@@ -575,15 +434,21 @@ void CCSlot::_updateMesh()
 
 void CCSlot::_updateTransform()
 {
-    _localMatrix.m[0] = globalTransformMatrix.a;
-    _localMatrix.m[1] = globalTransformMatrix.b;
-    _localMatrix.m[4] = -globalTransformMatrix.c;
-    _localMatrix.m[5] = -globalTransformMatrix.d;
+//    _localMatrix.m[0] = globalTransformMatrix.a;
+//    _localMatrix.m[1] = globalTransformMatrix.b;
+//    _localMatrix.m[4] = -globalTransformMatrix.c;
+//    _localMatrix.m[5] = -globalTransformMatrix.d;
 
+    _localMatrix.m[0] = globalTransformMatrix.a;
+    _localMatrix.m[1] = -globalTransformMatrix.b;
+    _localMatrix.m[4] = -globalTransformMatrix.c;
+    _localMatrix.m[5] = globalTransformMatrix.d;
+    
     if (_childArmature)
     {
         _localMatrix.m[12] = globalTransformMatrix.tx;
-        _localMatrix.m[13] = globalTransformMatrix.ty;
+        //_localMatrix.m[13] = globalTransformMatrix.ty;
+        _localMatrix.m[13] = -globalTransformMatrix.ty;
     }
     else 
     {
@@ -596,7 +461,8 @@ void CCSlot::_updateTransform()
         }
         
         _localMatrix.m[12] = globalTransformMatrix.tx - (globalTransformMatrix.a * _pivotX - globalTransformMatrix.c * _pivotY);
-        _localMatrix.m[13] = globalTransformMatrix.ty - (globalTransformMatrix.b * _pivotX - globalTransformMatrix.d * _pivotY);
+        //_localMatrix.m[13] = (globalTransformMatrix.ty - (globalTransformMatrix.b * _pivotX - globalTransformMatrix.d * _pivotY));
+        _localMatrix.m[13] = -(globalTransformMatrix.ty - (globalTransformMatrix.b * _pivotX - globalTransformMatrix.d * _pivotY));
     }
     
     _worldMatDirty = true;
@@ -645,10 +511,17 @@ void CCSlot::calculWorldMatrix()
 
 void CCSlot::_identityTransform()
 {
+//    _localMatrix.m[0] = 1.0f;
+//    _localMatrix.m[1] = 0.0f;
+//    _localMatrix.m[4] = -0.0f;
+//    _localMatrix.m[5] = -1.0f;
+//    _localMatrix.m[12] = 0.0f;
+//    _localMatrix.m[13] = 0.0f;
+    
     _localMatrix.m[0] = 1.0f;
     _localMatrix.m[1] = 0.0f;
-    _localMatrix.m[4] = -0.0f;
-    _localMatrix.m[5] = -1.0f;
+    _localMatrix.m[4] = 0.0f;
+    _localMatrix.m[5] = 1.0f;
     _localMatrix.m[12] = 0.0f;
     _localMatrix.m[13] = 0.0f;
     

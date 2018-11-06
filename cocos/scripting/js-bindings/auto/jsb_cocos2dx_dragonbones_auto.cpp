@@ -353,6 +353,62 @@ static bool js_cocos2dx_dragonbones_Transform_set_y(se::State& s)
 }
 SE_BIND_PROP_SET(js_cocos2dx_dragonbones_Transform_set_y)
 
+static bool js_cocos2dx_dragonbones_Transform_get_skew(se::State& s)
+{
+    dragonBones::Transform* cobj = (dragonBones::Transform*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_Transform_get_skew : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= float_to_seval(cobj->skew, &jsret);
+    s.rval() = jsret;
+    return true;
+}
+SE_BIND_PROP_GET(js_cocos2dx_dragonbones_Transform_get_skew)
+
+static bool js_cocos2dx_dragonbones_Transform_set_skew(se::State& s)
+{
+    const auto& args = s.args();
+    dragonBones::Transform* cobj = (dragonBones::Transform*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_Transform_set_skew : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    float arg0 = 0;
+    ok &= seval_to_float(args[0], &arg0);
+    SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_Transform_set_skew : Error processing new value");
+    cobj->skew = arg0;
+    return true;
+}
+SE_BIND_PROP_SET(js_cocos2dx_dragonbones_Transform_set_skew)
+
+static bool js_cocos2dx_dragonbones_Transform_get_rotation(se::State& s)
+{
+    dragonBones::Transform* cobj = (dragonBones::Transform*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_Transform_get_rotation : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= float_to_seval(cobj->rotation, &jsret);
+    s.rval() = jsret;
+    return true;
+}
+SE_BIND_PROP_GET(js_cocos2dx_dragonbones_Transform_get_rotation)
+
+static bool js_cocos2dx_dragonbones_Transform_set_rotation(se::State& s)
+{
+    const auto& args = s.args();
+    dragonBones::Transform* cobj = (dragonBones::Transform*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_Transform_set_rotation : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    float arg0 = 0;
+    ok &= seval_to_float(args[0], &arg0);
+    SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_Transform_set_rotation : Error processing new value");
+    cobj->rotation = arg0;
+    return true;
+}
+SE_BIND_PROP_SET(js_cocos2dx_dragonbones_Transform_set_rotation)
+
 static bool js_cocos2dx_dragonbones_Transform_get_scaleX(se::State& s)
 {
     dragonBones::Transform* cobj = (dragonBones::Transform*)s.nativeThisObject();
@@ -418,6 +474,8 @@ bool js_register_cocos2dx_dragonbones_Transform(se::Object* obj)
 
     cls->defineProperty("x", _SE(js_cocos2dx_dragonbones_Transform_get_x), _SE(js_cocos2dx_dragonbones_Transform_set_x));
     cls->defineProperty("y", _SE(js_cocos2dx_dragonbones_Transform_get_y), _SE(js_cocos2dx_dragonbones_Transform_set_y));
+    cls->defineProperty("skew", _SE(js_cocos2dx_dragonbones_Transform_get_skew), _SE(js_cocos2dx_dragonbones_Transform_set_skew));
+    cls->defineProperty("rotation", _SE(js_cocos2dx_dragonbones_Transform_get_rotation), _SE(js_cocos2dx_dragonbones_Transform_set_rotation));
     cls->defineProperty("scaleX", _SE(js_cocos2dx_dragonbones_Transform_get_scaleX), _SE(js_cocos2dx_dragonbones_Transform_set_scaleX));
     cls->defineProperty("scaleY", _SE(js_cocos2dx_dragonbones_Transform_get_scaleY), _SE(js_cocos2dx_dragonbones_Transform_set_scaleY));
     cls->defineStaticFunction("normalizeRadian", _SE(js_cocos2dx_dragonbones_Transform_normalizeRadian));
@@ -3579,6 +3637,34 @@ static bool js_cocos2dx_dragonbones_AnimationState_set_fadeTotalTime(se::State& 
 }
 SE_BIND_PROP_SET(js_cocos2dx_dragonbones_AnimationState_set_fadeTotalTime)
 
+static bool js_cocos2dx_dragonbones_AnimationState_get_name(se::State& s)
+{
+    dragonBones::AnimationState* cobj = (dragonBones::AnimationState*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_AnimationState_get_name : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= std_string_to_seval(cobj->name, &jsret);
+    s.rval() = jsret;
+    return true;
+}
+SE_BIND_PROP_GET(js_cocos2dx_dragonbones_AnimationState_get_name)
+
+static bool js_cocos2dx_dragonbones_AnimationState_set_name(se::State& s)
+{
+    const auto& args = s.args();
+    dragonBones::AnimationState* cobj = (dragonBones::AnimationState*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_AnimationState_set_name : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    std::string arg0;
+    ok &= seval_to_std_string(args[0], &arg0);
+    SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_AnimationState_set_name : Error processing new value");
+    cobj->name = arg0;
+    return true;
+}
+SE_BIND_PROP_SET(js_cocos2dx_dragonbones_AnimationState_set_name)
+
 
 extern se::Object* __jsb_dragonBones_BaseObject_proto;
 
@@ -3594,6 +3680,7 @@ bool js_register_cocos2dx_dragonbones_AnimationState(se::Object* obj)
     cls->defineProperty("weight", _SE(js_cocos2dx_dragonbones_AnimationState_get_weight), _SE(js_cocos2dx_dragonbones_AnimationState_set_weight));
     cls->defineProperty("autoFadeOutTime", _SE(js_cocos2dx_dragonbones_AnimationState_get_autoFadeOutTime), _SE(js_cocos2dx_dragonbones_AnimationState_set_autoFadeOutTime));
     cls->defineProperty("fadeTotalTime", _SE(js_cocos2dx_dragonbones_AnimationState_get_fadeTotalTime), _SE(js_cocos2dx_dragonbones_AnimationState_set_fadeTotalTime));
+    cls->defineProperty("name", _SE(js_cocos2dx_dragonbones_AnimationState_get_name), _SE(js_cocos2dx_dragonbones_AnimationState_set_name));
     cls->defineFunction("isCompleted", _SE(js_cocos2dx_dragonbones_AnimationState_isCompleted));
     cls->defineFunction("play", _SE(js_cocos2dx_dragonbones_AnimationState_play));
     cls->defineFunction("fadeOut", _SE(js_cocos2dx_dragonbones_AnimationState_fadeOut));

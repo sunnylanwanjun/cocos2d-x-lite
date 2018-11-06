@@ -458,7 +458,8 @@ public:
     static bool debug;
     static bool debugDraw;
     static bool webAssembly;
-
+    static bool checkInPool;
+    
 private:
     std::vector<BaseObject*> _objects;
     std::vector<EventObject*> _events;
@@ -468,10 +469,11 @@ private:
 public:
     DragonBones(IEventDispatcher* eventManager);
     virtual ~DragonBones();
-
+    
     void advanceTime(float passedTime);
     void bufferEvent(EventObject* value);
     void bufferObject(BaseObject* object);
+    
     WorldClock* getClock();
     IEventDispatcher* getEventManager() const
     {

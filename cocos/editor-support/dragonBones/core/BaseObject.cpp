@@ -14,7 +14,10 @@ void BaseObject::_returnObject(BaseObject* object)
     const auto maxCountIterator = _maxCountMap.find(classType);
     const auto maxCount = maxCountIterator != _maxCountMap.end() ? maxCountIterator->second : _defaultMaxCount;
     auto& pool = _poolsMap[classType];
-    if (pool.size() < maxCount)
+    // If script engine gc,then alway push object into pool,not immediately delete
+    // Because object will be referenced more then one place possibly,if delete it immediately,will
+    // crash.
+    if (!DragonBones::checkInPool || pool.size() < maxCount)
     {
         if (!object->_isInPool)
         {
@@ -25,7 +28,11 @@ void BaseObject::_returnObject(BaseObject* object)
         }
         else
         {
-            DRAGONBONES_ASSERT(false, "The object is already in the pool.");
+            // If script engine gc,repeat push into pool will happen.
+            if(DragonBones::checkInPool)
+            {
+                DRAGONBONES_ASSERT(false, "The object is already in the pool.");
+            }
         }
     }
     else
@@ -138,6 +145,7 @@ BaseObject::~BaseObject()
         __allDragonBonesObjects.erase(iter);
     }
 }
+
 void BaseObject::returnToPool()
 {
     _onClear();
