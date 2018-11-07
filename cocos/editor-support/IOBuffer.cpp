@@ -28,20 +28,18 @@ namespace editor {
     IOBuffer::IOBuffer (se::Object::TypedArrayType arrayType)
     : _arrayType(arrayType)
     {
-        _typeArray = se::Object::createTypedArray(_arrayType, nullptr, _bufferSize);
-        _typeArray->root();
-        _typeArray->getTypedArrayData(&_buffer, (size_t*)&_bufferSize);
+        _typeArray = TypeArrayPool::getInstance()->pop(_arrayType, _bufferSize);
+        _typeArray->getTypedArrayData(&_buffer, &_bufferSize);
     }
 
     IOBuffer::~IOBuffer ()
     {
-        _typeArray->unroot();
-        _typeArray->decRef();
+        TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
         _typeArray = nullptr;
     }
 
     //will write uint32_t in any pos,but can not out of range
-    void IOBuffer::writeUint32 (int pos, uint32_t val)
+    void IOBuffer::writeUint32 (std::size_t pos, uint32_t val)
     {
         if (_bufferSize < pos + sizeof(val))
         {
@@ -53,21 +51,21 @@ namespace editor {
         return;
     }
 
-    void IOBuffer::writeBytes (const char* bytes, int bytesLen)
+    void IOBuffer::writeBytes (const char* bytes, std::size_t bytesLen)
     {
         checkSpace(bytesLen);
         memcpy(_buffer + _curPos, bytes, bytesLen);
         _curPos += bytesLen;
     }
 
-    void IOBuffer::writeUint32 ( uint32_t val ) {
+    void IOBuffer::writeUint32 (uint32_t val) {
         checkSpace(sizeof(val));
         uint32_t* buffer = (uint32_t*)(_buffer + _curPos);
         *buffer = val;
         _curPos += sizeof(val);
     }
 
-    void IOBuffer::writeFloat32 (int pos, float val)
+    void IOBuffer::writeFloat32 (std::size_t pos, float val)
     {
         if (_bufferSize < pos + sizeof(val))
         {
@@ -131,37 +129,37 @@ namespace editor {
         _readPos = 0;
     }
 
-    se::Object* IOBuffer::getTypeArray () const
+    se_object_ptr IOBuffer::getTypeArray () const
     {
         return _typeArray;
     }
 
-    int IOBuffer::length () const
+    std::size_t IOBuffer::length () const
     {
         return _curPos;
     }
 
-    int IOBuffer::getCurPos () const
+    std::size_t IOBuffer::getCurPos () const
     {
         return _curPos;
     }
 
-    void IOBuffer::checkSpace (int needLen)
+    void IOBuffer::checkSpace (std::size_t needLen)
     {
-        int hasLen = _bufferSize - _curPos;
+        std::size_t hasLen = _bufferSize - _curPos;
         if (hasLen < needLen)
         {
-            int addLen = needLen - hasLen + 128;
-            int newLen = _bufferSize + addLen;
-            se::Object* newTypeBuffer = se::Object::createTypedArray(_arrayType, nullptr, newLen);
-            newTypeBuffer->root();
+            std::size_t addLen = needLen - hasLen + 128;
+            std::size_t newLen = _bufferSize + addLen;
+            
+            se::Object* newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
+            se::AutoHandleScope hs;
             
             uint8_t* newBuffer = nullptr;
             newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
             memcpy(newBuffer, _buffer, _bufferSize);
             
-            _typeArray->unroot();
-            _typeArray->decRef();
+            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
             
             _typeArray = newTypeBuffer;
             _buffer = newBuffer;

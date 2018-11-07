@@ -141,7 +141,7 @@ public:
         _premultipliedAlpha = value;
     }
     
-    typedef std::function<void(se_object_ptr, se_object_ptr, se_object_ptr)> bufferChangeCallback;
+    typedef std::function<void()> bufferChangeCallback;
     void setBufferChangeCallback(bufferChangeCallback callback)
     {
         _changeBufferCallback = callback;

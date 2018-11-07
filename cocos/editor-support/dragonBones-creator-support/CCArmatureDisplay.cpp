@@ -122,7 +122,7 @@ void CCArmatureDisplay::dbUpdate()
     {
         if (_changeBufferCallback)
         {
-            _changeBufferCallback(_vertexBuffer.getTypeArray(), _indiceBuffer.getTypeArray(), _debugBuffer.getTypeArray());
+            _changeBufferCallback();
         }
         _vertexBuffer.isNewBuffer = false;
         _indiceBuffer.isNewBuffer = false;
@@ -218,10 +218,10 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             _vertexBuffer.writeUint32(_curBlendDst);
             
             //reserve vertex segamentation lenght
-            _preVSegWritePos = _vertexBuffer.getCurPos();
+            _preVSegWritePos = (int)_vertexBuffer.getCurPos();
             _vertexBuffer.writeUint32(0);
             //reserve indice segamentation lenght
-            _preISegWritePos = _vertexBuffer.getCurPos();
+            _preISegWritePos = (int)_vertexBuffer.getCurPos();
             _vertexBuffer.writeUint32(0);
             
             _preTextureIndex = _curTextureIndex;

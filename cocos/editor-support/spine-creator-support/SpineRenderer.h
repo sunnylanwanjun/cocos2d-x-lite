@@ -29,6 +29,7 @@
 #include "base/ccTypes.h"
 #include <vector>
 #include "scripting/js-bindings/jswrapper/Object.hpp"
+#include "IOBuffer.h"
 
 namespace spine {
 
@@ -55,7 +56,8 @@ public:
 	void setToSetupPose ();
 	void setBonesToSetupPose ();
 	void setSlotsToSetupPose ();
-
+    void paused (bool value);
+    
 	/* Returns 0 if the bone was not found. */
 	spBone* findBone (const std::string& boneName) const;
 	/* Returns 0 if the slot was not found. */
@@ -92,6 +94,12 @@ public:
     void setOpacityModifyRGB (bool value);
     bool isOpacityModifyRGB () const;
     
+    typedef std::function<void()> bufferChangeCallback;
+    void setBufferChangeCallback(bufferChangeCallback callback)
+    {
+        _changeBufferCallback = callback;
+    }
+    
 CC_CONSTRUCTOR_ACCESS:
 	SpineRenderer ();
 	SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
@@ -119,12 +127,17 @@ protected:
 	float*              _worldVertices = nullptr;
 	spSkeleton*         _skeleton = nullptr;
 	float               _timeScale = 1;
+    bool                _paused = false;
     
 	bool                _debugSlots = false;
 	bool                _debugBones = false;
     cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
     bool                _premultipliedAlpha = false;
     
+    editor::IOBuffer   _vertexBuffer;
+    editor::IOBuffer   _indiceBuffer;
+    editor::IOBuffer   _debugBuffer;
+    bufferChangeCallback _changeBufferCallback = nullptr;
 };
 
 }

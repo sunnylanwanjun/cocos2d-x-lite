@@ -28,6 +28,8 @@
 #include "spine-creator-support/CreatorAttachmentLoader.h"
 #include <algorithm>
 #include "IOBuffer.h"
+#include "platform/CCApplication.h"
+#include "base/CCScheduler.h"
 
 USING_NS_CC;
 using std::min;
@@ -36,9 +38,16 @@ using std::max;
 using namespace editor;
 using namespace spine;
 
-static IOBuffer* _vertexBuffer = nullptr;
-static IOBuffer* _indiceBuffer = nullptr;
-static IOBuffer* _debugBuffer = nullptr;
+//static IOBuffer _vertexBuffer(se::Object::TypedArrayType::UINT32);
+//static IOBuffer _indiceBuffer(se::Object::TypedArrayType::UINT16);
+//static IOBuffer _debugBuffer(se::Object::TypedArrayType::FLOAT32);
+
+#define INIT_IOBUFFER \
+_vertexBuffer(se::Object::TypedArrayType::UINT32) \
+,_indiceBuffer(se::Object::TypedArrayType::UINT16) \
+,_debugBuffer(se::Object::TypedArrayType::FLOAT32)
+
+static const std::string scheduleKey = "spineScheduleKey";
 
 SpineRenderer* SpineRenderer::create ()
 {
@@ -70,24 +79,20 @@ SpineRenderer* SpineRenderer::createWithFile (const std::string& skeletonDataFil
 
 void SpineRenderer::initialize ()
 {
-
     // SpineRenderer::initalize may be invoked twice, need to check whether _worldVertics is already allocated to avoid memory leak.
     if (_worldVertices == nullptr)
         _worldVertices = new float[1000]; // Max number of vertices per mesh.
     
-    if(_vertexBuffer == nullptr)
+    auto app = cocos2d::Application::getInstance();
+    auto scheduler = app->getScheduler();
+    if (!scheduler->isScheduled(scheduleKey, this))
     {
-        _vertexBuffer = new IOBuffer(se::Object::TypedArrayType::UINT32);
-    }
-    
-    if(_indiceBuffer == nullptr)
-    {
-        _indiceBuffer = new IOBuffer(se::Object::TypedArrayType::UINT16);
-    }
-    
-    if(_debugBuffer == nullptr)
-    {
-        _debugBuffer = new IOBuffer(se::Object::TypedArrayType::FLOAT32);
+        scheduler->schedule(
+            [&](float passedTime)
+            {
+                this->update(passedTime);
+            },
+        this, 0, false, scheduleKey);
     }
 }
 
@@ -98,20 +103,24 @@ void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkel
 }
 
 SpineRenderer::SpineRenderer ()
+:INIT_IOBUFFER
 {
 }
 
 SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
+:INIT_IOBUFFER
 {
 	initWithData(skeletonData, ownsSkeletonData);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
+:INIT_IOBUFFER
 {
 	initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
+:INIT_IOBUFFER
 {
 	initWithJsonFile(skeletonDataFile, atlasFile, scale);
 }
@@ -123,6 +132,10 @@ SpineRenderer::~SpineRenderer ()
 	if (_atlas) spAtlas_dispose(_atlas);
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
 	delete [] _worldVertices;
+    
+    auto app = cocos2d::Application::getInstance();
+    auto scheduler = app->getScheduler();
+    scheduler->unschedule(scheduleKey, this);
 }
 
 void SpineRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData)
@@ -197,11 +210,10 @@ void SpineRenderer::initWithBinaryFile (const std::string& skeletonDataFile, con
 
 void SpineRenderer::update (float deltaTime)
 {
+    if (_paused) return;
+    
 	spSkeleton_update(_skeleton, deltaTime * _timeScale);
-}
-
-se_object_ptr SpineRenderer::getRenderData ()
-{
+    
     _skeleton->r = _nodeColor.r / (float)255;
     _skeleton->g = _nodeColor.g / (float)255;
     _skeleton->b = _nodeColor.b / (float)255;
@@ -225,16 +237,16 @@ se_object_ptr SpineRenderer::getRenderData ()
     int debugSlotsLen = 0;
     int materialLen = 0;
     
-    _vertexBuffer->reset();
-    _debugBuffer->reset();
-    _indiceBuffer->reset();
+    _vertexBuffer.reset();
+    _debugBuffer.reset();
+    _indiceBuffer.reset();
     
     //reserved 4 bytes to save material len
-    _vertexBuffer->writeUint32(0);
+    _vertexBuffer.writeUint32(0);
     if (_debugSlots)
     {
         //reserved 4 bytes to save debug slots len
-        _debugBuffer->writeUint32(0);
+        _debugBuffer.writeUint32(0);
     }
     
     for (int i = 0, n = _skeleton->slotsCount; i < n; ++i)
@@ -256,14 +268,14 @@ se_object_ptr SpineRenderer::getRenderData ()
                 
                 if(_debugSlots)
                 {
-                    _debugBuffer->writeFloat32(_worldVertices[0]);
-                    _debugBuffer->writeFloat32(_worldVertices[1]);
-                    _debugBuffer->writeFloat32(_worldVertices[2]);
-                    _debugBuffer->writeFloat32(_worldVertices[3]);
-                    _debugBuffer->writeFloat32(_worldVertices[4]);
-                    _debugBuffer->writeFloat32(_worldVertices[5]);
-                    _debugBuffer->writeFloat32(_worldVertices[6]);
-                    _debugBuffer->writeFloat32(_worldVertices[7]);
+                    _debugBuffer.writeFloat32(_worldVertices[0]);
+                    _debugBuffer.writeFloat32(_worldVertices[1]);
+                    _debugBuffer.writeFloat32(_worldVertices[2]);
+                    _debugBuffer.writeFloat32(_worldVertices[3]);
+                    _debugBuffer.writeFloat32(_worldVertices[4]);
+                    _debugBuffer.writeFloat32(_worldVertices[5]);
+                    _debugBuffer.writeFloat32(_worldVertices[6]);
+                    _debugBuffer.writeFloat32(_worldVertices[7]);
                     debugSlotsLen+=8;
                 }
                 
@@ -310,20 +322,20 @@ se_object_ptr SpineRenderer::getRenderData ()
             
             if (preVSegWritePos != -1)
             {
-                _vertexBuffer->writeUint32(preVSegWritePos,curVSegLen);
-                _vertexBuffer->writeUint32(preISegWritePos,curISegLen);
+                _vertexBuffer.writeUint32(preVSegWritePos,curVSegLen);
+                _vertexBuffer.writeUint32(preISegWritePos,curISegLen);
             }
             
-            _vertexBuffer->writeUint32(curTextureIndex);
-            _vertexBuffer->writeUint32(curBlendSrc);
-            _vertexBuffer->writeUint32(curBlendDst);
+            _vertexBuffer.writeUint32(curTextureIndex);
+            _vertexBuffer.writeUint32(curBlendSrc);
+            _vertexBuffer.writeUint32(curBlendDst);
             
             //reserve vertex segamentation lenght
-            preVSegWritePos = _vertexBuffer->getCurPos();
-            _vertexBuffer->writeUint32(0);
+            preVSegWritePos = (int)_vertexBuffer.getCurPos();
+            _vertexBuffer.writeUint32(0);
             //reserve indice segamentation lenght
-            preISegWritePos = _vertexBuffer->getCurPos();
-            _vertexBuffer->writeUint32(0);
+            preISegWritePos = (int)_vertexBuffer.getCurPos();
+            _vertexBuffer.writeUint32(0);
             
             preTextureIndex = curTextureIndex;
             preBlendDst = curBlendDst;
@@ -352,19 +364,19 @@ se_object_ptr SpineRenderer::getRenderData ()
             vertex->colors.a = (GLubyte)color.a;
         }
         
-        _vertexBuffer->writeBytes((char*)attachmentVertices->_triangles->verts,
-                               attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
+        _vertexBuffer.writeBytes((char*)attachmentVertices->_triangles->verts,
+                                  attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
         
         if (curVSegLen > 0)
         {
             for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++)
             {
-                _indiceBuffer->writeUint16(attachmentVertices->_triangles->indices[ii] + curVSegLen);
+                _indiceBuffer.writeUint16(attachmentVertices->_triangles->indices[ii] + curVSegLen);
             }
         }
         else
         {
-            _indiceBuffer->writeBytes((char*)attachmentVertices->_triangles->indices,
+            _indiceBuffer.writeBytes((char*)attachmentVertices->_triangles->indices,
                                       attachmentVertices->_triangles->indexCount*sizeof(unsigned short));
         }
         
@@ -375,32 +387,47 @@ se_object_ptr SpineRenderer::getRenderData ()
     if (_debugSlots)
     {
         //add 0.1 is avoid precision trouble
-        _debugBuffer->writeFloat32(0, debugSlotsLen+0.1);
+        _debugBuffer.writeFloat32(0, debugSlotsLen);
     }
     
-    _vertexBuffer->writeUint32(0, materialLen);
+    _vertexBuffer.writeUint32(0, materialLen);
     if (preVSegWritePos != -1)
     {
-        _vertexBuffer->writeUint32(preVSegWritePos, curVSegLen);
-        _vertexBuffer->writeUint32(preISegWritePos, curISegLen);
+        _vertexBuffer.writeUint32(preVSegWritePos, curVSegLen);
+        _vertexBuffer.writeUint32(preISegWritePos, curISegLen);
     }
     
     if (_debugBones)
     {
-        _debugBuffer->writeFloat32(_skeleton->bonesCount*4 + 0.1);
+        _debugBuffer.writeFloat32(_skeleton->bonesCount*4);
         for (int i = 0, n = _skeleton->bonesCount; i < n; i++)
         {
             spBone *bone = _skeleton->bones[i];
             float x = bone->data->length * bone->a + bone->worldX;
             float y = bone->data->length * bone->c + bone->worldY;
-            _debugBuffer->writeFloat32(bone->worldX);
-            _debugBuffer->writeFloat32(bone->worldY);
-            _debugBuffer->writeFloat32(x);
-            _debugBuffer->writeFloat32(y);
+            _debugBuffer.writeFloat32(bone->worldX);
+            _debugBuffer.writeFloat32(bone->worldY);
+            _debugBuffer.writeFloat32(x);
+            _debugBuffer.writeFloat32(y);
         }
     }
     
-    return _vertexBuffer->getTypeArray();
+    // update js array buffer
+    if (_vertexBuffer.isNewBuffer || _indiceBuffer.isNewBuffer || _debugBuffer.isNewBuffer)
+    {
+        if (_changeBufferCallback)
+        {
+            _changeBufferCallback();
+        }
+        _vertexBuffer.isNewBuffer = false;
+        _indiceBuffer.isNewBuffer = false;
+        _debugBuffer.isNewBuffer = false;
+    }
+}
+
+se_object_ptr SpineRenderer::getRenderData ()
+{
+    return _vertexBuffer.getTypeArray();
 }
 
 AttachmentVertices* SpineRenderer::getAttachmentVertices (spRegionAttachment* attachment) const
@@ -470,12 +497,12 @@ bool SpineRenderer::setAttachment (const std::string& slotName, const char* atta
 
 se_object_ptr SpineRenderer::getIndiceData() const
 {
-    return _indiceBuffer->getTypeArray();
+    return _indiceBuffer.getTypeArray();
 }
 
 se_object_ptr SpineRenderer::getDebugData() const
 {
-    return _debugBuffer->getTypeArray();
+    return _debugBuffer.getTypeArray();
 }
 
 spSkeleton* SpineRenderer::getSkeleton () const
@@ -491,6 +518,11 @@ void SpineRenderer::setTimeScale (float scale)
 float SpineRenderer::getTimeScale () const
 {
 	return _timeScale;
+}
+
+void SpineRenderer::paused(bool value)
+{
+    _paused = value;
 }
 
 void SpineRenderer::setColor (cocos2d::Color4B& color)

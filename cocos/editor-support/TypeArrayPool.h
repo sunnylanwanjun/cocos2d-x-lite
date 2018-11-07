@@ -1,3 +1,4 @@
+
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
@@ -24,10 +25,10 @@
 #pragma once
 #include <map>
 #include <vector>
-#include "scripting/js-bindings/jswrapper/Object.hpp"
+#include "scripting/js-bindings/jswrapper/SeApi.h"
 
 namespace editor {
-    /**
+    /** 
      * TypeArray Pool
      */
     class TypeArrayPool
@@ -40,6 +41,16 @@ namespace editor {
             if (_instance == nullptr)
             {
                 _instance = new TypeArrayPool();
+                
+                se::ScriptEngine::getInstance()->addAfterCleanupHook([&](){
+                    _instance->allowPush = false;
+                    _instance->clearPool();
+                });
+                
+                se::ScriptEngine::getInstance()->addAfterInitHook([&](){
+                    _instance->allowPush = true;
+                });
+                
             }
             return _instance;
         }
@@ -53,10 +64,24 @@ namespace editor {
             }
         }
     private:
-        TypeArrayPool(){}
-        ~TypeArrayPool(){}
-        std::map<se::Object::TypedArrayType,std::vector<se::Object*>*> _pool;
-    public:
+        typedef se::Object::TypedArrayType arrayType;
+        typedef std::vector<se::Object*> objPool;
+        typedef std::map<std::size_t, objPool*> fitMap;
+        typedef std::map<arrayType, fitMap*> typeMap;
         
+        objPool* getObjPool(arrayType type, std::size_t size);
+        
+        TypeArrayPool();
+        ~TypeArrayPool();
+        
+        void clearPool();
+        void dump();
+    private:
+        typeMap _pool;
+    public:
+        bool allowPush = true;
+    public:
+        se::Object* pop(arrayType type, std::size_t size);
+        void push(arrayType type, std::size_t fitSize, se::Object* object);
     };
 }

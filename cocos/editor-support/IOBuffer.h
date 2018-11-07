@@ -48,19 +48,19 @@ namespace editor {
          *  @param[in] pos The buffer pos begin to write.
          *  @param[in] val The value write into buffer.
          */
-        void writeFloat32(int pos,float val);
+        void writeFloat32(std::size_t pos,float val);
         /**
          *  @brief Write uint32 into buffer.
          *  @param[in] pos The buffer pos begin to write.
          *  @param[in] val The value write into buffer.
          */
-        void writeUint32(int pos,uint32_t val);
+        void writeUint32(std::size_t pos,uint32_t val);
         /**
          *  @brief Write bytes into buffer.
          *  @param[in] bytes A data pointer,the data will be copy.
          *  @param[in] bytesLen The length of the data.
          */
-        void writeBytes(const char* bytes,int bytesLen);
+        void writeBytes(const char* bytes,std::size_t bytesLen);
         /**
          *  @brief Write uint32 into buffer.
          *  @param[in] val The value write into buffer.
@@ -104,26 +104,26 @@ namespace editor {
         /**
          *  @brief Get JS type array.
          */
-        se::Object* getTypeArray() const;
+        se_object_ptr getTypeArray() const;
         /**
          *  @brief Get length of buffer.
          */
-        int length() const;
+        std::size_t length() const;
         /**
          *  @brief Get current write position.
          */
-        int getCurPos() const;
+        std::size_t getCurPos() const;
     private:
         /**
          * If js array address change,will return false,or return true.
          */
-        void checkSpace(int needLen);
+        void checkSpace(std::size_t needLen);
     private:
         se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
         uint8_t*                    _buffer = nullptr;
-        int                         _bufferSize = 40960;
-        int                         _curPos = 0;
-        int                         _readPos = 0;
+        std::size_t                 _bufferSize = 5120;
+        std::size_t                 _curPos = 0;
+        std::size_t                 _readPos = 0;
         se::Object*                 _typeArray = nullptr;
     public:
         bool                        isNewBuffer = false;

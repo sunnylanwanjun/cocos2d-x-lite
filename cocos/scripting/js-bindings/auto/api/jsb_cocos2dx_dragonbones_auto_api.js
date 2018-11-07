@@ -2636,6 +2636,14 @@ str
 },
 
 /**
+ * @method stopSchedule
+ */
+stopSchedule : function (
+)
+{
+},
+
+/**
  * @method removeTextureAtlasDataByIndex
  * @param {String} arg0
  * @param {int} arg1
@@ -2643,6 +2651,24 @@ str
 removeTextureAtlasDataByIndex : function (
 str, 
 int 
+)
+{
+},
+
+/**
+ * @method isInit
+ * @return {bool}
+ */
+isInit : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method destroyFactory
+ */
+destroyFactory : function (
 )
 {
 },

@@ -1,12 +1,12 @@
 /**
  * @module cocos2dx_spine
  */
-var jsbspine = jsbspine || {};
+var jsbSpine = jsbSpine || {};
 
 /**
  * @class SpineRenderer
  */
-jsbspine.Skeleton = {
+jsbSpine.Skeleton = {
 
 /**
  * @method setTimeScale
@@ -14,6 +14,16 @@ jsbspine.Skeleton = {
  */
 setTimeScale : function (
 float 
+)
+{
+},
+
+/**
+ * @method paused
+ * @param {bool} arg0
+ */
+paused : function (
+bool 
 )
 {
 },
@@ -115,6 +125,16 @@ float
 },
 
 /**
+ * @method setBufferChangeCallback
+ * @param {function} arg0
+ */
+setBufferChangeCallback : function (
+func 
+)
+{
+},
+
+/**
  * @method getDebugData
  * @return {se::Object}
  */
@@ -122,14 +142,6 @@ getDebugData : function (
 )
 {
     return se::Object;
-},
-
-/**
- * @method updateWorldTransform
- */
-updateWorldTransform : function (
-)
-{
 },
 
 /**
@@ -239,6 +251,14 @@ str
 },
 
 /**
+ * @method updateWorldTransform
+ */
+updateWorldTransform : function (
+)
+{
+},
+
+/**
  * @method getSkeleton
  * @return {spSkeleton}
  */
@@ -296,7 +316,7 @@ float
 /**
  * @class SpineAnimation
  */
-jsbspine.SpineAnimation = {
+jsbSpine.SpineAnimation = {
 
 /**
  * @method setAnimation
