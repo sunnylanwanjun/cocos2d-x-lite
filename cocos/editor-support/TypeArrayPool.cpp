@@ -23,8 +23,8 @@
  ****************************************************************************/
 #include "TypeArrayPool.h"
 #include "base/CCLog.h"
-#include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "base/ccMacros.h"
+#include <functional>
 
 #define POOL_DEBUG 0
 
@@ -42,12 +42,25 @@ namespace editor{
     
     TypeArrayPool::TypeArrayPool()
     {
-        
+        se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypeArrayPool::afterCleanupHandle,this));
     }
     
     TypeArrayPool::~TypeArrayPool()
     {
         clearPool();
+    }
+    
+    void TypeArrayPool::afterCleanupHandle()
+    {
+        this->allowPush = false;
+        clearPool();
+        se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&TypeArrayPool::afterInitHandle,this));
+    }
+    
+    void TypeArrayPool::afterInitHandle()
+    {
+        this->allowPush = true;
+        se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypeArrayPool::afterCleanupHandle,this));
     }
     
     void TypeArrayPool::clearPool()
@@ -56,7 +69,6 @@ namespace editor{
         dump();
         #endif
         
-        se::AutoHandleScope hs;
         //map
         for (auto it = _pool.begin(); it != _pool.end(); it++)
         {
@@ -147,8 +159,6 @@ namespace editor{
     void TypeArrayPool::push(arrayType type, std::size_t fitSize, se::Object* object)
     {
         if (object == nullptr) return;
-     
-        se::AutoHandleScope hs;
         
         // If script engine is cleaning,delete object directly
         if (!allowPush)

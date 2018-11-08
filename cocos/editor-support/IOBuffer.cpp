@@ -153,9 +153,9 @@ namespace editor {
             std::size_t newLen = _bufferSize + addLen;
             
             se::Object* newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
-            se::AutoHandleScope hs;
             
             uint8_t* newBuffer = nullptr;
+            se::AutoHandleScope hs;
             newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
             memcpy(newBuffer, _buffer, _bufferSize);
             

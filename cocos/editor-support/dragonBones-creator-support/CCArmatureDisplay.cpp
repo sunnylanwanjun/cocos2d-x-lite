@@ -95,7 +95,7 @@ void CCArmatureDisplay::dbUpdate()
     {
         auto& bones = _armature->getBones();
         std::size_t count = bones.size();
-        _debugBuffer.writeFloat32(count*4 + 0.1);
+        _debugBuffer.writeFloat32(count*4);
         for (int i = 0; i < count; i++)
         {
             Bone* bone = (Bone*)bones[i];
@@ -106,9 +106,9 @@ void CCArmatureDisplay::dbUpdate()
             }
             
             float bx = bone->globalTransformMatrix.tx;
-            float by = bone->globalTransformMatrix.ty;
+            float by = -bone->globalTransformMatrix.ty;
             float endx = bx + bone->globalTransformMatrix.a * boneLen;
-            float endy = by + bone->globalTransformMatrix.b * boneLen;
+            float endy = by - bone->globalTransformMatrix.b * boneLen;
             
             _debugBuffer.writeFloat32(bx);
             _debugBuffer.writeFloat32(by);

@@ -48,6 +48,10 @@ base/csscolorparser.cpp \
 base/CCGLUtils.cpp \
 base/CCRenderTexture.cpp \
 storage/local-storage/LocalStorage-android.cpp \
+editor-support/IOBuffer.cpp \
+editor-support/editor-adapter.cpp \
+editor-support/TypeArrayPool.cpp \
+scripting/js-bindings/auto/jsb_cocos2dx_editor_support_auto.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_auto.cpp \
 scripting/js-bindings/auto/jsb_cocos2dx_extension_auto.cpp \
 scripting/js-bindings/manual/JavaScriptJavaBridge.cpp \
@@ -171,6 +175,13 @@ scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.cpp
 LOCAL_STATIC_LIBRARIES += spine_static
 endif # USE_SPINE
 
+ifeq ($(USE_DRAGONBONES),1)
+LOCAL_SRC_FILES += \
+scripting/js-bindings/manual/jsb_dragonbones_manual.cpp \
+scripting/js-bindings/auto/jsb_cocos2dx_dragonbones_auto.cpp
+LOCAL_STATIC_LIBRARIES += dragonbones_static
+endif # USE_DRAGONBONES
+
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/.. \
                     $(LOCAL_PATH)/platform \
@@ -215,11 +226,11 @@ LOCAL_EXPORT_CPPFLAGS := -Wno-deprecated-declarations
 
 include $(BUILD_STATIC_LIBRARY)
 
-
 #==============================================================
 #$(call import-module,.)
 $(call import-module,android)
 $(call import-module,editor-support/spine-creator-support)
+$(call import-module,editor-support/dragonBones-creator-support)
 $(call import-module,platform/android)
 $(call import-module,audio/android)
 $(call import-module,network)

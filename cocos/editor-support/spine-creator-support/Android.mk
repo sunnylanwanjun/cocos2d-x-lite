@@ -40,13 +40,11 @@ LOCAL_SRC_FILES := \
 ../spine/TransformConstraintData.c \
 ../spine/VertexAttachment.c \
 ../spine/extension.c \
-../IOBuffer.cpp \
 AttachmentVertices.cpp \
 CreatorAttachmentLoader.cpp \
 SpineAnimation.cpp \
 SpineRenderer.cpp \
-spine-cocos2dx.cpp \
-spine-adapter.cpp
+spine-cocos2dx.cpp
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. \
 						   $(LOCAL_PATH)/../..

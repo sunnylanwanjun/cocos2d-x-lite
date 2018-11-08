@@ -42,15 +42,6 @@ namespace editor {
             {
                 _instance = new TypeArrayPool();
                 
-                se::ScriptEngine::getInstance()->addAfterCleanupHook([&](){
-                    _instance->allowPush = false;
-                    _instance->clearPool();
-                });
-                
-                se::ScriptEngine::getInstance()->addAfterInitHook([&](){
-                    _instance->allowPush = true;
-                });
-                
             }
             return _instance;
         }
@@ -76,6 +67,9 @@ namespace editor {
         
         void clearPool();
         void dump();
+        
+        void afterCleanupHandle();
+        void afterInitHandle();
     private:
         typeMap _pool;
     public:
