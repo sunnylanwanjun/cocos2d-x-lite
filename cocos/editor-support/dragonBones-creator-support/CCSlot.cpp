@@ -206,39 +206,6 @@ void CCSlot::_updateFrame()
             } else {
                 adjustTriangles(4, 6);
                 
-//                const auto scale = this->_armature->getArmatureData()->scale;
-//                this->_pivotX = currentDisplayData->pivot.x;
-//                this->_pivotY = currentDisplayData->pivot.y;
-//                
-//                if (currentDisplayData->isRelativePivot)
-//                {
-//                    const auto& rectData = currentTextureData->frame ? *currentTextureData->frame : currentTextureData->region;
-//                    auto width = rectData.width * scale;
-//                    auto height = rectData.height * scale;
-//                    if (!currentTextureData->frame && currentTextureData->rotated)
-//                    {
-//                        width = rectData.height;
-//                        height = rectData.width;
-//                    }
-//                    
-//                    this->_pivotX *= width;
-//                    this->_pivotY *= height;
-//                }
-//                
-//                if (currentTextureData->frame)
-//                {
-//                    this->_pivotX += currentTextureData->frame->x * scale;
-//                    this->_pivotY += currentTextureData->frame->y * scale;
-//                }
-//                
-//                if (rawDisplayData && rawDisplayData != currentDisplayData)
-//                {
-//                    this->_pivotX += rawDisplayData->transform.x - currentDisplayData->transform.x;
-//                    this->_pivotY += rawDisplayData->transform.y - currentDisplayData->transform.y;
-//                }
-//                
-//                this->_pivotY -= currentTextureData->region.height * this->_armature->getArmatureData()->scale;
-                
                 auto vertices = triangles.verts;
                 auto vertexIndices = triangles.indices;
                 
@@ -434,11 +401,6 @@ void CCSlot::_updateMesh()
 
 void CCSlot::_updateTransform()
 {
-//    _localMatrix.m[0] = globalTransformMatrix.a;
-//    _localMatrix.m[1] = globalTransformMatrix.b;
-//    _localMatrix.m[4] = -globalTransformMatrix.c;
-//    _localMatrix.m[5] = -globalTransformMatrix.d;
-
     _localMatrix.m[0] = globalTransformMatrix.a;
     _localMatrix.m[1] = -globalTransformMatrix.b;
     _localMatrix.m[4] = -globalTransformMatrix.c;
@@ -447,7 +409,6 @@ void CCSlot::_updateTransform()
     if (_childArmature)
     {
         _localMatrix.m[12] = globalTransformMatrix.tx;
-        //_localMatrix.m[13] = globalTransformMatrix.ty;
         _localMatrix.m[13] = -globalTransformMatrix.ty;
     }
     else 
@@ -461,7 +422,6 @@ void CCSlot::_updateTransform()
         }
         
         _localMatrix.m[12] = globalTransformMatrix.tx - (globalTransformMatrix.a * _pivotX - globalTransformMatrix.c * _pivotY);
-        //_localMatrix.m[13] = (globalTransformMatrix.ty - (globalTransformMatrix.b * _pivotX - globalTransformMatrix.d * _pivotY));
         _localMatrix.m[13] = -(globalTransformMatrix.ty - (globalTransformMatrix.b * _pivotX - globalTransformMatrix.d * _pivotY));
     }
     
@@ -511,13 +471,6 @@ void CCSlot::calculWorldMatrix()
 
 void CCSlot::_identityTransform()
 {
-//    _localMatrix.m[0] = 1.0f;
-//    _localMatrix.m[1] = 0.0f;
-//    _localMatrix.m[4] = -0.0f;
-//    _localMatrix.m[5] = -1.0f;
-//    _localMatrix.m[12] = 0.0f;
-//    _localMatrix.m[13] = 0.0f;
-    
     _localMatrix.m[0] = 1.0f;
     _localMatrix.m[1] = 0.0f;
     _localMatrix.m[4] = 0.0f;
