@@ -30,8 +30,19 @@
 
 NS_CC_BEGIN
 
+struct BoundTextureInfo
+{
+    GLenum target = GL_TEXTURE_2D;
+    GLuint texture = 0;
+};
+
 void ccInvalidateStateCache();
 
+void ccActiveTexture(GLenum texture);
+void ccBindTexture(GLenum target, GLuint texture);
+BoundTextureInfo* getBoundTextureInfo(uint32_t textureUnit);
+void ccBindFramebuffer(GLenum target,GLuint buffer);
+void ccActiveOffScreenFramebuffer(GLuint offscreenFbo);
 void ccBindBuffer(GLenum target, GLuint buffer);
 void ccDeleteBuffers(GLsizei, const GLuint * buffers);
 GLint ccGetBoundVertexBuffer();

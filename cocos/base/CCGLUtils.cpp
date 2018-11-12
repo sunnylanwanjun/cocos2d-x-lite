@@ -21,17 +21,18 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 #include "CCGLUtils.h"
+#include "platform/CCApplication.h"
 #include <stdio.h>
 #include <cfloat>
 #include <cassert>
-#include "platform/CCApplication.h"
+#include <array>
 
 NS_CC_BEGIN
 
 // todo: use gl to get the supported number
 #define MAX_ATTRIBUTE_UNIT  16
+#define MAX_TEXTURE_UNIT 32
 
 //IDEA: Consider to use variable to enable/disable cache state since using macro will not be able to close it if there're serious bugs.
 //#undef CC_ENABLE_GL_STATE_CACHE
@@ -46,11 +47,16 @@ namespace
     
     uint32_t __enabledVertexAttribArrayFlag = 0;
     VertexAttributePointerInfo __enabledVertexAttribArrayInfo[MAX_ATTRIBUTE_UNIT];
+    
+    uint8_t __currentActiveTextureUnit = 0;
+    std::array<BoundTextureInfo, MAX_TEXTURE_UNIT> __boundTextureInfos;
 
     GLint _currentUnpackAlignment = -1;
 
     bool __unpackFlipY = false;
     bool __premultiplyAlpha = false;
+
+    GLuint __currentOffScreenFbo = 0;
 }
 
 
@@ -68,6 +74,63 @@ void ccInvalidateStateCache()
     _currentUnpackAlignment = -1;
     __unpackFlipY = false;
     __premultiplyAlpha = false;
+}
+
+/****************************************************************************************
+ Texture related
+ ***************************************************************************************/
+void ccActiveTexture(GLenum texture)
+{
+#if CC_ENABLE_GL_STATE_CACHE
+    auto activeTextureUnit = texture - GL_TEXTURE0;
+    if(activeTextureUnit < MAX_TEXTURE_UNIT && activeTextureUnit >= 0)
+    {
+       __currentActiveTextureUnit = activeTextureUnit;
+    }
+#endif
+    glActiveTexture(texture);
+}
+
+void ccBindTexture(GLenum target, GLuint texture)
+{
+#if CC_ENABLE_GL_STATE_CACHE
+    auto& boundTextureInfo = __boundTextureInfos[__currentActiveTextureUnit];
+    //todo: support cache
+    if (boundTextureInfo.texture != texture || boundTextureInfo.target != target) {
+        boundTextureInfo.texture = texture;
+        boundTextureInfo.target = target;
+    }
+    glBindTexture(target, texture);
+#else
+    glBindTexture(target, texture);
+#endif
+}
+
+BoundTextureInfo* getBoundTextureInfo(uint32_t textureUnit)
+{
+    return &__boundTextureInfos[textureUnit];
+}
+
+/****************************************************************************************
+ FrameBuffer related
+ ***************************************************************************************/
+
+void ccBindFramebuffer(GLenum target,GLuint buffer)
+{
+    if(Application::getInstance()->isDownsampleEnabled())
+    {
+        if(target == GL_FRAMEBUFFER && buffer == Application::getInstance()->getMainFBO())
+        {
+            buffer = __currentOffScreenFbo;
+        }
+    }
+
+    glBindFramebuffer(target , buffer);
+}
+
+void ccActiveOffScreenFramebuffer(GLuint offscreenFbo)
+{
+    __currentOffScreenFbo = offscreenFbo;
 }
 
 /****************************************************************************************

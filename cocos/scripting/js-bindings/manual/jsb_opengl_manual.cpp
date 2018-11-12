@@ -41,6 +41,10 @@ using namespace cocos2d;
 #define LOG_GL_COMMAND(...) 
 #endif
 
+#ifndef OPENGL_PARAMETER_CHECK
+#define OPENGL_PARAMETER_CHECK 1
+#endif
+
 namespace {
 
     const uint32_t GL_COMMAND_ACTIVE_TEXTURE = 0;
@@ -144,11 +148,12 @@ namespace {
 
     const uint32_t GL_FLOAT_ARRAY = 1;
     const uint32_t GL_INT_ARRAY = 2;
+    const uint32_t GL_BOOL_ARRAY = 3;
     const uint32_t GL_MAX_STRIDE = 255;
 
     GLint __defaultFbo = 0;
 
-    GLint __glErrorCode = GL_NO_ERROR;
+    GLuint __glErrorCode = GL_NO_ERROR;
 
     se::Class* __jsb_WebGLObject_class = nullptr;
     se::Class* __jsb_WebGLTexture_class = nullptr;
@@ -517,7 +522,7 @@ static bool JSB_glActiveTexture(se::State& s) {
     ok &= seval_to_uint32(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
-    JSB_GL_CHECK(glActiveTexture((GLenum)arg0));
+    JSB_GL_CHECK(ccActiveTexture((GLenum)arg0));
 
     return true;
 }
@@ -596,9 +601,10 @@ static bool JSB_glBindFramebuffer(se::State& s) {
     ok &= seval_to_native_ptr(args[1], &arg1);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     GLuint frameBufferId = arg1 != nullptr ? arg1->_id : __defaultFbo;
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_FRAMEBUFFER, false, GL_INVALID_ENUM);
-    JSB_GL_CHECK(glBindFramebuffer((GLenum)arg0 , frameBufferId));
+#endif
+    JSB_GL_CHECK(ccBindFramebuffer((GLenum)arg0 , frameBufferId));
     return true;
 }
 SE_BIND_FUNC(JSB_glBindFramebuffer)
@@ -635,11 +641,11 @@ static bool JSB_glBindTexture(se::State& s) {
     ok &= seval_to_uint32(args[0], &arg0 );
     ok &= seval_to_native_ptr(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_TEXTURE_2D || arg0 == GL_TEXTURE_CUBE_MAP, false, GL_INVALID_ENUM);
-
+#endif
     GLuint textureId = arg1 != nullptr ? arg1->_id : 0;
-    JSB_GL_CHECK(glBindTexture((GLenum)arg0 , textureId));
+    JSB_GL_CHECK(ccBindTexture((GLenum)arg0 , textureId));
     return true;
 }
 SE_BIND_FUNC(JSB_glBindTexture)
@@ -676,10 +682,10 @@ static bool JSB_glBlendEquation(se::State& s) {
 
     ok &= seval_to_uint32(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_FUNC_ADD || arg0 == GL_FUNC_SUBTRACT || arg0 == GL_FUNC_REVERSE_SUBTRACT,
                      false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glBlendEquation((GLenum)arg0  ));
 
     return true;
@@ -698,13 +704,13 @@ static bool JSB_glBlendEquationSeparate(se::State& s) {
     ok &= seval_to_uint32(args[0], &arg0 );
     ok &= seval_to_uint32(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_FUNC_ADD || arg0 == GL_FUNC_SUBTRACT || arg0 == GL_FUNC_REVERSE_SUBTRACT,
                      false, GL_INVALID_ENUM);
 
     SE_PRECONDITION4(arg1 == GL_FUNC_ADD || arg1 == GL_FUNC_SUBTRACT || arg1 == GL_FUNC_REVERSE_SUBTRACT,
                      false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glBlendEquationSeparate((GLenum)arg0 , (GLenum)arg1  ));
 
     return true;
@@ -723,11 +729,12 @@ static bool JSB_glBlendFunc(se::State& s) {
     ok &= seval_to_uint32(args[0], &arg0 );
     ok &= seval_to_uint32(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(!((arg0 == GL_CONSTANT_COLOR && arg1 == GL_CONSTANT_ALPHA) || (arg0 == GL_ONE_MINUS_CONSTANT_COLOR && arg1 == GL_CONSTANT_ALPHA)
                           || (arg0 == GL_CONSTANT_COLOR && arg1 == GL_ONE_MINUS_CONSTANT_ALPHA) || (arg0 == GL_ONE_MINUS_CONSTANT_COLOR && arg1 == GL_ONE_MINUS_CONSTANT_ALPHA)
                           ||  (arg0 == GL_CONSTANT_ALPHA && arg1 == GL_CONSTANT_COLOR) || (arg0 == GL_CONSTANT_ALPHA && arg1 == GL_ONE_MINUS_CONSTANT_COLOR)
                           || (arg0 == GL_ONE_MINUS_CONSTANT_ALPHA && arg1 == GL_CONSTANT_COLOR) || (arg0 == GL_ONE_MINUS_CONSTANT_ALPHA && arg1 == GL_ONE_MINUS_CONSTANT_COLOR)), false, GL_INVALID_OPERATION );
+#endif
     JSB_GL_CHECK(glBlendFunc((GLenum)arg0 , (GLenum)arg1  ));
 
     return true;
@@ -748,11 +755,12 @@ static bool JSB_glBlendFuncSeparate(se::State& s) {
     ok &= seval_to_uint32(args[2], &arg2 );
     ok &= seval_to_uint32(args[3], &arg3 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(!((arg0 == GL_CONSTANT_COLOR && arg1 == GL_CONSTANT_ALPHA) || (arg0 == GL_ONE_MINUS_CONSTANT_COLOR && arg1 == GL_CONSTANT_ALPHA)
                       || (arg0 == GL_CONSTANT_COLOR && arg1 == GL_ONE_MINUS_CONSTANT_ALPHA) || (arg0 == GL_ONE_MINUS_CONSTANT_COLOR && arg1 == GL_ONE_MINUS_CONSTANT_ALPHA)
                       ||  (arg0 == GL_CONSTANT_ALPHA && arg1 == GL_CONSTANT_COLOR) || (arg0 == GL_CONSTANT_ALPHA && arg1 == GL_ONE_MINUS_CONSTANT_COLOR)
                       || (arg0 == GL_ONE_MINUS_CONSTANT_ALPHA && arg1 == GL_CONSTANT_COLOR) || (arg0 == GL_ONE_MINUS_CONSTANT_ALPHA && arg1 == GL_ONE_MINUS_CONSTANT_COLOR)), false, GL_INVALID_OPERATION );
+#endif
     JSB_GL_CHECK(glBlendFuncSeparate((GLenum)arg0 , (GLenum)arg1 , (GLenum)arg2 , (GLenum)arg3  ));
 
     return true;
@@ -781,11 +789,11 @@ static bool JSB_glBufferData(se::State& s) {
     }
     ok &= seval_to_uint32(args[2], &arg2 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_ARRAY_BUFFER || arg0 == GL_ELEMENT_ARRAY_BUFFER, false, GL_INVALID_ENUM);
 
     SE_PRECONDITION4(arg2 == GL_STREAM_DRAW || arg2 == GL_STATIC_DRAW || arg2 == GL_DYNAMIC_DRAW, false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glBufferData((GLenum)arg0 , count, (GLvoid*)arg1 , (GLenum)arg2  ));
 
     return true;
@@ -828,8 +836,9 @@ static bool JSB_glCheckFramebufferStatus(se::State& s) {
     ok &= seval_to_uint32(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     GLenum ret_val;
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_FRAMEBUFFER, false, GL_INVALID_ENUM);
+#endif
     ret_val = glCheckFramebufferStatus((GLenum)arg0);
     s.rval().setUint32((uint32_t)ret_val);
     return true;
@@ -1017,9 +1026,10 @@ static bool JSB_glCopyTexImage2D(se::State& s) {
     ok &= seval_to_int32(args[6], &arg6 );
     ok &= seval_to_int32(args[7], &arg7 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg2 == GL_ALPHA || arg2 == GL_RGB || arg2 == GL_RGBA || arg2 == GL_LUMINANCE || arg2 == GL_LUMINANCE_ALPHA,
                      false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glCopyTexImage2D((GLenum)arg0 , (GLint)arg1 , (GLenum)arg2 , (GLint)arg3 , (GLint)arg4 , (GLsizei)arg5 , (GLsizei)arg6 , (GLint)arg7  ));
 
     return true;
@@ -1089,6 +1099,9 @@ static bool JSB_glCreateShader(se::State& s) {
 
     ok &= seval_to_uint32(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
+    SE_PRECONDITION4(arg0 == GL_VERTEX_SHADER || arg0 == GL_FRAGMENT_SHADER, false, GL_INVALID_ENUM);
+#endif
     GLuint ret_val = glCreateShader((GLenum)arg0);
 
     se::Object* obj = se::Object::createObjectWithClass(__jsb_WebGLShader_class);
@@ -1226,8 +1239,9 @@ static bool JSB_glDepthRangef(se::State& s) {
     ok &= seval_to_float(args[0], &arg0 );
     ok &= seval_to_float(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 <= arg1, false, GL_INVALID_OPERATION);
+#endif
     JSB_GL_CHECK(glDepthRangef((GLclampf)arg0 , (GLclampf)arg1  ));
 
     return true;
@@ -1306,19 +1320,20 @@ static bool JSB_glDrawArrays(se::State& s) {
     ok &= seval_to_int32(args[1], &arg1 );
     ok &= seval_to_int32(args[2], &arg2 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg1 >= 0, false, GL_INVALID_VALUE);
 
-    int intbuffer[4];
-    JSB_GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, intbuffer));
-    SE_PRECONDITION4(intbuffer[0] > 0, false, GL_INVALID_OPERATION);
+    int buffer = 0;
+    JSB_GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &buffer));
+
+    SE_PRECONDITION4(buffer > 0, false, GL_INVALID_OPERATION);
 
     GLint data = 0;
     glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &data);
     int64_t size = ccGetBufferDataSize(), first = arg1;
     int64_t total = (int64_t)(size * (arg2 > 0 ? first + arg2 : arg2));
     SE_PRECONDITION4(total <= data, false, GL_INVALID_OPERATION);
-
+#endif
     JSB_GL_CHECK(glDrawArrays((GLenum)arg0 , (GLint)arg1 , (GLsizei)arg2  ));
 
     return true;
@@ -1348,7 +1363,7 @@ static bool JSB_glDrawElements(se::State& s) {
     }
 
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg2 == GL_UNSIGNED_BYTE || arg2 == GL_UNSIGNED_SHORT, false, GL_INVALID_ENUM);
 
     SE_PRECONDITION4(arg1 >= 0 && offset >= 0, false, GL_INVALID_VALUE);
@@ -1367,17 +1382,17 @@ static bool JSB_glDrawElements(se::State& s) {
 
     SE_PRECONDITION4(offset % size == 0, false, GL_INVALID_OPERATION);
 
-    int intbuffer[4];
-    JSB_GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, intbuffer));
-    SE_PRECONDITION4(intbuffer[0] > 0, false, GL_INVALID_OPERATION);
+    int buffer = 0;
+    JSB_GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &buffer));
+    SE_PRECONDITION4(buffer > 0, false, GL_INVALID_OPERATION);
 
-    JSB_GL_CHECK(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, intbuffer));
-    SE_PRECONDITION4(intbuffer[0] > 0, false, GL_INVALID_OPERATION);
+    JSB_GL_CHECK(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &buffer));
+    SE_PRECONDITION4(buffer > 0, false, GL_INVALID_OPERATION);
 
     GLint elementSize = 0;
     glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &elementSize);
     SE_PRECONDITION4(arg1 == 0 || ((elementSize > offset) && arg1 <= ((elementSize - offset) / size)), false, GL_INVALID_OPERATION);
-
+#endif
     JSB_GL_CHECK(glDrawElements((GLenum)arg0 , (GLsizei)arg1 , (GLenum)arg2 , (GLvoid*)arg3  ));
 
     return true;
@@ -1392,16 +1407,16 @@ static bool JSB_glEnable(se::State& s) {
     SE_PRECONDITION2( argc == 1, false, "Invalid number of arguments" );
     bool ok = true;
     uint32_t arg0;
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(!args[0].isNullOrUndefined(), false, GL_INVALID_ENUM);
-
+#endif
     ok &= seval_to_uint32(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_BLEND || arg0 == GL_CULL_FACE || arg0 == GL_DEPTH_TEST || arg0 == GL_DITHER ||
             arg0 == GL_POLYGON_OFFSET_FILL || arg0 == GL_SAMPLE_ALPHA_TO_COVERAGE || arg0 == GL_SAMPLE_COVERAGE
         || arg0 == GL_SCISSOR_TEST || arg0 == GL_STENCIL_TEST, false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glEnable((GLenum)arg0  ));
 
     return true;
@@ -1487,9 +1502,11 @@ static bool JSB_glFramebufferTexture2D(se::State& s) {
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
     GLuint textureId = arg3 != nullptr ? arg3->_id : 0;
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_FRAMEBUFFER, false, GL_INVALID_ENUM);
     SE_PRECONDITION4(arg1 == GL_COLOR_ATTACHMENT0 || arg1 == GL_DEPTH_ATTACHMENT || arg1 == GL_STENCIL_ATTACHMENT, false, GL_INVALID_ENUM);
     SE_PRECONDITION4(arg4 == 0, false, GL_INVALID_VALUE);
+#endif
     JSB_GL_CHECK(glFramebufferTexture2D((GLenum)arg0 , (GLenum)arg1 , (GLenum)arg2 , textureId , (GLint)arg4  ));
 
     return true;
@@ -1583,17 +1600,15 @@ static bool JSB_glGetUniformLocation(se::State& s) {
 
     ok &= seval_to_native_ptr(args[0], &arg0 );
     ok &= seval_to_std_string(args[1], &arg1 );
-
+    s.rval().setNull();
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     int ret_val = 0;
 
     GLuint programId = arg0 != nullptr ? arg0->_id : 0;
     ret_val = glGetUniformLocation(programId , arg1.c_str());
     JSB_GL_CHECK_ERROR();
-    if (ret_val < 0)
+    if(ret_val >= 0)
     {
-        s.rval().setNull();
-    } else {
         s.rval().setInt32(ret_val);
     }
     return true;
@@ -1808,17 +1823,17 @@ static bool JSB_glPixelStorei(se::State& s) {
     SE_PRECONDITION2( argc == 2, false, "Invalid number of arguments" );
     bool ok = true;
     uint32_t arg0; int32_t arg1;
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(!args[0].isNullOrUndefined(), false, GL_INVALID_ENUM);
-
+#endif
     ok &= seval_to_uint32(args[0], &arg0 );
     ok &= seval_to_int32(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_PACK_ALIGNMENT || arg0 == GL_UNPACK_ALIGNMENT || arg0 == GL_UNPACK_FLIP_Y_WEBGL ||
                              arg0 == GL_UNPACK_PREMULTIPLY_ALPHA_WEBGL || arg0 == GL_UNPACK_COLORSPACE_CONVERSION_WEBGL,
                      false, GL_INVALID_ENUM);
-    
+#endif
     JSB_GL_CHECK(ccPixelStorei((GLenum)arg0 , (GLint)arg1));
     return true;
 }
@@ -1861,8 +1876,9 @@ static bool JSB_glReadPixels(se::State& s) {
     GLsizei count;
     ok &= JSB_get_arraybufferview_dataptr(args[6], &count, &arg6);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg4 == GL_ALPHA || arg4 == GL_RGB || arg4 == GL_RGBA,false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glReadPixels((GLint)arg0 , (GLint)arg1 , (GLsizei)arg2 , (GLsizei)arg3 , (GLenum)arg4 , (GLenum)arg5 , (GLvoid*)arg6  ));
 
     return true;
@@ -2116,9 +2132,10 @@ static bool JSB_glTexImage2D(se::State& s) {
     ok &= JSB_get_arraybufferview_dataptr(args[8], &count, &pixels);
     ok &= seval_to_uint32(args[9], &alignment);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(type == GL_UNSIGNED_BYTE || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4 || type == GL_UNSIGNED_SHORT_5_5_5_1,
                      false, GL_INVALID_ENUM);
-
+#endif
     ccFlipYOrPremultiptyAlphaIfNeeded(format, width, height, count, pixels);
     if (alignment > 0)
         ccPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
@@ -2144,11 +2161,12 @@ static bool JSB_glTexParameterf(se::State& s) {
     ok &= seval_to_uint32(args[1], &arg1 );
     ok &= seval_to_float(args[2], &arg2 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_TEXTURE_2D || arg0 == GL_TEXTURE_CUBE_MAP, false, GL_INVALID_ENUM);
 
-    SE_PRECONDITION4((!(arg1 == GL_TEXTURE_MIN_LOD)) || arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
+    SE_PRECONDITION4(arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
                      arg1 == GL_TEXTURE_WRAP_S || arg1 == GL_TEXTURE_WRAP_T, false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glTexParameterf((GLenum)arg0 , (GLenum)arg1 , (GLfloat)arg2  ));
 
     return true;
@@ -2168,12 +2186,12 @@ static bool JSB_glTexParameteri(se::State& s) {
     ok &= seval_to_uint32(args[1], &arg1 );
     ok &= seval_to_int32(args[2], &arg2 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_TEXTURE_2D || arg0 == GL_TEXTURE_CUBE_MAP, false, GL_INVALID_ENUM);
 
-    SE_PRECONDITION4((!(arg1 == GL_TEXTURE_MIN_LOD)) || arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
+    SE_PRECONDITION4(arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
                              arg1 == GL_TEXTURE_WRAP_S || arg1 == GL_TEXTURE_WRAP_T, false, GL_INVALID_ENUM);
-
+#endif
     JSB_GL_CHECK(glTexParameteri((GLenum)arg0 , (GLenum)arg1 , (GLint)arg2  ));
     return true;
 }
@@ -2200,11 +2218,12 @@ static bool JSB_glTexSubImage2D(se::State& s) {
     ok &= JSB_get_arraybufferview_dataptr(args[8], &count, &pixels);
     ok &= seval_to_uint32(args[9], &alignment);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(format == GL_ALPHA || format == GL_RGB || format == GL_RGBA || format == GL_LUMINANCE || format == GL_LUMINANCE_ALPHA,
                      false, GL_INVALID_ENUM);
     SE_PRECONDITION4(type == GL_UNSIGNED_BYTE || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4 || type == GL_UNSIGNED_SHORT_5_5_5_1,
                      false, GL_INVALID_ENUM);
-
+#endif
     ccFlipYOrPremultiptyAlphaIfNeeded(format, width, height, count, pixels);
     if (alignment > 0)
         ccPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
@@ -2555,11 +2574,11 @@ static bool JSB_glUniformMatrix2fv(se::State& s) {
     GLData<float> data;
     ok &= JSB_jsval_typedarray_to_data<float>(args[2], data);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg1 == GL_FALSE, false, GL_INVALID_VALUE);
 
     SE_PRECONDITION4(data.count() % 4 == 0, false, GL_INVALID_VALUE);
-
+#endif
     JSB_GL_CHECK(glUniformMatrix2fv(arg0, (GLsizei)(data.count()/4), (GLboolean)arg1 , (GLfloat*)data.data()));
 
     return true;
@@ -2580,11 +2599,11 @@ static bool JSB_glUniformMatrix3fv(se::State& s) {
     GLData<float> data;
     ok &= JSB_jsval_typedarray_to_data<float>(args[2], data);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg1 == GL_FALSE, false, GL_INVALID_VALUE);
 
     SE_PRECONDITION4(data.count() % 9 == 0, false, GL_INVALID_VALUE);
-
+#endif
     JSB_GL_CHECK(glUniformMatrix3fv(arg0, (GLsizei)(data.count()/9), (GLboolean)arg1 , (GLfloat*)data.data()));
 
     return true;
@@ -2605,11 +2624,11 @@ static bool JSB_glUniformMatrix4fv(se::State& s) {
     GLData<float> data;
     ok &= JSB_jsval_typedarray_to_data<float>(args[2], data);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg1 == GL_FALSE, false, GL_INVALID_VALUE);
 
     SE_PRECONDITION4(data.count() % 16 == 0, false, GL_INVALID_VALUE);
-
+#endif
     JSB_GL_CHECK(glUniformMatrix4fv(arg0, (GLsizei)(data.count()/16), (GLboolean)arg1 , (GLfloat*)data.data()));
 
     return true;
@@ -2827,7 +2846,7 @@ static bool JSB_glVertexAttribPointer(se::State& s) {
     ok &= seval_to_int32(args[4], &arg4 );
     ok &= seval_to_int32(args[5], &arg5 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
-
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg2 == GL_BYTE || arg2 == GL_UNSIGNED_BYTE || arg2 == GL_SHORT ||
                              arg2 == GL_UNSIGNED_SHORT || arg2 == GL_FLOAT, false, GL_INVALID_ENUM);
 
@@ -2848,7 +2867,7 @@ static bool JSB_glVertexAttribPointer(se::State& s) {
             SE_PRECONDITION4(arg4 % sizeof(GLclampf) == 0 && arg5 % sizeof(GLclampf) == 0, false, GL_INVALID_OPERATION);
             break;
     }
-
+#endif
     JSB_GL_CHECK(ccVertexAttribPointer((GLuint)arg0 , (GLint)arg1 , (GLenum)arg2 , (GLboolean)arg3 , (GLsizei)arg4 , (GLvoid*)(intptr_t)arg5  ));
 
     return true;
@@ -2881,6 +2900,9 @@ static bool JSB_glGetVertexAttrib(se::State& s)
             else {
                 s.rval().setNull();
             }
+        }
+        else {
+            s.rval().setNull();
         }
     }
     else if( pname == GL_CURRENT_VERTEX_ATTRIB ) {
@@ -3178,6 +3200,8 @@ static bool JSB_glGetShaderParameter(se::State& s) {
     WebGLShader* arg0;
     uint32_t arg1;
 
+    s.rval().setNull();
+    SE_PRECONDITION2(!args[0].isNullOrUndefined(), false, "Error processing arguments");
     ok &= seval_to_native_ptr(args[0], &arg0);
     ok &= seval_to_uint32(args[1], &arg1);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
@@ -3207,6 +3231,8 @@ static bool JSB_glGetProgramParameter(se::State& s) {
     WebGLProgram* arg0;
     uint32_t arg1;
 
+    s.rval().setNull();
+    SE_PRECONDITION2(!args[0].isNullOrUndefined(), false, "Error processing arguments");
     ok &= seval_to_native_ptr(args[0], &arg0 );
     ok &= seval_to_uint32(args[1], &arg1 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
@@ -3230,6 +3256,7 @@ static bool JSB_glGetProgramInfoLog(se::State& s) {
     int argc = (int)args.size();
     SE_PRECONDITION2(argc == 1, false, "Invalid number of arguments" );
 
+    s.rval().setNull();
     bool ok = true;
     WebGLProgram* arg0;
     ok &= seval_to_native_ptr(args[0], &arg0 );
@@ -3239,7 +3266,7 @@ static bool JSB_glGetProgramInfoLog(se::State& s) {
     GLsizei length;
     JSB_GL_CHECK(glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &length));
 
-    if (length > 0)
+    if (length > 0 && glGetError() == 0)
     {
         GLchar* src = new (std::nothrow) GLchar[length];
         JSB_GL_CHECK(glGetProgramInfoLog(programId, length, nullptr, src));
@@ -3262,6 +3289,7 @@ static bool JSB_glGetShaderInfoLog(se::State& s) {
 
     bool ok = true;
     WebGLShader* arg0;
+    s.rval().setNull();
     ok &= seval_to_native_ptr(args[0], &arg0);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     GLuint shaderId = arg0 != nullptr ? arg0->_id : 0;
@@ -3269,7 +3297,7 @@ static bool JSB_glGetShaderInfoLog(se::State& s) {
     GLsizei length;
     JSB_GL_CHECK(glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length));
 
-    if (length > 0)
+    if (length > 0 && glGetError() == 0)
     {
         GLchar* src = new (std::nothrow) GLchar[length];
         JSB_GL_CHECK(glGetShaderInfoLog(shaderId, length, NULL, src));
@@ -3294,17 +3322,24 @@ static bool JSB_glGetShaderSource(se::State& s) {
     bool ok = true;
 
     WebGLShader* arg0;
+    s.rval().setNull();
     ok &= seval_to_native_ptr(args[0], &arg0);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     GLuint shaderId = arg0 != nullptr ? arg0->_id : 0;
 
     GLsizei length;
     JSB_GL_CHECK(glGetShaderiv(shaderId, GL_SHADER_SOURCE_LENGTH, &length));
-    GLchar* src = new (std::nothrow) GLchar[length];
-    JSB_GL_CHECK(glGetShaderSource(shaderId, length, NULL, src));
+    if (length > 0 && glGetError() == 0) {
+        GLchar* src = new (std::nothrow) GLchar[length];
+        JSB_GL_CHECK(glGetShaderSource(shaderId, length, NULL, src));
 
-    s.rval().setString(src);
-    CC_SAFE_DELETE_ARRAY(src);
+        s.rval().setString(src);
+        CC_SAFE_DELETE_ARRAY(src);
+    }
+    else
+    {
+        s.rval().setString("");
+    }
     return true;
 }
 SE_BIND_FUNC(JSB_glGetShaderSource)
@@ -3407,13 +3442,16 @@ static bool JSB_glGetAttachedShaders(se::State& s) {
     bool ok = true;
     WebGLProgram* arg0;
 
+    s.rval().setNull();
     ok &= seval_to_native_ptr(args[0], &arg0 );
     SE_PRECONDITION2(ok, false, "Error processing arguments");
     GLuint id = arg0 != nullptr ? arg0->_id : 0;
 
     GLsizei length;
     JSB_GL_CHECK(glGetProgramiv(id, GL_ATTACHED_SHADERS, &length));
-    SE_PRECONDITION2(glGetError() == 0, false, "Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
+    SE_PRECONDITION4(glGetError() == 0, false, arg0 != nullptr ? GL_NO_ERROR : GL_INVALID_VALUE);
+#endif
     GLuint* buffer = new (std::nothrow) GLuint[length];
     memset(buffer, 0, length * sizeof(GLuint));
     //Fix bug 2448, it seems that glGetAttachedShaders will crash if we send NULL to the third parameter (eg Windows), same as in lua binding
@@ -3497,10 +3535,11 @@ static bool JSB_glGetTexParameterfv(se::State& s) {
     ok &= seval_to_uint32(args[1], &arg1 );
 
     SE_PRECONDITION2(ok, false, "JSB_glGetTexParameterfv: Error processing arguments");
+#if OPENGL_PARAMETER_CHECK
     SE_PRECONDITION4(arg0 == GL_TEXTURE_2D || arg0 == GL_TEXTURE_CUBE_MAP, false, GL_INVALID_ENUM);
-    SE_PRECONDITION4((!(arg1 == GL_TEXTURE_MIN_LOD)) || arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
+    SE_PRECONDITION4(arg1 == GL_TEXTURE_MIN_FILTER || arg1 == GL_TEXTURE_MAG_FILTER ||
                      arg1 == GL_TEXTURE_WRAP_S || arg1 == GL_TEXTURE_WRAP_T, false, GL_INVALID_ENUM);
-
+#endif
     GLfloat param;
     JSB_GL_CHECK(glGetTexParameterfv(arg0, arg1, &param));
 
@@ -3513,7 +3552,7 @@ SE_BIND_FUNC(JSB_glGetTexParameterfv)
 static bool JSB_glGetFramebufferAttachmentParameter(se::State& s) {
     const auto& args = s.args();
     int argc = (int)args.size();
-    SE_PRECONDITION2(argc == 3, false,"JSB_glGetFramebufferAttachmentParameter: Invalid number of arguments" );
+    SE_PRECONDITION2(argc == 3, false,"Invalid number of arguments" );
 
     bool ok = true;
     uint32_t target, attachment, pname;
@@ -3522,10 +3561,7 @@ static bool JSB_glGetFramebufferAttachmentParameter(se::State& s) {
     ok &= seval_to_uint32(args[1], &attachment );
     ok &= seval_to_uint32(args[2], &pname );
 
-    SE_PRECONDITION2(ok, false, "JSB_glGetFramebufferAttachmentParameter: Error processing arguments");
-    SE_PRECONDITION4(target == GL_FRAMEBUFFER, false, GL_INVALID_ENUM);
-    SE_PRECONDITION4(attachment == GL_COLOR_ATTACHMENT0 || attachment == GL_DEPTH_ATTACHMENT || attachment == GL_STENCIL_ATTACHMENT, false, GL_INVALID_ENUM);
-    SE_PRECONDITION4(pname == GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE || pname == GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME || pname == GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL || pname == GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE, false, GL_INVALID_ENUM);
+    SE_PRECONDITION2(ok, false, "Error processing arguments");
 
     GLint param = 0;
     JSB_GL_CHECK(glGetFramebufferAttachmentParameteriv(target, attachment, pname, &param));
@@ -3559,6 +3595,10 @@ static bool JSB_glGetFramebufferAttachmentParameter(se::State& s) {
                 return true;
             }
         }
+        else {
+            s.rval().setNull();
+            return true;
+        }
     }
 
     s.rval().setInt32(param);
@@ -3571,16 +3611,18 @@ SE_BIND_FUNC(JSB_glGetFramebufferAttachmentParameter)
 static bool JSB_glGetUniformfv(se::State& s) {
     const auto& args = s.args();
     int argc = (int)args.size();
-    SE_PRECONDITION2(argc == 2, false,"JSB_glGetUniformfv: Invalid number of arguments" );
+    SE_PRECONDITION2(argc == 2, false,"Invalid number of arguments" );
 
     bool ok = true;
     WebGLProgram* arg0;
     uint32_t arg1;
 
+    s.rval().setNull();
+    SE_PRECONDITION2(!args[0].isNullOrUndefined(), false, "Error processing arguments");
+    SE_PRECONDITION2(!args[1].isNullOrUndefined(), false, "Error processing arguments");
     ok &= seval_to_native_ptr(args[0], &arg0 );
     ok &= seval_to_uint32(args[1], &arg1 );
-
-    SE_PRECONDITION2(ok, false, "JSB_glGetUniformfv: Error processing arguments");
+    SE_PRECONDITION2(ok, false, "Error processing arguments");
     SE_PRECONDITION2(arg0 != nullptr, false, "WebGLProgram is null!");
 
     GLuint id = arg0 != nullptr ? arg0->_id : 0;
@@ -3614,6 +3656,23 @@ static bool JSB_glGetUniformfv(se::State& s) {
     int usize = 0;
     int utype = 0;
     switch(type) {
+            //boolean
+        case GL_BOOL:
+            usize = 1;
+            utype = GL_BOOL;
+            break;
+        case GL_BOOL_VEC2:
+            usize = 2;
+            utype = GL_BOOL_ARRAY;
+            break;
+        case GL_BOOL_VEC3:
+            usize = 3;
+            utype = GL_BOOL_ARRAY;
+            break;
+        case GL_BOOL_VEC4:
+            usize = 4;
+            utype = GL_BOOL_ARRAY;
+            break;
 
         // float
         case GL_FLOAT:
@@ -3647,6 +3706,8 @@ static bool JSB_glGetUniformfv(se::State& s) {
 
             // int
         case GL_INT:
+        case GL_SAMPLER_2D:
+        case GL_SAMPLER_CUBE:
             usize = 1;
             utype = GL_INT;
             break;
@@ -3668,42 +3729,57 @@ static bool JSB_glGetUniformfv(se::State& s) {
             return false;
     }
 
-    if (utype == GL_FLOAT_ARRAY)
+    if( utype == GL_BOOL_ARRAY)
     {
-        GLfloat* param = new (std::nothrow) GLfloat[usize];
-        JSB_GL_CHECK(glGetUniformfv(id, arg1, param));
-
-        se::HandleObject obj(se::Object::createTypedArray(se::Object::TypedArrayType::FLOAT32, param, usize * sizeof(GLfloat)));
+        std::vector<GLint> param(usize);
+        JSB_GL_CHECK(glGetUniformiv(id, arg1, param.data()));
+        se::HandleObject arrayObj(se::Object::createArrayObject((size_t)usize));
+        for (int i = 0; i < usize; ++i)
+        {
+            arrayObj->setArrayElement(i, se::Value(param[i] != 0));
+        }
+        s.rval().setObject(arrayObj);
+        return true;
+    }
+    else if( utype == GL_FLOAT_ARRAY)
+    {
+        std::vector<GLfloat> param(usize);
+        JSB_GL_CHECK(glGetUniformfv(id, arg1, param.data()));
+        se::HandleObject obj(se::Object::createTypedArray(se::Object::TypedArrayType::FLOAT32, param.data(), usize * sizeof(GLfloat)));
         s.rval().setObject(obj);
-        CC_SAFE_DELETE_ARRAY(param);
         return true;
     }
     else if(utype == GL_INT_ARRAY)
     {
-        GLint* param = new (std::nothrow) GLint[usize];
-        JSB_GL_CHECK(glGetUniformiv(id, arg1, param));
-
-        se::HandleObject obj(se::Object::createTypedArray(se::Object::TypedArrayType::INT32, param, usize * sizeof(GLint)));
+        std::vector<GLint> param(usize);
+        JSB_GL_CHECK(glGetUniformiv(id, arg1, param.data()));
+        se::HandleObject obj(se::Object::createTypedArray(se::Object::TypedArrayType::INT32, param.data(), usize * sizeof(GLint)));
         s.rval().setObject(obj);
-        CC_SAFE_DELETE_ARRAY(param);
         return true;
     }
-    if (utype == GL_FLOAT)
-    {
-        GLfloat* param = new (std::nothrow) GLfloat[usize];
-        JSB_GL_CHECK(glGetUniformfv(id, arg1, param));
 
-        s.rval().setFloat(param[0]);
-        CC_SAFE_DELETE_ARRAY(param);
+    if( utype == GL_FLOAT)
+    {
+        GLfloat param = 0;
+        JSB_GL_CHECK(glGetUniformfv(id, arg1, &param));
+
+        s.rval().setFloat(param);
         return true;
     }
     else if( utype == GL_INT )
     {
-        GLint* param = new (std::nothrow) GLint[usize];
-        JSB_GL_CHECK(glGetUniformiv(id, arg1, param));
+        GLint param = 0;
+        JSB_GL_CHECK(glGetUniformiv(id, arg1, &param));
 
-        s.rval().setInt32(param[0]);
-        CC_SAFE_DELETE_ARRAY(param);
+        s.rval().setInt32(param);
+        return true;
+    }
+    else if( utype == GL_BOOL )
+    {
+        GLint param = 0;
+        JSB_GL_CHECK(glGetUniformiv(id, arg1, &param));
+
+        s.rval().setBoolean(param != 0);
         return true;
     }
 
@@ -4094,7 +4170,7 @@ static bool JSB_glGetBufferParameter(se::State& s) {
     bool ok = true;
 
     uint32_t target; int32_t pname;
-    GLint ret = 0;
+    GLint ret = -1;
 
     ok &= seval_to_uint32(args[0], &target );
     ok &= seval_to_int32(args[1], &pname );
@@ -4102,7 +4178,7 @@ static bool JSB_glGetBufferParameter(se::State& s) {
 
     JSB_GL_CHECK(glGetBufferParameteriv((GLenum)target, (GLenum)pname, &ret));
 
-    if (ret > 0){
+    if (ret >= 0){
         s.rval().setInt32(ret);
     } else{
         s.rval().setNull();
@@ -4120,7 +4196,7 @@ static bool JSB_glGetRenderbufferParameter(se::State& s) {
     bool ok = true;
 
     uint32_t target; int32_t pname;
-    GLint ret = 0;
+    GLint ret = -1;
 
     ok &= seval_to_uint32(args[0], &target );
     ok &= seval_to_int32(args[1], &pname );
@@ -4128,7 +4204,7 @@ static bool JSB_glGetRenderbufferParameter(se::State& s) {
 
     JSB_GL_CHECK(glGetRenderbufferParameteriv((GLenum)target, (GLenum)pname, &ret));
 
-    if (ret > 0){
+    if (ret >= 0){
         s.rval().setInt32(ret);
     } else{
         s.rval().setNull();
@@ -4163,507 +4239,555 @@ static bool JSB_glFlushCommand(se::State& s) {
     while (p < end) {
         uint32_t commandID = (uint32_t)p[0];
         ++handledCommandCount;
-        if (commandID == GL_COMMAND_ACTIVE_TEXTURE) {
-            LOG_GL_COMMAND("Flush: ACTIVE_TEXTURE\n");
-            JSB_GL_CHECK_VOID(glActiveTexture((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_ATTACH_SHADER) {
-            LOG_GL_COMMAND("Flush: ATTACH_SHADER\n");
-            JSB_GL_CHECK_VOID(glAttachShader((GLuint)p[1], (GLuint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BIND_BUFFER) {
-            LOG_GL_COMMAND("Flush: BIND_BUFFER, %u\n", (GLuint)p[2]);
-            JSB_GL_CHECK_VOID(ccBindBuffer((GLenum)p[1], (GLuint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BIND_FRAME_BUFFER) {
-            LOG_GL_COMMAND("Flush: BIND_FRAME_BUFFER\n");
-            GLuint fbo = (GLuint)p[2];
-            if (fbo == 0)
-                fbo = __defaultFbo;
-            JSB_GL_CHECK_VOID(glBindFramebuffer((GLenum)p[1], fbo));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BIND_RENDER_BUFFER) {
-            LOG_GL_COMMAND("Flush: BIND_RENDER_BUFFER\n");
-            JSB_GL_CHECK_VOID(glBindRenderbuffer((GLenum)p[1], (GLuint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BIND_TEXTURE) {
-            LOG_GL_COMMAND("Flush: BIND_TEXTURE\n");
-            JSB_GL_CHECK_VOID(glBindTexture((GLenum)p[1], (GLuint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BLEND_COLOR) {
-            LOG_GL_COMMAND("Flush: BLEND_COLOR\n");
-            JSB_GL_CHECK_VOID(glBlendColor((GLclampf)p[1], (GLclampf)p[2], (GLclampf)p[3], (GLclampf)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_BLEND_EQUATION) {
-            LOG_GL_COMMAND("Flush: BLEND_EQUATION\n");
-            JSB_GL_CHECK_VOID(glBlendEquation((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_BLEND_EQUATION_SEPARATE) {
-            LOG_GL_COMMAND("Flush: BLEND_EQUATION_SEPARATE\n");
-            JSB_GL_CHECK_VOID(glBlendEquationSeparate((GLenum)p[1], (GLenum)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BLEND_FUNC) {
-            LOG_GL_COMMAND("Flush: BLEND_FUNC\n");
-            JSB_GL_CHECK_VOID(glBlendFunc((GLenum)p[1], (GLenum)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_BLEND_FUNC_SEPARATE) {
-            LOG_GL_COMMAND("Flush: BLEND_FUNC_SEPARATE\n");
-            JSB_GL_CHECK_VOID(glBlendFuncSeparate((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLenum)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_CLEAR) {
-            LOG_GL_COMMAND("Flush: CLEAR\n");
-            JSB_GL_CHECK_VOID(glClear((GLbitfield)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_CLEAR_COLOR) {
-            LOG_GL_COMMAND("Flush: CLEAR_COLOR\n");
-            JSB_GL_CHECK_VOID(glClearColor((GLclampf)p[1], (GLclampf)p[2], (GLclampf)p[3], (GLclampf)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_CLEAR_DEPTH) {
-            LOG_GL_COMMAND("Flush: CLEAR_DEPTH\n");
-            JSB_GL_CHECK_VOID(glClearDepthf(p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_CLEAR_STENCIL) {
-            LOG_GL_COMMAND("Flush: CLEAR_STENCIL\n");
-            JSB_GL_CHECK_VOID(glClearStencil((GLint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_COLOR_MASK) {
-            LOG_GL_COMMAND("Flush: COLOR_MASK\n");
-            JSB_GL_CHECK_VOID(glColorMask((GLboolean)p[1], (GLboolean)p[2], (GLboolean)p[3], (GLboolean)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_COMPILE_SHADER) {
-            LOG_GL_COMMAND("Flush: COMPILE_SHADER\n");
-            JSB_GL_CHECK_VOID(glCompileShader((GLuint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_COPY_TEX_IMAGE_2D) {
-            LOG_GL_COMMAND("Flush: COPY_TEX_IMAGE_2D\n");
-            JSB_GL_CHECK_VOID(glCopyTexImage2D((GLenum)p[1], (GLint)p[2], (GLenum)p[3], (GLint)p[4], (GLint)p[5], (GLsizei)p[6], (GLsizei)p[7], (GLint)p[8]));
-            p += 9;
-        }
-        else if (commandID == GL_COMMAND_COPY_TEX_SUB_IMAGE_2D) {
-            LOG_GL_COMMAND("Flush: COPY_TEX_SUB_IMAGE_2D\n");
-            JSB_GL_CHECK_VOID(glCopyTexSubImage2D((GLenum)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4], (GLint)p[5], (GLint)p[6], (GLsizei)p[7], (GLsizei)p[8]));
-            p += 9;
-        }
-        else if (commandID == GL_COMMAND_CULL_FACE) {
-            LOG_GL_COMMAND("Flush: CULL_FACE\n");
-            JSB_GL_CHECK_VOID(glCullFace((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_BUFFER) {
-            LOG_GL_COMMAND("Flush: DELETE_BUFFER\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(ccDeleteBuffers(1, &id));
-            safeRemoveElementFromGLObjectMap(__webglBufferMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_FRAME_BUFFER) {
-            LOG_GL_COMMAND("Flush: DELETE_FRAME_BUFFER\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(glDeleteFramebuffers(1, &id));
-            safeRemoveElementFromGLObjectMap(__webglFramebufferMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_PROGRAM) {
-            LOG_GL_COMMAND("Flush: DELETE_PROGRAM\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(glDeleteProgram(id));
-            safeRemoveElementFromGLObjectMap(__webglProgramMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_RENDER_BUFFER) {
-            LOG_GL_COMMAND("Flush: DELETE_RENDER_BUFFER\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(glDeleteRenderbuffers(1, &id));
-            safeRemoveElementFromGLObjectMap(__webglRenderbufferMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_SHADER) {
-            LOG_GL_COMMAND("Flush: DELETE_SHADER\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(glDeleteShader(id));
-            safeRemoveElementFromGLObjectMap(__webglShaderMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DELETE_TEXTURE) {
-            LOG_GL_COMMAND("Flush: DELETE_TEXTURE\n");
-            GLuint id = (GLuint)p[1];
-            JSB_GL_CHECK_VOID(glDeleteTextures(1, &id));
-            safeRemoveElementFromGLObjectMap(__webglTextureMap, id);
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DEPTH_FUNC) {
-            LOG_GL_COMMAND("Flush: DEPTH_FUNC\n");
-            JSB_GL_CHECK_VOID(glDepthFunc((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DEPTH_MASK) {
-            LOG_GL_COMMAND("Flush: DEPTH_MASK\n");
-            JSB_GL_CHECK_VOID(glDepthMask((GLboolean)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DEPTH_RANGE) {
-            LOG_GL_COMMAND("Flush: DEPTH_RANGE\n");
-            JSB_GL_CHECK_VOID(glDepthRangef(p[1], p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_DETACH_SHADER) {
-            LOG_GL_COMMAND("Flush: DETACH_SHADER\n");
-            JSB_GL_CHECK_VOID(glDetachShader((GLuint)p[1], (GLuint) p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_DISABLE) {
-            LOG_GL_COMMAND("Flush: DISABLE\n");
-            JSB_GL_CHECK_VOID(glDisable((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DISABLE_VERTEX_ATTRIB_ARRAY) {
-            LOG_GL_COMMAND("Flush: DISABLE_VERTEX_ATTRIB_ARRAY\n");
-            JSB_GL_CHECK_VOID(ccDisableVertexAttribArray((GLuint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_DRAW_ARRAYS) {
-            LOG_GL_COMMAND("Flush: DRAW_ARRAYS, %u, %d, %d\n", (GLenum)p[1], (GLint)p[2], (int)p[3]);
-            JSB_GL_CHECK_VOID(glDrawArrays((GLenum)p[1], (GLint)p[2], (GLsizei)p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_DRAW_ELEMENTS) {
-            LOG_GL_COMMAND("Flush: DRAW_ELEMENTS\n");
-            JSB_GL_CHECK_VOID(glDrawElements((GLenum)p[1], (GLsizei)p[2], (GLenum)p[3], (const GLvoid*)(intptr_t)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_ENABLE) {
-            LOG_GL_COMMAND("Flush: ENABLE\n");
-            JSB_GL_CHECK_VOID(glEnable((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_ENABLE_VERTEX_ATTRIB_ARRAY) {
-            LOG_GL_COMMAND("Flush: ENABLE_VERTEX_ATTRIB_ARRAY, %u\n", (GLuint)p[1]);
-            JSB_GL_CHECK_VOID(ccEnableVertexAttribArray((GLuint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_FINISH) {
-            LOG_GL_COMMAND("Flush: FINISH\n");
-            JSB_GL_CHECK_VOID(glFinish());
-            p += 1;
-        }
-        else if (commandID == GL_COMMAND_FLUSH) {
-            LOG_GL_COMMAND("Flush: FLUSH\n");
-            JSB_GL_CHECK_VOID(glFlush());
-            p += 1;
-        }
-        else if (commandID == GL_COMMAND_FRAME_BUFFER_RENDER_BUFFER) {
-            LOG_GL_COMMAND("Flush: FRAME_BUFFER_RENDER_BUFFER\n");
-            JSB_GL_CHECK_VOID(WEBGL_framebufferRenderbuffer((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLuint)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_FRAME_BUFFER_TEXTURE_2D) {
-            LOG_GL_COMMAND("Flush: FRAME_BUFFER_TEXTURE_2D\n");
-            JSB_GL_CHECK_VOID(glFramebufferTexture2D((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLuint)p[4], (GLint)p[5]));
-            p += 6;
-        }
-        else if (commandID == GL_COMMAND_FRONT_FACE) {
-            LOG_GL_COMMAND("Flush: FRONT_FACE\n");
-            JSB_GL_CHECK_VOID(glFrontFace((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_GENERATE_MIPMAP) {
-            LOG_GL_COMMAND("Flush: GENERATE_MIPMAP\n");
-            JSB_GL_CHECK_VOID(glGenerateMipmap((GLenum)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_HINT) {
-            LOG_GL_COMMAND("Flush: HINT\n");
-            JSB_GL_CHECK_VOID(glHint((GLenum)p[1], (GLenum)p[2]));;
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_LINE_WIDTH) {
+        switch(commandID) {
+            case GL_COMMAND_ACTIVE_TEXTURE:
+                LOG_GL_COMMAND("Flush: ACTIVE_TEXTURE\n");
+                JSB_GL_CHECK_VOID(ccActiveTexture((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_ATTACH_SHADER:
+                LOG_GL_COMMAND("Flush: ATTACH_SHADER\n");
+                JSB_GL_CHECK_VOID(glAttachShader((GLuint)p[1], (GLuint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BIND_BUFFER:
+                LOG_GL_COMMAND("Flush: BIND_BUFFER, %u\n", (GLuint)p[2]);
+                JSB_GL_CHECK_VOID(ccBindBuffer((GLenum)p[1], (GLuint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BIND_FRAME_BUFFER:
+            {
+                LOG_GL_COMMAND("Flush: BIND_FRAME_BUFFER\n");
+                GLuint fbo = (GLuint)p[2];
+                if (0 == fbo)
+                    fbo = __defaultFbo;
+#if OPENGL_PARAMETER_CHECK
+                SE_PRECONDITION4((GLenum)p[1] == GL_FRAMEBUFFER, false, GL_INVALID_ENUM);
+#endif
+                JSB_GL_CHECK_VOID(ccBindFramebuffer((GLenum)p[1], fbo));
+                p += 3;
+                break;
+            }
+            case GL_COMMAND_BIND_RENDER_BUFFER:
+                LOG_GL_COMMAND("Flush: BIND_RENDER_BUFFER\n");
+                JSB_GL_CHECK_VOID(glBindRenderbuffer((GLenum)p[1], (GLuint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BIND_TEXTURE:
+                LOG_GL_COMMAND("Flush: BIND_TEXTURE\n");
+                JSB_GL_CHECK_VOID(ccBindTexture((GLenum)p[1], (GLuint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BLEND_COLOR:
+                LOG_GL_COMMAND("Flush: BLEND_COLOR\n");
+                JSB_GL_CHECK_VOID(glBlendColor((GLclampf)p[1], (GLclampf)p[2], (GLclampf)p[3], (GLclampf)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_BLEND_EQUATION:
+                LOG_GL_COMMAND("Flush: BLEND_EQUATION\n");
+                JSB_GL_CHECK_VOID(glBlendEquation((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_BLEND_EQUATION_SEPARATE:
+                LOG_GL_COMMAND("Flush: BLEND_EQUATION_SEPARATE\n");
+                JSB_GL_CHECK_VOID(glBlendEquationSeparate((GLenum)p[1], (GLenum)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BLEND_FUNC:
+                LOG_GL_COMMAND("Flush: BLEND_FUNC\n");
+                JSB_GL_CHECK_VOID(glBlendFunc((GLenum)p[1], (GLenum)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_BLEND_FUNC_SEPARATE:
+                LOG_GL_COMMAND("Flush: BLEND_FUNC_SEPARATE\n");
+                JSB_GL_CHECK_VOID(glBlendFuncSeparate((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLenum)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_CLEAR:
+                LOG_GL_COMMAND("Flush: CLEAR\n");
+                JSB_GL_CHECK_VOID(glClear((GLbitfield)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_CLEAR_COLOR:
+                LOG_GL_COMMAND("Flush: CLEAR_COLOR\n");
+                JSB_GL_CHECK_VOID(glClearColor((GLclampf)p[1], (GLclampf)p[2], (GLclampf)p[3], (GLclampf)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_CLEAR_DEPTH:
+                LOG_GL_COMMAND("Flush: CLEAR_DEPTH\n");
+                JSB_GL_CHECK_VOID(glClearDepthf(p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_CLEAR_STENCIL:
+                LOG_GL_COMMAND("Flush: CLEAR_STENCIL\n");
+                JSB_GL_CHECK_VOID(glClearStencil((GLint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_COLOR_MASK:
+                LOG_GL_COMMAND("Flush: COLOR_MASK\n");
+                JSB_GL_CHECK_VOID(glColorMask((GLboolean)p[1], (GLboolean)p[2], (GLboolean)p[3], (GLboolean)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_COMPILE_SHADER:
+                LOG_GL_COMMAND("Flush: COMPILE_SHADER\n");
+                JSB_GL_CHECK_VOID(glCompileShader((GLuint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_COPY_TEX_IMAGE_2D:
+                LOG_GL_COMMAND("Flush: COPY_TEX_IMAGE_2D\n");
+                JSB_GL_CHECK_VOID(glCopyTexImage2D((GLenum)p[1], (GLint)p[2], (GLenum)p[3], (GLint)p[4], (GLint)p[5], (GLsizei)p[6], (GLsizei)p[7], (GLint)p[8]));
+                p += 9;
+                break;
+            case GL_COMMAND_COPY_TEX_SUB_IMAGE_2D:
+                LOG_GL_COMMAND("Flush: COPY_TEX_SUB_IMAGE_2D\n");
+                JSB_GL_CHECK_VOID(glCopyTexSubImage2D((GLenum)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4], (GLint)p[5], (GLint)p[6], (GLsizei)p[7], (GLsizei)p[8]));
+                p += 9;
+                break;
+            case GL_COMMAND_CULL_FACE:
+                LOG_GL_COMMAND("Flush: CULL_FACE\n");
+                JSB_GL_CHECK_VOID(glCullFace((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_DELETE_BUFFER:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_BUFFER\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(ccDeleteBuffers(1, &id));
+                safeRemoveElementFromGLObjectMap(__webglBufferMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DELETE_FRAME_BUFFER:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_FRAME_BUFFER\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(glDeleteFramebuffers(1, &id));
+                safeRemoveElementFromGLObjectMap(__webglFramebufferMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DELETE_PROGRAM:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_PROGRAM\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(glDeleteProgram(id));
+                safeRemoveElementFromGLObjectMap(__webglProgramMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DELETE_RENDER_BUFFER:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_RENDER_BUFFER\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(glDeleteRenderbuffers(1, &id));
+                safeRemoveElementFromGLObjectMap(__webglRenderbufferMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DELETE_SHADER:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_SHADER\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(glDeleteShader(id));
+                safeRemoveElementFromGLObjectMap(__webglShaderMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DELETE_TEXTURE:
+            {
+                LOG_GL_COMMAND("Flush: DELETE_TEXTURE\n");
+                GLuint id = (GLuint)p[1];
+                JSB_GL_CHECK_VOID(glDeleteTextures(1, &id));
+                safeRemoveElementFromGLObjectMap(__webglTextureMap, id);
+                p += 2;
+                break;
+            }
+            case GL_COMMAND_DEPTH_FUNC:
+                LOG_GL_COMMAND("Flush: DEPTH_FUNC\n");
+                JSB_GL_CHECK_VOID(glDepthFunc((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_DEPTH_MASK:
+                LOG_GL_COMMAND("Flush: DEPTH_MASK\n");
+                JSB_GL_CHECK_VOID(glDepthMask((GLboolean)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_DEPTH_RANGE:
+                LOG_GL_COMMAND("Flush: DEPTH_RANGE\n");
+                JSB_GL_CHECK_VOID(glDepthRangef(p[1], p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_DETACH_SHADER:
+                LOG_GL_COMMAND("Flush: DETACH_SHADER\n");
+                JSB_GL_CHECK_VOID(glDetachShader((GLuint)p[1], (GLuint) p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_DISABLE:
+                LOG_GL_COMMAND("Flush: DISABLE\n");
+                JSB_GL_CHECK_VOID(glDisable((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_DISABLE_VERTEX_ATTRIB_ARRAY:
+                LOG_GL_COMMAND("Flush: DISABLE_VERTEX_ATTRIB_ARRAY\n");
+                JSB_GL_CHECK_VOID(ccDisableVertexAttribArray((GLuint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_DRAW_ARRAYS:
+                LOG_GL_COMMAND("Flush: DRAW_ARRAYS, %u, %d, %d\n", (GLenum)p[1], (GLint)p[2], (int)p[3]);
+                JSB_GL_CHECK_VOID(glDrawArrays((GLenum)p[1], (GLint)p[2], (GLsizei)p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_DRAW_ELEMENTS:
+                LOG_GL_COMMAND("Flush: DRAW_ELEMENTS\n");
+                JSB_GL_CHECK_VOID(glDrawElements((GLenum)p[1], (GLsizei)p[2], (GLenum)p[3], (const GLvoid*)(intptr_t)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_ENABLE:
+                LOG_GL_COMMAND("Flush: ENABLE\n");
+                JSB_GL_CHECK_VOID(glEnable((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_ENABLE_VERTEX_ATTRIB_ARRAY:
+                LOG_GL_COMMAND("Flush: ENABLE_VERTEX_ATTRIB_ARRAY, %u\n", (GLuint)p[1]);
+                JSB_GL_CHECK_VOID(ccEnableVertexAttribArray((GLuint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_FINISH:
+                LOG_GL_COMMAND("Flush: FINISH\n");
+                JSB_GL_CHECK_VOID(glFinish());
+                p += 1;
+                break;
+            case GL_COMMAND_FLUSH:
+                LOG_GL_COMMAND("Flush: FLUSH\n");
+                JSB_GL_CHECK_VOID(glFlush());
+                p += 1;
+                break;
+            case GL_COMMAND_FRAME_BUFFER_RENDER_BUFFER:
+                LOG_GL_COMMAND("Flush: FRAME_BUFFER_RENDER_BUFFER\n");
+                JSB_GL_CHECK_VOID(WEBGL_framebufferRenderbuffer((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLuint)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_FRAME_BUFFER_TEXTURE_2D:
+                LOG_GL_COMMAND("Flush: FRAME_BUFFER_TEXTURE_2D\n");
+                JSB_GL_CHECK_VOID(glFramebufferTexture2D((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLuint)p[4], (GLint)p[5]));
+                p += 6;
+                break;
+            case GL_COMMAND_FRONT_FACE:
+                LOG_GL_COMMAND("Flush: FRONT_FACE\n");
+                JSB_GL_CHECK_VOID(glFrontFace((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_GENERATE_MIPMAP:
+                LOG_GL_COMMAND("Flush: GENERATE_MIPMAP\n");
+                JSB_GL_CHECK_VOID(glGenerateMipmap((GLenum)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_HINT:
+                LOG_GL_COMMAND("Flush: HINT\n");
+                JSB_GL_CHECK_VOID(glHint((GLenum)p[1], (GLenum)p[2]));;
+                p += 3;
+                break;
+            case GL_COMMAND_LINE_WIDTH:
             LOG_GL_COMMAND("Flush: LINE_WIDTH\n");
             JSB_GL_CHECK_VOID(glLineWidth(p[1]));
             p += 2;
-        }
-        else if (commandID == GL_COMMAND_LINK_PROGRAM) {
-            LOG_GL_COMMAND("Flush: LINK_PROGRAM\n");
-            JSB_GL_CHECK_VOID(glLinkProgram((GLuint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_PIXEL_STOREI) {
-            LOG_GL_COMMAND("Flush: PIXEL_STOREI\n");
-            JSB_GL_CHECK_VOID(ccPixelStorei((GLenum)p[1], (GLint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_POLYGON_OFFSET) {
-            LOG_GL_COMMAND("Flush: POLYGON_OFFSET\n");
-            JSB_GL_CHECK_VOID(glPolygonOffset(p[1], p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_RENDER_BUFFER_STORAGE) {
-            LOG_GL_COMMAND("Flush: RENDER_BUFFER_STORAGE\n");
-            JSB_GL_CHECK_VOID(WEBGL_renderbufferStorage((GLenum)p[1], (GLenum)p[2], (GLsizei)p[3], (GLsizei)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_SAMPLE_COVERAGE) {
-            LOG_GL_COMMAND("Flush: SAMPLE_COVERAGE\n");
-            JSB_GL_CHECK_VOID(glSampleCoverage(p[1], (GLboolean)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_SCISSOR) {
-            LOG_GL_COMMAND("Flush: SCISSOR\n");
-            JSB_GL_CHECK_VOID(ccScissor((GLint)p[1], (GLint)p[2], (GLsizei)p[3], (GLsizei)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_FUNC) {
-            LOG_GL_COMMAND("Flush: STENCIL_FUNC\n");
-            JSB_GL_CHECK_VOID(glStencilFunc((GLenum)p[1], (GLint)p[2], (GLuint)p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_FUNC_SEPARATE) {
-            LOG_GL_COMMAND("Flush: STENCIL_FUNC_SEPARATE\n");
-            JSB_GL_CHECK_VOID(glStencilFuncSeparate((GLenum)p[1], (GLenum)p[2], (GLint)p[3], (GLuint)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_MASK) {
-            LOG_GL_COMMAND("Flush: STENCIL_MASK\n");
-            JSB_GL_CHECK_VOID(glStencilMask((GLuint)p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_MASK_SEPARATE) {
-            LOG_GL_COMMAND("Flush: STENCIL_MASK_SEPARATE\n");
-            JSB_GL_CHECK_VOID(glStencilMaskSeparate((GLenum)p[1], (GLuint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_OP) {
-            LOG_GL_COMMAND("Flush: STENCIL_OP\n");
-            JSB_GL_CHECK_VOID(glStencilOp((GLenum)p[1], (GLenum)p[2], (GLenum)p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_STENCIL_OP_SEPARATE) {
-            LOG_GL_COMMAND("Flush: STENCIL_OP_SEPARATE\n");
-            JSB_GL_CHECK_VOID(glStencilOpSeparate((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLenum)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_TEX_PARAMETER_F) {
-            LOG_GL_COMMAND("Flush: TEX_PARAMETER_F\n");
-            JSB_GL_CHECK_VOID(glTexParameterf((GLenum)p[1], (GLenum)p[2], p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_TEX_PARAMETER_I) {
-            LOG_GL_COMMAND("Flush: TEX_PARAMETER_I\n");
-            JSB_GL_CHECK_VOID(glTexParameteri((GLenum)p[1], (GLenum)p[2], (GLint)p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_1F) {
-            LOG_GL_COMMAND("Flush: UNIFORM_1F\n");
-            JSB_GL_CHECK_VOID(glUniform1f((GLint)p[1], p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_2F) {
-            LOG_GL_COMMAND("Flush: UNIFORM_2F\n");
-            JSB_GL_CHECK_VOID(glUniform2f((GLint)p[1], p[2], p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_3F) {
-            LOG_GL_COMMAND("Flush: UNIFORM_3F\n");
-            JSB_GL_CHECK_VOID(glUniform3f((GLint)p[1], p[2], p[3], p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_4F) {
-            LOG_GL_COMMAND("Flush: UNIFORM_4F\n");
-            JSB_GL_CHECK_VOID(glUniform4f((GLint)p[1], p[2], p[3], p[4], p[5]));
-            p += 6;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_1I) {
-            LOG_GL_COMMAND("Flush: UNIFORM_1I\n");
-            JSB_GL_CHECK_VOID(glUniform1i((GLint)p[1], (GLint)p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_2I) {
-            LOG_GL_COMMAND("Flush: UNIFORM_2I\n");
-            JSB_GL_CHECK_VOID(glUniform2i((GLint)p[1], (GLint)p[2], (GLint)p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_3I) {
-            LOG_GL_COMMAND("Flush: UNIFORM_3I\n");
-            JSB_GL_CHECK_VOID(glUniform3i((GLint)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_4I) {
-            LOG_GL_COMMAND("Flush: UNIFORM_4I\n");
-            JSB_GL_CHECK_VOID(glUniform4i((GLint)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4], (GLint)p[5]));
-            p += 6;
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_1FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_1FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glUniform1fv((GLint)p[1], elementCount, &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_2FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_2FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glUniform2fv((GLint)p[1], elementCount / 2, &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_3FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_3FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glUniform3fv((GLint)p[1], elementCount / 3, &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_4FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_4FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glUniform4fv((GLint)p[1], elementCount / 3, &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_1IV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_1IV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
-            for (GLsizei i = 0; i < elementCount; ++i)
+                break;
+            case GL_COMMAND_LINK_PROGRAM:
+                LOG_GL_COMMAND("Flush: LINK_PROGRAM\n");
+                JSB_GL_CHECK_VOID(glLinkProgram((GLuint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_PIXEL_STOREI:
+                LOG_GL_COMMAND("Flush: PIXEL_STOREI\n");
+                JSB_GL_CHECK_VOID(ccPixelStorei((GLenum)p[1], (GLint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_POLYGON_OFFSET:
+                LOG_GL_COMMAND("Flush: POLYGON_OFFSET\n");
+                JSB_GL_CHECK_VOID(glPolygonOffset(p[1], p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_RENDER_BUFFER_STORAGE:
+                LOG_GL_COMMAND("Flush: RENDER_BUFFER_STORAGE\n");
+                JSB_GL_CHECK_VOID(WEBGL_renderbufferStorage((GLenum)p[1], (GLenum)p[2], (GLsizei)p[3], (GLsizei)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_SAMPLE_COVERAGE:
+                LOG_GL_COMMAND("Flush: SAMPLE_COVERAGE\n");
+                JSB_GL_CHECK_VOID(glSampleCoverage(p[1], (GLboolean)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_SCISSOR:
+                LOG_GL_COMMAND("Flush: SCISSOR\n");
+                JSB_GL_CHECK_VOID(ccScissor((GLint)p[1], (GLint)p[2], (GLsizei)p[3], (GLsizei)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_STENCIL_FUNC:
+                LOG_GL_COMMAND("Flush: STENCIL_FUNC\n");
+                JSB_GL_CHECK_VOID(glStencilFunc((GLenum)p[1], (GLint)p[2], (GLuint)p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_STENCIL_FUNC_SEPARATE:
+                LOG_GL_COMMAND("Flush: STENCIL_FUNC_SEPARATE\n");
+                JSB_GL_CHECK_VOID(glStencilFuncSeparate((GLenum)p[1], (GLenum)p[2], (GLint)p[3], (GLuint)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_STENCIL_MASK:
+                LOG_GL_COMMAND("Flush: STENCIL_MASK\n");
+                JSB_GL_CHECK_VOID(glStencilMask((GLuint)p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_STENCIL_MASK_SEPARATE:
+                LOG_GL_COMMAND("Flush: STENCIL_MASK_SEPARATE\n");
+                JSB_GL_CHECK_VOID(glStencilMaskSeparate((GLenum)p[1], (GLuint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_STENCIL_OP:
+                LOG_GL_COMMAND("Flush: STENCIL_OP\n");
+                JSB_GL_CHECK_VOID(glStencilOp((GLenum)p[1], (GLenum)p[2], (GLenum)p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_STENCIL_OP_SEPARATE:
+                LOG_GL_COMMAND("Flush: STENCIL_OP_SEPARATE\n");
+                JSB_GL_CHECK_VOID(glStencilOpSeparate((GLenum)p[1], (GLenum)p[2], (GLenum)p[3], (GLenum)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_TEX_PARAMETER_F:
+                LOG_GL_COMMAND("Flush: TEX_PARAMETER_F\n");
+                JSB_GL_CHECK_VOID(glTexParameterf((GLenum)p[1], (GLenum)p[2], p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_TEX_PARAMETER_I:
+                LOG_GL_COMMAND("Flush: TEX_PARAMETER_I\n");
+                JSB_GL_CHECK_VOID(glTexParameteri((GLenum)p[1], (GLenum)p[2], (GLint)p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_UNIFORM_1F:
+                LOG_GL_COMMAND("Flush: UNIFORM_1F\n");
+                JSB_GL_CHECK_VOID(glUniform1f((GLint)p[1], p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_UNIFORM_2F:
+                LOG_GL_COMMAND("Flush: UNIFORM_2F\n");
+                JSB_GL_CHECK_VOID(glUniform2f((GLint)p[1], p[2], p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_UNIFORM_3F:
+                LOG_GL_COMMAND("Flush: UNIFORM_3F\n");
+                JSB_GL_CHECK_VOID(glUniform3f((GLint)p[1], p[2], p[3], p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_UNIFORM_4F:
+                LOG_GL_COMMAND("Flush: UNIFORM_4F\n");
+                JSB_GL_CHECK_VOID(glUniform4f((GLint)p[1], p[2], p[3], p[4], p[5]));
+                p += 6;
+                break;
+            case GL_COMMAND_UNIFORM_1I:
+                LOG_GL_COMMAND("Flush: UNIFORM_1I\n");
+                JSB_GL_CHECK_VOID(glUniform1i((GLint)p[1], (GLint)p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_UNIFORM_2I:
+                LOG_GL_COMMAND("Flush: UNIFORM_2I\n");
+                JSB_GL_CHECK_VOID(glUniform2i((GLint)p[1], (GLint)p[2], (GLint)p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_UNIFORM_3I:
+                LOG_GL_COMMAND("Flush: UNIFORM_3I\n");
+                JSB_GL_CHECK_VOID(glUniform3i((GLint)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_UNIFORM_4I:
+                LOG_GL_COMMAND("Flush: UNIFORM_4I\n");
+                JSB_GL_CHECK_VOID(glUniform4i((GLint)p[1], (GLint)p[2], (GLint)p[3], (GLint)p[4], (GLint)p[5]));
+                p += 6;
+                break;
+            case GL_COMMAND_UNIFORM_1FV:
             {
-                intBuf[i] = p[3+i];
+                LOG_GL_COMMAND("Flush: UNIFORM_1FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glUniform1fv((GLint)p[1], elementCount, &p[3]));
+                p += (elementCount + 3);
+                break;
             }
-            JSB_GL_CHECK_VOID(glUniform1iv((GLint)p[1], elementCount, intBuf));
-            free(intBuf);
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_2IV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_2IV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
-            for (GLsizei i = 0; i < elementCount; ++i)
+            case GL_COMMAND_UNIFORM_2FV:
             {
-                intBuf[i] = p[3+i];
+                LOG_GL_COMMAND("Flush: UNIFORM_2FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glUniform2fv((GLint)p[1], elementCount / 2, &p[3]));
+                p += (elementCount + 3);
+                break;
             }
-            JSB_GL_CHECK_VOID(glUniform2iv((GLint)p[1], elementCount / 2, intBuf));
-            free(intBuf);
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_3IV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_3IV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
-            for (GLsizei i = 0; i < elementCount; ++i)
+            case GL_COMMAND_UNIFORM_3FV:
             {
-                intBuf[i] = p[3+i];
+                LOG_GL_COMMAND("Flush: UNIFORM_3FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glUniform3fv((GLint)p[1], elementCount / 3, &p[3]));
+                p += (elementCount + 3);
+                break;
             }
-            JSB_GL_CHECK_VOID(glUniform3iv((GLint)p[1], elementCount / 3, intBuf));
-            free(intBuf);
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_4IV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_4IV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
-            for (GLsizei i = 0; i < elementCount; ++i)
+            case GL_COMMAND_UNIFORM_4FV:
             {
-                intBuf[i] = p[3+i];
+                LOG_GL_COMMAND("Flush: UNIFORM_4FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glUniform4fv((GLint)p[1], elementCount / 3, &p[3]));
+                p += (elementCount + 3);
+                break;
             }
-            JSB_GL_CHECK_VOID(glUniform4iv((GLint)p[1], elementCount / 4, intBuf));
-            free(intBuf);
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_MATRIX_2FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_2FV\n");
-            GLsizei elementCount = (GLsizei)p[3];
-            JSB_GL_CHECK_VOID(glUniformMatrix2fv((GLint)p[1], elementCount / 4, (GLboolean)p[2], &p[4]));
-            p += (elementCount + 4);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_MATRIX_3FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_3FV\n");
-            GLsizei elementCount = (GLsizei)p[3];
-            JSB_GL_CHECK_VOID(glUniformMatrix3fv((GLint)p[1], elementCount / 9, (GLboolean)p[2], &p[4]));
-            p += (elementCount + 4);
-        }
-        else if (commandID == GL_COMMAND_UNIFORM_MATRIX_4FV) {
-            LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_4FV\n");
-            GLsizei elementCount = (GLsizei)p[3];
-            JSB_GL_CHECK_VOID(glUniformMatrix4fv((GLint)p[1], elementCount / 16, (GLboolean)p[2], &p[4]));
-            p += (elementCount + 4);
-        }
-        else if (commandID == GL_COMMAND_USE_PROGRAM) {
-            LOG_GL_COMMAND("Flush: USE_PROGRAM\n");
-            JSB_GL_CHECK_VOID(glUseProgram((GLuint) p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_VALIDATE_PROGRAM) {
-            LOG_GL_COMMAND("Flush: VALIDATE_PROGRAM\n");
-            JSB_GL_CHECK_VOID(glValidateProgram((GLuint) p[1]));
-            p += 2;
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_1F) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_1F\n");
-            JSB_GL_CHECK_VOID(glVertexAttrib1f((GLuint)p[1], p[2]));
-            p += 3;
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_2F) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_2F\n");
-            JSB_GL_CHECK_VOID(glVertexAttrib2f((GLuint)p[1], p[2], p[3]));
-            p += 4;
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_3F) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_3F\n");
-            JSB_GL_CHECK_VOID(glVertexAttrib3f((GLuint)p[1], p[2], p[3], p[4]));
-            p += 5;
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_4F) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_4F\n");
-            JSB_GL_CHECK_VOID(glVertexAttrib4f((GLuint)p[1], p[2], p[3], p[4], p[5]));
-            p += 6;
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_1FV) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_1FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glVertexAttrib1fv((GLint)p[1], &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_2FV) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_2FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glVertexAttrib2fv((GLint)p[1], &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_3FV) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_3FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glVertexAttrib3fv((GLint)p[1], &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_4FV) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_4FV\n");
-            GLsizei elementCount = (GLsizei)p[2];
-            JSB_GL_CHECK_VOID(glVertexAttrib4fv((GLint)p[1], &p[3]));
-            p += (elementCount + 3);
-        }
-        else if (commandID == GL_COMMAND_VERTEX_ATTRIB_POINTER) {
-            LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_POINTER\n");
-            JSB_GL_CHECK_VOID(ccVertexAttribPointer((GLuint)p[1], (GLint)p[2], (GLenum)p[3], (GLboolean)p[4], (GLsizei)p[5], (const GLvoid*)(GLintptr)p[6]));
-            p += 7;
-        }
-        else if (commandID == GL_COMMAND_VIEW_PORT) {
-            LOG_GL_COMMAND("Flush: VIEW_PORT\n");
-            JSB_GL_CHECK_VOID(ccViewport((GLint)p[1], (GLint)p[2], (GLsizei)p[3], (GLsizei)p[4]));
-            p += 5;
-        }
-        else {
-            assert(false);
+            case GL_COMMAND_UNIFORM_1IV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_1IV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
+                for (GLsizei i = 0; i < elementCount; ++i)
+                {
+                    intBuf[i] = p[3+i];
+                }
+                JSB_GL_CHECK_VOID(glUniform1iv((GLint)p[1], elementCount, intBuf));
+                free(intBuf);
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_2IV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_2IV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
+                for (GLsizei i = 0; i < elementCount; ++i)
+                {
+                    intBuf[i] = p[3+i];
+                }
+                JSB_GL_CHECK_VOID(glUniform2iv((GLint)p[1], elementCount / 2, intBuf));
+                free(intBuf);
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_3IV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_3IV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
+                for (GLsizei i = 0; i < elementCount; ++i)
+                {
+                    intBuf[i] = p[3+i];
+                }
+                JSB_GL_CHECK_VOID(glUniform3iv((GLint)p[1], elementCount / 3, intBuf));
+                free(intBuf);
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_4IV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_4IV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                GLint* intBuf = (GLint*)malloc(elementCount * sizeof(GLint));
+                for (GLsizei i = 0; i < elementCount; ++i)
+                {
+                    intBuf[i] = p[3+i];
+                }
+                JSB_GL_CHECK_VOID(glUniform4iv((GLint)p[1], elementCount / 4, intBuf));
+                free(intBuf);
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_MATRIX_2FV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_2FV\n");
+                GLsizei elementCount = (GLsizei)p[3];
+                JSB_GL_CHECK_VOID(glUniformMatrix2fv((GLint)p[1], elementCount / 4, (GLboolean)p[2], &p[4]));
+                p += (elementCount + 4);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_MATRIX_3FV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_3FV\n");
+                GLsizei elementCount = (GLsizei)p[3];
+                JSB_GL_CHECK_VOID(glUniformMatrix3fv((GLint)p[1], elementCount / 9, (GLboolean)p[2], &p[4]));
+                p += (elementCount + 4);
+                break;
+            }
+            case GL_COMMAND_UNIFORM_MATRIX_4FV:
+            {
+                LOG_GL_COMMAND("Flush: UNIFORM_MATRIX_4FV\n");
+                GLsizei elementCount = (GLsizei)p[3];
+                JSB_GL_CHECK_VOID(glUniformMatrix4fv((GLint)p[1], elementCount / 16, (GLboolean)p[2], &p[4]));
+                p += (elementCount + 4);
+                break;
+            }
+            case GL_COMMAND_USE_PROGRAM:
+                LOG_GL_COMMAND("Flush: USE_PROGRAM\n");
+                JSB_GL_CHECK_VOID(glUseProgram((GLuint) p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_VALIDATE_PROGRAM:
+                LOG_GL_COMMAND("Flush: VALIDATE_PROGRAM\n");
+                JSB_GL_CHECK_VOID(glValidateProgram((GLuint) p[1]));
+                p += 2;
+                break;
+            case GL_COMMAND_VERTEX_ATTRIB_1F:
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_1F\n");
+                JSB_GL_CHECK_VOID(glVertexAttrib1f((GLuint)p[1], p[2]));
+                p += 3;
+                break;
+            case GL_COMMAND_VERTEX_ATTRIB_2F:
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_2F\n");
+                JSB_GL_CHECK_VOID(glVertexAttrib2f((GLuint)p[1], p[2], p[3]));
+                p += 4;
+                break;
+            case GL_COMMAND_VERTEX_ATTRIB_3F:
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_3F\n");
+                JSB_GL_CHECK_VOID(glVertexAttrib3f((GLuint)p[1], p[2], p[3], p[4]));
+                p += 5;
+                break;
+            case GL_COMMAND_VERTEX_ATTRIB_4F:
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_4F\n");
+                JSB_GL_CHECK_VOID(glVertexAttrib4f((GLuint)p[1], p[2], p[3], p[4], p[5]));
+                p += 6;
+                break;
+            case GL_COMMAND_VERTEX_ATTRIB_1FV:
+            {
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_1FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glVertexAttrib1fv((GLint)p[1], &p[3]));
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_VERTEX_ATTRIB_2FV:
+            {
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_2FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glVertexAttrib2fv((GLint)p[1], &p[3]));
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_VERTEX_ATTRIB_3FV:
+            {
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_3FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glVertexAttrib3fv((GLint)p[1], &p[3]));
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_VERTEX_ATTRIB_4FV:
+            {
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_4FV\n");
+                GLsizei elementCount = (GLsizei)p[2];
+                JSB_GL_CHECK_VOID(glVertexAttrib4fv((GLint)p[1], &p[3]));
+                p += (elementCount + 3);
+                break;
+            }
+            case GL_COMMAND_VERTEX_ATTRIB_POINTER:
+                LOG_GL_COMMAND("Flush: VERTEX_ATTRIB_POINTER\n");
+                JSB_GL_CHECK_VOID(ccVertexAttribPointer((GLuint)p[1], (GLint)p[2], (GLenum)p[3], (GLboolean)p[4], (GLsizei)p[5], (const GLvoid*)(GLintptr)p[6]));
+                p += 7;
+                break;
+            case GL_COMMAND_VIEW_PORT:
+                LOG_GL_COMMAND("Flush: VIEW_PORT\n");
+                JSB_GL_CHECK_VOID(ccViewport((GLint)p[1], (GLint)p[2], (GLsizei)p[3], (GLsizei)p[4]));
+                p += 5;
+                break;
+            default:
+                assert(false);
         }
     }
 
