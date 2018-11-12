@@ -373,7 +373,9 @@ extern se::Class* __jsb_dragonBones_CCFactory_class;
 
 bool js_register_dragonBones_CCFactory(se::Object* obj);
 bool register_all_cocos2dx_dragonbones(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_parseDragonBonesDataOnly);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getSoundEventManager);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_handleTextureAtlasData);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getTextureAtlasDataByIndex);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_remove);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_add);

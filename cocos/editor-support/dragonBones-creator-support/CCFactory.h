@@ -240,6 +240,9 @@ public:
     void removeTextureAtlasDataByIndex(const std::string& name, int textureIndex);
     
     CCTextureAtlasData* getTextureAtlasDataByIndex(const std::string& name, int textureIndex) const;
+    
+    DragonBonesData* parseDragonBonesDataOnly(const std::string& filePath, const std::string& name = "", float scale = 1.0f);
+    void handleTextureAtlasData(bool isBinary, const std::string& name = "", float scale = 1.0f);
 };
 
 DRAGONBONES_NAMESPACE_END

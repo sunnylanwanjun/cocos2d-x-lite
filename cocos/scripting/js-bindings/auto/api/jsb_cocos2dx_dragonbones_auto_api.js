@@ -2574,6 +2574,22 @@ CCArmatureDisplay : function (
 jsbDragonBones.CCFactory = {
 
 /**
+ * @method parseDragonBonesDataOnly
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {float} arg2
+ * @return {dragonBones::DragonBonesData}
+ */
+parseDragonBonesDataOnly : function (
+str, 
+str, 
+float 
+)
+{
+    return dragonBones::DragonBonesData;
+},
+
+/**
  * @method getSoundEventManager
  * @return {dragonBones::CCArmatureDisplay}
  */
@@ -2581,6 +2597,20 @@ getSoundEventManager : function (
 )
 {
     return dragonBones::CCArmatureDisplay;
+},
+
+/**
+ * @method handleTextureAtlasData
+ * @param {bool} arg0
+ * @param {String} arg1
+ * @param {float} arg2
+ */
+handleTextureAtlasData : function (
+bool, 
+str, 
+float 
+)
+{
 },
 
 /**

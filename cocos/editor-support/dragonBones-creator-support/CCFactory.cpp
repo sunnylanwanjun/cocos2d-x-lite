@@ -85,12 +85,8 @@ DragonBonesData* CCFactory::loadDragonBonesData(const std::string& filePath, con
         }
         else
         {
-#if COCOS2D_VERSION >= 0x00031200
             cocos2d::Data cocos2dData;
             cocos2d::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
-#else
-            const auto cocos2dData = cocos2d::FileUtils::getInstance()->getDataFromFile(fullpath);
-#endif
             const auto binary = (unsigned char*)malloc(sizeof(unsigned char)* cocos2dData.getSize());
             memcpy(binary, cocos2dData.getBytes(), cocos2dData.getSize());
             const auto data = parseDragonBonesData((char*)binary, name, scale);
@@ -100,6 +96,85 @@ DragonBonesData* CCFactory::loadDragonBonesData(const std::string& filePath, con
     }
 
     return nullptr;
+}
+
+DragonBonesData* CCFactory::parseDragonBonesDataOnly(const std::string& filePath, const std::string& name, float scale)
+{
+    if (!name.empty())
+    {
+        const auto existedData = getDragonBonesData(name);
+        if (existedData)
+        {
+            return existedData;
+        }
+    }
+    
+    const auto fullpath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
+    char* rawData = nullptr;
+    
+    if (cocos2d::FileUtils::getInstance()->isFileExist(filePath))
+    {
+        const auto pos = fullpath.find(".json");
+        
+        if (pos != std::string::npos)
+        {
+            const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(filePath);
+            rawData = (char*)data.c_str();
+        }
+        else
+        {
+            cocos2d::Data cocos2dData;
+            cocos2d::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
+            rawData = (char*)malloc(sizeof(char)* cocos2dData.getSize());
+            memcpy(rawData, cocos2dData.getBytes(), cocos2dData.getSize());
+        }
+    }
+    
+    DataParser* dataParser = nullptr;
+    
+    if (
+        rawData[0] == 'D' &&
+        rawData[1] == 'B' &&
+        rawData[2] == 'D' &&
+        rawData[3] == 'T'
+        )
+    {
+        dataParser = &_binaryParser;
+    }
+    else
+    {
+        dataParser = _dataParser;
+    }
+    
+    return dataParser->parseDragonBonesData(rawData, scale);
+}
+
+void CCFactory::handleTextureAtlasData(bool isBinary, const std::string& name, float scale)
+{
+    DataParser* dataParser = nullptr;
+    
+    if (isBinary)
+    {
+        dataParser = &_binaryParser;
+    }
+    else
+    {
+        dataParser = _dataParser;
+    }
+    
+    while (true)
+    {
+        const auto textureAtlasData = _buildTextureAtlasData(nullptr, nullptr);
+        if (dataParser->parseTextureAtlasData(nullptr, *textureAtlasData, scale))
+        {
+            addTextureAtlasData(textureAtlasData, name);
+        }
+        else
+        {
+            textureAtlasData->returnToPool();
+            break;
+        }
+    }
 }
 
 TextureAtlasData* CCFactory::loadTextureAtlasData(const std::string& filePath, const std::string& name, float scale)
