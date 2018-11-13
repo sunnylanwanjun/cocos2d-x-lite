@@ -87,7 +87,7 @@ public:
 	virtual void onTrackEntryEvent (spTrackEntry* entry, spEventType type, spEvent* event);
 
 	spAnimationState* getState() const;
-
+    
 CC_CONSTRUCTOR_ACCESS:
 	SpineAnimation ();
 	SpineAnimation (spSkeletonData* skeletonData, bool ownsSkeletonData = false);

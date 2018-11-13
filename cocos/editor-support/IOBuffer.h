@@ -121,7 +121,7 @@ namespace editor {
     private:
         se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
         uint8_t*                    _buffer = nullptr;
-        std::size_t                 _bufferSize = 5120;
+        std::size_t                 _bufferSize = 8192;
         std::size_t                 _curPos = 0;
         std::size_t                 _readPos = 0;
         se::Object*                 _typeArray = nullptr;

@@ -217,6 +217,14 @@ getTimeScale : function (
 },
 
 /**
+ * @method stopSchedule
+ */
+stopSchedule : function (
+)
+{
+},
+
+/**
  * @method setColor
  * @param {color4b_object} arg0
  */

@@ -100,6 +100,11 @@ public:
         _changeBufferCallback = callback;
     }
     
+    void beginSchedule();
+    void stopSchedule();
+    void onEnable();
+    void onDisable();
+    
 CC_CONSTRUCTOR_ACCESS:
 	SpineRenderer ();
 	SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);

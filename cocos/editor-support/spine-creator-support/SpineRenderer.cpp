@@ -83,17 +83,39 @@ void SpineRenderer::initialize ()
     if (_worldVertices == nullptr)
         _worldVertices = new float[1000]; // Max number of vertices per mesh.
     
+    beginSchedule();
+}
+
+void SpineRenderer::beginSchedule()
+{
     auto app = cocos2d::Application::getInstance();
     auto scheduler = app->getScheduler();
     if (!scheduler->isScheduled(scheduleKey, this))
     {
         scheduler->schedule(
-            [&](float passedTime)
-            {
-                this->update(passedTime);
-            },
+        [&](float passedTime)
+        {
+            this->update(passedTime);
+        },
         this, 0, false, scheduleKey);
     }
+}
+
+void SpineRenderer::onEnable()
+{
+    beginSchedule();
+}
+
+void SpineRenderer::onDisable()
+{
+    stopSchedule();
+}
+
+void SpineRenderer::stopSchedule()
+{
+    auto app = cocos2d::Application::getInstance();
+    auto scheduler = app->getScheduler();
+    scheduler->unschedule(scheduleKey, this);
 }
 
 void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkeletonData)
@@ -133,9 +155,7 @@ SpineRenderer::~SpineRenderer ()
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
 	delete [] _worldVertices;
     
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    scheduler->unschedule(scheduleKey, this);
+    stopSchedule();
 }
 
 void SpineRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData)
