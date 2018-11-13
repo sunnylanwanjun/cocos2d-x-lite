@@ -125,6 +125,22 @@ float
 },
 
 /**
+ * @method onEnable
+ */
+onEnable : function (
+)
+{
+},
+
+/**
+ * @method beginSchedule
+ */
+beginSchedule : function (
+)
+{
+},
+
+/**
  * @method setBufferChangeCallback
  * @param {function} arg0
  */
@@ -220,6 +236,14 @@ getTimeScale : function (
  * @method stopSchedule
  */
 stopSchedule : function (
+)
+{
+},
+
+/**
+ * @method onDisable
+ */
+onDisable : function (
 )
 {
 },

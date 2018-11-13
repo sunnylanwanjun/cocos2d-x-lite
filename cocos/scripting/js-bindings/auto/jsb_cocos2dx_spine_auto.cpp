@@ -331,6 +331,36 @@ static bool js_cocos2dx_spine_SpineRenderer_initWithBinaryFile(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SpineRenderer_initWithBinaryFile)
 
+static bool js_cocos2dx_spine_SpineRenderer_onEnable(se::State& s)
+{
+    spine::SpineRenderer* cobj = (spine::SpineRenderer*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SpineRenderer_onEnable : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->onEnable();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SpineRenderer_onEnable)
+
+static bool js_cocos2dx_spine_SpineRenderer_beginSchedule(se::State& s)
+{
+    spine::SpineRenderer* cobj = (spine::SpineRenderer*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SpineRenderer_beginSchedule : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->beginSchedule();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SpineRenderer_beginSchedule)
+
 static bool js_cocos2dx_spine_SpineRenderer_setBufferChangeCallback(se::State& s)
 {
     spine::SpineRenderer* cobj = (spine::SpineRenderer*)s.nativeThisObject();
@@ -537,6 +567,21 @@ static bool js_cocos2dx_spine_SpineRenderer_stopSchedule(se::State& s)
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SpineRenderer_stopSchedule)
+
+static bool js_cocos2dx_spine_SpineRenderer_onDisable(se::State& s)
+{
+    spine::SpineRenderer* cobj = (spine::SpineRenderer*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SpineRenderer_onDisable : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->onDisable();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SpineRenderer_onDisable)
 
 static bool js_cocos2dx_spine_SpineRenderer_setColor(se::State& s)
 {
@@ -881,6 +926,8 @@ bool js_register_cocos2dx_spine_SpineRenderer(se::Object* obj)
     cls->defineFunction("setToSetupPose", _SE(js_cocos2dx_spine_SpineRenderer_setToSetupPose));
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_spine_SpineRenderer_setOpacityModifyRGB));
     cls->defineFunction("initWithBinaryFile", _SE(js_cocos2dx_spine_SpineRenderer_initWithBinaryFile));
+    cls->defineFunction("onEnable", _SE(js_cocos2dx_spine_SpineRenderer_onEnable));
+    cls->defineFunction("beginSchedule", _SE(js_cocos2dx_spine_SpineRenderer_beginSchedule));
     cls->defineFunction("setBufferChangeCallback", _SE(js_cocos2dx_spine_SpineRenderer_setBufferChangeCallback));
     cls->defineFunction("getDebugData", _SE(js_cocos2dx_spine_SpineRenderer_getDebugData));
     cls->defineFunction("update", _SE(js_cocos2dx_spine_SpineRenderer_update));
@@ -891,6 +938,7 @@ bool js_register_cocos2dx_spine_SpineRenderer(se::Object* obj)
     cls->defineFunction("setDebugBonesEnabled", _SE(js_cocos2dx_spine_SpineRenderer_setDebugBonesEnabled));
     cls->defineFunction("getTimeScale", _SE(js_cocos2dx_spine_SpineRenderer_getTimeScale));
     cls->defineFunction("stopSchedule", _SE(js_cocos2dx_spine_SpineRenderer_stopSchedule));
+    cls->defineFunction("onDisable", _SE(js_cocos2dx_spine_SpineRenderer_onDisable));
     cls->defineFunction("setColor", _SE(js_cocos2dx_spine_SpineRenderer_setColor));
     cls->defineFunction("setSkin", _SE(js_cocos2dx_spine_SpineRenderer_setSkin));
     cls->defineFunction("findSlot", _SE(js_cocos2dx_spine_SpineRenderer_findSlot));
