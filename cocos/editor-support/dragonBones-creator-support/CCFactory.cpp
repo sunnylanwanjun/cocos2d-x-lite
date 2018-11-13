@@ -1,4 +1,4 @@
-#include "dragonBones-creator-support/CCFactory.h"
+﻿#include "dragonBones-creator-support/CCFactory.h"
 #include "dragonBones-creator-support/CCTextureAtlasData.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
@@ -110,8 +110,7 @@ DragonBonesData* CCFactory::parseDragonBonesDataOnly(const std::string& filePath
     }
     
     const auto fullpath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
-    char* rawData = nullptr;
-    
+
     if (cocos2d::FileUtils::getInstance()->isFileExist(filePath))
     {
         const auto pos = fullpath.find(".json");
@@ -119,34 +118,17 @@ DragonBonesData* CCFactory::parseDragonBonesDataOnly(const std::string& filePath
         if (pos != std::string::npos)
         {
             const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(filePath);
-            rawData = (char*)data.c_str();
+			return _dataParser->parseDragonBonesData(data.c_str(), scale);
         }
         else
         {
             cocos2d::Data cocos2dData;
             cocos2d::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
-            rawData = (char*)malloc(sizeof(char)* cocos2dData.getSize());
-            memcpy(rawData, cocos2dData.getBytes(), cocos2dData.getSize());
+			const auto binary = (unsigned char*)malloc(sizeof(unsigned char)* cocos2dData.getSize());
+			memcpy(binary, cocos2dData.getBytes(), cocos2dData.getSize());
+			return _binaryParser.parseDragonBonesData((char*)binary, scale);
         }
     }
-    
-    DataParser* dataParser = nullptr;
-    
-    if (
-        rawData[0] == 'D' &&
-        rawData[1] == 'B' &&
-        rawData[2] == 'D' &&
-        rawData[3] == 'T'
-        )
-    {
-        dataParser = &_binaryParser;
-    }
-    else
-    {
-        dataParser = _dataParser;
-    }
-    
-    return dataParser->parseDragonBonesData(rawData, scale);
 }
 
 void CCFactory::handleTextureAtlasData(bool isBinary, const std::string& name, float scale)
