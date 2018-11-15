@@ -1,4 +1,4 @@
-﻿
+
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
@@ -29,7 +29,7 @@
 
 namespace editor {
     /** 
-     * TypeArray Pool
+     * TypeArray Pool for IOBuffer
      */
     class TypeArrayPool
     {

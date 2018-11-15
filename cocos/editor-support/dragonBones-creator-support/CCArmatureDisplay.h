@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -153,7 +153,7 @@ public:
         _dbEventCallback = callback;
     }
     
-    cocos2d::Vec2 convertRootSpace(const cocos2d::Vec2& pos) const;
+    cocos2d::Vec2 convertToRootSpace(const cocos2d::Vec2& pos) const;
     CCArmatureDisplay* getRootDisplay();
     
 private:

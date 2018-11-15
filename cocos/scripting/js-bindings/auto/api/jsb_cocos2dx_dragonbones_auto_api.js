@@ -2516,6 +2516,18 @@ getArmature : function (
 },
 
 /**
+ * @method convertToRootSpace
+ * @param {vec2_object} arg0
+ * @return {vec2_object}
+ */
+convertToRootSpace : function (
+vec2 
+)
+{
+    return cc.Vec2;
+},
+
+/**
  * @method setBufferChangeCallback
  * @param {function} arg0
  */
@@ -2533,18 +2545,6 @@ getDebugData : function (
 )
 {
     return se::Object;
-},
-
-/**
- * @method convertRootSpace
- * @param {vec2_object} arg0
- * @return {vec2_object}
- */
-convertRootSpace : function (
-vec2 
-)
-{
-    return cc.Vec2;
 },
 
 /**

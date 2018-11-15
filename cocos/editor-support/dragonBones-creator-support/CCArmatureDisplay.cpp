@@ -1,4 +1,4 @@
-﻿#include "dragonBones-creator-support/CCArmatureDisplay.h"
+#include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
 #include "IOBuffer.h"
 
@@ -130,7 +130,7 @@ void CCArmatureDisplay::dbUpdate()
     }
 }
 
-cocos2d::Vec2 CCArmatureDisplay::convertRootSpace(const cocos2d::Vec2& pos) const
+cocos2d::Vec2 CCArmatureDisplay::convertToRootSpace(const cocos2d::Vec2& pos) const
 {
     CCSlot* slot = (CCSlot*)_armature->getParent();
     if (!slot)

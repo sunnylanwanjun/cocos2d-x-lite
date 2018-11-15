@@ -1,4 +1,4 @@
-﻿#include "dragonBones-creator-support/CCSlot.h"
+#include "dragonBones-creator-support/CCSlot.h"
 #include "dragonBones-creator-support/CCTextureAtlasData.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 
@@ -8,6 +8,10 @@ void CCSlot::_onClear()
 {
     Slot::_onClear();
     disposeTriangles();
+    _localMatrix.setIdentity();
+    worldMatrix.setIdentity();
+    _worldMatDirty = true;
+    _textureScale = 1.0f;
 }
 
 void CCSlot::disposeTriangles()

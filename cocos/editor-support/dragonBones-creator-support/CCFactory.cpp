@@ -1,4 +1,4 @@
-﻿#include "dragonBones-creator-support/CCFactory.h"
+#include "dragonBones-creator-support/CCFactory.h"
 #include "dragonBones-creator-support/CCTextureAtlasData.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
@@ -129,6 +129,8 @@ DragonBonesData* CCFactory::parseDragonBonesDataOnly(const std::string& filePath
 			return _binaryParser.parseDragonBonesData((char*)binary, scale);
         }
     }
+    
+    return nullptr;
 }
 
 void CCFactory::handleTextureAtlasData(bool isBinary, const std::string& name, float scale)
