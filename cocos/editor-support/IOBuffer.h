@@ -38,7 +38,7 @@ namespace editor {
          *  @brief IOBuffer constructor.
          *  @param[in] arrayType The type array will be create.
          */
-        IOBuffer(se::Object::TypedArrayType arrayType);
+        IOBuffer(se::Object::TypedArrayType arrayType, std::size_t defaultSize);
         /**
          *  @brief IOBuffer destructor.
          */

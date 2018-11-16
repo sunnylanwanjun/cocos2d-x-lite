@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -38,14 +38,11 @@ using std::max;
 using namespace editor;
 using namespace spine;
 
-//static IOBuffer _vertexBuffer(se::Object::TypedArrayType::UINT32);
-//static IOBuffer _indiceBuffer(se::Object::TypedArrayType::UINT16);
-//static IOBuffer _debugBuffer(se::Object::TypedArrayType::FLOAT32);
-
 #define INIT_IOBUFFER \
-_vertexBuffer(se::Object::TypedArrayType::UINT32) \
-,_indiceBuffer(se::Object::TypedArrayType::UINT16) \
-,_debugBuffer(se::Object::TypedArrayType::FLOAT32)
+_materialBuffer(se::Object::TypedArrayType::UINT32, 128) \
+,_verticesBuffer(se::Object::TypedArrayType::FLOAT32, 8196) \
+,_indicesBuffer(se::Object::TypedArrayType::UINT16, 8196) \
+,_debugBuffer(se::Object::TypedArrayType::FLOAT32, 128)
 
 static const std::string scheduleKey = "spineScheduleKey";
 
@@ -249,20 +246,28 @@ void SpineRenderer::update (float deltaTime)
     int curBlendDst = -1;
     int curTextureIndex = -1;
     
-    int preVSegWritePos = -1;
     int preISegWritePos = -1;
-    int curVSegLen = 0;
     int curISegLen = 0;
+    int totalVLen = 0;
+    int totalILen = 0;
     
     int debugSlotsLen = 0;
     int materialLen = 0;
     
-    _vertexBuffer.reset();
+    _materialBuffer.reset();
+    _verticesBuffer.reset();
+    _indicesBuffer.reset();
     _debugBuffer.reset();
-    _indiceBuffer.reset();
     
-    //reserved 4 bytes to save material len
-    _vertexBuffer.writeUint32(0);
+    //reserved space to save material len
+    _materialBuffer.writeUint32(0);
+    //reserved space to save vertex len
+    std::size_t vertexPos = _materialBuffer.getCurPos();
+    _materialBuffer.writeUint32(0);
+    //reserved space to save index len
+    std::size_t indexPos = _materialBuffer.getCurPos();
+    _materialBuffer.writeUint32(0);
+    
     if (_debugSlots)
     {
         //reserved 4 bytes to save debug slots len
@@ -339,31 +344,24 @@ void SpineRenderer::update (float deltaTime)
         curTextureIndex = attachmentVertices->_texture->getRealTextureIndex();
         if (preTextureIndex != curTextureIndex || preBlendDst != curBlendDst || preBlendSrc != curBlendSrc)
         {
-            
-            if (preVSegWritePos != -1)
+            if (preISegWritePos != -1)
             {
-                _vertexBuffer.writeUint32(preVSegWritePos,curVSegLen);
-                _vertexBuffer.writeUint32(preISegWritePos,curISegLen);
+                _materialBuffer.writeUint32(preISegWritePos, curISegLen);
             }
             
-            _vertexBuffer.writeUint32(curTextureIndex);
-            _vertexBuffer.writeUint32(curBlendSrc);
-            _vertexBuffer.writeUint32(curBlendDst);
+            _materialBuffer.writeUint32(curTextureIndex);
+            _materialBuffer.writeUint32(curBlendSrc);
+            _materialBuffer.writeUint32(curBlendDst);
             
-            //reserve vertex segamentation lenght
-            preVSegWritePos = (int)_vertexBuffer.getCurPos();
-            _vertexBuffer.writeUint32(0);
             //reserve indice segamentation lenght
-            preISegWritePos = (int)_vertexBuffer.getCurPos();
-            _vertexBuffer.writeUint32(0);
+            preISegWritePos = (int)_materialBuffer.getCurPos();
+            _materialBuffer.writeUint32(0);
             
             preTextureIndex = curTextureIndex;
             preBlendDst = curBlendDst;
             preBlendSrc = curBlendSrc;
             
-            curVSegLen = 0;
             curISegLen = 0;
-            
             materialLen++;
         }
         
@@ -384,23 +382,24 @@ void SpineRenderer::update (float deltaTime)
             vertex->colors.a = (GLubyte)color.a;
         }
         
-        _vertexBuffer.writeBytes((char*)attachmentVertices->_triangles->verts,
+        _verticesBuffer.writeBytes((char*)attachmentVertices->_triangles->verts,
                                   attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
         
-        if (curVSegLen > 0)
+        if (totalVLen > 0)
         {
             for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++)
             {
-                _indiceBuffer.writeUint16(attachmentVertices->_triangles->indices[ii] + curVSegLen);
+                _indicesBuffer.writeUint16(attachmentVertices->_triangles->indices[ii] + totalVLen);
             }
         }
         else
         {
-            _indiceBuffer.writeBytes((char*)attachmentVertices->_triangles->indices,
+            _indicesBuffer.writeBytes((char*)attachmentVertices->_triangles->indices,
                                       attachmentVertices->_triangles->indexCount*sizeof(unsigned short));
         }
         
-        curVSegLen += attachmentVertices->_triangles->vertCount;
+        totalVLen += attachmentVertices->_triangles->vertCount;
+        totalILen += attachmentVertices->_triangles->indexCount;
         curISegLen += attachmentVertices->_triangles->indexCount;
     }
     
@@ -410,11 +409,13 @@ void SpineRenderer::update (float deltaTime)
         _debugBuffer.writeFloat32(0, debugSlotsLen);
     }
     
-    _vertexBuffer.writeUint32(0, materialLen);
-    if (preVSegWritePos != -1)
+    _materialBuffer.writeUint32(0, materialLen);
+    _materialBuffer.writeUint32(vertexPos, totalVLen);
+    _materialBuffer.writeUint32(indexPos, totalILen);
+    
+    if (preISegWritePos != -1)
     {
-        _vertexBuffer.writeUint32(preVSegWritePos, curVSegLen);
-        _vertexBuffer.writeUint32(preISegWritePos, curISegLen);
+        _materialBuffer.writeUint32(preISegWritePos, curISegLen);
     }
     
     if (_debugBones)
@@ -433,21 +434,17 @@ void SpineRenderer::update (float deltaTime)
     }
     
     // update js array buffer
-    if (_vertexBuffer.isNewBuffer || _indiceBuffer.isNewBuffer || _debugBuffer.isNewBuffer)
+    if (_materialBuffer.isNewBuffer || _verticesBuffer.isNewBuffer || _verticesBuffer.isNewBuffer || _debugBuffer.isNewBuffer)
     {
         if (_changeBufferCallback)
         {
             _changeBufferCallback();
         }
-        _vertexBuffer.isNewBuffer = false;
-        _indiceBuffer.isNewBuffer = false;
+        _materialBuffer.isNewBuffer = false;
+        _verticesBuffer.isNewBuffer = false;
+        _verticesBuffer.isNewBuffer = false;
         _debugBuffer.isNewBuffer = false;
     }
-}
-
-se_object_ptr SpineRenderer::getRenderData ()
-{
-    return _vertexBuffer.getTypeArray();
 }
 
 AttachmentVertices* SpineRenderer::getAttachmentVertices (spRegionAttachment* attachment) const
@@ -513,16 +510,6 @@ bool SpineRenderer::setAttachment (const std::string& slotName, const std::strin
 bool SpineRenderer::setAttachment (const std::string& slotName, const char* attachmentName)
 {
 	return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName) ? true : false;
-}
-
-se_object_ptr SpineRenderer::getIndiceData() const
-{
-    return _indiceBuffer.getTypeArray();
-}
-
-se_object_ptr SpineRenderer::getDebugData() const
-{
-    return _debugBuffer.getTypeArray();
 }
 
 spSkeleton* SpineRenderer::getSkeleton () const

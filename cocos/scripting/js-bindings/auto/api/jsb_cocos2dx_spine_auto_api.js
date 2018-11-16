@@ -19,6 +19,16 @@ float
 },
 
 /**
+ * @method getIndicesData
+ * @return {se::Object}
+ */
+getIndicesData : function (
+)
+{
+    return se::Object;
+},
+
+/**
  * @method paused
  * @param {bool} arg0
  */
@@ -76,6 +86,16 @@ setDebugSlotsEnabled : function (
 bool 
 )
 {
+},
+
+/**
+ * @method getMaterialData
+ * @return {se::Object}
+ */
+getMaterialData : function (
+)
+{
+    return se::Object;
 },
 
 /**
@@ -185,20 +205,10 @@ str
 },
 
 /**
- * @method getRenderData
+ * @method getVerticesData
  * @return {se::Object}
  */
-getRenderData : function (
-)
-{
-    return se::Object;
-},
-
-/**
- * @method getIndiceData
- * @return {se::Object}
- */
-getIndiceData : function (
+getVerticesData : function (
 )
 {
     return se::Object;

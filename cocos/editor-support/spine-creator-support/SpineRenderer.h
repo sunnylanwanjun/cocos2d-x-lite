@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -79,13 +79,31 @@ public:
 	bool setAttachment (const std::string& slotName, const char* attachmentName);
 
     /** Returns render data,it's a Uint32Array
-      * format is |material length|blend src|blend dst|vertex length|indice length|x|y|u|v|color4b|.....*/
-    se_object_ptr getRenderData ();
+     * format is |x|y|u|v|color4b|.....*/
+    se_object_ptr getVerticesData() const
+    {
+        return _verticesBuffer.getTypeArray();
+    }
+    
     /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
-    se_object_ptr getIndiceData () const;
+    se_object_ptr getIndicesData() const
+    {
+        return _indicesBuffer.getTypeArray();
+    }
+    
     /** Returns debug data,it's a Float32Array,
      * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
-    se_object_ptr getDebugData () const;
+    se_object_ptr getDebugData() const
+    {
+        return _debugBuffer.getTypeArray();
+    }
+    
+    /** Returns debug data,it's a Float32Array,
+     * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
+    se_object_ptr getMaterialData() const
+    {
+        return _materialBuffer.getTypeArray();
+    }
 
     void setColor (cocos2d::Color4B& color);
     void setDebugBonesEnabled (bool enabled);
@@ -139,9 +157,10 @@ protected:
     cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
     bool                _premultipliedAlpha = false;
     
-    editor::IOBuffer   _vertexBuffer;
-    editor::IOBuffer   _indiceBuffer;
-    editor::IOBuffer   _debugBuffer;
+    editor::IOBuffer _materialBuffer;
+    editor::IOBuffer _verticesBuffer;
+    editor::IOBuffer _indicesBuffer;
+    editor::IOBuffer _debugBuffer;
     bufferChangeCallback _changeBufferCallback = nullptr;
 };
 

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -25,8 +25,9 @@
 
 namespace editor {
 
-    IOBuffer::IOBuffer (se::Object::TypedArrayType arrayType)
+    IOBuffer::IOBuffer (se::Object::TypedArrayType arrayType, std::size_t defaultSize)
     : _arrayType(arrayType)
+    , _bufferSize(defaultSize)
     {
         _typeArray = TypeArrayPool::getInstance()->pop(_arrayType, _bufferSize);
         _typeArray->getTypedArrayData(&_buffer, &_bufferSize);

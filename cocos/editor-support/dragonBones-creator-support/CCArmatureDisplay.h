@@ -107,16 +107,16 @@ public:
     }
     
     /** Returns render data,it's a Uint32Array
-     * format is |material length|blend src|blend dst|vertex length|indice length|x|y|u|v|color4b|.....*/
-    se_object_ptr getRenderData() const
+     * format is |x|y|u|v|color4b|.....*/
+    se_object_ptr getVerticesData() const
     {
-        return _vertexBuffer.getTypeArray();
+        return _verticesBuffer.getTypeArray();
     }
     
     /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
-    se_object_ptr getIndiceData() const
+    se_object_ptr getIndicesData() const
     {
-        return _indiceBuffer.getTypeArray();
+        return _indicesBuffer.getTypeArray();
     }
     
     /** Returns debug data,it's a Float32Array,
@@ -124,6 +124,13 @@ public:
     se_object_ptr getDebugData() const
     {
         return _debugBuffer.getTypeArray();
+    }
+    
+    /** Returns debug data,it's a Float32Array,
+     * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
+    se_object_ptr getMaterialData() const
+    {
+        return _materialBuffer.getTypeArray();
     }
     
     void setColor(cocos2d::Color4B& color)
@@ -158,8 +165,9 @@ public:
     
 private:
     std::map<std::string,bool> _listenerIDMap;
-    editor::IOBuffer _vertexBuffer;
-    editor::IOBuffer _indiceBuffer;
+    editor::IOBuffer _materialBuffer;
+    editor::IOBuffer _verticesBuffer;
+    editor::IOBuffer _indicesBuffer;
     editor::IOBuffer _debugBuffer;
     cocos2d::Color4B _nodeColor = cocos2d::Color4B::WHITE;
     
@@ -170,10 +178,10 @@ private:
     int _curBlendDst = -1;
     int _curTextureIndex = -1;
     
-    int _preVSegWritePos = -1;
     int _preISegWritePos = -1;
-    int _curVSegLen = 0;
     int _curISegLen = 0;
+    int _totalVLen = 0;
+    int _totalILen = 0;
     
     int _debugSlotsLen = 0;
     int _materialLen = 0;
