@@ -22,9 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "TypeArrayPool.h"
-#include <vector>
 #include "base/ccMacros.h"
+#include <cstddef>
+#include <cstdint>
+#include <string>
 
 namespace editor {
     
@@ -34,98 +35,124 @@ namespace editor {
     class IOBuffer
     {
     public:
-        /**
-         *  @brief IOBuffer constructor.
-         *  @param[in] arrayType The type array will be create.
-         */
-        IOBuffer(se::Object::TypedArrayType arrayType, std::size_t defaultSize);
-        /**
-         *  @brief IOBuffer destructor.
-         */
-        ~IOBuffer();
-        /**
-         *  @brief Write float into buffer.
-         *  @param[in] pos The buffer pos begin to write.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeFloat32(std::size_t pos,float val);
-        /**
-         *  @brief Write uint32 into buffer.
-         *  @param[in] pos The buffer pos begin to write.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint32(std::size_t pos,uint32_t val);
-        /**
-         *  @brief Write bytes into buffer.
-         *  @param[in] bytes A data pointer,the data will be copy.
-         *  @param[in] bytesLen The length of the data.
-         */
-        void writeBytes(const char* bytes,std::size_t bytesLen);
-        /**
-         *  @brief Write uint32 into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint32(uint32_t val);
-        /**
-         *  @brief Write float into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeFloat32(float val);
-        /**
-         *  @brief Write uint16_t into buffer.
-         *  @param[in] val The value write into buffer.
-         */
-        void writeUint16(uint16_t val);
+        IOBuffer (std::size_t defaultSize)
+        : _bufferSize(defaultSize)
+        {
+            _buffer = new uint8_t[_bufferSize];
+        }
+        
+        IOBuffer ()
+        {
+            
+        }
+        
+        virtual ~IOBuffer ()
+        {
+            if (_buffer)
+            {
+                delete[] _buffer;
+                _buffer = nullptr;
+            }
+        }
+        
+        inline void writeUint32 (std::size_t pos, uint32_t val)
+        {
+            if (_bufferSize < pos + sizeof(val)) return;
+            uint32_t* buffer = (uint32_t*)(_buffer + pos);
+            *buffer = val;
+        }
+        
+        inline void writeFloat32 (std::size_t pos, float val)
+        {
+            if (_bufferSize < pos + sizeof(val)) return;
+            float* buffer = (float*)(_buffer + pos);
+            *buffer = val;
+        }
+        
+        inline void writeBytes (const char* bytes, std::size_t bytesLen)
+        {
+            if (_bufferSize < _curPos + bytesLen) return;
+            memcpy(_buffer + _curPos, bytes, bytesLen);
+            _curPos += bytesLen;
+        }
+        
+        inline void writeUint32 (uint32_t val) {
+            if (_bufferSize < _curPos + sizeof(val)) return;
+            uint32_t* buffer = (uint32_t*)(_buffer + _curPos);
+            *buffer = val;
+            _curPos += sizeof(val);
+        }
+        
+        inline void writeFloat32 (float val)
+        {
+            if (_bufferSize < _curPos + sizeof(val)) return;
+            float* buffer = (float*)(_buffer + _curPos);
+            *buffer = val;
+            _curPos += sizeof(val);
+        }
+        
+        inline void writeUint16 (uint16_t val)
+        {
+            if (_bufferSize < _curPos + sizeof(val)) return;
+            uint16_t* buffer = (uint16_t*)(_buffer + _curPos);
+            *buffer = val;
+            _curPos += sizeof(val);
+        }
+        
+        inline uint32_t readUint32 ()
+        {
+            uint32_t* buffer = (uint32_t*)(_buffer + _readPos);
+            _readPos += sizeof(uint32_t);
+            return *buffer;
+        }
+        
+        inline uint16_t readUint16 ()
+        {
+            uint16_t* buffer = (uint16_t*)(_buffer + _readPos);
+            _readPos += sizeof(uint16_t);
+            return *buffer;
+        }
+        
+        inline float readFloat32 ()
+        {
+            float* buffer = (float*)(_buffer + _readPos);
+            _readPos += sizeof(float);
+            return *buffer;
+        }
+        
+        inline char readUint8 ()
+        {
+            char* buffer = (char*)(_buffer + _readPos);
+            _readPos += sizeof(char);
+            return *buffer;
+        }
+        
+        inline void reset ()
+        {
+            _curPos = 0;
+            _readPos = 0;
+        }
+        
+        inline std::size_t length() const
+        {
+            return _curPos;
+        }
 
-        /**
-         *  @brief Get uint32 from buffer.
-         *  @return The value read from buffer.
-         */
-        uint32_t readUint32();
-        /**
-         *  @brief Get uint16 from buffer.
-         *  @return The value read from buffer.
-         */
-        uint16_t readUint16();
-        /**
-         *  @brief Get float32 from buffer.
-         *  @return The value read from buffer.
-         */
-        float readFloat32();
-        /**
-         *  @brief Get uint8 from buffer.
-         *  @return The value read from buffer.
-         */
-        char readUint8();
-        /**
-         *  @brief Reset buffer write/read pointer.
-         */
-        void reset();
-        /**
-         *  @brief Get JS type array.
-         */
-        se_object_ptr getTypeArray() const;
-        /**
-         *  @brief Get length of buffer.
-         */
-        std::size_t length() const;
-        /**
-         *  @brief Get current write position.
-         */
-        std::size_t getCurPos() const;
-    private:
-        /**
-         * If js array address change,will return false,or return true.
-         */
-        void checkSpace(std::size_t needLen);
-    private:
-        se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
+        inline std::size_t getCurPos() const
+        {
+            return _curPos;
+        }
+
+        inline uint8_t* getBuffer() const
+        {
+            return _buffer;
+        }
+    protected:
+        virtual void resize(std::size_t needLen);
+    protected:
         uint8_t*                    _buffer = nullptr;
-        std::size_t                 _bufferSize = 8192;
+        std::size_t                 _bufferSize = 0;
         std::size_t                 _curPos = 0;
         std::size_t                 _readPos = 0;
-        se::Object*                 _typeArray = nullptr;
-    public:
-        bool                        isNewBuffer = false;
     };
 }

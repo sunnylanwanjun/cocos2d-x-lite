@@ -29,139 +29,126 @@
 #include "base/ccTypes.h"
 #include <vector>
 #include "scripting/js-bindings/jswrapper/Object.hpp"
-#include "IOBuffer.h"
+#include "IOTypeArray.h"
+#include "EditorManager.h"
 
 namespace spine {
 
-class AttachmentVertices;
+    class AttachmentVertices;
 
-/** Draws a skeleton.
- */
-class SpineRenderer: public cocos2d::Ref {
-public:
-    static SpineRenderer* create ();
-	static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+    /** Draws a skeleton.
+     */
+    class SpineRenderer: public editor::IEditor, public cocos2d::Ref {
+    public:
+        static SpineRenderer* create ();
+        static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+        static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
-    virtual void update (float deltaTime);
+        virtual void update (float deltaTime);
 
-	spSkeleton* getSkeleton() const;
+        spSkeleton* getSkeleton() const;
 
-	void setTimeScale (float scale);
-	float getTimeScale () const;
+        void setTimeScale (float scale);
+        float getTimeScale () const;
 
-	void updateWorldTransform ();
+        void updateWorldTransform ();
 
-	void setToSetupPose ();
-	void setBonesToSetupPose ();
-	void setSlotsToSetupPose ();
-    void paused (bool value);
-    
-	/* Returns 0 if the bone was not found. */
-	spBone* findBone (const std::string& boneName) const;
-	/* Returns 0 if the slot was not found. */
-	spSlot* findSlot (const std::string& slotName) const;
-	
-	/* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
-	 * attached if the corresponding attachment from the old skin was attached. Returns false if the skin was not found.
-	 * @param skin May be empty string ("") for no skin.*/
-	bool setSkin (const std::string& skinName);
-	/** @param skin May be 0 for no skin.*/
-	bool setSkin (const char* skinName);
-	
-	/* Returns 0 if the slot or attachment was not found. */
-	spAttachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
-	/* Returns false if the slot or attachment was not found.
-	 * @param attachmentName May be empty string ("") for no attachment. */
-	bool setAttachment (const std::string& slotName, const std::string& attachmentName);
-	/* @param attachmentName May be 0 for no attachment. */
-	bool setAttachment (const std::string& slotName, const char* attachmentName);
+        void setToSetupPose ();
+        void setBonesToSetupPose ();
+        void setSlotsToSetupPose ();
+        void paused (bool value);
+        
+        /* Returns 0 if the bone was not found. */
+        spBone* findBone (const std::string& boneName) const;
+        /* Returns 0 if the slot was not found. */
+        spSlot* findSlot (const std::string& slotName) const;
+        
+        /* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
+         * attached if the corresponding attachment from the old skin was attached. Returns false if the skin was not found.
+         * @param skin May be empty string ("") for no skin.*/
+        bool setSkin (const std::string& skinName);
+        /** @param skin May be 0 for no skin.*/
+        bool setSkin (const char* skinName);
+        
+        /* Returns 0 if the slot or attachment was not found. */
+        spAttachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
+        /* Returns false if the slot or attachment was not found.
+         * @param attachmentName May be empty string ("") for no attachment. */
+        bool setAttachment (const std::string& slotName, const std::string& attachmentName);
+        /* @param attachmentName May be 0 for no attachment. */
+        bool setAttachment (const std::string& slotName, const char* attachmentName);
+        
+        /** Returns debug data,it's a Float32Array,
+         * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
+        se_object_ptr getDebugData() const
+        {
+            if (_debugBuffer)
+            {
+                return _debugBuffer->getTypeArray();
+            }
+            return nullptr;
+        }
+        
+        /** Returns debug data,it's a Uint32Array,
+         * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
+        se_object_ptr getMaterialData() const
+        {
+            if (_materialBuffer)
+            {
+                return _materialBuffer->getTypeArray();
+            }
+            return nullptr;
+        }
 
-    /** Returns render data,it's a Uint32Array
-     * format is |x|y|u|v|color4b|.....*/
-    se_object_ptr getVerticesData() const
-    {
-        return _verticesBuffer.getTypeArray();
-    }
-    
-    /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
-    se_object_ptr getIndicesData() const
-    {
-        return _indicesBuffer.getTypeArray();
-    }
-    
-    /** Returns debug data,it's a Float32Array,
-     * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
-    se_object_ptr getDebugData() const
-    {
-        return _debugBuffer.getTypeArray();
-    }
-    
-    /** Returns debug data,it's a Float32Array,
-     * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
-    se_object_ptr getMaterialData() const
-    {
-        return _materialBuffer.getTypeArray();
-    }
+        void setColor (cocos2d::Color4B& color);
+        void setDebugBonesEnabled (bool enabled);
+        void setDebugSlotsEnabled (bool enabled);
+        
+        void setOpacityModifyRGB (bool value);
+        bool isOpacityModifyRGB () const;
+        
+        void beginSchedule();
+        void stopSchedule();
+        void onEnable();
+        void onDisable();
+        
+    CC_CONSTRUCTOR_ACCESS:
+        SpineRenderer ();
+        SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+        SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
-    void setColor (cocos2d::Color4B& color);
-    void setDebugBonesEnabled (bool enabled);
-    void setDebugSlotsEnabled (bool enabled);
-    
-    void setOpacityModifyRGB (bool value);
-    bool isOpacityModifyRGB () const;
-    
-    typedef std::function<void()> bufferChangeCallback;
-    void setBufferChangeCallback(bufferChangeCallback callback)
-    {
-        _changeBufferCallback = callback;
-    }
-    
-    void beginSchedule();
-    void stopSchedule();
-    void onEnable();
-    void onDisable();
-    
-CC_CONSTRUCTOR_ACCESS:
-	SpineRenderer ();
-	SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+        virtual ~SpineRenderer ();
 
-	virtual ~SpineRenderer ();
+        void initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+        void initWithJsonFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        void initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+        void initWithBinaryFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        void initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
-	void initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	void initWithJsonFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	void initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
-    void initWithBinaryFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-    void initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+        virtual void initialize ();
+        
+    protected:
+        void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
+        virtual AttachmentVertices* getAttachmentVertices (spRegionAttachment* attachment) const;
+        virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;
 
-	virtual void initialize ();
-    
-protected:
-	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
-    virtual AttachmentVertices* getAttachmentVertices (spRegionAttachment* attachment) const;
-    virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;
-
-	bool                _ownsSkeletonData = true;
-	spAtlas*            _atlas = nullptr;
-	spAttachmentLoader* _attachmentLoader = nullptr;
-	float*              _worldVertices = nullptr;
-	spSkeleton*         _skeleton = nullptr;
-	float               _timeScale = 1;
-    bool                _paused = false;
-    
-	bool                _debugSlots = false;
-	bool                _debugBones = false;
-    cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
-    bool                _premultipliedAlpha = false;
-    
-    editor::IOBuffer _materialBuffer;
-    editor::IOBuffer _verticesBuffer;
-    editor::IOBuffer _indicesBuffer;
-    editor::IOBuffer _debugBuffer;
-    bufferChangeCallback _changeBufferCallback = nullptr;
-};
+        bool                _ownsSkeletonData = true;
+        spAtlas*            _atlas = nullptr;
+        spAttachmentLoader* _attachmentLoader = nullptr;
+        float*              _worldVertices = nullptr;
+        spSkeleton*         _skeleton = nullptr;
+        float               _timeScale = 1;
+        bool                _paused = false;
+        
+        bool                _debugSlots = false;
+        bool                _debugBones = false;
+        cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
+        bool                _premultipliedAlpha = false;
+        
+        editor::IOTypeArray* _materialBuffer = nullptr;
+        editor::IOTypeArray* _debugBuffer = nullptr;
+    };
 
 }

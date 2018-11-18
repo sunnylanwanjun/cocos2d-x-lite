@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -109,7 +109,7 @@ namespace editor{
     se::Object* TypeArrayPool::pop(arrayType type, std::size_t size)
     {
         // allocate n * 4096,fit to memory each page.
-        std::size_t fitSize = ceil(size / 4096.0f) * 4096;
+        std::size_t fitSize = ceil(size / 128.0f) * 128;
         objPool* objPoolPtr = getObjPool(type, fitSize);
         
         if (objPoolPtr->size() > 0)

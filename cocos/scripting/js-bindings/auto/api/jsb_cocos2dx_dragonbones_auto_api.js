@@ -2344,6 +2344,38 @@ updateWorldMatrix : function (
 jsbDragonBones.CCArmatureDisplay = {
 
 /**
+ * @method getAnimation
+ * @return {dragonBones::Animation}
+ */
+getAnimation : function (
+)
+{
+    return dragonBones::Animation;
+},
+
+/**
+ * @method hasDBEventListener
+ * @param {String} arg0
+ * @return {bool}
+ */
+hasDBEventListener : function (
+str 
+)
+{
+    return false;
+},
+
+/**
+ * @method setColor
+ * @param {color4b_object} arg0
+ */
+setColor : function (
+color4b 
+)
+{
+},
+
+/**
  * @method dbInit
  * @param {dragonBones::Armature} arg0
  */
@@ -2366,38 +2398,6 @@ func
 },
 
 /**
- * @method getRootDisplay
- * @return {dragonBones::CCArmatureDisplay}
- */
-getRootDisplay : function (
-)
-{
-    return dragonBones::CCArmatureDisplay;
-},
-
-/**
- * @method getIndicesData
- * @return {se::Object}
- */
-getIndicesData : function (
-)
-{
-    return se::Object;
-},
-
-/**
- * @method removeDBEventListener
- * @param {String} arg0
- * @param {function} arg1
- */
-removeDBEventListener : function (
-str, 
-func 
-)
-{
-},
-
-/**
  * @method getMaterialData
  * @return {se::Object}
  */
@@ -2405,6 +2405,26 @@ getMaterialData : function (
 )
 {
     return se::Object;
+},
+
+/**
+ * @method dbUpdate
+ */
+dbUpdate : function (
+)
+{
+},
+
+/**
+ * @method dispatchDBEvent
+ * @param {String} arg0
+ * @param {dragonBones::EventObject} arg1
+ */
+dispatchDBEvent : function (
+str, 
+eventobject 
+)
+{
 },
 
 /**
@@ -2426,73 +2446,13 @@ bool
 },
 
 /**
- * @method dbClear
+ * @method getRootDisplay
+ * @return {dragonBones::CCArmatureDisplay}
  */
-dbClear : function (
+getRootDisplay : function (
 )
 {
-},
-
-/**
- * @method dispatchDBEvent
- * @param {String} arg0
- * @param {dragonBones::EventObject} arg1
- */
-dispatchDBEvent : function (
-str, 
-eventobject 
-)
-{
-},
-
-/**
- * @method setBufferChangeCallback
- * @param {function} arg0
- */
-setBufferChangeCallback : function (
-func 
-)
-{
-},
-
-/**
- * @method getDebugData
- * @return {se::Object}
- */
-getDebugData : function (
-)
-{
-    return se::Object;
-},
-
-/**
- * @method hasDBEventListener
- * @param {String} arg0
- * @return {bool}
- */
-hasDBEventListener : function (
-str 
-)
-{
-    return false;
-},
-
-/**
- * @method dbUpdate
- */
-dbUpdate : function (
-)
-{
-},
-
-/**
- * @method getVerticesData
- * @return {se::Object}
- */
-getVerticesData : function (
-)
-{
-    return se::Object;
+    return dragonBones::CCArmatureDisplay;
 },
 
 /**
@@ -2516,21 +2476,21 @@ bool
 },
 
 /**
- * @method getAnimation
- * @return {dragonBones::Animation}
+ * @method removeDBEventListener
+ * @param {String} arg0
+ * @param {function} arg1
  */
-getAnimation : function (
+removeDBEventListener : function (
+str, 
+func 
 )
 {
-    return dragonBones::Animation;
 },
 
 /**
- * @method setColor
- * @param {color4b_object} arg0
+ * @method dbClear
  */
-setColor : function (
-color4b 
+dbClear : function (
 )
 {
 },
@@ -2555,6 +2515,16 @@ vec2
 )
 {
     return cc.Vec2;
+},
+
+/**
+ * @method getDebugData
+ * @return {se::Object}
+ */
+getDebugData : function (
+)
+{
+    return se::Object;
 },
 
 /**
@@ -2624,6 +2594,26 @@ float
 },
 
 /**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
+ * @method remove
+ * @param {dragonBones::Armature} arg0
+ */
+remove : function (
+armature 
+)
+{
+},
+
+/**
  * @method getTextureAtlasDataByIndex
  * @param {String} arg0
  * @param {int} arg1
@@ -2635,16 +2625,6 @@ int
 )
 {
     return dragonBones::CCTextureAtlasData;
-},
-
-/**
- * @method remove
- * @param {dragonBones::Armature} arg0
- */
-remove : function (
-armature 
-)
-{
 },
 
 /**

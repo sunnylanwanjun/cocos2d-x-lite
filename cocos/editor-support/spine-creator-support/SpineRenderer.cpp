@@ -30,6 +30,7 @@
 #include "IOBuffer.h"
 #include "platform/CCApplication.h"
 #include "base/CCScheduler.h"
+#include "EditorDef.h"
 
 USING_NS_CC;
 using std::min;
@@ -37,12 +38,6 @@ using std::max;
 
 using namespace editor;
 using namespace spine;
-
-#define INIT_IOBUFFER \
-_materialBuffer(se::Object::TypedArrayType::UINT32, 128) \
-,_verticesBuffer(se::Object::TypedArrayType::FLOAT32, 8196) \
-,_indicesBuffer(se::Object::TypedArrayType::UINT16, 8196) \
-,_debugBuffer(se::Object::TypedArrayType::FLOAT32, 128)
 
 static const std::string scheduleKey = "spineScheduleKey";
 
@@ -81,21 +76,16 @@ void SpineRenderer::initialize ()
         _worldVertices = new float[1000]; // Max number of vertices per mesh.
     
     beginSchedule();
+    
+    if (_materialBuffer == nullptr)
+    {
+        _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER);
+    }
 }
 
 void SpineRenderer::beginSchedule()
 {
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    if (!scheduler->isScheduled(scheduleKey, this))
-    {
-        scheduler->schedule(
-        [&](float passedTime)
-        {
-            this->update(passedTime);
-        },
-        this, 0, false, scheduleKey);
-    }
+    EditorManager::getInstance()->addTimer(this);
 }
 
 void SpineRenderer::onEnable()
@@ -110,9 +100,7 @@ void SpineRenderer::onDisable()
 
 void SpineRenderer::stopSchedule()
 {
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    scheduler->unschedule(scheduleKey, this);
+    EditorManager::getInstance()->removeTimer(this);
 }
 
 void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkeletonData)
@@ -122,24 +110,20 @@ void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkel
 }
 
 SpineRenderer::SpineRenderer ()
-:INIT_IOBUFFER
 {
 }
 
 SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
-:INIT_IOBUFFER
 {
 	initWithData(skeletonData, ownsSkeletonData);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
-:INIT_IOBUFFER
 {
 	initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
-:INIT_IOBUFFER
 {
 	initWithJsonFile(skeletonDataFile, atlasFile, scale);
 }
@@ -151,6 +135,18 @@ SpineRenderer::~SpineRenderer ()
 	if (_atlas) spAtlas_dispose(_atlas);
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
 	delete [] _worldVertices;
+    
+    if (_materialBuffer)
+    {
+        delete _materialBuffer;
+        _materialBuffer = nullptr;
+    }
+    
+    if (_debugBuffer)
+    {
+        delete _debugBuffer;
+        _debugBuffer = nullptr;
+    }
     
     stopSchedule();
 }
@@ -238,6 +234,9 @@ void SpineRenderer::update (float deltaTime)
     
     Color4F color;
     AttachmentVertices* attachmentVertices = nullptr;
+    auto mgr = EditorManager::getInstance();
+    editor::IOBuffer& vb = mgr->vb;
+    editor::IOBuffer& ib = mgr->ib;
     
     int preBlendSrc = -1;
     int preBlendDst = -1;
@@ -248,31 +247,31 @@ void SpineRenderer::update (float deltaTime)
     
     int preISegWritePos = -1;
     int curISegLen = 0;
-    int totalVLen = 0;
-    int totalILen = 0;
     
     int debugSlotsLen = 0;
     int materialLen = 0;
     
-    _materialBuffer.reset();
-    _verticesBuffer.reset();
-    _indicesBuffer.reset();
-    _debugBuffer.reset();
+    _materialBuffer->reset();
+    
+    if (_debugSlots || _debugBones)
+    {
+        if (_debugBuffer == nullptr)
+        {
+            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER);
+        }
+        _debugBuffer->reset();
+        
+        if (_debugSlots)
+        {
+            //reserved 4 bytes to save debug slots len
+            _debugBuffer->writeUint32(0);
+        }
+    }
     
     //reserved space to save material len
-    _materialBuffer.writeUint32(0);
-    //reserved space to save vertex len
-    std::size_t vertexPos = _materialBuffer.getCurPos();
-    _materialBuffer.writeUint32(0);
-    //reserved space to save index len
-    std::size_t indexPos = _materialBuffer.getCurPos();
-    _materialBuffer.writeUint32(0);
-    
-    if (_debugSlots)
-    {
-        //reserved 4 bytes to save debug slots len
-        _debugBuffer.writeUint32(0);
-    }
+    _materialBuffer->writeUint32(0);
+    //reserved space to save index offset
+    _materialBuffer->writeUint32((uint32_t)ib.getCurPos()/sizeof(unsigned short));
     
     for (int i = 0, n = _skeleton->slotsCount; i < n; ++i)
     {
@@ -293,14 +292,14 @@ void SpineRenderer::update (float deltaTime)
                 
                 if(_debugSlots)
                 {
-                    _debugBuffer.writeFloat32(_worldVertices[0]);
-                    _debugBuffer.writeFloat32(_worldVertices[1]);
-                    _debugBuffer.writeFloat32(_worldVertices[2]);
-                    _debugBuffer.writeFloat32(_worldVertices[3]);
-                    _debugBuffer.writeFloat32(_worldVertices[4]);
-                    _debugBuffer.writeFloat32(_worldVertices[5]);
-                    _debugBuffer.writeFloat32(_worldVertices[6]);
-                    _debugBuffer.writeFloat32(_worldVertices[7]);
+                    _debugBuffer->writeFloat32(_worldVertices[0]);
+                    _debugBuffer->writeFloat32(_worldVertices[1]);
+                    _debugBuffer->writeFloat32(_worldVertices[2]);
+                    _debugBuffer->writeFloat32(_worldVertices[3]);
+                    _debugBuffer->writeFloat32(_worldVertices[4]);
+                    _debugBuffer->writeFloat32(_worldVertices[5]);
+                    _debugBuffer->writeFloat32(_worldVertices[6]);
+                    _debugBuffer->writeFloat32(_worldVertices[7]);
                     debugSlotsLen+=8;
                 }
                 
@@ -346,16 +345,16 @@ void SpineRenderer::update (float deltaTime)
         {
             if (preISegWritePos != -1)
             {
-                _materialBuffer.writeUint32(preISegWritePos, curISegLen);
+                _materialBuffer->writeUint32(preISegWritePos, curISegLen);
             }
             
-            _materialBuffer.writeUint32(curTextureIndex);
-            _materialBuffer.writeUint32(curBlendSrc);
-            _materialBuffer.writeUint32(curBlendDst);
+            _materialBuffer->writeUint32(curTextureIndex);
+            _materialBuffer->writeUint32(curBlendSrc);
+            _materialBuffer->writeUint32(curBlendDst);
             
             //reserve indice segamentation lenght
-            preISegWritePos = (int)_materialBuffer.getCurPos();
-            _materialBuffer.writeUint32(0);
+            preISegWritePos = (int)_materialBuffer->getCurPos();
+            _materialBuffer->writeUint32(0);
             
             preTextureIndex = curTextureIndex;
             preBlendDst = curBlendDst;
@@ -382,68 +381,51 @@ void SpineRenderer::update (float deltaTime)
             vertex->colors.a = (GLubyte)color.a;
         }
         
-        _verticesBuffer.writeBytes((char*)attachmentVertices->_triangles->verts,
+        auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
+        vb.writeBytes((char*)attachmentVertices->_triangles->verts,
                                   attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
         
-        if (totalVLen > 0)
+        if (vertexOffset > 0)
         {
             for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++)
             {
-                _indicesBuffer.writeUint16(attachmentVertices->_triangles->indices[ii] + totalVLen);
+                ib.writeUint16(attachmentVertices->_triangles->indices[ii] + vertexOffset);
             }
         }
         else
         {
-            _indicesBuffer.writeBytes((char*)attachmentVertices->_triangles->indices,
+            ib.writeBytes((char*)attachmentVertices->_triangles->indices,
                                       attachmentVertices->_triangles->indexCount*sizeof(unsigned short));
         }
         
-        totalVLen += attachmentVertices->_triangles->vertCount;
-        totalILen += attachmentVertices->_triangles->indexCount;
         curISegLen += attachmentVertices->_triangles->indexCount;
     }
     
     if (_debugSlots)
     {
-        //add 0.1 is avoid precision trouble
-        _debugBuffer.writeFloat32(0, debugSlotsLen);
+        _debugBuffer->writeFloat32(0, debugSlotsLen);
     }
     
-    _materialBuffer.writeUint32(0, materialLen);
-    _materialBuffer.writeUint32(vertexPos, totalVLen);
-    _materialBuffer.writeUint32(indexPos, totalILen);
+    _materialBuffer->writeUint32(0, materialLen);
     
     if (preISegWritePos != -1)
     {
-        _materialBuffer.writeUint32(preISegWritePos, curISegLen);
+        _materialBuffer->writeUint32(preISegWritePos, curISegLen);
     }
     
     if (_debugBones)
     {
-        _debugBuffer.writeFloat32(_skeleton->bonesCount*4);
+        _debugBuffer->writeFloat32(_skeleton->bonesCount*4);
         for (int i = 0, n = _skeleton->bonesCount; i < n; i++)
         {
             spBone *bone = _skeleton->bones[i];
             float x = bone->data->length * bone->a + bone->worldX;
             float y = bone->data->length * bone->c + bone->worldY;
-            _debugBuffer.writeFloat32(bone->worldX);
-            _debugBuffer.writeFloat32(bone->worldY);
-            _debugBuffer.writeFloat32(x);
-            _debugBuffer.writeFloat32(y);
+            _debugBuffer->writeFloat32(bone->worldX);
+            _debugBuffer->writeFloat32(bone->worldY);
+            _debugBuffer->writeFloat32(x);
+            _debugBuffer->writeFloat32(y);
         }
-    }
-    
-    // update js array buffer
-    if (_materialBuffer.isNewBuffer || _verticesBuffer.isNewBuffer || _verticesBuffer.isNewBuffer || _debugBuffer.isNewBuffer)
-    {
-        if (_changeBufferCallback)
-        {
-            _changeBufferCallback();
-        }
-        _materialBuffer.isNewBuffer = false;
-        _verticesBuffer.isNewBuffer = false;
-        _verticesBuffer.isNewBuffer = false;
-        _debugBuffer.isNewBuffer = false;
     }
 }
 

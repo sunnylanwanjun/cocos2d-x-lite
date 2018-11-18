@@ -25,8 +25,7 @@
 
 #include "dragonBones/DragonBonesHeaders.h"
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
-#include "platform/CCApplication.h"
-#include "base/CCScheduler.h"
+#include "EditorManager.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -42,7 +41,7 @@ class CCTextureAtlasData;
  * @version DragonBones 3.0
  * @language zh_CN
  */
-class CCFactory : public BaseFactory
+class CCFactory : public BaseFactory, public editor::IEditor
 {
     DRAGONBONES_DISALLOW_COPY_AND_ASSIGN(CCFactory)
 
@@ -109,21 +108,20 @@ public:
             _dragonBonesInstance = new DragonBones(eventManager);
             // _dragonBonesInstance->yDown = false;
 
-            cocos2d::Application::getInstance()->getScheduler()->schedule(
-                [&](float passedTime)
-                {
-                    _dragonBonesInstance->advanceTime(passedTime);
-                },
-                this, 0, false, "dragonBonesClock"
-            );
+            editor::EditorManager::getInstance()->addTimer(this);
         }
 
         _dragonBones = _dragonBonesInstance;
     }
     
+    virtual void update(float dt) override
+    {
+        _dragonBonesInstance->advanceTime(dt);
+    }
+    
     void stopSchedule()
     {
-        cocos2d::Application::getInstance()->getScheduler()->unschedule("dragonBonesClock", this);
+        editor::EditorManager::getInstance()->removeTimer(this);
     }
     
     /*

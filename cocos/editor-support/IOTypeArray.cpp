@@ -21,11 +21,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "IOBuffer.h"
+#include "IOTypeArray.h"
 
 namespace editor {
-
-    void IOBuffer::resize (std::size_t needLen)
+    
+    void IOTypeArray::resize (std::size_t needLen)
     {
         std::size_t hasLen = _bufferSize - _curPos;
         if (hasLen < needLen)
@@ -33,13 +33,19 @@ namespace editor {
             std::size_t addLen = needLen - hasLen + 128;
             std::size_t newLen = _bufferSize + addLen;
             
-            uint8_t* newBuffer = new uint8_t[newLen];
+            se::Object* newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
+            
+            uint8_t* newBuffer = nullptr;
+            se::AutoHandleScope hs;
+            newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
             memcpy(newBuffer, _buffer, _bufferSize);
             
-            delete[] _buffer;
+            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
+            
+            _typeArray = newTypeBuffer;
             _buffer = newBuffer;
             _bufferSize = newLen;
+            isNewBuffer = true;
         }
     }
-
 }

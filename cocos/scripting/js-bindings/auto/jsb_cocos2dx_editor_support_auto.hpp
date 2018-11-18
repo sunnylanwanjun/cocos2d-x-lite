@@ -18,3 +18,16 @@ SE_DECLARE_FUNC(js_cocos2dx_editor_support_Texture2D_setRealTextureIndex);
 SE_DECLARE_FUNC(js_cocos2dx_editor_support_Texture2D_setTexParameters);
 SE_DECLARE_FUNC(js_cocos2dx_editor_support_Texture2D_Texture2D);
 
+extern se::Object* __jsb_editor_EditorManager_proto;
+extern se::Class* __jsb_editor_EditorManager_class;
+
+bool js_register_editor_EditorManager(se::Object* obj);
+bool register_all_cocos2dx_editor_support(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_addTimer);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_removeTimer);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_getGLVBID);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_getGLIBID);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_destroyInstance);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_getInstance);
+SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_EditorManager);
+

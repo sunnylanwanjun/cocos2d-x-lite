@@ -2,6 +2,7 @@
 #include "scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "scripting/js-bindings/manual/jsb_global.h"
 #include "editor-support/editor-adapter.h"
+#include "editor-support/EditorManager.h"
 
 se::Object* __jsb_editor_Texture2D_proto = nullptr;
 se::Class* __jsb_editor_Texture2D_class = nullptr;
@@ -234,6 +235,161 @@ bool js_register_cocos2dx_editor_support_Texture2D(se::Object* obj)
     return true;
 }
 
+se::Object* __jsb_editor_EditorManager_proto = nullptr;
+se::Class* __jsb_editor_EditorManager_class = nullptr;
+
+static bool js_cocos2dx_editor_support_EditorManager_addTimer(se::State& s)
+{
+    editor::EditorManager* cobj = (editor::EditorManager*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_EditorManager_addTimer : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        editor::IEditor* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_EditorManager_addTimer : Error processing arguments");
+        cobj->addTimer(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_addTimer)
+
+static bool js_cocos2dx_editor_support_EditorManager_removeTimer(se::State& s)
+{
+    editor::EditorManager* cobj = (editor::EditorManager*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_EditorManager_removeTimer : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        editor::IEditor* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_EditorManager_removeTimer : Error processing arguments");
+        cobj->removeTimer(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_removeTimer)
+
+static bool js_cocos2dx_editor_support_EditorManager_getGLVBID(se::State& s)
+{
+    editor::EditorManager* cobj = (editor::EditorManager*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_EditorManager_getGLVBID : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        unsigned int result = cobj->getGLVBID();
+        ok &= uint32_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_EditorManager_getGLVBID : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_getGLVBID)
+
+static bool js_cocos2dx_editor_support_EditorManager_getGLIBID(se::State& s)
+{
+    editor::EditorManager* cobj = (editor::EditorManager*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_EditorManager_getGLIBID : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        unsigned int result = cobj->getGLIBID();
+        ok &= uint32_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_EditorManager_getGLIBID : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_getGLIBID)
+
+static bool js_cocos2dx_editor_support_EditorManager_destroyInstance(se::State& s)
+{
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        editor::EditorManager::destroyInstance();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_destroyInstance)
+
+static bool js_cocos2dx_editor_support_EditorManager_getInstance(se::State& s)
+{
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        editor::EditorManager* result = editor::EditorManager::getInstance();
+        ok &= native_ptr_to_seval<editor::EditorManager>((editor::EditorManager*)result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_EditorManager_getInstance : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_EditorManager_getInstance)
+
+SE_DECLARE_FINALIZE_FUNC(js_editor_EditorManager_finalize)
+
+static bool js_cocos2dx_editor_support_EditorManager_constructor(se::State& s)
+{
+    editor::EditorManager* cobj = new (std::nothrow) editor::EditorManager();
+    s.thisObject()->setPrivateData(cobj);
+    se::NonRefNativePtrCreatedByCtorMap::emplace(cobj);
+    return true;
+}
+SE_BIND_CTOR(js_cocos2dx_editor_support_EditorManager_constructor, __jsb_editor_EditorManager_class, js_editor_EditorManager_finalize)
+
+
+
+
+static bool js_editor_EditorManager_finalize(se::State& s)
+{
+    CCLOGINFO("jsbindings: finalizing JS object %p (editor::EditorManager)", s.nativeThisObject());
+    auto iter = se::NonRefNativePtrCreatedByCtorMap::find(s.nativeThisObject());
+    if (iter != se::NonRefNativePtrCreatedByCtorMap::end())
+    {
+        se::NonRefNativePtrCreatedByCtorMap::erase(iter);
+        editor::EditorManager* cobj = (editor::EditorManager*)s.nativeThisObject();
+        delete cobj;
+    }
+    return true;
+}
+SE_BIND_FINALIZE_FUNC(js_editor_EditorManager_finalize)
+
+bool js_register_cocos2dx_editor_support_EditorManager(se::Object* obj)
+{
+    auto cls = se::Class::create("EditorManager", obj, nullptr, _SE(js_cocos2dx_editor_support_EditorManager_constructor));
+
+    cls->defineFunction("addTimer", _SE(js_cocos2dx_editor_support_EditorManager_addTimer));
+    cls->defineFunction("removeTimer", _SE(js_cocos2dx_editor_support_EditorManager_removeTimer));
+    cls->defineFunction("getGLVBID", _SE(js_cocos2dx_editor_support_EditorManager_getGLVBID));
+    cls->defineFunction("getGLIBID", _SE(js_cocos2dx_editor_support_EditorManager_getGLIBID));
+    cls->defineStaticFunction("destroyInstance", _SE(js_cocos2dx_editor_support_EditorManager_destroyInstance));
+    cls->defineStaticFunction("getInstance", _SE(js_cocos2dx_editor_support_EditorManager_getInstance));
+    cls->defineFinalizeFunction(_SE(js_editor_EditorManager_finalize));
+    cls->install();
+    JSBClassType::registerClass<editor::EditorManager>(cls);
+
+    __jsb_editor_EditorManager_proto = cls->getProto();
+    __jsb_editor_EditorManager_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
 bool register_all_cocos2dx_editor_support(se::Object* obj)
 {
     // Get the ns
@@ -246,6 +402,7 @@ bool register_all_cocos2dx_editor_support(se::Object* obj)
     }
     se::Object* ns = nsVal.toObject();
 
+    js_register_cocos2dx_editor_support_EditorManager(ns);
     js_register_cocos2dx_editor_support_Texture2D(ns);
     return true;
 }

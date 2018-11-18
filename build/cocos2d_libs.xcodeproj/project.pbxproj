@@ -151,6 +151,16 @@
 		0435590F217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
 		04355914217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
 		04355915217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
+		046B688A219FA61200B33469 /* EditorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B6888219FA61200B33469 /* EditorManager.cpp */; };
+		046B688B219FA61200B33469 /* EditorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B6888219FA61200B33469 /* EditorManager.cpp */; };
+		046B688C219FA61200B33469 /* EditorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B6889219FA61200B33469 /* EditorManager.h */; };
+		046B688D219FA61200B33469 /* EditorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B6889219FA61200B33469 /* EditorManager.h */; };
+		046B689021A00F5600B33469 /* IOTypeArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B688E21A00F5600B33469 /* IOTypeArray.cpp */; };
+		046B689121A00F5600B33469 /* IOTypeArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B688E21A00F5600B33469 /* IOTypeArray.cpp */; };
+		046B689221A00F5600B33469 /* IOTypeArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B688F21A00F5600B33469 /* IOTypeArray.h */; };
+		046B689321A00F5600B33469 /* IOTypeArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B688F21A00F5600B33469 /* IOTypeArray.h */; };
+		046B689521A10D5800B33469 /* EditorDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* EditorDef.h */; };
+		046B689621A10D5800B33469 /* EditorDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* EditorDef.h */; };
 		046E03ED21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EE21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EF21804E6B00B24E2D /* SpineAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E121804E6A00B24E2D /* SpineAnimation.cpp */; };
@@ -1216,6 +1226,11 @@
 		04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_spine_auto.cpp; sourceTree = "<group>"; };
 		0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
 		0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
+		046B6888219FA61200B33469 /* EditorManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditorManager.cpp; path = "../cocos/editor-support/EditorManager.cpp"; sourceTree = "<group>"; };
+		046B6889219FA61200B33469 /* EditorManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EditorManager.h; path = "../cocos/editor-support/EditorManager.h"; sourceTree = "<group>"; };
+		046B688E21A00F5600B33469 /* IOTypeArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IOTypeArray.cpp; path = "../cocos/editor-support/IOTypeArray.cpp"; sourceTree = "<group>"; };
+		046B688F21A00F5600B33469 /* IOTypeArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOTypeArray.h; path = "../cocos/editor-support/IOTypeArray.h"; sourceTree = "<group>"; };
+		046B689421A10D5800B33469 /* EditorDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EditorDef.h; path = "../cocos/editor-support/EditorDef.h"; sourceTree = "<group>"; };
 		046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreatorAttachmentLoader.cpp; path = "../cocos/editor-support/spine-creator-support/CreatorAttachmentLoader.cpp"; sourceTree = "<group>"; };
 		046E03E121804E6A00B24E2D /* SpineAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpineAnimation.cpp; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.cpp"; sourceTree = "<group>"; };
 		046E03E221804E6A00B24E2D /* SpineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpineAnimation.h; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.h"; sourceTree = "<group>"; };
@@ -1846,6 +1861,11 @@
 				04355812217EADB900B9C056 /* spine */,
 				04AF62FD219190ED00AED9DE /* TypeArrayPool.cpp */,
 				04AF62FE219190ED00AED9DE /* TypeArrayPool.h */,
+				046B6888219FA61200B33469 /* EditorManager.cpp */,
+				046B6889219FA61200B33469 /* EditorManager.h */,
+				046B688E21A00F5600B33469 /* IOTypeArray.cpp */,
+				046B688F21A00F5600B33469 /* IOTypeArray.h */,
+				046B689421A10D5800B33469 /* EditorDef.h */,
 			);
 			name = "editor-support";
 			sourceTree = "<group>";
@@ -3051,6 +3071,7 @@
 				ED30579B1BEC77B70083C3ED /* ConvertUTF.h in Headers */,
 				46FDDA75202ACC6A00931238 /* Config.h in Headers */,
 				469303822046AE05004A3D6C /* Value.hpp in Headers */,
+				046B689521A10D5800B33469 /* EditorDef.h in Headers */,
 				46FDDAC3202ACC6A00931238 /* FrameBuffer.h in Headers */,
 				4617863D20522469008256E1 /* HttpResponse.h in Headers */,
 				1A29D7A320566CAC00168D9A /* CCCanvasRenderingContext2D.h in Headers */,
@@ -3104,7 +3125,9 @@
 				461786632052607E008256E1 /* jsb_socketio.hpp in Headers */,
 				046E06BD2185B49F00B24E2D /* UserData.h in Headers */,
 				46FDDBDD202ADDCE00931238 /* TGAlib.h in Headers */,
+				046B688C219FA61200B33469 /* EditorManager.h in Headers */,
 				BAEA45551E279D5C00FA219F /* tinydir.h in Headers */,
+				046B689221A00F5600B33469 /* IOTypeArray.h in Headers */,
 				46FDDAB7202ACC6A00931238 /* IndexBuffer.h in Headers */,
 				4617864520522469008256E1 /* HttpAsynConnection-apple.h in Headers */,
 				4617865D2052607E008256E1 /* jsb_xmlhttprequest.hpp in Headers */,
@@ -3343,6 +3366,7 @@
 				469303932046AE05004A3D6C /* SeApi.h in Headers */,
 				46FDDA84202ACC6A00931238 /* Technique.h in Headers */,
 				1A29D76C205665BE00168D9A /* jsb_cocos2dx_auto.hpp in Headers */,
+				046B688D219FA61200B33469 /* EditorManager.h in Headers */,
 				046E06792185B42500B24E2D /* BaseObject.h in Headers */,
 				46FDDBB8202ADDCE00931238 /* ccUtils.h in Headers */,
 				046E06552185B41B00B24E2D /* Bone.h in Headers */,
@@ -3375,6 +3399,7 @@
 				46AE3FFE2092F3A600F3A228 /* util.h in Headers */,
 				046E06652185B41B00B24E2D /* Armature.h in Headers */,
 				046E06692185B41B00B24E2D /* Constraint.h in Headers */,
+				046B689621A10D5800B33469 /* EditorDef.h in Headers */,
 				46FDDA82202ACC6A00931238 /* RendererUtils.h in Headers */,
 				40AEF7B7216D982600729AA5 /* jsb_webview_auto.hpp in Headers */,
 				50ABC0101926664800A911A9 /* CCFileUtils.h in Headers */,
@@ -3418,6 +3443,7 @@
 				1A28FF6A1F20AFAB007A1D9D /* SRConstants.h in Headers */,
 				50ABBFFE1926664800A911A9 /* CCFileUtils-apple.h in Headers */,
 				046E061F2185B37100B24E2D /* CCDragonBonesHeaders.h in Headers */,
+				046B689321A00F5600B33469 /* IOTypeArray.h in Headers */,
 				46FDDBEA202ADDCE00931238 /* CCAutoreleasePool.h in Headers */,
 				461786642052607E008256E1 /* jsb_socketio.hpp in Headers */,
 				40AEF7C1216DF22500729AA5 /* jsb_video_auto.hpp in Headers */,
@@ -3868,6 +3894,7 @@
 				4693043C2046AE06004A3D6C /* jsb_gfx_manual.cpp in Sources */,
 				469303682046AE05004A3D6C /* State.cpp in Sources */,
 				4693039A2046AE05004A3D6C /* Utils.cpp in Sources */,
+				046B689021A00F5600B33469 /* IOTypeArray.cpp in Sources */,
 				04355890217EAE1B00B9C056 /* PathConstraint.c in Sources */,
 				046E06162185B37100B24E2D /* CCSlot.cpp in Sources */,
 				0435587C217EAE1B00B9C056 /* AttachmentLoader.c in Sources */,
@@ -3881,6 +3908,7 @@
 				1AAAC8F1205CB6E9005321B9 /* AudioEngine.cpp in Sources */,
 				046E06F72189990700B24E2D /* editor-adapter.cpp in Sources */,
 				46FDDAE5202ACC6B00931238 /* IndexBuffer.cpp in Sources */,
+				046B688A219FA61200B33469 /* EditorManager.cpp in Sources */,
 				1A29D76F205665D200168D9A /* jsb_cocos2dx_manual.cpp in Sources */,
 				50ABC00D1926664800A911A9 /* CCFileUtils.cpp in Sources */,
 				46FDDBA3202ADDCE00931238 /* pvr.cpp in Sources */,
@@ -4022,6 +4050,7 @@
 				4693038F2046AE05004A3D6C /* Value.cpp in Sources */,
 				469303A12046AE05004A3D6C /* ScriptEngine.mm in Sources */,
 				046E06EA2185B4A500B24E2D /* JSONDataParser.cpp in Sources */,
+				046B688B219FA61200B33469 /* EditorManager.cpp in Sources */,
 				46FDDB8C202ADDCE00931238 /* CCAutoreleasePool.cpp in Sources */,
 				461786622052607E008256E1 /* jsb_socketio.cpp in Sources */,
 				4693039F2046AE05004A3D6C /* Object.mm in Sources */,
@@ -4041,6 +4070,7 @@
 				46FDDA72202ACC6A00931238 /* Scene.cpp in Sources */,
 				046E06732185B42500B24E2D /* BaseObject.cpp in Sources */,
 				043558BB217EAE1B00B9C056 /* SkeletonBinary.c in Sources */,
+				046B689121A00F5600B33469 /* IOTypeArray.cpp in Sources */,
 				046E06D22185B49F00B24E2D /* DisplayData.cpp in Sources */,
 				1A52DB7D205BCDD000350EE3 /* Utils.cpp in Sources */,
 				1A29D770205665D200168D9A /* jsb_cocos2dx_manual.cpp in Sources */,

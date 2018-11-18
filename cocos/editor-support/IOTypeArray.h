@@ -21,25 +21,40 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+#pragma once
+
+#include "TypeArrayPool.h"
 #include "IOBuffer.h"
+#include "base/ccMacros.h"
 
 namespace editor {
-
-    void IOBuffer::resize (std::size_t needLen)
-    {
-        std::size_t hasLen = _bufferSize - _curPos;
-        if (hasLen < needLen)
+    class IOTypeArray: public IOBuffer {
+    public:
+        IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize)
+        : _arrayType(arrayType)
         {
-            std::size_t addLen = needLen - hasLen + 128;
-            std::size_t newLen = _bufferSize + addLen;
-            
-            uint8_t* newBuffer = new uint8_t[newLen];
-            memcpy(newBuffer, _buffer, _bufferSize);
-            
-            delete[] _buffer;
-            _buffer = newBuffer;
-            _bufferSize = newLen;
+            _bufferSize = defaultSize;
+            _typeArray = TypeArrayPool::getInstance()->pop(_arrayType, _bufferSize);
+            se::AutoHandleScope hs;
+            _typeArray->getTypedArrayData(&_buffer, &_bufferSize);
         }
-    }
-
+        
+        ~IOTypeArray()
+        {
+            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
+            _typeArray = nullptr;
+        }
+        
+        inline se_object_ptr getTypeArray () const
+        {
+            return _typeArray;
+        }
+    protected:
+        virtual void resize(std::size_t needLen) override;
+    private:
+        se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
+        se::Object*                 _typeArray = nullptr;
+    public:
+        bool                        isNewBuffer = false;
+    };
 }

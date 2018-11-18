@@ -1,6 +1,7 @@
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
 #include "IOBuffer.h"
+#include "EditorDef.h"
 
 using namespace editor;
 
@@ -23,17 +24,24 @@ CCArmatureDisplay* CCArmatureDisplay::create()
 }
 
 CCArmatureDisplay::CCArmatureDisplay()
-:_materialBuffer(se::Object::TypedArrayType::UINT32, 128)
-,_verticesBuffer(se::Object::TypedArrayType::FLOAT32, 8196)
-,_indicesBuffer(se::Object::TypedArrayType::UINT16, 8196)
-,_debugBuffer(se::Object::TypedArrayType::FLOAT32, 128)
 {
-    
+    _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER);
 }
 
 CCArmatureDisplay::~CCArmatureDisplay()
 {
     dispose();
+    if (_materialBuffer)
+    {
+        delete _materialBuffer;
+        _materialBuffer = nullptr;
+    }
+
+    if (_debugBuffer)
+    {
+        delete _debugBuffer;
+        _debugBuffer = nullptr;
+    }
 }
 
 void CCArmatureDisplay::dbInit(Armature* armature)
@@ -61,10 +69,7 @@ void CCArmatureDisplay::dbUpdate()
     if (this->_armature->getParent())
         return;
     
-    _materialBuffer.reset();
-    _verticesBuffer.reset();
-    _debugBuffer.reset();
-    _indicesBuffer.reset();
+    _materialBuffer->reset();
     
     _preBlendSrc = -1;
     _preBlendDst = -1;
@@ -74,38 +79,37 @@ void CCArmatureDisplay::dbUpdate()
     _curTextureIndex = -1;
     
     _preISegWritePos = -1;
-    _totalVLen = 0;
-    _totalILen = 0;
     _curISegLen = 0;
     
     _debugSlotsLen = 0;
     _materialLen = 0;
     
     //reserved space to save material len
-    _materialBuffer.writeUint32(0);
-    //reserved space to save vertex len
-    std::size_t vertexPos = _materialBuffer.getCurPos();
-    _materialBuffer.writeUint32(0);
-    //reserved space to save index len
-    std::size_t indexPos = _materialBuffer.getCurPos();
-    _materialBuffer.writeUint32(0);
+    _materialBuffer->writeUint32(0);
+    //reserved space to save index offset
+    _materialBuffer->writeUint32((uint32_t)EditorManager::getInstance()->ib.getCurPos()/sizeof(unsigned short));
     
     traverseArmature(_armature);
     
-    _materialBuffer.writeUint32(0, _materialLen);
-    _materialBuffer.writeUint32(vertexPos, _totalVLen);
-    _materialBuffer.writeUint32(indexPos, _totalILen);
+    _materialBuffer->writeUint32(0, _materialLen);
     
     if (_preISegWritePos != -1)
     {
-        _materialBuffer.writeUint32(_preISegWritePos, _curISegLen);
+        _materialBuffer->writeUint32(_preISegWritePos, _curISegLen);
     }
     
     if (_debugDraw)
     {
+        if (_debugBuffer == nullptr)
+        {
+            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER);
+        }
+        
+        _debugBuffer->reset();
+        
         auto& bones = _armature->getBones();
         std::size_t count = bones.size();
-        _debugBuffer.writeFloat32(count*4);
+        _debugBuffer->writeFloat32(count*4);
         for (int i = 0; i < count; i++)
         {
             Bone* bone = (Bone*)bones[i];
@@ -120,24 +124,11 @@ void CCArmatureDisplay::dbUpdate()
             float endx = bx + bone->globalTransformMatrix.a * boneLen;
             float endy = by - bone->globalTransformMatrix.b * boneLen;
             
-            _debugBuffer.writeFloat32(bx);
-            _debugBuffer.writeFloat32(by);
-            _debugBuffer.writeFloat32(endx);
-            _debugBuffer.writeFloat32(endy);
+            _debugBuffer->writeFloat32(bx);
+            _debugBuffer->writeFloat32(by);
+            _debugBuffer->writeFloat32(endx);
+            _debugBuffer->writeFloat32(endy);
         }
-    }
-    
-    // update js array buffer
-    if (_materialBuffer.isNewBuffer || _verticesBuffer.isNewBuffer || _indicesBuffer.isNewBuffer || _debugBuffer.isNewBuffer)
-    {
-        if (_changeBufferCallback)
-        {
-            _changeBufferCallback();
-        }
-        _materialBuffer.isNewBuffer = false;
-        _verticesBuffer.isNewBuffer = false;
-        _indicesBuffer.isNewBuffer = false;
-        _debugBuffer.isNewBuffer = false;
     }
 }
 
@@ -176,6 +167,10 @@ CCArmatureDisplay* CCArmatureDisplay::getRootDisplay()
 void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
     auto& slots = armature->getSlots();
+    auto mgr = EditorManager::getInstance();
+    editor::IOBuffer& vb = mgr->vb;
+    editor::IOBuffer& ib = mgr->ib;
+    
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {
         CCSlot* slot = (CCSlot*)slots[i];
@@ -220,16 +215,16 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         {
             if (_preISegWritePos != -1)
             {
-                _materialBuffer.writeUint32(_preISegWritePos,_curISegLen);
+                _materialBuffer->writeUint32(_preISegWritePos,_curISegLen);
             }
             
-            _materialBuffer.writeUint32(_curTextureIndex);
-            _materialBuffer.writeUint32(_curBlendSrc);
-            _materialBuffer.writeUint32(_curBlendDst);
+            _materialBuffer->writeUint32(_curTextureIndex);
+            _materialBuffer->writeUint32(_curBlendSrc);
+            _materialBuffer->writeUint32(_curBlendDst);
             
             //reserve indice segamentation lenght
-            _preISegWritePos = (int)_materialBuffer.getCurPos();
-            _materialBuffer.writeUint32(0);
+            _preISegWritePos = (int)_materialBuffer->getCurPos();
+            _materialBuffer->writeUint32(0);
             
             _preTextureIndex = _curTextureIndex;
             _preBlendDst = _curBlendDst;
@@ -261,23 +256,22 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             worldVertex->colors.a = (GLubyte)_finalColor.a;
         }
         
-        _verticesBuffer.writeBytes((char*)worldTriangles,triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
+        auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
+        vb.writeBytes((char*)worldTriangles, triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
         
-        if (_totalVLen > 0)
+        if (vertexOffset > 0)
         {
             for (int ii = 0, nn = triangles.indexCount; ii < nn; ii++)
             {
-                _indicesBuffer.writeUint16(triangles.indices[ii] + _totalVLen);
+                ib.writeUint16(triangles.indices[ii] + vertexOffset);
             }
         }
         else
         {
-            _indicesBuffer.writeBytes((char*)triangles.indices,triangles.indexCount*sizeof(unsigned short));
+            ib.writeBytes((char*)triangles.indices, triangles.indexCount*sizeof(unsigned short));
         }
         
         _curISegLen += triangles.indexCount;
-        _totalVLen += triangles.vertCount;
-        _totalILen += triangles.indexCount;
     }
 }
 

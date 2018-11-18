@@ -19,16 +19,6 @@ float
 },
 
 /**
- * @method getIndicesData
- * @return {se::Object}
- */
-getIndicesData : function (
-)
-{
-    return se::Object;
-},
-
-/**
  * @method paused
  * @param {bool} arg0
  */
@@ -161,16 +151,6 @@ beginSchedule : function (
 },
 
 /**
- * @method setBufferChangeCallback
- * @param {function} arg0
- */
-setBufferChangeCallback : function (
-func 
-)
-{
-},
-
-/**
  * @method getDebugData
  * @return {se::Object}
  */
@@ -202,16 +182,6 @@ str
 )
 {
     return spAttachment;
-},
-
-/**
- * @method getVerticesData
- * @return {se::Object}
- */
-getVerticesData : function (
-)
-{
-    return se::Object;
 },
 
 /**

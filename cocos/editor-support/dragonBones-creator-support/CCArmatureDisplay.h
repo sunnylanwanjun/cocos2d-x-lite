@@ -30,7 +30,8 @@
 #include <vector>
 
 #include "dragonBones-creator-support/CCSlot.h"
-#include "IOBuffer.h"
+#include "IOTypeArray.h"
+#include "EditorManager.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -106,31 +107,26 @@ public:
         return _armature->getAnimation();
     }
     
-    /** Returns render data,it's a Uint32Array
-     * format is |x|y|u|v|color4b|.....*/
-    se_object_ptr getVerticesData() const
-    {
-        return _verticesBuffer.getTypeArray();
-    }
-    
-    /** Returns indice data,it's a Uint16Array,format |indice|indice|...*/
-    se_object_ptr getIndicesData() const
-    {
-        return _indicesBuffer.getTypeArray();
-    }
-    
     /** Returns debug data,it's a Float32Array,
      * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
     se_object_ptr getDebugData() const
     {
-        return _debugBuffer.getTypeArray();
+        if (_debugBuffer)
+        {
+            return _debugBuffer->getTypeArray();
+        }
+        return nullptr;
     }
     
-    /** Returns debug data,it's a Float32Array,
+    /** Returns debug data,it's a Uint32Array,
      * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
     se_object_ptr getMaterialData() const
     {
-        return _materialBuffer.getTypeArray();
+        if (_materialBuffer)
+        {
+            return _materialBuffer->getTypeArray();
+        }
+        return nullptr;
     }
     
     void setColor(cocos2d::Color4B& color)
@@ -148,12 +144,6 @@ public:
         _premultipliedAlpha = value;
     }
     
-    typedef std::function<void()> bufferChangeCallback;
-    void setBufferChangeCallback(bufferChangeCallback callback)
-    {
-        _changeBufferCallback = callback;
-    }
-    
     typedef std::function<void(EventObject*)> dbEventCallback;
     void setDBEventCallback(dbEventCallback callback)
     {
@@ -165,10 +155,8 @@ public:
     
 private:
     std::map<std::string,bool> _listenerIDMap;
-    editor::IOBuffer _materialBuffer;
-    editor::IOBuffer _verticesBuffer;
-    editor::IOBuffer _indicesBuffer;
-    editor::IOBuffer _debugBuffer;
+    editor::IOTypeArray* _materialBuffer = nullptr;
+    editor::IOTypeArray* _debugBuffer = nullptr;
     cocos2d::Color4B _nodeColor = cocos2d::Color4B::WHITE;
     
     int _preBlendSrc = -1;
@@ -180,15 +168,12 @@ private:
     
     int _preISegWritePos = -1;
     int _curISegLen = 0;
-    int _totalVLen = 0;
-    int _totalILen = 0;
     
     int _debugSlotsLen = 0;
     int _materialLen = 0;
     
     bool _premultipliedAlpha = false;
     cocos2d::Color4B _finalColor = cocos2d::Color4B::WHITE;
-    bufferChangeCallback _changeBufferCallback = nullptr;
     dbEventCallback _dbEventCallback = nullptr;
 };
 
