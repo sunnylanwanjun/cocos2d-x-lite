@@ -22,7 +22,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#define MAX_VB_BUFFER 8192000
-#define MAX_IB_BUFFER 8192000
-#define MAX_MATERIAL_BUFFER 512
-#define MAX_DEBUG_BUFFER 4096
+// if buffer out range,will increase with INCREASE_BUFFER_SIZE size
+#define INCREASE_BUFFER_SIZE 1024000
+// vertex buffer max capacity 8192000
+#define MAX_VB_BUFFER_SIZE 8192000
+// index buffer max capacity
+#define MAX_IB_BUFFER_SIZE 8192000
+// can fill material data max capacity
+#define MAX_MATERIAL_BUFFER_SIZE 512
+// fill debug data max capacity
+#define MAX_DEBUG_BUFFER_SIZE 40960
+// type array pool min size
+#define MIN_TYPE_ARRAY_SIZE 128

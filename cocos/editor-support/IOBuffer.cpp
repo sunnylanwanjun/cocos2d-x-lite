@@ -25,20 +25,20 @@
 
 namespace editor {
 
-    void IOBuffer::resize (std::size_t needLen)
+    void IOBuffer::resize (std::size_t newLen, bool needCopy)
     {
-        std::size_t hasLen = _bufferSize - _curPos;
-        if (hasLen < needLen)
+        if (_bufferSize < newLen)
         {
-            std::size_t addLen = needLen - hasLen + 128;
-            std::size_t newLen = _bufferSize + addLen;
-            
             uint8_t* newBuffer = new uint8_t[newLen];
-            memcpy(newBuffer, _buffer, _bufferSize);
+            if (needCopy)
+            {
+                memcpy(newBuffer, _buffer, _bufferSize);
+            }
             
             delete[] _buffer;
             _buffer = newBuffer;
             _bufferSize = newLen;
+            _outRange = false;
         }
     }
 

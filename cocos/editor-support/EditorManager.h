@@ -77,6 +77,8 @@ namespace editor {
         EditorManager();
         ~EditorManager();
         
+        bool isUpdating = false;
+        
     private:
         void update(float dt);
         void uploadVB();
@@ -84,11 +86,8 @@ namespace editor {
     private:
         std::map<IEditor*, bool> _updateMap;
         std::vector<IEditor*> _removeList;
-        
         uint32_t _glIBID = 0;
         uint32_t _glVBID = 0;
-        
-        bool isUpdating = false;
         static EditorManager* _instance;
     };
 }

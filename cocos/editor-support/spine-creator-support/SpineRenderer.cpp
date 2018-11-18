@@ -79,7 +79,7 @@ void SpineRenderer::initialize ()
     
     if (_materialBuffer == nullptr)
     {
-        _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER);
+        _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
     }
 }
 
@@ -225,6 +225,9 @@ void SpineRenderer::update (float deltaTime)
 {
     if (_paused) return;
     
+    auto mgr = EditorManager::getInstance();
+    if (!mgr->isUpdating) return;
+    
 	spSkeleton_update(_skeleton, deltaTime * _timeScale);
     
     _skeleton->r = _nodeColor.r / (float)255;
@@ -234,7 +237,6 @@ void SpineRenderer::update (float deltaTime)
     
     Color4F color;
     AttachmentVertices* attachmentVertices = nullptr;
-    auto mgr = EditorManager::getInstance();
     editor::IOBuffer& vb = mgr->vb;
     editor::IOBuffer& ib = mgr->ib;
     
@@ -257,7 +259,7 @@ void SpineRenderer::update (float deltaTime)
     {
         if (_debugBuffer == nullptr)
         {
-            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER);
+            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
         }
         _debugBuffer->reset();
         
@@ -406,11 +408,29 @@ void SpineRenderer::update (float deltaTime)
         _debugBuffer->writeFloat32(0, debugSlotsLen);
     }
     
-    _materialBuffer->writeUint32(0, materialLen);
+    bool isVBOutRange = vb.isOutRange();
+    bool isIBOutRange = ib.isOutRange();
+    bool isMatOutRange = _materialBuffer->isOutRange();
     
-    if (preISegWritePos != -1)
+    if (isVBOutRange || isIBOutRange || isMatOutRange)
     {
-        _materialBuffer->writeUint32(preISegWritePos, curISegLen);
+        _materialBuffer->writeUint32(0, 0);
+    }
+    else
+    {
+        _materialBuffer->writeUint32(0, materialLen);
+        
+        if (preISegWritePos != -1)
+        {
+            _materialBuffer->writeUint32(preISegWritePos, curISegLen);
+        }
+    }
+    
+    if (isMatOutRange)
+    {
+        cocos2d::log("Spine material data is too large,buffer has no space to put in it!!!!!!!!!!");
+        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in EditorDef");
+        cocos2d::log("But It's better to optimize resource to avoid large material.Because it can advance performance");
     }
     
     if (_debugBones)
@@ -426,6 +446,14 @@ void SpineRenderer::update (float deltaTime)
             _debugBuffer->writeFloat32(x);
             _debugBuffer->writeFloat32(y);
         }
+    }
+    
+    if ((_debugSlots || _debugBones) &&  _debugBuffer->isOutRange())
+    {
+        _debugBuffer->writeFloat32(0, 0);
+        _debugBuffer->writeFloat32(sizeof(float), 0);
+        cocos2d::log("Spine debug data is too large,debug buffer has no space to put in it!!!!!!!!!!");
+        cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in EditorDef");
     }
 }
 

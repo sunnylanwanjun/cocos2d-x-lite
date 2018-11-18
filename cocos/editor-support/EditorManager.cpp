@@ -34,8 +34,8 @@ namespace editor {
     EditorManager* EditorManager::_instance = nullptr;
     
     EditorManager::EditorManager()
-    :vb(MAX_VB_BUFFER)
-    ,ib(MAX_IB_BUFFER)
+    :vb(MAX_VB_BUFFER_SIZE)
+    ,ib(MAX_IB_BUFFER_SIZE)
     {
         glGenBuffers(1, &_glIBID);
         glGenBuffers(1, &_glVBID);
@@ -95,6 +95,16 @@ namespace editor {
         
         _removeList.clear();
         
+        if (vb.isOutRange())
+        {
+            vb.resize(vb.getCapacity() + INCREASE_BUFFER_SIZE, true);
+        }
+        
+        if (ib.isOutRange())
+        {
+            ib.resize(ib.getCapacity() + INCREASE_BUFFER_SIZE, true);
+        }
+        
         uploadVB();
         uploadIB();
     }
@@ -132,7 +142,7 @@ namespace editor {
         if (length == 0) return;
         
         cocos2d::ccBindBuffer(GL_ARRAY_BUFFER, _glVBID);
-        glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)vb.length(), vb.getBuffer(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)length, vb.getBuffer(), GL_DYNAMIC_DRAW);
         cocos2d::ccBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
@@ -151,7 +161,7 @@ namespace editor {
         glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &_oldGLID);
         
         cocos2d::ccBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _glIBID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)ib.length(), ib.getBuffer(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)length, ib.getBuffer(), GL_STATIC_DRAW);
         cocos2d::ccBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _oldGLID);
     }
 }

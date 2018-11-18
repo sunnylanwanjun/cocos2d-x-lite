@@ -25,27 +25,27 @@
 
 namespace editor {
     
-    void IOTypeArray::resize (std::size_t needLen)
+    void IOTypeArray::resize (std::size_t newLen, bool needCopy)
     {
-        std::size_t hasLen = _bufferSize - _curPos;
-        if (hasLen < needLen)
+        if (_bufferSize < newLen)
         {
-            std::size_t addLen = needLen - hasLen + 128;
-            std::size_t newLen = _bufferSize + addLen;
-            
             se::Object* newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
             
             uint8_t* newBuffer = nullptr;
             se::AutoHandleScope hs;
             newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
-            memcpy(newBuffer, _buffer, _bufferSize);
+            
+            if (needCopy)
+            {
+                memcpy(newBuffer, _buffer, _bufferSize);
+            }
             
             TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
             
             _typeArray = newTypeBuffer;
             _buffer = newBuffer;
             _bufferSize = newLen;
-            isNewBuffer = true;
+            _outRange = false;
         }
     }
 }

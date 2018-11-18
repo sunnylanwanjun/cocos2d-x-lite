@@ -25,6 +25,7 @@
 #include "base/CCLog.h"
 #include "base/ccMacros.h"
 #include <functional>
+#include "EditorDef.h"
 
 #define POOL_DEBUG 0
 
@@ -108,8 +109,7 @@ namespace editor{
     
     se::Object* TypeArrayPool::pop(arrayType type, std::size_t size)
     {
-        // allocate n * 4096,fit to memory each page.
-        std::size_t fitSize = ceil(size / 128.0f) * 128;
+        std::size_t fitSize = ceil(size / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
         objPool* objPoolPtr = getObjPool(type, fitSize);
         
         if (objPoolPtr->size() > 0)

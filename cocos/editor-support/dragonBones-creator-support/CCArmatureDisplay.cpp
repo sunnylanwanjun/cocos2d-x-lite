@@ -1,3 +1,25 @@
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2012-2018 DragonBones team and other contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
 #include "IOBuffer.h"
@@ -25,7 +47,7 @@ CCArmatureDisplay* CCArmatureDisplay::create()
 
 CCArmatureDisplay::CCArmatureDisplay()
 {
-    _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER);
+    _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
 }
 
 CCArmatureDisplay::~CCArmatureDisplay()
@@ -69,6 +91,12 @@ void CCArmatureDisplay::dbUpdate()
     if (this->_armature->getParent())
         return;
     
+    auto mgr = EditorManager::getInstance();
+    if (!mgr->isUpdating) return;
+    
+    editor::IOBuffer& vb = mgr->vb;
+    editor::IOBuffer& ib = mgr->ib;
+    
     _materialBuffer->reset();
     
     _preBlendSrc = -1;
@@ -87,29 +115,48 @@ void CCArmatureDisplay::dbUpdate()
     //reserved space to save material len
     _materialBuffer->writeUint32(0);
     //reserved space to save index offset
-    _materialBuffer->writeUint32((uint32_t)EditorManager::getInstance()->ib.getCurPos()/sizeof(unsigned short));
+    _materialBuffer->writeUint32((uint32_t)mgr->ib.getCurPos()/sizeof(unsigned short));
     
     traverseArmature(_armature);
     
-    _materialBuffer->writeUint32(0, _materialLen);
+    bool isVBOutRange = vb.isOutRange();
+    bool isIBOutRange = ib.isOutRange();
+    bool isMatOutRange = _materialBuffer->isOutRange();
     
-    if (_preISegWritePos != -1)
+    if (isVBOutRange || isIBOutRange || isMatOutRange)
     {
-        _materialBuffer->writeUint32(_preISegWritePos, _curISegLen);
+        _materialBuffer->writeUint32(0, 0);
+    }
+    else
+    {
+        _materialBuffer->writeUint32(0, _materialLen);
+        
+        if (_preISegWritePos != -1)
+        {
+            _materialBuffer->writeUint32(_preISegWritePos, _curISegLen);
+        }
+    }
+    
+    if (isMatOutRange)
+    {
+        cocos2d::log("Dragonbones material data is too large,buffer has no space to put in it!!!!!!!!!!");
+        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in EditorDef");
+        cocos2d::log("But It's better to optimize resource to avoid large material.Because it can advance performance");
     }
     
     if (_debugDraw)
     {
         if (_debugBuffer == nullptr)
         {
-            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER);
+            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
         }
         
         _debugBuffer->reset();
         
         auto& bones = _armature->getBones();
         std::size_t count = bones.size();
-        _debugBuffer->writeFloat32(count*4);
+        
+       _debugBuffer->writeFloat32(count*4);
         for (int i = 0; i < count; i++)
         {
             Bone* bone = (Bone*)bones[i];
@@ -128,6 +175,13 @@ void CCArmatureDisplay::dbUpdate()
             _debugBuffer->writeFloat32(by);
             _debugBuffer->writeFloat32(endx);
             _debugBuffer->writeFloat32(endy);
+        }
+        
+        if (_debugBuffer->isOutRange())
+        {
+            _debugBuffer->writeFloat32(0, 0);
+            cocos2d::log("Dragonbones debug data is too large,debug buffer has no space to put in it!!!!!!!!!!");
+            cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in EditorDef");
         }
     }
 }

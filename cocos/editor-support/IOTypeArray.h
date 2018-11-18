@@ -43,18 +43,17 @@ namespace editor {
         {
             TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
             _typeArray = nullptr;
+            _buffer = nullptr;
         }
         
         inline se_object_ptr getTypeArray () const
         {
             return _typeArray;
         }
-    protected:
-        virtual void resize(std::size_t needLen) override;
+    
+        virtual void resize(std::size_t newLen, bool needCopy = false) override;
     private:
         se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
         se::Object*                 _typeArray = nullptr;
-    public:
-        bool                        isNewBuffer = false;
     };
 }

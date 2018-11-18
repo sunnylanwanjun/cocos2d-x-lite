@@ -29,9 +29,6 @@
 
 namespace editor {
     
-    /**
-     * IOBuffer write/read bytes with js array buffer.
-     */
     class IOBuffer
     {
     public:
@@ -57,27 +54,44 @@ namespace editor {
         
         inline void writeUint32 (std::size_t pos, uint32_t val)
         {
-            if (_bufferSize < pos + sizeof(val)) return;
+            if (_bufferSize < pos + sizeof(val))
+            {
+                _outRange = true;
+                return;
+            }
             uint32_t* buffer = (uint32_t*)(_buffer + pos);
             *buffer = val;
         }
         
         inline void writeFloat32 (std::size_t pos, float val)
         {
-            if (_bufferSize < pos + sizeof(val)) return;
+            if (_bufferSize < pos + sizeof(val))
+            {
+                _outRange = true;
+                return;
+            }
             float* buffer = (float*)(_buffer + pos);
             *buffer = val;
         }
         
         inline void writeBytes (const char* bytes, std::size_t bytesLen)
         {
-            if (_bufferSize < _curPos + bytesLen) return;
+            if (_bufferSize < _curPos + bytesLen)
+            {
+                _outRange = true;
+                return;
+            }
             memcpy(_buffer + _curPos, bytes, bytesLen);
             _curPos += bytesLen;
         }
         
-        inline void writeUint32 (uint32_t val) {
-            if (_bufferSize < _curPos + sizeof(val)) return;
+        inline void writeUint32 (uint32_t val)
+        {
+            if (_bufferSize < _curPos + sizeof(val))
+            {
+                _outRange = true;
+                return;
+            }
             uint32_t* buffer = (uint32_t*)(_buffer + _curPos);
             *buffer = val;
             _curPos += sizeof(val);
@@ -85,7 +99,11 @@ namespace editor {
         
         inline void writeFloat32 (float val)
         {
-            if (_bufferSize < _curPos + sizeof(val)) return;
+            if (_bufferSize < _curPos + sizeof(val))
+            {
+                _outRange = true;
+                return;
+            }
             float* buffer = (float*)(_buffer + _curPos);
             *buffer = val;
             _curPos += sizeof(val);
@@ -93,7 +111,11 @@ namespace editor {
         
         inline void writeUint16 (uint16_t val)
         {
-            if (_bufferSize < _curPos + sizeof(val)) return;
+            if (_bufferSize < _curPos + sizeof(val))
+            {
+                _outRange = true;
+                return;
+            }
             uint16_t* buffer = (uint16_t*)(_buffer + _curPos);
             *buffer = val;
             _curPos += sizeof(val);
@@ -147,12 +169,23 @@ namespace editor {
         {
             return _buffer;
         }
-    protected:
-        virtual void resize(std::size_t needLen);
+        
+        inline std::size_t getCapacity() const
+        {
+            return _bufferSize;
+        }
+        
+        inline bool isOutRange()
+        {
+            return _outRange;
+        }
+    
+        virtual void resize(std::size_t newLen, bool needCopy = false);
     protected:
         uint8_t*                    _buffer = nullptr;
         std::size_t                 _bufferSize = 0;
         std::size_t                 _curPos = 0;
         std::size_t                 _readPos = 0;
+        bool                        _outRange = false;
     };
 }
