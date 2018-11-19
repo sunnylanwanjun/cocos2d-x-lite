@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "jsb_dragonbones_manual.hpp"
+#include "base/ccConfig.h"
 
 #if USE_DRAGONBONES > 0
 

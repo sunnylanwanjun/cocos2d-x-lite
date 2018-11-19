@@ -31,6 +31,7 @@
 //
 //
 
+#include "base/ccConfig.h"
 #include "jsb_spine_manual.hpp"
 
 #if USE_SPINE > 0

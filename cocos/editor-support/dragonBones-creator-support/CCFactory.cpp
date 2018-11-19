@@ -131,25 +131,22 @@ DragonBonesData* CCFactory::parseDragonBonesDataOnly(const std::string& filePath
         }
     }
     
-    const auto fullpath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
-
-    if (cocos2d::FileUtils::getInstance()->isFileExist(filePath))
+    const auto dbbinPos = filePath.find(".dbbin");
+    if (dbbinPos != std::string::npos)
     {
-        const auto pos = fullpath.find(".json");
-        
-        if (pos != std::string::npos)
-        {
-            const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(filePath);
-			return _dataParser->parseDragonBonesData(data.c_str(), scale);
-        }
-        else
+        const auto fullpath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
+        if (cocos2d::FileUtils::getInstance()->isFileExist(filePath))
         {
             cocos2d::Data cocos2dData;
             cocos2d::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
-			const auto binary = (unsigned char*)malloc(sizeof(unsigned char)* cocos2dData.getSize());
-			memcpy(binary, cocos2dData.getBytes(), cocos2dData.getSize());
-			return _binaryParser.parseDragonBonesData((char*)binary, scale);
+            const auto binary = (unsigned char*)malloc(sizeof(unsigned char)* cocos2dData.getSize());
+            memcpy(binary, cocos2dData.getBytes(), cocos2dData.getSize());
+            return _binaryParser.parseDragonBonesData((char*)binary, scale);
         }
+    }
+    else
+    {
+        return _dataParser->parseDragonBonesData(filePath.c_str(), scale);
     }
     
     return nullptr;

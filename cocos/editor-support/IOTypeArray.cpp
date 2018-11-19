@@ -40,7 +40,9 @@ namespace editor {
         }
         else
         {
+            se::AutoHandleScope hs;
             _typeArray = se::Object::createTypedArray(_arrayType, nullptr, _bufferSize);
+            _typeArray->root();
         }
         
         se::AutoHandleScope hs;
@@ -74,7 +76,9 @@ namespace editor {
         }
         else
         {
+            se::AutoHandleScope hs;
             newTypeBuffer = se::Object::createTypedArray(_arrayType, nullptr, newLen);
+            newTypeBuffer->root();
         }
         
         uint8_t* newBuffer = nullptr;
