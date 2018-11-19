@@ -22,30 +22,84 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "IOTypeArray.h"
+#include "TypeArrayPool.h"
+
+#define USE_TYPEARRAY_POOL 0
 
 namespace editor {
     
+    IOTypeArray::IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize, bool usePool)
+    {
+        _arrayType = arrayType;
+        _bufferSize = defaultSize;
+        _usePool = usePool;
+        
+        if (_usePool)
+        {
+            _typeArray = TypeArrayPool::getInstance()->pop(_arrayType, _bufferSize);
+        }
+        else
+        {
+            _typeArray = se::Object::createTypedArray(_arrayType, nullptr, _bufferSize);
+        }
+        
+        se::AutoHandleScope hs;
+        _typeArray->getTypedArrayData(&_buffer, &_bufferSize);
+    }
+    
+    IOTypeArray::~IOTypeArray ()
+    {
+        if (_usePool)
+        {
+            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
+        }
+        else
+        {
+            _typeArray->unroot();
+            _typeArray->decRef();
+        }
+        _typeArray = nullptr;
+        _buffer = nullptr;
+    }
+    
     void IOTypeArray::resize (std::size_t newLen, bool needCopy)
     {
-        if (_bufferSize < newLen)
+        if (_bufferSize >= newLen) return;
+        
+        se::Object* newTypeBuffer = nullptr;
+        
+        if (_usePool)
         {
-            se::Object* newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
-            
-            uint8_t* newBuffer = nullptr;
-            se::AutoHandleScope hs;
-            newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
-            
-            if (needCopy)
-            {
-                memcpy(newBuffer, _buffer, _bufferSize);
-            }
-            
-            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
-            
-            _typeArray = newTypeBuffer;
-            _buffer = newBuffer;
-            _bufferSize = newLen;
-            _outRange = false;
+            newTypeBuffer = TypeArrayPool::getInstance()->pop(_arrayType, newLen);
         }
+        else
+        {
+            newTypeBuffer = se::Object::createTypedArray(_arrayType, nullptr, newLen);
+        }
+        
+        uint8_t* newBuffer = nullptr;
+        se::AutoHandleScope hs;
+        newTypeBuffer->getTypedArrayData(&newBuffer, (size_t*)&newLen);
+        
+        if (needCopy)
+        {
+            memcpy(newBuffer, _buffer, _bufferSize);
+        }
+        
+        if (_usePool)
+        {
+            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
+        }
+        else
+        {
+            _typeArray->unroot();
+            _typeArray->decRef();
+        }
+        
+        _typeArray = newTypeBuffer;
+        _buffer = newBuffer;
+        _bufferSize = newLen;
+        _outRange = false;
+        
     }
 }

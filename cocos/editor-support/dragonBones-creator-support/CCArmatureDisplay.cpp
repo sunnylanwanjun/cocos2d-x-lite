@@ -22,7 +22,6 @@
  */
 #include "dragonBones-creator-support/CCArmatureDisplay.h"
 #include "dragonBones-creator-support/CCSlot.h"
-#include "IOBuffer.h"
 #include "EditorDef.h"
 
 using namespace editor;
@@ -94,8 +93,8 @@ void CCArmatureDisplay::dbUpdate()
     auto mgr = EditorManager::getInstance();
     if (!mgr->isUpdating) return;
     
-    editor::IOBuffer& vb = mgr->vb;
-    editor::IOBuffer& ib = mgr->ib;
+    IOBuffer& vb = mgr->vb;
+    IOBuffer& ib = mgr->ib;
     
     _materialBuffer->reset();
     
@@ -222,8 +221,8 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
     auto& slots = armature->getSlots();
     auto mgr = EditorManager::getInstance();
-    editor::IOBuffer& vb = mgr->vb;
-    editor::IOBuffer& ib = mgr->ib;
+    IOBuffer& vb = mgr->vb;
+    IOBuffer& ib = mgr->ib;
     
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {

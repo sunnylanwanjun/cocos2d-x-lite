@@ -1,5 +1,6 @@
 #pragma once
 #include "base/ccConfig.h"
+#if USE_SPINE > 0
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
@@ -64,3 +65,4 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_create);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_createWithJsonFile);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SpineAnimation_SpineAnimation);
 
+#endif //#if USE_SPINE > 0

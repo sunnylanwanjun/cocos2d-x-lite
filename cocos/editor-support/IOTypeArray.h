@@ -23,37 +23,27 @@
  ****************************************************************************/
 #pragma once
 
-#include "TypeArrayPool.h"
 #include "IOBuffer.h"
 #include "base/ccMacros.h"
+#include "scripting/js-bindings/jswrapper/SeApi.h"
 
 namespace editor {
-    class IOTypeArray: public IOBuffer {
+    class IOTypeArray: public IOBuffer
+    {
     public:
-        IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize)
-        : _arrayType(arrayType)
-        {
-            _bufferSize = defaultSize;
-            _typeArray = TypeArrayPool::getInstance()->pop(_arrayType, _bufferSize);
-            se::AutoHandleScope hs;
-            _typeArray->getTypedArrayData(&_buffer, &_bufferSize);
-        }
+        IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize, bool usePool = false);
+        virtual ~IOTypeArray ();
         
-        ~IOTypeArray()
-        {
-            TypeArrayPool::getInstance()->push(_arrayType, _bufferSize, _typeArray);
-            _typeArray = nullptr;
-            _buffer = nullptr;
-        }
-        
-        inline se_object_ptr getTypeArray () const
+        inline se::Object* getTypeArray () const
         {
             return _typeArray;
         }
     
         virtual void resize(std::size_t newLen, bool needCopy = false) override;
+        
     private:
         se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
         se::Object*                 _typeArray = nullptr;
+        bool                        _usePool = false;
     };
 }

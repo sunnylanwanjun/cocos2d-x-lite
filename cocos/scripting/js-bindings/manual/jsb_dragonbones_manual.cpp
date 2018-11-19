@@ -24,6 +24,9 @@
  ****************************************************************************/
 
 #include "jsb_dragonbones_manual.hpp"
+
+#if USE_DRAGONBONES > 0
+
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_global.h"
@@ -489,3 +492,5 @@ bool register_all_dragonbones_manual(se::Object* obj)
 
     return true;
 }
+
+#endif

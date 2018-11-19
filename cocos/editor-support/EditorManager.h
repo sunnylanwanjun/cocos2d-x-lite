@@ -83,6 +83,8 @@ namespace editor {
         void update(float dt);
         void uploadVB();
         void uploadIB();
+        void afterCleanupHandle();
+        void afterInitHandle();
     private:
         std::map<IEditor*, bool> _updateMap;
         std::vector<IEditor*> _removeList;

@@ -1,4 +1,5 @@
 #include "scripting/js-bindings/auto/jsb_cocos2dx_editor_support_auto.hpp"
+#if USE_EDITOR_SUPPORT > 0
 #include "scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "scripting/js-bindings/manual/jsb_global.h"
 #include "editor-support/editor-adapter.h"
@@ -407,3 +408,4 @@ bool register_all_cocos2dx_editor_support(se::Object* obj)
     return true;
 }
 
+#endif //#if USE_EDITOR_SUPPORT > 0

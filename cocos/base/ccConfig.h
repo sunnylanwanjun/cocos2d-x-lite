@@ -58,6 +58,10 @@ THE SOFTWARE.
 #define USE_NET_WORK 1
 #endif
 
+#ifndef USE_EDITOR_SUPPORT
+#define USE_EDITOR_SUPPORT 1
+#endif
+
 #ifndef USE_SPINE
 #define USE_SPINE 1
 #endif

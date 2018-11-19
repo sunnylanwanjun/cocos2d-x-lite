@@ -26,6 +26,7 @@
 #include "base/CCScheduler.h"
 #include "base/CCGLUtils.h"
 #include "EditorDef.h"
+#include "scripting/js-bindings/jswrapper/SeApi.h"
 
 static const std::string scheduleKey = "editorScheduleKey";
 
@@ -39,7 +40,30 @@ namespace editor {
     {
         glGenBuffers(1, &_glIBID);
         glGenBuffers(1, &_glVBID);
+        afterInitHandle();
+    }
+
+    EditorManager::~EditorManager()
+    {
+        auto app = cocos2d::Application::getInstance();
+        auto scheduler = app->getScheduler();
+        scheduler->unschedule(scheduleKey, this);
         
+        cocos2d::ccDeleteBuffers(1, &_glIBID);
+        cocos2d::ccDeleteBuffers(1, &_glVBID);
+    }
+    
+    void EditorManager::afterCleanupHandle()
+    {
+        auto app = cocos2d::Application::getInstance();
+        auto scheduler = app->getScheduler();
+        scheduler->unschedule(scheduleKey, this);
+        
+        se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&EditorManager::afterInitHandle,this));
+    }
+    
+    void EditorManager::afterInitHandle()
+    {
         auto app = cocos2d::Application::getInstance();
         auto scheduler = app->getScheduler();
         scheduler->schedule(
@@ -48,13 +72,8 @@ namespace editor {
             this->update(passedTime);
         },
         this, 0, false, scheduleKey);
-    }
-
-    EditorManager::~EditorManager()
-    {
-        auto app = cocos2d::Application::getInstance();
-        auto scheduler = app->getScheduler();
-        scheduler->unschedule(scheduleKey, this);
+        
+        se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&EditorManager::afterCleanupHandle,this));
     }
     
     void EditorManager::update(float dt)

@@ -143,14 +143,6 @@
 		043558DD217EAE1B00B9C056 /* VertexAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 0435585A217EAE1B00B9C056 /* VertexAttachment.h */; };
 		043558DE217EAE1B00B9C056 /* BoneData.h in Headers */ = {isa = PBXBuildFile; fileRef = 0435585B217EAE1B00B9C056 /* BoneData.h */; };
 		043558DF217EAE1B00B9C056 /* BoneData.h in Headers */ = {isa = PBXBuildFile; fileRef = 0435585B217EAE1B00B9C056 /* BoneData.h */; };
-		04355906217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */; };
-		04355907217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */; };
-		04355908217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */; };
-		04355909217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */; };
-		0435590E217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
-		0435590F217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */; };
-		04355914217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
-		04355915217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */; };
 		046B688A219FA61200B33469 /* EditorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B6888219FA61200B33469 /* EditorManager.cpp */; };
 		046B688B219FA61200B33469 /* EditorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B6888219FA61200B33469 /* EditorManager.cpp */; };
 		046B688C219FA61200B33469 /* EditorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B6889219FA61200B33469 /* EditorManager.h */; };
@@ -161,6 +153,14 @@
 		046B689321A00F5600B33469 /* IOTypeArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B688F21A00F5600B33469 /* IOTypeArray.h */; };
 		046B689521A10D5800B33469 /* EditorDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* EditorDef.h */; };
 		046B689621A10D5800B33469 /* EditorDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* EditorDef.h */; };
+		046B68A621A292D300B33469 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68A421A292D200B33469 /* jsb_spine_manual.cpp */; };
+		046B68A721A292D300B33469 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68A421A292D200B33469 /* jsb_spine_manual.cpp */; };
+		046B68A821A292D300B33469 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046B68A521A292D200B33469 /* jsb_spine_manual.hpp */; };
+		046B68A921A292D300B33469 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046B68A521A292D200B33469 /* jsb_spine_manual.hpp */; };
+		046B68AC21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046B68AA21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp */; };
+		046B68AD21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046B68AA21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp */; };
+		046B68AE21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68AB21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp */; };
+		046B68AF21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68AB21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp */; };
 		046E03ED21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EE21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */; };
 		046E03EF21804E6B00B24E2D /* SpineAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046E03E121804E6A00B24E2D /* SpineAnimation.cpp */; };
@@ -1222,15 +1222,15 @@
 		04355859217EAE1B00B9C056 /* Atlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Atlas.h; path = "../cocos/editor-support/spine/Atlas.h"; sourceTree = "<group>"; };
 		0435585A217EAE1B00B9C056 /* VertexAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexAttachment.h; path = "../cocos/editor-support/spine/VertexAttachment.h"; sourceTree = "<group>"; };
 		0435585B217EAE1B00B9C056 /* BoneData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BoneData.h; path = "../cocos/editor-support/spine/BoneData.h"; sourceTree = "<group>"; };
-		04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_spine_auto.hpp; sourceTree = "<group>"; };
-		04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_spine_auto.cpp; sourceTree = "<group>"; };
-		0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
-		0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
 		046B6888219FA61200B33469 /* EditorManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditorManager.cpp; path = "../cocos/editor-support/EditorManager.cpp"; sourceTree = "<group>"; };
 		046B6889219FA61200B33469 /* EditorManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EditorManager.h; path = "../cocos/editor-support/EditorManager.h"; sourceTree = "<group>"; };
 		046B688E21A00F5600B33469 /* IOTypeArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IOTypeArray.cpp; path = "../cocos/editor-support/IOTypeArray.cpp"; sourceTree = "<group>"; };
 		046B688F21A00F5600B33469 /* IOTypeArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOTypeArray.h; path = "../cocos/editor-support/IOTypeArray.h"; sourceTree = "<group>"; };
 		046B689421A10D5800B33469 /* EditorDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EditorDef.h; path = "../cocos/editor-support/EditorDef.h"; sourceTree = "<group>"; };
+		046B68A421A292D200B33469 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
+		046B68A521A292D200B33469 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
+		046B68AA21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_spine_auto.hpp; sourceTree = "<group>"; };
+		046B68AB21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_cocos2dx_spine_auto.cpp; sourceTree = "<group>"; };
 		046E03E021804E6A00B24E2D /* CreatorAttachmentLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreatorAttachmentLoader.cpp; path = "../cocos/editor-support/spine-creator-support/CreatorAttachmentLoader.cpp"; sourceTree = "<group>"; };
 		046E03E121804E6A00B24E2D /* SpineAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpineAnimation.cpp; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.cpp"; sourceTree = "<group>"; };
 		046E03E221804E6A00B24E2D /* SpineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpineAnimation.h; path = "../cocos/editor-support/spine-creator-support/SpineAnimation.h"; sourceTree = "<group>"; };
@@ -2550,13 +2550,13 @@
 			children = (
 				046E06FB2189999500B24E2D /* jsb_cocos2dx_editor_support_auto.cpp */,
 				046E06FC2189999600B24E2D /* jsb_cocos2dx_editor_support_auto.hpp */,
-				04355905217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.cpp */,
-				04355904217EAE4A00B9C056 /* jsb_cocos2dx_spine_auto.hpp */,
 				046E0707218B015000B24E2D /* jsb_cocos2dx_dragonbones_auto.cpp */,
 				046E0708218B015000B24E2D /* jsb_cocos2dx_dragonbones_auto.hpp */,
 				40AEF7BD216DF21B00729AA5 /* jsb_video_auto.cpp */,
 				40AEF7BE216DF21B00729AA5 /* jsb_video_auto.hpp */,
 				40AEF7B4216D982600729AA5 /* jsb_webview_auto.cpp */,
+				046B68AB21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp */,
+				046B68AA21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp */,
 				40AEF7B5216D982600729AA5 /* jsb_webview_auto.hpp */,
 				1AAAC871205CB647005321B9 /* jsb_cocos2dx_audioengine_auto.cpp */,
 				1AAAC872205CB647005321B9 /* jsb_cocos2dx_audioengine_auto.hpp */,
@@ -2588,13 +2588,13 @@
 				1A52DB8A2060B12500350EE3 /* jsb_platform_ios.h */,
 				1A52DB8B2060B12600350EE3 /* jsb_platfrom_ios.mm */,
 				1A52DB872060B11800350EE3 /* jsb_platform.h */,
+				046B68A421A292D200B33469 /* jsb_spine_manual.cpp */,
+				046B68A521A292D200B33469 /* jsb_spine_manual.hpp */,
 				1A52DB862060B11800350EE3 /* jsb_platfrom_apple.mm */,
 				469302D02046AE05004A3D6C /* jsb_classtype.cpp */,
 				469302DF2046AE05004A3D6C /* jsb_classtype.hpp */,
 				1A29D76D205665D100168D9A /* jsb_cocos2dx_manual.cpp */,
 				1A29D76E205665D100168D9A /* jsb_cocos2dx_manual.hpp */,
-				0435590D217EAE7800B9C056 /* jsb_spine_manual.cpp */,
-				0435590A217EAE7800B9C056 /* jsb_spine_manual.hpp */,
 				469302DA2046AE05004A3D6C /* jsb_conversions.cpp */,
 				4617866F205262BB008256E1 /* jsb_conversions.hpp */,
 				469302E52046AE05004A3D6C /* jsb_gfx_manual.cpp */,
@@ -3039,7 +3039,6 @@
 				043558D4217EAE1B00B9C056 /* EventData.h in Headers */,
 				1A52DB5F205BCDC700350EE3 /* HelperMacros.h in Headers */,
 				46FDDACF202ACC6A00931238 /* RenderBuffer.h in Headers */,
-				04355906217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.hpp in Headers */,
 				0435588E217EAE1B00B9C056 /* IkConstraint.h in Headers */,
 				46FDDAAF202ACC6A00931238 /* Texture2D.h in Headers */,
 				5091A7A319BFABA800AC8789 /* CCPlatformDefine.h in Headers */,
@@ -3083,6 +3082,7 @@
 				46FDDC66202D504E00931238 /* CCApplication.h in Headers */,
 				ED3057811BEC76C90083C3ED /* ioapi.h in Headers */,
 				046E06682185B41B00B24E2D /* Constraint.h in Headers */,
+				046B68AC21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp in Headers */,
 				469303642046AE05004A3D6C /* RefCounter.hpp in Headers */,
 				046E06CB2185B49F00B24E2D /* SkinData.h in Headers */,
 				46FDDA73202ACC6A00931238 /* ProgramLib.h in Headers */,
@@ -3150,7 +3150,6 @@
 				1A29D79E205666F500168D9A /* jsb_opengl_manual.hpp in Headers */,
 				043558B0217EAE1B00B9C056 /* MeshAttachment.h in Headers */,
 				469303A22046AE05004A3D6C /* Object.hpp in Headers */,
-				0435590E217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */,
 				1A52DAF6205BB81400350EE3 /* CCThreadPool.h in Headers */,
 				046E06642185B41B00B24E2D /* Armature.h in Headers */,
 				1AAAC8E9205CB6E9005321B9 /* AudioMacros.h in Headers */,
@@ -3190,6 +3189,7 @@
 				1A28FF611F20AFAB007A1D9D /* SRRunLoopThread.h in Headers */,
 				469303D22046AE05004A3D6C /* jsb_gfx_auto.hpp in Headers */,
 				04355866217EAE1B00B9C056 /* TransformConstraint.h in Headers */,
+				046B68A821A292D300B33469 /* jsb_spine_manual.hpp in Headers */,
 				1A52DB5E205BCDC700350EE3 /* Class.hpp in Headers */,
 				4693039C2046AE05004A3D6C /* PlatformUtils.h in Headers */,
 				046E06C12185B49F00B24E2D /* TextureAtlasData.h in Headers */,
@@ -3429,14 +3429,12 @@
 				046E06342185B41100B24E2D /* Animation.h in Headers */,
 				461786682052607E008256E1 /* jsb_websocket.hpp in Headers */,
 				4617865E2052607E008256E1 /* jsb_xmlhttprequest.hpp in Headers */,
-				04355907217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.hpp in Headers */,
 				043558BF217EAE1B00B9C056 /* SkeletonJson.h in Headers */,
 				046E03FC21804E6B00B24E2D /* AttachmentVertices.h in Headers */,
 				46FDDAB0202ACC6A00931238 /* Texture2D.h in Headers */,
 				50ABBD3F1925AB0000A911A9 /* CCGeometry.h in Headers */,
 				4693039D2046AE05004A3D6C /* PlatformUtils.h in Headers */,
 				046E06C22185B49F00B24E2D /* TextureAtlasData.h in Headers */,
-				0435590F217EAE7900B9C056 /* jsb_spine_manual.hpp in Headers */,
 				046E06402185B41100B24E2D /* AnimationState.h in Headers */,
 				4617866E2052609B008256E1 /* jsb_cocos2dx_network_auto.hpp in Headers */,
 				046E066B2185B41B00B24E2D /* IArmatureProxy.h in Headers */,
@@ -3530,6 +3528,7 @@
 				046E063C2185B41100B24E2D /* WorldClock.h in Headers */,
 				40AEF7B2216D940200729AA5 /* WebView.h in Headers */,
 				1AAAC8F4205CB6E9005321B9 /* AudioEngine.h in Headers */,
+				046B68A921A292D300B33469 /* jsb_spine_manual.hpp in Headers */,
 				46FDDA78202ACC6A00931238 /* Light.h in Headers */,
 				1A29D7A420566CAC00168D9A /* CCCanvasRenderingContext2D.h in Headers */,
 				04355881217EAE1B00B9C056 /* Skeleton.h in Headers */,
@@ -3607,6 +3606,7 @@
 				046E06B82185B49F00B24E2D /* AnimationData.h in Headers */,
 				50ABBD471925AB0000A911A9 /* CCVertex.h in Headers */,
 				46FDDA90202ACC6A00931238 /* BaseRenderer.h in Headers */,
+				046B68AD21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp in Headers */,
 				46FDDABE202ACC6A00931238 /* DeviceGraphics.h in Headers */,
 				4617862820522469008256E1 /* WebSocket.h in Headers */,
 				04355883217EAE1B00B9C056 /* Attachment.h in Headers */,
@@ -3720,7 +3720,6 @@
 				046E06352185B41100B24E2D /* TimelineState.cpp in Sources */,
 				043558B6217EAE1B00B9C056 /* SkeletonData.c in Sources */,
 				0435589E217EAE1B00B9C056 /* Animation.c in Sources */,
-				04355908217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.cpp in Sources */,
 				1A28FF7F1F20AFAB007A1D9D /* SRMutex.m in Sources */,
 				469303942046AE05004A3D6C /* RefCounter.cpp in Sources */,
 				469304262046AE06004A3D6C /* jsb_conversions.cpp in Sources */,
@@ -3874,7 +3873,6 @@
 				1A29D784205666B200168D9A /* LocalStorage.cpp in Sources */,
 				046E06C32185B49F00B24E2D /* ArmatureData.cpp in Sources */,
 				0435586C217EAE1B00B9C056 /* SkeletonBounds.c in Sources */,
-				04355914217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */,
 				4617864920522469008256E1 /* CCDownloader.cpp in Sources */,
 				4693039E2046AE05004A3D6C /* Object.mm in Sources */,
 				4043D65E20D2132E00C55611 /* CCGLView-desktop.cpp in Sources */,
@@ -3940,6 +3938,7 @@
 				04355876217EAE1B00B9C056 /* AnimationStateData.c in Sources */,
 				1A28FF871F20AFAB007A1D9D /* SRSIMDHelpers.m in Sources */,
 				0435586A217EAE1B00B9C056 /* TransformConstraintData.c in Sources */,
+				046B68AE21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp in Sources */,
 				50ABBD601925AB0000A911A9 /* Vec4.cpp in Sources */,
 				0435587A217EAE1B00B9C056 /* Slot.c in Sources */,
 				46FDDA93202ACC6A00931238 /* Technique.cpp in Sources */,
@@ -3962,6 +3961,7 @@
 				BA21055B21009A2900E19975 /* CCEventAssetsManagerEx.cpp in Sources */,
 				046E06822185B43B00B24E2D /* EventObject.cpp in Sources */,
 				0435588A217EAE1B00B9C056 /* BoneData.c in Sources */,
+				046B68A621A292D300B33469 /* jsb_spine_manual.cpp in Sources */,
 				BA21055C21009A2C00E19975 /* Manifest.cpp in Sources */,
 				046E06392185B41100B24E2D /* WorldClock.cpp in Sources */,
 				1A28FF931F20AFAB007A1D9D /* NSURLRequest+SRWebSocket.m in Sources */,
@@ -3987,7 +3987,6 @@
 				046E06F02185B4A500B24E2D /* BinaryDataParser.cpp in Sources */,
 				46FDDBA4202ADDCE00931238 /* pvr.cpp in Sources */,
 				46FDDAB6202ACC6A00931238 /* Program.cpp in Sources */,
-				04355909217EAE4B00B9C056 /* jsb_cocos2dx_spine_auto.cpp in Sources */,
 				46FDDAC2202ACC6A00931238 /* Texture.cpp in Sources */,
 				0435586D217EAE1B00B9C056 /* SkeletonBounds.c in Sources */,
 				50ABC01A1926664800A911A9 /* CCSAXParser.cpp in Sources */,
@@ -3997,6 +3996,7 @@
 				043558A7217EAE1B00B9C056 /* BoundingBoxAttachment.c in Sources */,
 				046E03EE21804E6B00B24E2D /* CreatorAttachmentLoader.cpp in Sources */,
 				503DD8EE1926736A00CD74DD /* CCImage-ios.mm in Sources */,
+				046B68AF21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp in Sources */,
 				ED30578B1BEC774D0083C3ED /* ioapi_mem.cpp in Sources */,
 				0435588B217EAE1B00B9C056 /* BoneData.c in Sources */,
 				1A28FF9A1F20AFAB007A1D9D /* SRSecurityPolicy.m in Sources */,
@@ -4038,7 +4038,6 @@
 				046E06322185B41100B24E2D /* BaseTimelineState.cpp in Sources */,
 				50ABBD591925AB0000A911A9 /* Vec2.cpp in Sources */,
 				1A28FF681F20AFAB007A1D9D /* SRPinningSecurityPolicy.m in Sources */,
-				04355915217EAE7900B9C056 /* jsb_spine_manual.cpp in Sources */,
 				1A28FF9E1F20AFAB007A1D9D /* SRWebSocket.m in Sources */,
 				046E06592185B41B00B24E2D /* Armature.cpp in Sources */,
 				403ACADC20CE542600BB433D /* jsb_module_register.cpp in Sources */,
@@ -4153,6 +4152,7 @@
 				046E06CA2185B49F00B24E2D /* UserData.cpp in Sources */,
 				1A28FF8C1F20AFAB007A1D9D /* SRURLUtilities.m in Sources */,
 				1A28FF541F20AFAB007A1D9D /* SRIOConsumer.m in Sources */,
+				046B68A721A292D300B33469 /* jsb_spine_manual.cpp in Sources */,
 				469303692046AE05004A3D6C /* State.cpp in Sources */,
 				46FDDAAA202ACC6A00931238 /* Types.cpp in Sources */,
 				1A29D797205666F500168D9A /* jsb_opengl_utils.cpp in Sources */,

@@ -1,4 +1,5 @@
 #include "scripting/js-bindings/auto/jsb_cocos2dx_dragonbones_auto.hpp"
+#if USE_DRAGONBONES > 0
 #include "scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "scripting/js-bindings/manual/jsb_global.h"
 #include "editor-support/dragonBones-creator-support/CCDragonBonesHeaders.h"
@@ -7156,3 +7157,4 @@ bool register_all_cocos2dx_dragonbones(se::Object* obj)
     return true;
 }
 
+#endif //#if USE_DRAGONBONES > 0

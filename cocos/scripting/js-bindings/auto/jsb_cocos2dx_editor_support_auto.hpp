@@ -1,5 +1,6 @@
 #pragma once
 #include "base/ccConfig.h"
+#if USE_EDITOR_SUPPORT > 0
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
@@ -31,3 +32,4 @@ SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_destroyInstance);
 SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_getInstance);
 SE_DECLARE_FUNC(js_cocos2dx_editor_support_EditorManager_EditorManager);
 
+#endif //#if USE_EDITOR_SUPPORT > 0

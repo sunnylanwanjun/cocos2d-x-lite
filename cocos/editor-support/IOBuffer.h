@@ -33,15 +33,12 @@ namespace editor {
     {
     public:
         IOBuffer (std::size_t defaultSize)
-        : _bufferSize(defaultSize)
         {
+            _bufferSize = defaultSize;
             _buffer = new uint8_t[_bufferSize];
         }
         
-        IOBuffer ()
-        {
-            
-        }
+        IOBuffer () {}
         
         virtual ~IOBuffer ()
         {

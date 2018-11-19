@@ -66,9 +66,7 @@ namespace editor{
     
     void TypeArrayPool::clearPool()
     {
-        #if POOL_DEBUG > 0
-        dump();
-        #endif
+        PoolLog("*****clearPool TypeArray pool begin");
         
         //map
         for (auto it = _pool.begin(); it != _pool.end(); it++)
@@ -79,6 +77,7 @@ namespace editor{
             {
                 //vector
                 objPool& itFitPool = *(itMapPool->second);
+                PoolLog("clear arrayType:%d,fitSize:%lu,objSize:%lu\n", it->first, itMapPool->first, itFitPool.size());
                 for (auto itFit = itFitPool.begin(); itFit != itFitPool.end(); itFit++)
                 {
                     (*itFit)->unroot();
@@ -89,6 +88,8 @@ namespace editor{
             delete &mapPool;
         }
         _pool.clear();
+        
+        PoolLog("*****clearPool TypeArray pool end");
     }
     
     void TypeArrayPool::dump()

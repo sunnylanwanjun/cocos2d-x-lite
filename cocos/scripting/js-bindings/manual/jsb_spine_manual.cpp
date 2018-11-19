@@ -32,11 +32,15 @@
 //
 
 #include "jsb_spine_manual.hpp"
+
+#if USE_SPINE > 0
+
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_global.h"
 #include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
 #include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.hpp"
+
 #include "editor-adapter.h"
 #include "spine-creator-support/SpineRenderer.h"
 #include "spine-creator-support/spine-cocos2dx.h"
@@ -429,3 +433,5 @@ bool register_all_spine_manual(se::Object* obj)
     js_register_spine_TrackEntry(ns);
     return true;
 }
+
+#endif

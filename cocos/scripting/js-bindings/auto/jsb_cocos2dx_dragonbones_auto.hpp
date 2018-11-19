@@ -1,5 +1,6 @@
 #pragma once
 #include "base/ccConfig.h"
+#if USE_DRAGONBONES > 0
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 
@@ -387,3 +388,4 @@ SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getClock);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getFactory);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_CCFactory);
 
+#endif //#if USE_DRAGONBONES > 0

@@ -27,7 +27,6 @@
 #include "spine-creator-support/AttachmentVertices.h"
 #include "spine-creator-support/CreatorAttachmentLoader.h"
 #include <algorithm>
-#include "IOBuffer.h"
 #include "platform/CCApplication.h"
 #include "base/CCScheduler.h"
 #include "EditorDef.h"
