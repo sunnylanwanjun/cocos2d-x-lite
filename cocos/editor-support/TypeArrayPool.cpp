@@ -157,7 +157,7 @@ namespace editor{
         return objPoolPtr;
     }
     
-    void TypeArrayPool::push(arrayType type, std::size_t fitSize, se::Object* object)
+    void TypeArrayPool::push(arrayType type, std::size_t arrayCapacity, se::Object* object)
     {
         if (object == nullptr) return;
         
@@ -167,11 +167,11 @@ namespace editor{
             object->unroot();
             object->decRef();
             object = nullptr;
-            PoolLog("TypeArrayPool:push result:not allow,type:%d,fitSize:%lu\n", (int)type, fitSize);
+            PoolLog("TypeArrayPool:push result:not allow,type:%d,arrayCapacity:%lu\n", (int)type, arrayCapacity);
             return;
         }
         
-        objPool* objPoolPtr = getObjPool(type, fitSize);
+        objPool* objPoolPtr = getObjPool(type, arrayCapacity);
         auto it = std::find(objPoolPtr->begin(), objPoolPtr->end(), object);
         if (it != objPoolPtr->end())
         {
@@ -182,7 +182,7 @@ namespace editor{
         if (objPoolPtr->size() < maxPoolSize)
         {
             objPoolPtr->push_back(object);
-            PoolLog("TypeArrayPool:push result:success,type:%d,fitSize:%lu,objSize:%lu\n", (int)type, fitSize, objPoolPtr->size());
+            PoolLog("TypeArrayPool:push result:success,type:%d,arrayCapacity:%lu,objSize:%lu\n", (int)type, arrayCapacity, objPoolPtr->size());
         }
         else{
             object->unroot();

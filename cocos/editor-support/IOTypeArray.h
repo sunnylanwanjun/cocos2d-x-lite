@@ -28,9 +28,18 @@
 #include "scripting/js-bindings/jswrapper/SeApi.h"
 
 namespace editor {
+    /**
+     * Inherit from IOBuffer.
+     */
     class IOTypeArray: public IOBuffer
     {
     public:
+        /**
+         * @brief constructor
+         * @param[in] arrayType TypeArray type
+         * @param[in] defaultSize TypeArray capacity
+         * @param[in] usePool If true,will get TypeArray from pool,or create TypeArray,default false.
+         */
         IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize, bool usePool = false);
         virtual ~IOTypeArray ();
         

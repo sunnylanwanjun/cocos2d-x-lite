@@ -111,17 +111,20 @@ void CCArmatureDisplay::dbUpdate()
     _debugSlotsLen = 0;
     _materialLen = 0;
     
-    //reserved space to save material len
+    // Reserved space to save material len
     _materialBuffer->writeUint32(0);
-    //reserved space to save index offset
+    // Reserved space to save index offset
     _materialBuffer->writeUint32((uint32_t)mgr->ib.getCurPos()/sizeof(unsigned short));
     
+    // Traverse all aramture to fill vertex and index buffer.
     traverseArmature(_armature);
     
     bool isVBOutRange = vb.isOutRange();
     bool isIBOutRange = ib.isOutRange();
     bool isMatOutRange = _materialBuffer->isOutRange();
     
+    // If vertex buffer or index buffer or material buffer out of range,then discard this time render
+    // next time will enlarge vertex buffer or index buffer to fill the animation data.
     if (isVBOutRange || isIBOutRange || isMatOutRange)
     {
         _materialBuffer->writeUint32(0, 0);
@@ -136,6 +139,8 @@ void CCArmatureDisplay::dbUpdate()
         }
     }
     
+    // If material buffer is out of range,it will no enlarge automatically,because the size which is 512 bytes is
+    // enough large,exceed the size means call gl draw function too many times,you better to optimize resource.
     if (isMatOutRange)
     {
         cocos2d::log("Dragonbones material data is too large,buffer has no space to put in it!!!!!!!!!!");
@@ -145,6 +150,7 @@ void CCArmatureDisplay::dbUpdate()
     
     if (_debugDraw)
     {
+        // If enable debug draw,then init debug buffer.
         if (_debugBuffer == nullptr)
         {
             _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
@@ -234,6 +240,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         
         slot->updateWorldMatrix();
         
+        // If slots has child armature,will traverse child first.
         Armature* childArmature = slot->getChildArmature();
         if (childArmature != nullptr)
         {
@@ -264,6 +271,8 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         editor::Texture2D* texture = slot->getTexture();
         if (!texture) continue;
         _curTextureIndex = texture->getRealTextureIndex();
+        
+        // If texture or blendMode change,will change material.
         if (_preTextureIndex != _curTextureIndex || _preBlendDst != _curBlendDst || _preBlendSrc != _curBlendSrc)
         {
             if (_preISegWritePos != -1)
@@ -275,7 +284,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             _materialBuffer->writeUint32(_curBlendSrc);
             _materialBuffer->writeUint32(_curBlendDst);
             
-            //reserve indice segamentation lenght
+            //Reserve indice segamentation count.
             _preISegWritePos = (int)_materialBuffer->getCurPos();
             _materialBuffer->writeUint32(0);
             
@@ -283,17 +292,20 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             _preBlendDst = _curBlendDst;
             _preBlendSrc = _curBlendSrc;
             
+            // Clear index segmentation count,prepare to next segmentation.
             _curISegLen = 0;
             
             _materialLen++;
         }
         
+        // Calculation vertex color.
         _finalColor.a = _nodeColor.a * slot->color.a * 255;
         float multiplier = _premultipliedAlpha ? slot->color.a : 255;
         _finalColor.r = _nodeColor.r * slot->color.r * multiplier;
         _finalColor.g = _nodeColor.g * slot->color.g * multiplier;
         _finalColor.b = _nodeColor.b * slot->color.b * multiplier;
         
+        // Transform component matrix to global matrix
         editor::Triangles& triangles = slot->triangles;
         cocos2d::Mat4& worldMatrix = slot->worldMatrix;
         editor::V2F_T2F_C4B* worldTriangles = slot->worldVerts;
@@ -309,9 +321,11 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             worldVertex->colors.a = (GLubyte)_finalColor.a;
         }
         
+        // Fill EditorManager vertex buffer
         auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
         vb.writeBytes((char*)worldTriangles, triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
         
+        // If vertex buffer current offset is zero,fill it directly or recalculate vertex offset.
         if (vertexOffset > 0)
         {
             for (int ii = 0, nn = triangles.indexCount; ii < nn; ii++)
@@ -324,6 +338,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             ib.writeBytes((char*)triangles.indices, triangles.indexCount*sizeof(unsigned short));
         }
         
+        // Record this turn index segmentation count,it will store in material buffer in the end.
         _curISegLen += triangles.indexCount;
     }
 }

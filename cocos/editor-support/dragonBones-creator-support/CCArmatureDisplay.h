@@ -107,8 +107,10 @@ public:
         return _armature->getAnimation();
     }
     
-    /** Returns debug data,it's a Float32Array,
-     * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
+    /**
+     * @return debug data,it's a Float32Array,
+     * format |debug bones length|[beginX|beginY|toX|toY|...loop...]
+     */
     se_object_ptr getDebugData() const
     {
         if (_debugBuffer)
@@ -118,8 +120,10 @@ public:
         return nullptr;
     }
     
-    /** Returns debug data,it's a Uint32Array,
-     * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
+    /**
+     * @return material data,it's a Uint32Array,
+     * format |material length|index offset|[texture index|blend src|blend dst|indice length|...loop...]
+     */
     se_object_ptr getMaterialData() const
     {
         if (_materialBuffer)
@@ -150,7 +154,16 @@ public:
         _dbEventCallback = callback;
     }
     
+    /**
+     * @brief Convert component position to global position.
+     * @param[in] pos Component position
+     * @return Global position
+     */
     cocos2d::Vec2 convertToRootSpace(const cocos2d::Vec2& pos) const;
+    
+    /**
+     * @return root display,if this diplay is root,then return itself.
+     */
     CCArmatureDisplay* getRootDisplay();
     
 private:

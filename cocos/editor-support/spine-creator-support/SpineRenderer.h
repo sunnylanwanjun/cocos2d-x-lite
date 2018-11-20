@@ -79,8 +79,10 @@ namespace spine {
         /* @param attachmentName May be 0 for no attachment. */
         bool setAttachment (const std::string& slotName, const char* attachmentName);
         
-        /** Returns debug data,it's a Float32Array,
-         * format |debug slots length|x0|y0|x1|y1|...|debug bones length|beginX|beginY|toX|toY| */
+        /**
+         * @return debug data,it's a Float32Array,
+         * format |debug bones length|[beginX|beginY|toX|toY|...loop...]
+         */
         se_object_ptr getDebugData() const
         {
             if (_debugBuffer)
@@ -90,8 +92,10 @@ namespace spine {
             return nullptr;
         }
         
-        /** Returns debug data,it's a Uint32Array,
-         * format |material length|vertex length|index length|blend src|blend dst|indice length|*/
+        /**
+         * @return material data,it's a Uint32Array,
+         * format |material length|index offset|[texture index|blend src|blend dst|indice length|...loop...]
+         */
         se_object_ptr getMaterialData() const
         {
             if (_materialBuffer)

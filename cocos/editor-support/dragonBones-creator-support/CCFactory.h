@@ -119,13 +119,16 @@ public:
         _dragonBonesInstance->advanceTime(dt);
     }
     
+    /**
+     * @note When script engine clean up is trigger,will stop dragonbones timer.
+     */
     void stopSchedule()
     {
         editor::EditorManager::getInstance()->removeTimer(this);
     }
     
-    /*
-     this function is call by jsb_dragonbones_manual,when gc is trigger.
+    /**
+     * @note Destructor call by jsb_dragonbones_manual,when script engine clean up is trigger.
      */
     virtual ~CCFactory() 
     {

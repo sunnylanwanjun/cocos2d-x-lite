@@ -58,14 +58,29 @@ namespace editor {
             }
         }
         
+        /**
+         * @brief Third party module add in _updateMap,it will update perframe.
+         * @param[in] editor Module must implement IEditor interface.
+         */
         void addTimer(IEditor* editor);
+        
+        /**
+         * @brief Third party module remove from _updateMap,it will stop update.
+         * @param[in] editor Module must implement IEditor interface.
+         */
         void removeTimer(IEditor* editor);
         
+        /**
+         * @return opengl index buffer id
+         */
         uint32_t getGLIBID()
         {
             return _glIBID;
         }
         
+        /**
+         * @return opengl vertex buffer id
+         */
         uint32_t getGLVBID()
         {
             return _glVBID;
@@ -77,6 +92,7 @@ namespace editor {
         EditorManager();
         ~EditorManager();
         
+        // If manager is traversing _updateMap,will set the flag,untill traverse is finished.
         bool isUpdating = false;
         
     private:

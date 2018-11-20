@@ -28,7 +28,11 @@
 #include <string>
 
 namespace editor {
-    
+    /**
+     * Use for such as vertex buffer or index buffer,write bytes in it.
+     * If write data out of range,will sign it in _outRange property.
+     * User decide to enlarge it or not.
+     */
     class IOBuffer
     {
     public:
@@ -177,6 +181,11 @@ namespace editor {
             return _outRange;
         }
     
+        /**
+         * @brief Resize buffer
+         * @param[in] newLen New size you want to adjustment.
+         * @param[in] needCopy If true,will copy old data to new buffer,default false.
+         */
         virtual void resize(std::size_t newLen, bool needCopy = false);
     protected:
         uint8_t*                    _buffer = nullptr;

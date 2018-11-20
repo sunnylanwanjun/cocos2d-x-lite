@@ -29,7 +29,7 @@
 
 namespace editor {
     /** 
-     * TypeArray Pool for IOBuffer
+     * TypeArray Pool for IOTypeArray
      */
     class TypeArrayPool
     {
@@ -66,16 +66,30 @@ namespace editor {
         ~TypeArrayPool();
         
         void clearPool();
+        /**
+         * @brief Print all pool data
+         */
         void dump();
         
         void afterCleanupHandle();
         void afterInitHandle();
     private:
         typeMap _pool;
-    public:
         bool allowPush = true;
     public:
+        /**
+         * @brief pop a js TypeArray by given type and size
+         * @param[in] type TypeArray type.
+         * @param[in] size.
+         * @return a js TypeArray Object.
+         */
         se::Object* pop(arrayType type, std::size_t size);
-        void push(arrayType type, std::size_t fitSize, se::Object* object);
+        /**
+         * @brief push a TypeArray back to pool.
+         * @param[in] type TypeArray type.
+         * @param[in] arrayCapacity TypeArray capacity.
+         * @param[in] object TypeArray which want to put in pool.
+         */
+        void push(arrayType type, std::size_t arrayCapacity, se::Object* object);
     };
 }

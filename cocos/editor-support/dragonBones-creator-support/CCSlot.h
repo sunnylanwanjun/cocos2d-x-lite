@@ -45,9 +45,13 @@ class CCSlot : public Slot
     BIND_CLASS_TYPE_A(CCSlot);
     
 public:
+    // Global matrix (相对于骨骼部件)
     cocos2d::Mat4 worldMatrix;
+    // Global matrix dirty flag
     bool _worldMatDirty = true;
+    // Slot triangles
     editor::Triangles triangles;
+    // Slot vertex transform to World vertex
     editor::V2F_T2F_C4B* worldVerts = nullptr;
     cocos2d::Color4B color;
     cocos2d::Rect boundsRect;

@@ -224,6 +224,7 @@ void SpineRenderer::update (float deltaTime)
 {
     if (_paused) return;
     
+    // avoid other place call update.
     auto mgr = EditorManager::getInstance();
     if (!mgr->isUpdating) return;
     
@@ -256,6 +257,7 @@ void SpineRenderer::update (float deltaTime)
     
     if (_debugSlots || _debugBones)
     {
+        // If enable debug draw,then init debug buffer.
         if (_debugBuffer == nullptr)
         {
             _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
@@ -340,8 +342,8 @@ void SpineRenderer::update (float deltaTime)
                 curBlendDst = GL_ONE_MINUS_SRC_ALPHA;
         }
         
-        //jsb
         curTextureIndex = attachmentVertices->_texture->getRealTextureIndex();
+        // If texture or blendMode change,will change material.
         if (preTextureIndex != curTextureIndex || preBlendDst != curBlendDst || preBlendSrc != curBlendSrc)
         {
             if (preISegWritePos != -1)
@@ -353,7 +355,7 @@ void SpineRenderer::update (float deltaTime)
             _materialBuffer->writeUint32(curBlendSrc);
             _materialBuffer->writeUint32(curBlendDst);
             
-            //reserve indice segamentation lenght
+           //Reserve indice segamentation count.
             preISegWritePos = (int)_materialBuffer->getCurPos();
             _materialBuffer->writeUint32(0);
             
@@ -361,10 +363,12 @@ void SpineRenderer::update (float deltaTime)
             preBlendDst = curBlendDst;
             preBlendSrc = curBlendSrc;
             
+            // Clear index segmentation count,prepare to next segmentation.
             curISegLen = 0;
             materialLen++;
         }
         
+        // Calculation vertex color.
         color.a *= _skeleton->a * slot->a * 255;
         float multiplier = _premultipliedAlpha ? color.a : 255;
         color.r *= _skeleton->r * slot->r * multiplier;
@@ -382,6 +386,7 @@ void SpineRenderer::update (float deltaTime)
             vertex->colors.a = (GLubyte)color.a;
         }
         
+        // Fill EditorManager vertex buffer
         auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
         vb.writeBytes((char*)attachmentVertices->_triangles->verts,
                                   attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
@@ -399,6 +404,7 @@ void SpineRenderer::update (float deltaTime)
                                       attachmentVertices->_triangles->indexCount*sizeof(unsigned short));
         }
         
+        // Record this turn index segmentation count,it will store in material buffer in the end.
         curISegLen += attachmentVertices->_triangles->indexCount;
     }
     
@@ -411,6 +417,8 @@ void SpineRenderer::update (float deltaTime)
     bool isIBOutRange = ib.isOutRange();
     bool isMatOutRange = _materialBuffer->isOutRange();
     
+    // If vertex buffer or index buffer or material buffer out of range,then discard this time render
+    // next time will enlarge vertex buffer or index buffer to fill the animation data.
     if (isVBOutRange || isIBOutRange || isMatOutRange)
     {
         _materialBuffer->writeUint32(0, 0);
@@ -425,6 +433,8 @@ void SpineRenderer::update (float deltaTime)
         }
     }
     
+    // If material buffer is out of range,it will no enlarge automatically,because the size which is 512 bytes is
+    // enough large,exceed the size means call gl draw function too many times,you better to optimize resource.
     if (isMatOutRange)
     {
         cocos2d::log("Spine material data is too large,buffer has no space to put in it!!!!!!!!!!");
