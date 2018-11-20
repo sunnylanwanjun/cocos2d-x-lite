@@ -653,6 +653,12 @@
     <ClCompile Include="..\cocos\scripting\js-bindings\auto\jsb_cocos2dx_editor_support_auto.cpp">
       <Filter>js-bindings\auto</Filter>
     </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\EditorManager.cpp">
+      <Filter>editor-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\IOTypeArray.cpp">
+      <Filter>editor-support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cocos\base\base64.h">
@@ -1447,6 +1453,15 @@
     </ClInclude>
     <ClInclude Include="..\cocos\scripting\js-bindings\auto\jsb_cocos2dx_editor_support_auto.hpp">
       <Filter>js-bindings\auto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\EditorDef.h">
+      <Filter>editor-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\EditorManager.h">
+      <Filter>editor-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\IOTypeArray.h">
+      <Filter>editor-support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

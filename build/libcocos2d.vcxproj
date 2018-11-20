@@ -77,7 +77,9 @@
     <ClCompile Include="..\cocos\editor-support\dragonBones\parser\DataParser.cpp" />
     <ClCompile Include="..\cocos\editor-support\dragonBones\parser\JSONDataParser.cpp" />
     <ClCompile Include="..\cocos\editor-support\editor-adapter.cpp" />
+    <ClCompile Include="..\cocos\editor-support\EditorManager.cpp" />
     <ClCompile Include="..\cocos\editor-support\IOBuffer.cpp" />
+    <ClCompile Include="..\cocos\editor-support\IOTypeArray.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\CreatorAttachmentLoader.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.cpp" />
@@ -314,7 +316,10 @@
     <ClInclude Include="..\cocos\editor-support\dragonBones\parser\DataParser.h" />
     <ClInclude Include="..\cocos\editor-support\dragonBones\parser\JSONDataParser.h" />
     <ClInclude Include="..\cocos\editor-support\editor-adapter.h" />
+    <ClInclude Include="..\cocos\editor-support\EditorDef.h" />
+    <ClInclude Include="..\cocos\editor-support\EditorManager.h" />
     <ClInclude Include="..\cocos\editor-support\IOBuffer.hpp" />
+    <ClInclude Include="..\cocos\editor-support\IOTypeArray.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\CreatorAttachmentLoader.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.h" />
@@ -513,7 +518,7 @@
     <ProjectGuid>{98A51BA8-FC3A-415B-AC8F-8C7BD464E93E}</ProjectGuid>
     <RootNamespace>cocos2d-x.win32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
