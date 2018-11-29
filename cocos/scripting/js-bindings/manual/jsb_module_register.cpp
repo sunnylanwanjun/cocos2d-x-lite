@@ -35,7 +35,7 @@
 #include "cocos/scripting/js-bindings/manual/jsb_platform.h"
 #include "cocos/scripting/js-bindings/manual/jsb_cocos2dx_manual.hpp"
 
-#if USE_EDITOR_SUPPORT
+#if USE_MIDDLEWARE
 #include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_editor_support_auto.hpp"
 #endif
 
@@ -110,7 +110,7 @@ bool jsb_register_all_modules()
     se->addRegisterCallback(register_all_cocos2dx_manual);
     se->addRegisterCallback(register_platform_bindings);
     
-#if USE_EDITOR_SUPPORT
+#if USE_MIDDLEWARE
     se->addRegisterCallback(register_all_cocos2dx_editor_support);
 #endif
     

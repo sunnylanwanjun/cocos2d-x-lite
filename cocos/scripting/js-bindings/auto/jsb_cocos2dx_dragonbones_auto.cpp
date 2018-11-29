@@ -2,7 +2,7 @@
 #if USE_DRAGONBONES > 0
 #include "scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "scripting/js-bindings/manual/jsb_global.h"
-#include "editor-support/dragonBones-creator-support/CCDragonBonesHeaders.h"
+#include "editor-support/dragonbones-creator-support/CCDragonBonesHeaders.h"
 
 se::Object* __jsb_dragonBones_BaseObject_proto = nullptr;
 se::Class* __jsb_dragonBones_BaseObject_class = nullptr;
@@ -6084,7 +6084,7 @@ static bool js_cocos2dx_dragonbones_CCTextureAtlasData_setRenderTexture(se::Stat
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 1) {
-        editor::Texture2D* arg0 = nullptr;
+        cocos2d::middleware::Texture2D* arg0 = nullptr;
         ok &= seval_to_native_ptr(args[0], &arg0);
         SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCTextureAtlasData_setRenderTexture : Error processing arguments");
         cobj->setRenderTexture(arg0);
@@ -6103,8 +6103,8 @@ static bool js_cocos2dx_dragonbones_CCTextureAtlasData_getRenderTexture(se::Stat
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        editor::Texture2D* result = cobj->getRenderTexture();
-        ok &= native_ptr_to_seval<editor::Texture2D>((editor::Texture2D*)result, &s.rval());
+        cocos2d::middleware::Texture2D* result = cobj->getRenderTexture();
+        ok &= native_ptr_to_seval<cocos2d::middleware::Texture2D>((cocos2d::middleware::Texture2D*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCTextureAtlasData_getRenderTexture : Error processing arguments");
         return true;
     }
@@ -6165,8 +6165,8 @@ static bool js_cocos2dx_dragonbones_CCSlot_getTexture(se::State& s)
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        editor::Texture2D* result = cobj->getTexture();
-        ok &= native_ptr_to_seval<editor::Texture2D>((editor::Texture2D*)result, &s.rval());
+        cocos2d::middleware::Texture2D* result = cobj->getTexture();
+        ok &= native_ptr_to_seval<cocos2d::middleware::Texture2D>((cocos2d::middleware::Texture2D*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCSlot_getTexture : Error processing arguments");
         return true;
     }
@@ -7121,11 +7121,11 @@ bool register_all_cocos2dx_dragonbones(se::Object* obj)
 {
     // Get the ns
     se::Value nsVal;
-    if (!obj->getProperty("jsbDragonBones", &nsVal))
+    if (!obj->getProperty("dragonBones", &nsVal))
     {
         se::HandleObject jsobj(se::Object::createPlainObject());
         nsVal.setObject(jsobj);
-        obj->setProperty("jsbDragonBones", nsVal);
+        obj->setProperty("dragonBones", nsVal);
     }
     se::Object* ns = nsVal.toObject();
 

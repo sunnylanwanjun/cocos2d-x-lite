@@ -24,13 +24,25 @@
 #pragma once
 // if buffer out range,will increase with INCREASE_BUFFER_SIZE size
 #define INCREASE_BUFFER_SIZE 1024000
-// vertex buffer max capacity 8192000
-#define MAX_VB_BUFFER_SIZE 8192000
+// vertex buffer max capacity
+#define MAX_VB_BUFFER_SIZE 1024000
 // index buffer max capacity
-#define MAX_IB_BUFFER_SIZE 8192000
+#define MAX_IB_BUFFER_SIZE 1024000
 // can fill material data max capacity
 #define MAX_MATERIAL_BUFFER_SIZE 512
 // fill debug data max capacity
 #define MAX_DEBUG_BUFFER_SIZE 40960
 // type array pool min size
 #define MIN_TYPE_ARRAY_SIZE 128
+
+#ifndef MIDDLEWARE_BEGIN
+#define MIDDLEWARE_BEGIN namespace cocos2d { namespace middleware {
+#endif // MIDDLEWARE_BEGIN
+
+#ifndef MIDDLEWARE_END
+#define MIDDLEWARE_END }}
+#endif // MIDDLEWARE_END
+
+#ifndef USING_NS_MW
+#define USING_NS_MW using namespace cocos2d::middleware
+#endif

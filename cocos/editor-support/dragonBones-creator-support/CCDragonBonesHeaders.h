@@ -23,9 +23,9 @@
 #ifndef DRAGONBONES_CC_HEADERS_H
 #define DRAGONBONES_CC_HEADERS_H
 
-#include "dragonBones-creator-support/CCTextureAtlasData.h"
-#include "dragonBones-creator-support/CCArmatureDisplay.h"
-#include "dragonBones-creator-support/CCSlot.h"
-#include "dragonBones-creator-support/CCFactory.h"
+#include "dragonbones-creator-support/CCTextureAtlasData.h"
+#include "dragonbones-creator-support/CCArmatureDisplay.h"
+#include "dragonbones-creator-support/CCSlot.h"
+#include "dragonbones-creator-support/CCFactory.h"
 
 #endif // DRAGONBONES_CC_HEADERS_H

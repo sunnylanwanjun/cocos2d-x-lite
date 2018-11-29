@@ -29,13 +29,14 @@
 #include <algorithm>
 #include "platform/CCApplication.h"
 #include "base/CCScheduler.h"
-#include "EditorDef.h"
+#include "Macro.h"
 
 USING_NS_CC;
+USING_NS_MW;
+
 using std::min;
 using std::max;
 
-using namespace editor;
 using namespace spine;
 
 static const std::string scheduleKey = "spineScheduleKey";
@@ -78,13 +79,13 @@ void SpineRenderer::initialize ()
     
     if (_materialBuffer == nullptr)
     {
-        _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
+        _materialBuffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
     }
 }
 
 void SpineRenderer::beginSchedule()
 {
-    EditorManager::getInstance()->addTimer(this);
+    MiddlewareManager::getInstance()->addTimer(this);
 }
 
 void SpineRenderer::onEnable()
@@ -99,7 +100,7 @@ void SpineRenderer::onDisable()
 
 void SpineRenderer::stopSchedule()
 {
-    EditorManager::getInstance()->removeTimer(this);
+    MiddlewareManager::getInstance()->removeTimer(this);
 }
 
 void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkeletonData)
@@ -225,7 +226,7 @@ void SpineRenderer::update (float deltaTime)
     if (_paused) return;
     
     // avoid other place call update.
-    auto mgr = EditorManager::getInstance();
+    auto mgr = MiddlewareManager::getInstance();
     if (!mgr->isUpdating) return;
     
 	spSkeleton_update(_skeleton, deltaTime * _timeScale);
@@ -237,8 +238,8 @@ void SpineRenderer::update (float deltaTime)
     
     Color4F color;
     AttachmentVertices* attachmentVertices = nullptr;
-    editor::IOBuffer& vb = mgr->vb;
-    editor::IOBuffer& ib = mgr->ib;
+    middleware::IOBuffer& vb = mgr->vb;
+    middleware::IOBuffer& ib = mgr->ib;
     
     int preBlendSrc = -1;
     int preBlendDst = -1;
@@ -260,7 +261,7 @@ void SpineRenderer::update (float deltaTime)
         // If enable debug draw,then init debug buffer.
         if (_debugBuffer == nullptr)
         {
-            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
+            _debugBuffer = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
         }
         _debugBuffer->reset();
         
@@ -386,10 +387,10 @@ void SpineRenderer::update (float deltaTime)
             vertex->colors.a = (GLubyte)color.a;
         }
         
-        // Fill EditorManager vertex buffer
-        auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
+        // Fill MiddlewareManager vertex buffer
+        auto vertexOffset = vb.getCurPos()/sizeof(middleware::V2F_T2F_C4B);
         vb.writeBytes((char*)attachmentVertices->_triangles->verts,
-                                  attachmentVertices->_triangles->vertCount*sizeof(editor::V2F_T2F_C4B));
+                                  attachmentVertices->_triangles->vertCount*sizeof(middleware::V2F_T2F_C4B));
         
         if (vertexOffset > 0)
         {
@@ -438,7 +439,7 @@ void SpineRenderer::update (float deltaTime)
     if (isMatOutRange)
     {
         cocos2d::log("Spine material data is too large,buffer has no space to put in it!!!!!!!!!!");
-        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in EditorDef");
+        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in Macro");
         cocos2d::log("But It's better to optimize resource to avoid large material.Because it can advance performance");
     }
     
@@ -462,7 +463,7 @@ void SpineRenderer::update (float deltaTime)
         _debugBuffer->writeFloat32(0, 0);
         _debugBuffer->writeFloat32(sizeof(float), 0);
         cocos2d::log("Spine debug data is too large,debug buffer has no space to put in it!!!!!!!!!!");
-        cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in EditorDef");
+        cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in Macro");
     }
 }
 

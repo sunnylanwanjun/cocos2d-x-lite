@@ -23,15 +23,15 @@
 #ifndef DRAGONBONES_CC_ARMATURE_DISPLAY_CONTAINER_H
 #define DRAGONBONES_CC_ARMATURE_DISPLAY_CONTAINER_H
 
-#include "dragonBones/DragonBonesHeaders.h"
+#include "dragonbones/DragonBonesHeaders.h"
 #include "base/CCRef.h"
 #include "scripting/js-bindings/event/EventDispatcher.h"
 #include <map>
 #include <vector>
 
-#include "dragonBones-creator-support/CCSlot.h"
-#include "IOTypeArray.h"
-#include "EditorManager.h"
+#include "dragonbones-creator-support/CCSlot.h"
+#include "IOTypedArray.h"
+#include "MiddlewareManager.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -168,8 +168,8 @@ public:
     
 private:
     std::map<std::string,bool> _listenerIDMap;
-    editor::IOTypeArray* _materialBuffer = nullptr;
-    editor::IOTypeArray* _debugBuffer = nullptr;
+    cocos2d::middleware::IOTypedArray* _materialBuffer = nullptr;
+    cocos2d::middleware::IOTypedArray* _debugBuffer = nullptr;
     cocos2d::Color4B _nodeColor = cocos2d::Color4B::WHITE;
     
     int _preBlendSrc = -1;

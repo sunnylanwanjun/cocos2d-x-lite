@@ -1,12 +1,12 @@
 /**
  * @module cocos2dx_editor_support
  */
-var jsbEditor = jsbEditor || {};
+var middleware = middleware || {};
 
 /**
  * @class Texture2D
  */
-jsbEditor.Texture2D = {
+middleware.Texture2D = {
 
 /**
  * @method getRealTextureIndex
@@ -80,7 +80,7 @@ int
 
 /**
  * @method setTexParameters
- * @param {editor::Texture2D::_TexParams} arg0
+ * @param {cc.middleware::Texture2D::_TexParams} arg0
  */
 setTexParameters : function (
 _texparams 
@@ -100,26 +100,26 @@ Texture2D : function (
 };
 
 /**
- * @class EditorManager
+ * @class MiddlewareManager
  */
-jsbEditor.EditorManager = {
+middleware.MiddlewareManager = {
 
 /**
  * @method addTimer
- * @param {editor::IEditor} arg0
+ * @param {cc.middleware::IMiddleware} arg0
  */
 addTimer : function (
-ieditor 
+imiddleware 
 )
 {
 },
 
 /**
  * @method removeTimer
- * @param {editor::IEditor} arg0
+ * @param {cc.middleware::IMiddleware} arg0
  */
 removeTimer : function (
-ieditor 
+imiddleware 
 )
 {
 },
@@ -154,19 +154,19 @@ destroyInstance : function (
 
 /**
  * @method getInstance
- * @return {editor::EditorManager}
+ * @return {cc.middleware::MiddlewareManager}
  */
 getInstance : function (
 )
 {
-    return editor::EditorManager;
+    return cc.middleware::MiddlewareManager;
 },
 
 /**
- * @method EditorManager
+ * @method MiddlewareManager
  * @constructor
  */
-EditorManager : function (
+MiddlewareManager : function (
 )
 {
 },

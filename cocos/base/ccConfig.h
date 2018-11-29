@@ -58,9 +58,11 @@ THE SOFTWARE.
 #define USE_NET_WORK 1
 #endif
 
-#ifndef USE_EDITOR_SUPPORT
-#define USE_EDITOR_SUPPORT 1
+#ifndef USE_MIDDLEWARE
+#define USE_MIDDLEWARE 1
 #endif
+
+#if USE_MIDDLEWARE > 0
 
 #ifndef USE_SPINE
 #define USE_SPINE 1
@@ -69,6 +71,8 @@ THE SOFTWARE.
 #ifndef USE_DRAGONBONES
 #define USE_DRAGONBONES 1
 #endif
+
+#endif //USE_MIDDLEWARE
 
 /** @def CC_ENABLE_STACKABLE_ACTIONS
  * If enabled, actions that alter the position property (eg: MoveBy, JumpBy, BezierBy, etc..) will be stacked.

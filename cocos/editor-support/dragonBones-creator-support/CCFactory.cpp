@@ -20,11 +20,13 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#include "dragonBones-creator-support/CCFactory.h"
-#include "dragonBones-creator-support/CCTextureAtlasData.h"
-#include "dragonBones-creator-support/CCArmatureDisplay.h"
-#include "dragonBones-creator-support/CCSlot.h"
+#include "dragonbones-creator-support/CCFactory.h"
+#include "dragonbones-creator-support/CCTextureAtlasData.h"
+#include "dragonbones-creator-support/CCArmatureDisplay.h"
+#include "dragonbones-creator-support/CCSlot.h"
 #include "platform/CCFileUtils.h"
+
+USING_NS_CC;
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -44,7 +46,7 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
 
         if (textureAtlas != nullptr)
         {
-            static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(static_cast<editor::Texture2D*>(textureAtlas));
+            static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(static_cast<middleware::Texture2D*>(textureAtlas));
         }
     }
     else
@@ -213,7 +215,7 @@ void CCFactory::removeTextureAtlasDataByIndex(const std::string& name, int textu
         auto& textureAtlasDataList = iterator->second;
         for (auto it = textureAtlasDataList.begin(); it != textureAtlasDataList.end(); it++)
         {
-            editor::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
+            middleware::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
             if (texture && texture->getRealTextureIndex() == textureIndex)
             {
                 textureAtlasDataList.erase(it);
@@ -235,7 +237,7 @@ CCTextureAtlasData* CCFactory::getTextureAtlasDataByIndex(const std::string& nam
         auto& textureAtlasDataList = iterator->second;
         for (auto it = textureAtlasDataList.begin(); it != textureAtlasDataList.end(); it++)
         {
-            editor::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
+            middleware::Texture2D* texture = ((CCTextureAtlasData*)*it)->getRenderTexture();
             if (texture && texture->getRealTextureIndex() == textureIndex)
             {
                 return (CCTextureAtlasData*)*it;

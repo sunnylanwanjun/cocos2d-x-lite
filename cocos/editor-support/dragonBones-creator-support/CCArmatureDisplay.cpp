@@ -20,13 +20,12 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#include "dragonBones-creator-support/CCArmatureDisplay.h"
-#include "dragonBones-creator-support/CCSlot.h"
-#include "EditorDef.h"
-
-using namespace editor;
+#include "dragonbones-creator-support/CCArmatureDisplay.h"
+#include "dragonbones-creator-support/CCSlot.h"
+#include "Macro.h"
 
 USING_NS_CC;
+USING_NS_MW;
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -46,7 +45,7 @@ CCArmatureDisplay* CCArmatureDisplay::create()
 
 CCArmatureDisplay::CCArmatureDisplay()
 {
-    _materialBuffer = new IOTypeArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
+    _materialBuffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
 }
 
 CCArmatureDisplay::~CCArmatureDisplay()
@@ -90,7 +89,7 @@ void CCArmatureDisplay::dbUpdate()
     if (this->_armature->getParent())
         return;
     
-    auto mgr = EditorManager::getInstance();
+    auto mgr = MiddlewareManager::getInstance();
     if (!mgr->isUpdating) return;
     
     IOBuffer& vb = mgr->vb;
@@ -144,7 +143,7 @@ void CCArmatureDisplay::dbUpdate()
     if (isMatOutRange)
     {
         cocos2d::log("Dragonbones material data is too large,buffer has no space to put in it!!!!!!!!!!");
-        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in EditorDef");
+        cocos2d::log("You can adjust MAX_MATERIAL_BUFFER_SIZE in Macro");
         cocos2d::log("But It's better to optimize resource to avoid large material.Because it can advance performance");
     }
     
@@ -153,7 +152,7 @@ void CCArmatureDisplay::dbUpdate()
         // If enable debug draw,then init debug buffer.
         if (_debugBuffer == nullptr)
         {
-            _debugBuffer = new IOTypeArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
+            _debugBuffer = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
         }
         
         _debugBuffer->reset();
@@ -186,7 +185,7 @@ void CCArmatureDisplay::dbUpdate()
         {
             _debugBuffer->writeFloat32(0, 0);
             cocos2d::log("Dragonbones debug data is too large,debug buffer has no space to put in it!!!!!!!!!!");
-            cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in EditorDef");
+            cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in Macro");
         }
     }
 }
@@ -226,7 +225,7 @@ CCArmatureDisplay* CCArmatureDisplay::getRootDisplay()
 void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
     auto& slots = armature->getSlots();
-    auto mgr = EditorManager::getInstance();
+    auto mgr = MiddlewareManager::getInstance();
     IOBuffer& vb = mgr->vb;
     IOBuffer& ib = mgr->ib;
     
@@ -268,7 +267,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
                 break;
         }
         
-        editor::Texture2D* texture = slot->getTexture();
+        middleware::Texture2D* texture = slot->getTexture();
         if (!texture) continue;
         _curTextureIndex = texture->getRealTextureIndex();
         
@@ -306,13 +305,13 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         _finalColor.b = _nodeColor.b * slot->color.b * multiplier;
         
         // Transform component matrix to global matrix
-        editor::Triangles& triangles = slot->triangles;
+        middleware::Triangles& triangles = slot->triangles;
         cocos2d::Mat4& worldMatrix = slot->worldMatrix;
-        editor::V2F_T2F_C4B* worldTriangles = slot->worldVerts;
+        middleware::V2F_T2F_C4B* worldTriangles = slot->worldVerts;
         for (int v = 0, w = 0, vn = triangles.vertCount; v < vn; ++v, w += 2)
         {
-            editor::V2F_T2F_C4B* vertex = triangles.verts + v;
-            editor::V2F_T2F_C4B* worldVertex = worldTriangles + v;
+            middleware::V2F_T2F_C4B* vertex = triangles.verts + v;
+            middleware::V2F_T2F_C4B* worldVertex = worldTriangles + v;
             worldVertex->vertices.x = vertex->vertices.x * worldMatrix.m[0] + vertex->vertices.y * worldMatrix.m[4] + worldMatrix.m[12];
             worldVertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[5] + worldMatrix.m[13];
             worldVertex->colors.r = (GLubyte)_finalColor.r;
@@ -321,9 +320,9 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
             worldVertex->colors.a = (GLubyte)_finalColor.a;
         }
         
-        // Fill EditorManager vertex buffer
-        auto vertexOffset = vb.getCurPos()/sizeof(editor::V2F_T2F_C4B);
-        vb.writeBytes((char*)worldTriangles, triangles.vertCount*sizeof(editor::V2F_T2F_C4B));
+        // Fill MiddlewareManager vertex buffer
+        auto vertexOffset = vb.getCurPos()/sizeof(middleware::V2F_T2F_C4B);
+        vb.writeBytes((char*)worldTriangles, triangles.vertCount*sizeof(middleware::V2F_T2F_C4B));
         
         // If vertex buffer current offset is zero,fill it directly or recalculate vertex offset.
         if (vertexOffset > 0)

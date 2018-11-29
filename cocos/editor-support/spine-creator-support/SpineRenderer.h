@@ -29,8 +29,8 @@
 #include "base/ccTypes.h"
 #include <vector>
 #include "scripting/js-bindings/jswrapper/Object.hpp"
-#include "IOTypeArray.h"
-#include "EditorManager.h"
+#include "IOTypedArray.h"
+#include "MiddlewareManager.h"
 
 namespace spine {
 
@@ -38,7 +38,7 @@ namespace spine {
 
     /** Draws a skeleton.
      */
-    class SpineRenderer: public editor::IEditor, public cocos2d::Ref {
+    class SpineRenderer: public cocos2d::middleware::IMiddleware, public cocos2d::Ref {
     public:
         static SpineRenderer* create ();
         static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
@@ -151,8 +151,8 @@ namespace spine {
         cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
         bool                _premultipliedAlpha = false;
         
-        editor::IOTypeArray* _materialBuffer = nullptr;
-        editor::IOTypeArray* _debugBuffer = nullptr;
+        cocos2d::middleware::IOTypedArray* _materialBuffer = nullptr;
+        cocos2d::middleware::IOTypedArray* _debugBuffer = nullptr;
     };
 
 }

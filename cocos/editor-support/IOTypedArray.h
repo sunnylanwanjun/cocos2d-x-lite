@@ -26,33 +26,35 @@
 #include "IOBuffer.h"
 #include "base/ccMacros.h"
 #include "scripting/js-bindings/jswrapper/SeApi.h"
+#include "Macro.h"
 
-namespace editor {
+MIDDLEWARE_BEGIN
+/**
+ * Inherit from IOBuffer.
+ */
+class IOTypedArray: public IOBuffer
+{
+public:
     /**
-     * Inherit from IOBuffer.
+     * @brief constructor
+     * @param[in] arrayType TypeArray type
+     * @param[in] defaultSize TypeArray capacity
+     * @param[in] usePool If true,will get TypeArray from pool,or create TypeArray,default false.
      */
-    class IOTypeArray: public IOBuffer
-    {
-    public:
-        /**
-         * @brief constructor
-         * @param[in] arrayType TypeArray type
-         * @param[in] defaultSize TypeArray capacity
-         * @param[in] usePool If true,will get TypeArray from pool,or create TypeArray,default false.
-         */
-        IOTypeArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize, bool usePool = false);
-        virtual ~IOTypeArray ();
-        
-        inline se::Object* getTypeArray () const
-        {
-            return _typeArray;
-        }
+    IOTypedArray (se::Object::TypedArrayType arrayType, std::size_t defaultSize, bool usePool = false);
+    virtual ~IOTypedArray ();
     
-        virtual void resize(std::size_t newLen, bool needCopy = false) override;
-        
-    private:
-        se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
-        se::Object*                 _typeArray = nullptr;
-        bool                        _usePool = false;
-    };
-}
+    inline se::Object* getTypeArray () const
+    {
+        return _typeArray;
+    }
+
+    virtual void resize(std::size_t newLen, bool needCopy = false) override;
+    
+private:
+    se::Object::TypedArrayType  _arrayType = se::Object::TypedArrayType::NONE;
+    se::Object*                 _typeArray = nullptr;
+    bool                        _usePool = false;
+};
+
+MIDDLEWARE_END

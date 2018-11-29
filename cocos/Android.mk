@@ -163,7 +163,7 @@ LOCAL_STATIC_LIBRARIES += cocos_network_static
 LOCAL_STATIC_LIBRARIES += cocos_extension_static
 endif # USE_NET_WORK
 
-ifneq ($(USE_EDITOR_SUPPORT),0_0)
+ifneq ($(USE_MIDDLEWARE),0_0)
 LOCAL_STATIC_LIBRARIES += editor_support_static
 endif # USE_SPINE or USE_DRAGONBONES
 
