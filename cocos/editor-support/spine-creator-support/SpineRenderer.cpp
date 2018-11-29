@@ -29,7 +29,7 @@
 #include <algorithm>
 #include "platform/CCApplication.h"
 #include "base/CCScheduler.h"
-#include "Macro.h"
+#include "MiddleWareMacro.h"
 
 USING_NS_CC;
 USING_NS_MW;

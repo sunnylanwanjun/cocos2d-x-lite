@@ -26,7 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
-#include "Macro.h"
+#include "MiddleWareMacro.h"
 
 MIDDLEWARE_BEGIN
 /**

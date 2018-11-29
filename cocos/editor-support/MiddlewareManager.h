@@ -27,7 +27,7 @@
 #include "map"
 #include "vector"
 #include "base/CCRef.h"
-#include "Macro.h"
+#include "MiddleWareMacro.h"
 
 MIDDLEWARE_BEGIN
 

@@ -26,7 +26,7 @@
 #include "math/Vec2.h"
 #include "base/ccTypes.h"
 #include <functional>
-#include "Macro.h"
+#include "MiddleWareMacro.h"
 
 MIDDLEWARE_BEGIN
 /** @struct Tex2F
