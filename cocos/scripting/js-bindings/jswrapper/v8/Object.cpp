@@ -205,7 +205,14 @@ namespace se {
     Object* Object::createArrayBufferObject(void* data, size_t byteLength)
     {
         v8::Local<v8::ArrayBuffer> jsobj = v8::ArrayBuffer::New(__isolate, byteLength);
-        memcpy(jsobj->GetContents().Data(), data, byteLength);
+        if (data)
+        {
+            memcpy(jsobj->GetContents().Data(), data, byteLength);
+        }
+        else
+        {
+            memset(jsobj->GetContents().Data(), 0, byteLength);
+        }
         Object* obj = Object::_createJSObject(nullptr, jsobj);
         return obj;
     }

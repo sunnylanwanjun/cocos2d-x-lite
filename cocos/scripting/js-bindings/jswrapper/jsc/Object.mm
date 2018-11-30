@@ -113,7 +113,15 @@ namespace se {
         if (isSupportTypedArrayAPI())
         {
             void* copiedData = malloc(byteLength);
-            memcpy(copiedData, data, byteLength);
+            if (data)
+            {
+                memcpy(copiedData, data, byteLength);
+            }
+            else
+            {
+                memset(copiedData, 0, byteLength);
+            }
+            
             JSValueRef exception = nullptr;
             JSObjectRef jsobj = JSObjectMakeArrayBufferWithBytesNoCopy(__cx, copiedData, byteLength, myJSTypedArrayBytesDeallocator, nullptr, &exception);
             if (exception != nullptr)
@@ -161,7 +169,7 @@ namespace se {
                 memcpy(copiedData, data, byteLength);
             }
             else
-	    {
+            {
                 memset(copiedData, 0, byteLength);
             }
             

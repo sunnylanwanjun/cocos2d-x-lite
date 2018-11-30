@@ -74,7 +74,14 @@ namespace se {
         unsigned int bufferLength = 0;
         if (JsNoError == JsGetArrayBufferStorage(jsobj, &buffer, &bufferLength))
         {
-            memcpy((void*)buffer, data, byteLength);
+            if (data)
+            {
+                memcpy((void*)buffer, data, byteLength);
+            }
+            else
+            {
+                memset((void*)buffer, 0, byteLength);
+            }
             obj = Object::_createJSObject(nullptr, jsobj);
         }
 
