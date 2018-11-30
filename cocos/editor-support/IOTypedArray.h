@@ -26,7 +26,7 @@
 #include "IOBuffer.h"
 #include "base/ccMacros.h"
 #include "scripting/js-bindings/jswrapper/SeApi.h"
-#include "MiddleWareMacro.h"
+#include "MiddlewareMacro.h"
 
 MIDDLEWARE_BEGIN
 /**

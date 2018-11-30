@@ -25,7 +25,7 @@
 #include "base/CCLog.h"
 #include "base/ccMacros.h"
 #include <functional>
-#include "MiddleWareMacro.h"
+#include "MiddlewareMacro.h"
 
 #define POOL_DEBUG 0
 

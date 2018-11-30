@@ -151,8 +151,8 @@
 		046B689121A00F5600B33469 /* IOTypedArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B688E21A00F5600B33469 /* IOTypedArray.cpp */; };
 		046B689221A00F5600B33469 /* IOTypedArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B688F21A00F5600B33469 /* IOTypedArray.h */; };
 		046B689321A00F5600B33469 /* IOTypedArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B688F21A00F5600B33469 /* IOTypedArray.h */; };
-		046B689521A10D5800B33469 /* MiddleWareMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* MiddleWareMacro.h */; };
-		046B689621A10D5800B33469 /* MiddleWareMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* MiddleWareMacro.h */; };
+		046B689521A10D5800B33469 /* MiddlewareMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* MiddlewareMacro.h */; };
+		046B689621A10D5800B33469 /* MiddlewareMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 046B689421A10D5800B33469 /* MiddlewareMacro.h */; };
 		046B68A621A292D300B33469 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68A421A292D200B33469 /* jsb_spine_manual.cpp */; };
 		046B68A721A292D300B33469 /* jsb_spine_manual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046B68A421A292D200B33469 /* jsb_spine_manual.cpp */; };
 		046B68A821A292D300B33469 /* jsb_spine_manual.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 046B68A521A292D200B33469 /* jsb_spine_manual.hpp */; };
@@ -1226,7 +1226,7 @@
 		046B6889219FA61200B33469 /* MiddlewareManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MiddlewareManager.h; path = "../cocos/editor-support/MiddlewareManager.h"; sourceTree = "<group>"; };
 		046B688E21A00F5600B33469 /* IOTypedArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IOTypedArray.cpp; path = "../cocos/editor-support/IOTypedArray.cpp"; sourceTree = "<group>"; };
 		046B688F21A00F5600B33469 /* IOTypedArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOTypedArray.h; path = "../cocos/editor-support/IOTypedArray.h"; sourceTree = "<group>"; };
-		046B689421A10D5800B33469 /* MiddleWareMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MiddleWareMacro.h; path = "../cocos/editor-support/MiddleWareMacro.h"; sourceTree = "<group>"; };
+		046B689421A10D5800B33469 /* MiddlewareMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MiddlewareMacro.h; path = "../cocos/editor-support/MiddlewareMacro.h"; sourceTree = "<group>"; };
 		046B68A421A292D200B33469 /* jsb_spine_manual.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_spine_manual.cpp; sourceTree = "<group>"; };
 		046B68A521A292D200B33469 /* jsb_spine_manual.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_spine_manual.hpp; sourceTree = "<group>"; };
 		046B68AA21A294B100B33469 /* jsb_cocos2dx_spine_auto.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jsb_cocos2dx_spine_auto.hpp; sourceTree = "<group>"; };
@@ -1865,7 +1865,7 @@
 				046B6889219FA61200B33469 /* MiddlewareManager.h */,
 				046B688E21A00F5600B33469 /* IOTypedArray.cpp */,
 				046B688F21A00F5600B33469 /* IOTypedArray.h */,
-				046B689421A10D5800B33469 /* MiddleWareMacro.h */,
+				046B689421A10D5800B33469 /* MiddlewareMacro.h */,
 			);
 			name = "editor-support";
 			sourceTree = "<group>";
@@ -3070,7 +3070,7 @@
 				ED30579B1BEC77B70083C3ED /* ConvertUTF.h in Headers */,
 				46FDDA75202ACC6A00931238 /* Config.h in Headers */,
 				469303822046AE05004A3D6C /* Value.hpp in Headers */,
-				046B689521A10D5800B33469 /* MiddleWareMacro.h in Headers */,
+				046B689521A10D5800B33469 /* MiddlewareMacro.h in Headers */,
 				46FDDAC3202ACC6A00931238 /* FrameBuffer.h in Headers */,
 				4617863D20522469008256E1 /* HttpResponse.h in Headers */,
 				1A29D7A320566CAC00168D9A /* CCCanvasRenderingContext2D.h in Headers */,
@@ -3399,7 +3399,7 @@
 				46AE3FFE2092F3A600F3A228 /* util.h in Headers */,
 				046E06652185B41B00B24E2D /* Armature.h in Headers */,
 				046E06692185B41B00B24E2D /* Constraint.h in Headers */,
-				046B689621A10D5800B33469 /* MiddleWareMacro.h in Headers */,
+				046B689621A10D5800B33469 /* MiddlewareMacro.h in Headers */,
 				46FDDA82202ACC6A00931238 /* RendererUtils.h in Headers */,
 				40AEF7B7216D982600729AA5 /* jsb_webview_auto.hpp in Headers */,
 				50ABC0101926664800A911A9 /* CCFileUtils.h in Headers */,

@@ -22,7 +22,7 @@
  */
 #include "dragonbones-creator-support/CCArmatureDisplay.h"
 #include "dragonbones-creator-support/CCSlot.h"
-#include "MiddleWareMacro.h"
+#include "MiddlewareMacro.h"
 
 USING_NS_CC;
 USING_NS_MW;
