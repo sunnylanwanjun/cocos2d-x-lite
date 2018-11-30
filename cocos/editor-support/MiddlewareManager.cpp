@@ -39,7 +39,6 @@ MiddlewareManager::MiddlewareManager()
 {
     glGenBuffers(1, &_glIBID);
     glGenBuffers(1, &_glVBID);
-    afterInitHandle();
 }
 
 MiddlewareManager::~MiddlewareManager()
@@ -50,29 +49,6 @@ MiddlewareManager::~MiddlewareManager()
     
     cocos2d::ccDeleteBuffers(1, &_glIBID);
     cocos2d::ccDeleteBuffers(1, &_glVBID);
-}
-
-void MiddlewareManager::afterCleanupHandle()
-{
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    scheduler->unschedule(scheduleKey, this);
-    
-    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&MiddlewareManager::afterInitHandle,this));
-}
-
-void MiddlewareManager::afterInitHandle()
-{
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    scheduler->schedule(
-    [&](float passedTime)
-    {
-        this->update(passedTime);
-    },
-    this, 0, false, scheduleKey);
-    
-    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&MiddlewareManager::afterCleanupHandle,this));
 }
 
 void MiddlewareManager::update(float dt)

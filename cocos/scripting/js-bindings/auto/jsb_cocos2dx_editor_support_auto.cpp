@@ -239,24 +239,23 @@ bool js_register_cocos2dx_editor_support_Texture2D(se::Object* obj)
 se::Object* __jsb_cocos2d_middleware_MiddlewareManager_proto = nullptr;
 se::Class* __jsb_cocos2d_middleware_MiddlewareManager_class = nullptr;
 
-static bool js_cocos2dx_editor_support_MiddlewareManager_addTimer(se::State& s)
+static bool js_cocos2dx_editor_support_MiddlewareManager_getGLVBID(se::State& s)
 {
     cocos2d::middleware::MiddlewareManager* cobj = (cocos2d::middleware::MiddlewareManager*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_MiddlewareManager_addTimer : Invalid Native Object");
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_MiddlewareManager_getGLVBID : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        cocos2d::middleware::IMiddleware* arg0 = nullptr;
-        ok &= seval_to_native_ptr(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_MiddlewareManager_addTimer : Error processing arguments");
-        cobj->addTimer(arg0);
+    if (argc == 0) {
+        unsigned int result = cobj->getGLVBID();
+        ok &= uint32_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_MiddlewareManager_getGLVBID : Error processing arguments");
         return true;
     }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_addTimer)
+SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_getGLVBID)
 
 static bool js_cocos2dx_editor_support_MiddlewareManager_removeTimer(se::State& s)
 {
@@ -277,23 +276,43 @@ static bool js_cocos2dx_editor_support_MiddlewareManager_removeTimer(se::State& 
 }
 SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_removeTimer)
 
-static bool js_cocos2dx_editor_support_MiddlewareManager_getGLVBID(se::State& s)
+static bool js_cocos2dx_editor_support_MiddlewareManager_update(se::State& s)
 {
     cocos2d::middleware::MiddlewareManager* cobj = (cocos2d::middleware::MiddlewareManager*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_MiddlewareManager_getGLVBID : Invalid Native Object");
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_MiddlewareManager_update : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        unsigned int result = cobj->getGLVBID();
-        ok &= uint32_to_seval(result, &s.rval());
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_MiddlewareManager_getGLVBID : Error processing arguments");
+    if (argc == 1) {
+        float arg0 = 0;
+        ok &= seval_to_float(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_MiddlewareManager_update : Error processing arguments");
+        cobj->update(arg0);
         return true;
     }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_getGLVBID)
+SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_update)
+
+static bool js_cocos2dx_editor_support_MiddlewareManager_addTimer(se::State& s)
+{
+    cocos2d::middleware::MiddlewareManager* cobj = (cocos2d::middleware::MiddlewareManager*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_editor_support_MiddlewareManager_addTimer : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        cocos2d::middleware::IMiddleware* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_editor_support_MiddlewareManager_addTimer : Error processing arguments");
+        cobj->addTimer(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_editor_support_MiddlewareManager_addTimer)
 
 static bool js_cocos2dx_editor_support_MiddlewareManager_getGLIBID(se::State& s)
 {
@@ -374,9 +393,10 @@ bool js_register_cocos2dx_editor_support_MiddlewareManager(se::Object* obj)
 {
     auto cls = se::Class::create("MiddlewareManager", obj, nullptr, _SE(js_cocos2dx_editor_support_MiddlewareManager_constructor));
 
-    cls->defineFunction("addTimer", _SE(js_cocos2dx_editor_support_MiddlewareManager_addTimer));
-    cls->defineFunction("removeTimer", _SE(js_cocos2dx_editor_support_MiddlewareManager_removeTimer));
     cls->defineFunction("getGLVBID", _SE(js_cocos2dx_editor_support_MiddlewareManager_getGLVBID));
+    cls->defineFunction("removeTimer", _SE(js_cocos2dx_editor_support_MiddlewareManager_removeTimer));
+    cls->defineFunction("update", _SE(js_cocos2dx_editor_support_MiddlewareManager_update));
+    cls->defineFunction("addTimer", _SE(js_cocos2dx_editor_support_MiddlewareManager_addTimer));
     cls->defineFunction("getGLIBID", _SE(js_cocos2dx_editor_support_MiddlewareManager_getGLIBID));
     cls->defineStaticFunction("destroyInstance", _SE(js_cocos2dx_editor_support_MiddlewareManager_destroyInstance));
     cls->defineStaticFunction("getInstance", _SE(js_cocos2dx_editor_support_MiddlewareManager_getInstance));

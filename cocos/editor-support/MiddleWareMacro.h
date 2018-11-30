@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 // if buffer out range,will increase with INCREASE_BUFFER_SIZE size
-#define INCREASE_BUFFER_SIZE 1024000
+#define INCREASE_BUFFER_SIZE 102400
 // vertex buffer max capacity
 #define MAX_VB_BUFFER_SIZE 1024000
 // index buffer max capacity
