@@ -321,9 +321,13 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         }
         
         // Fill MiddlewareManager vertex buffer
-        auto vertexOffset = vb.getCurPos()/sizeof(middleware::V2F_T2F_C4B);
-        vb.writeBytes((char*)worldTriangles, triangles.vertCount*sizeof(middleware::V2F_T2F_C4B));
+        auto vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B);
+		auto vbSize = triangles.vertCount * sizeof(middleware::V2F_T2F_C4B);
+		vb.checkSpace(vbSize, true);
+        vb.writeBytes((char*)worldTriangles, vbSize);
         
+		auto ibSize = triangles.indexCount * sizeof(unsigned short);
+		ib.checkSpace(ibSize, true);
         // If vertex buffer current offset is zero,fill it directly or recalculate vertex offset.
         if (vertexOffset > 0)
         {
@@ -334,7 +338,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         }
         else
         {
-            ib.writeBytes((char*)triangles.indices, triangles.indexCount*sizeof(unsigned short));
+            ib.writeBytes((char*)triangles.indices, ibSize);
         }
         
         // Record this turn index segmentation count,it will store in material buffer in the end.

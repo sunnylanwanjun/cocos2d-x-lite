@@ -33,7 +33,7 @@
 // fill debug data max capacity
 #define MAX_DEBUG_BUFFER_SIZE 40960
 // type array pool min size
-#define MIN_TYPE_ARRAY_SIZE 128
+#define MIN_TYPE_ARRAY_SIZE 1024
 
 #ifndef MIDDLEWARE_BEGIN
 #define MIDDLEWARE_BEGIN namespace cocos2d { namespace middleware {

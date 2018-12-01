@@ -389,9 +389,12 @@ void SpineRenderer::update (float deltaTime)
         
         // Fill MiddlewareManager vertex buffer
         auto vertexOffset = vb.getCurPos()/sizeof(middleware::V2F_T2F_C4B);
-        vb.writeBytes((char*)attachmentVertices->_triangles->verts,
-                                  attachmentVertices->_triangles->vertCount*sizeof(middleware::V2F_T2F_C4B));
+		auto vbSize = attachmentVertices->_triangles->vertCount * sizeof(middleware::V2F_T2F_C4B);
+		vb.checkSpace(vbSize, true);
+        vb.writeBytes((char*)attachmentVertices->_triangles->verts, vbSize);
         
+		auto ibSize = attachmentVertices->_triangles->indexCount * sizeof(unsigned short);
+		ib.checkSpace(ibSize, true);
         if (vertexOffset > 0)
         {
             for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++)
@@ -401,8 +404,7 @@ void SpineRenderer::update (float deltaTime)
         }
         else
         {
-            ib.writeBytes((char*)attachmentVertices->_triangles->indices,
-                                      attachmentVertices->_triangles->indexCount*sizeof(unsigned short));
+            ib.writeBytes((char*)attachmentVertices->_triangles->indices, ibSize);
         }
         
         // Record this turn index segmentation count,it will store in material buffer in the end.

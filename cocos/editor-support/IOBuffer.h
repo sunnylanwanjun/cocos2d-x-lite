@@ -182,6 +182,16 @@ public:
         return _outRange;
     }
 
+	inline void checkSpace(std::size_t needSize, bool needCopy = false)
+	{
+		auto needLen = _curPos + needSize;
+		if (_bufferSize < needLen)
+		{
+			std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
+			resize(fitSize, needCopy);
+		}
+	}
+
     /**
      * @brief Resize buffer
      * @param[in] newLen New size you want to adjustment.
