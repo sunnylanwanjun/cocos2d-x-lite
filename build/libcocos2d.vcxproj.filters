@@ -1292,9 +1292,6 @@
     <ClInclude Include="..\cocos\editor-support\spine\TransformConstraintData.h">
       <Filter>editor-support\spine</Filter>
     </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\IOBuffer.hpp">
-      <Filter>editor-support</Filter>
-    </ClInclude>
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.h">
       <Filter>editor-support\spine-creator-support</Filter>
     </ClInclude>
@@ -1454,13 +1451,16 @@
     <ClInclude Include="..\cocos\scripting\js-bindings\auto\jsb_cocos2dx_editor_support_auto.hpp">
       <Filter>js-bindings\auto</Filter>
     </ClInclude>
-    <ClInclude Include="..\cocos\editor-support\Macro.h">
-      <Filter>editor-support</Filter>
-    </ClInclude>
     <ClInclude Include="..\cocos\editor-support\MiddlewareManager.h">
       <Filter>editor-support</Filter>
     </ClInclude>
     <ClInclude Include="..\cocos\editor-support\IOTypedArray.h">
+      <Filter>editor-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\IOBuffer.h">
+      <Filter>editor-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\MiddleWareMacro.h">
       <Filter>editor-support</Filter>
     </ClInclude>
   </ItemGroup>

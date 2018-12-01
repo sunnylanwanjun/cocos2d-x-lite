@@ -315,10 +315,10 @@
     <ClInclude Include="..\cocos\editor-support\dragonbones\parser\BinaryDataParser.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones\parser\DataParser.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones\parser\JSONDataParser.h" />
+    <ClInclude Include="..\cocos\editor-support\IOBuffer.h" />
     <ClInclude Include="..\cocos\editor-support\middleware-adapter.h" />
-    <ClInclude Include="..\cocos\editor-support\Macro.h" />
+    <ClInclude Include="..\cocos\editor-support\MiddlewareMacro.h" />
     <ClInclude Include="..\cocos\editor-support\MiddlewareManager.h" />
-    <ClInclude Include="..\cocos\editor-support\IOBuffer.hpp" />
     <ClInclude Include="..\cocos\editor-support\IOTypedArray.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\CreatorAttachmentLoader.h" />
