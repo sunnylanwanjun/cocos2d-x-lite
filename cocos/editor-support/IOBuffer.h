@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <string>
 #include "MiddlewareMacro.h"
+#include <math.h>
 
 MIDDLEWARE_BEGIN
 /**
