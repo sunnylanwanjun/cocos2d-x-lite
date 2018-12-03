@@ -39,8 +39,6 @@ using std::max;
 
 using namespace spine;
 
-static const std::string scheduleKey = "spineScheduleKey";
-
 SpineRenderer* SpineRenderer::create ()
 {
     SpineRenderer* skeleton = new SpineRenderer();

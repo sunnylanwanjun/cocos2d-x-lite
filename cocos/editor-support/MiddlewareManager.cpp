@@ -22,12 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "MiddlewareManager.h"
-#include "platform/CCApplication.h"
-#include "base/CCScheduler.h"
 #include "base/CCGLUtils.h"
 #include "scripting/js-bindings/jswrapper/SeApi.h"
-
-static const std::string scheduleKey = "editorScheduleKey";
 
 MIDDLEWARE_BEGIN
     
@@ -43,10 +39,6 @@ MiddlewareManager::MiddlewareManager()
 
 MiddlewareManager::~MiddlewareManager()
 {
-    auto app = cocos2d::Application::getInstance();
-    auto scheduler = app->getScheduler();
-    scheduler->unschedule(scheduleKey, this);
-    
     cocos2d::ccDeleteBuffers(1, &_glIBID);
     cocos2d::ccDeleteBuffers(1, &_glVBID);
 }
