@@ -70,10 +70,6 @@ void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
 	if (spine::_customTextureLoader) {
 		texture = spine::_customTextureLoader(path);
 	}
-	if (!texture) {
-		//texture = Director::getInstance()->getTextureCache()->addImage(path);
-        assert(false);
-	}
 	CCASSERT(texture != nullptr, "Invalid image");
 	texture->retain();
 

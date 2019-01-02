@@ -168,6 +168,11 @@ public:
         return _curPos;
     }
 
+    inline uint8_t* getCurBuffer() const
+    {
+        return _buffer + _curPos;
+    }
+    
     inline uint8_t* getBuffer() const
     {
         return _buffer;
