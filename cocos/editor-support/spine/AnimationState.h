@@ -153,6 +153,9 @@ SP_API float spTrackEntry_getAnimationTime (spTrackEntry* entry);
 /** Use this to dispose static memory before your app exits to appease your memory leak detector*/
 SP_API void spAnimationState_disposeStatics ();
 
+typedef void (*TrackEntryDisposeCallback)(spTrackEntry*);
+void spTrackEntry_setDisposeCallback(TrackEntryDisposeCallback cb);
+    
 #ifdef SPINE_SHORT_NAMES
 typedef spEventType EventType;
 #define ANIMATION_START SP_ANIMATION_START

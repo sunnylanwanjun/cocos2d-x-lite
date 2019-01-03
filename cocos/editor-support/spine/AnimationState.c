@@ -40,6 +40,8 @@
 _SP_ARRAY_IMPLEMENT_TYPE(spTrackEntryArray, spTrackEntry*)
 
 static spAnimation* SP_EMPTY_ANIMATION = 0;
+static TrackEntryDisposeCallback _trackEntryDisposeCallback = 0;
+
 void spAnimationState_disposeStatics () {
 	if (SP_EMPTY_ANIMATION) spAnimation_dispose(SP_EMPTY_ANIMATION);
 	SP_EMPTY_ANIMATION = 0;
@@ -192,6 +194,11 @@ void _spAnimationState_disableQueue(spAnimationState* self) {
 }
 
 void _spAnimationState_disposeTrackEntry (spTrackEntry* entry) {
+    if (_trackEntryDisposeCallback)
+    {
+        _trackEntryDisposeCallback(entry);
+    }
+    
 	spIntArray_dispose(entry->timelineData);
 	spTrackEntryArray_dispose(entry->timelineDipMix);
 	FREE(entry->timelinesRotation);
@@ -214,6 +221,11 @@ void _spAnimationState_disposeTrackEntries (spAnimationState* state, spTrackEntr
 		_spAnimationState_disposeTrackEntry(entry);
 		entry = next;
 	}
+}
+
+void spTrackEntry_setDisposeCallback(TrackEntryDisposeCallback cb)
+{
+    _trackEntryDisposeCallback = cb;
 }
 
 spAnimationState* spAnimationState_create (spAnimationStateData* data) {
