@@ -31,7 +31,6 @@
 #include "base/CCScheduler.h"
 #include "MiddlewareMacro.h"
 
-#define 
 #define INITIAL_WORLD_VERTICES_LENGTH 1000
 // Used for transforming attachments for bounding boxes & debug rendering
 static float* worldVertices = nullptr;
@@ -381,21 +380,30 @@ void SpineRenderer::update (float deltaTime)
 
                 if (!isTwoColorTint)
                 {
-                    triangles.indices = attachmentVertices->_triangles->indices;
                     triangles.indexCount = attachmentVertices->_triangles->indexCount;
-                    vbSize = attachmentVertices->_triangles->vertCount * sizeof(V2F_T2F_C4B);
+                    ibSize = triangles.indexCount * sizeof(unsigned short);
+                    ib.checkSpace(ibSize);
+                    triangles.indices = (unsigned short*)ib.getCurBuffer();
+                    memcpy(triangles.indices, attachmentVertices->_triangles->indices, ibSize);
+                    
+                    triangles.vertCount = attachmentVertices->_triangles->vertCount;
+                    vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
                     vb.checkSpace(vbSize);
                     triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
-                    triangles.vertCount = attachmentVertices->_triangles->vertCount;
                     memcpy(triangles.verts, attachmentVertices->_triangles->verts, vbSize);
                     spRegionAttachment_computeWorldVertices(attachment, slot->bone, (float*)triangles.verts, 0, vs1);
+                    
                 } else {
-                    trianglesTwoColor.indices = attachmentVertices->_triangles->indices;
                     trianglesTwoColor.indexCount = attachmentVertices->_triangles->indexCount;
-                    vbSize = attachmentVertices->_triangles->vertCount * sizeof(V2F_T2F_C4B_C4B);
+                    ibSize = trianglesTwoColor.indexCount * sizeof(unsigned short);
+                    ib.checkSpace(ibSize);
+                    trianglesTwoColor.indices = (unsigned short*)ib.getCurBuffer();
+                    memcpy(trianglesTwoColor.indices, attachmentVertices->_triangles->indices, ibSize);
+                    
+                    trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
+                    vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
                     vb.checkSpace(vbSize);
                     trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
-                    trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                     for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                         trianglesTwoColor.verts[ii].texCoords = attachmentVertices->_triangles->verts[ii].texCoords;
                     }
@@ -434,21 +442,30 @@ void SpineRenderer::update (float deltaTime)
                 }
                 
                 if (!isTwoColorTint) {
-                    triangles.indices = attachmentVertices->_triangles->indices;
                     triangles.indexCount = attachmentVertices->_triangles->indexCount;
-                    vbSize = attachmentVertices->_triangles->vertCount * sizeof(V2F_T2F_C4B);
+                    ibSize = triangles.indexCount * sizeof(unsigned short);
+                    ib.checkSpace(ibSize);
+                    triangles.indices = (unsigned short*)ib.getCurBuffer();
+                    memcpy(triangles.indices, attachmentVertices->_triangles->indices, ibSize);
+                    
+                    triangles.vertCount = attachmentVertices->_triangles->vertCount;
+                    vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
                     vb.checkSpace(vbSize);
                     triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
-                    triangles.vertCount = attachmentVertices->_triangles->vertCount;
                     memcpy(triangles.verts, attachmentVertices->_triangles->verts, vbSize);
                     spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, attachment->super.worldVerticesLength, (float*)triangles.verts, 0, vs1);
+                    
                 } else {
-                    trianglesTwoColor.indices = attachmentVertices->_triangles->indices;
                     trianglesTwoColor.indexCount = attachmentVertices->_triangles->indexCount;
-                    vbSize = attachmentVertices->_triangles->vertCount * sizeof(V2F_T2F_C4B_C4B);
+                    ibSize = trianglesTwoColor.indexCount * sizeof(unsigned short);
+                    ib.checkSpace(ibSize);
+                    trianglesTwoColor.indices = (unsigned short*)ib.getCurBuffer();
+                    memcpy(trianglesTwoColor.indices, attachmentVertices->_triangles->indices, ibSize);
+                    
+                    trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
+                    vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
                     vb.checkSpace(vbSize);
                     trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
-                    trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                     for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                         trianglesTwoColor.verts[ii].texCoords = attachmentVertices->_triangles->verts[ii].texCoords;
                     }
@@ -545,41 +562,9 @@ void SpineRenderer::update (float deltaTime)
             materialLen++;
         }
         
-//        for (int v = 0, w = 0, vn = attachmentVertices->_triangles->vertCount; v < vn; ++v, w += 2)
-//        {
-//            V2F_T2F_C4B* vertex = attachmentVertices->_triangles->verts + v;
-//            vertex->vertices.x = _worldVertices[w];
-//            vertex->vertices.y = _worldVertices[w + 1];
-//            vertex->colors.r = (GLubyte)color.r;
-//            vertex->colors.g = (GLubyte)color.g;
-//            vertex->colors.b = (GLubyte)color.b;
-//            vertex->colors.a = (GLubyte)color.a;
-//        }
-//
-//        // Fill MiddlewareManager vertex buffer
-//        auto vertexOffset = vb.getCurPos()/sizeof(middleware::V2F_T2F_C4B);
-//        auto vbSize = attachmentVertices->_triangles->vertCount * sizeof(middleware::V2F_T2F_C4B);
-//        vb.checkSpace(vbSize, true);
-//        vb.writeBytes((char*)attachmentVertices->_triangles->verts, vbSize);
-//
-//        auto ibSize = attachmentVertices->_triangles->indexCount * sizeof(unsigned short);
-//        ib.checkSpace(ibSize, true);
-//        if (vertexOffset > 0)
-//        {
-//            for (int ii = 0, nn = attachmentVertices->_triangles->indexCount; ii < nn; ii++)
-//            {
-//                ib.writeUint16(attachmentVertices->_triangles->indices[ii] + vertexOffset);
-//            }
-//        }
-//        else
-//        {
-//            ib.writeBytes((char*)attachmentVertices->_triangles->indices, ibSize);
-//        }
-//
-//        // Record this turn index segmentation count,it will store in material buffer in the end.
-//        curISegLen += attachmentVertices->_triangles->indexCount;
-        
+        // One color tint logic
         if (!isTwoColorTint) {
+            // Cliping logic
             if (spSkeletonClipping_isClipping(_clipper)) {
                 spSkeletonClipping_clipTriangles(_clipper, (float*)&triangles.verts[0].vertices, triangles.vertCount * vs1, triangles.indices, triangles.indexCount, (float*)&triangles.verts[0].texCoords, vs1);
                 
@@ -589,15 +574,15 @@ void SpineRenderer::update (float deltaTime)
                 }
                 
                 triangles.vertCount = _clipper->clippedVertices->size >> 1;
-                vbSize = attachmentVertices->_triangles->vertCount * sizeof(V2F_T2F_C4B);
+                vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
                 vb.checkSpace(vbSize);
                 triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
-                triangles.indexCount = _clipper->clippedTriangles->size;
-                triangles.indices = batch->allocateIndices(triangles.indexCount);
-                ibSize = 
-                memcpy(triangles.indices, _clipper->clippedTriangles->items, sizeof(unsigned short) * _clipper->clippedTriangles->size);
                 
-                cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
+                triangles.indexCount = _clipper->clippedTriangles->size;
+                ibSize = triangles.indexCount * sizeof(unsigned short);
+                ib.checkSpace(ibSize);
+                triangles.indices = (unsigned short*)ib.getCurBuffer();
+                memcpy(triangles.indices, _clipper->clippedTriangles->items, sizeof(unsigned short) * _clipper->clippedTriangles->size);
                 
                 float* verts = _clipper->clippedVertices->items;
                 float* uvs = _clipper->clippedUVs->items;
@@ -609,8 +594,8 @@ void SpineRenderer::update (float deltaTime)
                     light.b = color.b / 255.0f;
                     light.a = color.a / 255.0f;
                     dark.r = dark.g = dark.b = dark.a = 0;
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount, vv = 0; v < vn; ++v, vv+=2) {
-                        V3F_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv+=2) {
+                        V2F_T2F_C4B* vertex = triangles.verts + v;
                         spColor lightCopy = light;
                         spColor darkCopy = dark;
                         vertex->vertices.x = verts[vv];
@@ -624,8 +609,8 @@ void SpineRenderer::update (float deltaTime)
                         vertex->colors.a = (GLubyte)(lightCopy.a * 255);
                     }
                 } else {
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount, vv = 0; v < vn; ++v, vv+=2) {
-                        V3F_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv+=2) {
+                        V2F_T2F_C4B* vertex = triangles.verts + v;
                         vertex->vertices.x = verts[vv];
                         vertex->vertices.y = verts[vv + 1];
                         vertex->texCoords.u = uvs[vv];
@@ -636,9 +621,8 @@ void SpineRenderer::update (float deltaTime)
                         vertex->colors.a = (GLubyte)color.a;
                     }
                 }
+            // No cliping logic
             } else {
-                cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
-                
                 if (_effect) {
                     spColor light;
                     spColor dark;
@@ -647,8 +631,8 @@ void SpineRenderer::update (float deltaTime)
                     light.b = color.b / 255.0f;
                     light.a = color.a / 255.0f;
                     dark.r = dark.g = dark.b = dark.a = 0;
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount; v < vn; ++v) {
-                        V3F_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
+                        V2F_T2F_C4B* vertex = triangles.verts + v;
                         spColor lightCopy = light;
                         spColor darkCopy = dark;
                         _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
@@ -658,8 +642,8 @@ void SpineRenderer::update (float deltaTime)
                         vertex->colors.a = (GLubyte)(lightCopy.a * 255);
                     }
                 } else {
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount; v < vn; ++v) {
-                        V3F_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
+                        V2F_T2F_C4B* vertex = triangles.verts + v;
                         vertex->colors.r = (GLubyte)color.r;
                         vertex->colors.g = (GLubyte)color.g;
                         vertex->colors.b = (GLubyte)color.b;
@@ -667,10 +651,11 @@ void SpineRenderer::update (float deltaTime)
                     }
                 }
             }
-        } else {
+        }
+        // Two color tint logic
+        else {
             if (spSkeletonClipping_isClipping(_clipper)) {
-                spSkeletonClipping_clipTriangles(_clipper, (float*)&trianglesTwoColor.verts[0].position, trianglesTwoColor.vertCount * sizeof(V3F_C4B_C4B_T2F) / 4, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float*)&trianglesTwoColor.verts[0].texCoords, 7);
-                twoColorBatch->deallocateVertices(trianglesTwoColor.vertCount);
+                spSkeletonClipping_clipTriangles(_clipper, (float*)&trianglesTwoColor.verts[0].vertices, trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B) / 4, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float*)&trianglesTwoColor.verts[0].texCoords, vs2);
                 
                 if (_clipper->clippedTriangles->size == 0){
                     spSkeletonClipping_clipEnd(_clipper, slot);
@@ -678,12 +663,14 @@ void SpineRenderer::update (float deltaTime)
                 }
                 
                 trianglesTwoColor.vertCount = _clipper->clippedVertices->size >> 1;
-                trianglesTwoColor.verts = twoColorBatch->allocateVertices(trianglesTwoColor.vertCount);
-                trianglesTwoColor.indexCount = _clipper->clippedTriangles->size;
-                trianglesTwoColor.indices = twoColorBatch->allocateIndices(trianglesTwoColor.indexCount);
-                memcpy(trianglesTwoColor.indices, _clipper->clippedTriangles->items, sizeof(unsigned short) * _clipper->clippedTriangles->size);
+                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
+                vb.checkSpace(vbSize);
+                trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                 
-                TwoColorTrianglesCommand* batchedTriangles = lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture->getName(), _glProgramState, blendFunc, trianglesTwoColor, transform, transformFlags);
+                trianglesTwoColor.indexCount = _clipper->clippedTriangles->size;
+                ibSize = trianglesTwoColor.indexCount * sizeof(unsigned short);
+                trianglesTwoColor.indices = (unsigned short*)ib.getCurBuffer();
+                memcpy(trianglesTwoColor.indices, _clipper->clippedTriangles->items, sizeof(unsigned short) * _clipper->clippedTriangles->size);
                 
                 float* verts = _clipper->clippedVertices->items;
                 float* uvs = _clipper->clippedUVs->items;
@@ -699,43 +686,42 @@ void SpineRenderer::update (float deltaTime)
                     dark.g = darkColor.g / 255.0f;
                     dark.b = darkColor.b / 255.0f;
                     // dark.a = darkColor.a / 255.0f;
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount, vv = 0; v < vn; ++v, vv += 2) {
-                        V3F_C4B_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
+                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
                         spColor lightCopy = light;
                         spColor darkCopy = dark;
-                        vertex->position.x = verts[vv];
-                        vertex->position.y = verts[vv + 1];
+                        vertex->vertices.x = verts[vv];
+                        vertex->vertices.y = verts[vv + 1];
                         vertex->texCoords.u = uvs[vv];
                         vertex->texCoords.v = uvs[vv + 1];
-                        _effect->transform(_effect, &vertex->position.x, &vertex->position.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->color.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->color.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->color.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->color.a = (GLubyte)(lightCopy.a * 255);
-                        vertex->color2.r = (GLubyte)(darkCopy.r * 255);
-                        vertex->color2.g = (GLubyte)(darkCopy.g * 255);
-                        vertex->color2.b = (GLubyte)(darkCopy.b * 255);
-                        vertex->color2.a = (GLubyte)darkColor.a;
+                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
+                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
+                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
+                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
+                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
+                        vertex->colors2.r = (GLubyte)(darkCopy.r * 255);
+                        vertex->colors2.g = (GLubyte)(darkCopy.g * 255);
+                        vertex->colors2.b = (GLubyte)(darkCopy.b * 255);
+                        vertex->colors2.a = (GLubyte)darkColor.a;
                     }
                 } else {
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount, vv = 0; v < vn; ++v, vv += 2) {
-                        V3F_C4B_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
-                        vertex->position.x = verts[vv];
-                        vertex->position.y = verts[vv + 1];
+                    for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
+                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
+                        vertex->vertices.x = verts[vv];
+                        vertex->vertices.y = verts[vv + 1];
                         vertex->texCoords.u = uvs[vv];
                         vertex->texCoords.v = uvs[vv + 1];
-                        vertex->color.r = (GLubyte)color.r;
-                        vertex->color.g = (GLubyte)color.g;
-                        vertex->color.b = (GLubyte)color.b;
-                        vertex->color.a = (GLubyte)color.a;
-                        vertex->color2.r = (GLubyte)darkColor.r;
-                        vertex->color2.g = (GLubyte)darkColor.g;
-                        vertex->color2.b = (GLubyte)darkColor.b;
-                        vertex->color2.a = (GLubyte)darkColor.a;
+                        vertex->colors.r = (GLubyte)color.r;
+                        vertex->colors.g = (GLubyte)color.g;
+                        vertex->colors.b = (GLubyte)color.b;
+                        vertex->colors.a = (GLubyte)color.a;
+                        vertex->colors2.r = (GLubyte)darkColor.r;
+                        vertex->colors2.g = (GLubyte)darkColor.g;
+                        vertex->colors2.b = (GLubyte)darkColor.b;
+                        vertex->colors2.a = (GLubyte)darkColor.a;
                     }
                 }
             } else {
-                TwoColorTrianglesCommand* batchedTriangles = lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture->getName(), _glProgramState, blendFunc, trianglesTwoColor, transform, transformFlags);
                 
                 if (_effect) {
                     spColor light;
@@ -749,38 +735,64 @@ void SpineRenderer::update (float deltaTime)
                     dark.b = darkColor.b / 255.0f;
                     dark.a = darkColor.a / 255.0f;
                     
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount; v < vn; ++v) {
-                        V3F_C4B_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
+                    for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
+                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
                         spColor lightCopy = light;
                         spColor darkCopy = dark;
-                        _effect->transform(_effect, &vertex->position.x, &vertex->position.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->color.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->color.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->color.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->color.a = (GLubyte)(lightCopy.a * 255);
-                        vertex->color2.r = (GLubyte)(darkCopy.r * 255);
-                        vertex->color2.g = (GLubyte)(darkCopy.g * 255);
-                        vertex->color2.b = (GLubyte)(darkCopy.b * 255);
+                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
+                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
+                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
+                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
+                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
+                        vertex->colors2.r = (GLubyte)(darkCopy.r * 255);
+                        vertex->colors2.g = (GLubyte)(darkCopy.g * 255);
+                        vertex->colors2.b = (GLubyte)(darkCopy.b * 255);
                         // vertex->color2.a = (GLubyte)darkColor.a;
                     }
                 } else {
-                    for (int v = 0, vn = batchedTriangles->getTriangles().vertCount; v < vn; ++v) {
-                        V3F_C4B_C4B_T2F* vertex = batchedTriangles->getTriangles().verts + v;
-                        vertex->color.r = (GLubyte)color.r;
-                        vertex->color.g = (GLubyte)color.g;
-                        vertex->color.b = (GLubyte)color.b;
-                        vertex->color.a = (GLubyte)color.a;
-                        vertex->color2.r = (GLubyte)darkColor.r;
-                        vertex->color2.g = (GLubyte)darkColor.g;
-                        vertex->color2.b = (GLubyte)darkColor.b;
-                        vertex->color2.a = (GLubyte)darkColor.a;
+                    for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
+                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
+                        vertex->colors.r = (GLubyte)color.r;
+                        vertex->colors.g = (GLubyte)color.g;
+                        vertex->colors.b = (GLubyte)color.b;
+                        vertex->colors.a = (GLubyte)color.a;
+                        vertex->colors2.r = (GLubyte)darkColor.r;
+                        vertex->colors2.g = (GLubyte)darkColor.g;
+                        vertex->colors2.b = (GLubyte)darkColor.b;
+                        vertex->colors2.a = (GLubyte)darkColor.a;
                     }
                 }
             }
         }
-        spSkeletonClipping_clipEnd(_clipper, slot);
         
-    }
+        if (vbSize > 0 && ibSize > 0)
+        {
+            auto vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B);
+            if (isTwoColorTint)
+            {
+                vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B_C4B);
+            }
+            
+            if (vertexOffset > 0)
+            {
+                unsigned short* ibBuffer = (unsigned short*)ib.getCurBuffer();
+                for (int ii = 0, nn = ibSize / sizeof(unsigned short); ii < nn; ii++)
+                {
+                    ibBuffer[ii] += vertexOffset;
+                }
+            }
+            vb.move(vbSize);
+            ib.move(ibSize);
+            
+            // Record this turn index segmentation count,it will store in material buffer in the end.
+            curISegLen += ibSize / sizeof(unsigned short);
+        }
+        
+        spSkeletonClipping_clipEnd(_clipper, slot);
+    } // End slot traverse
+    
+    spSkeletonClipping_clipEnd2(_clipper);
+    if (_effect) _effect->end(_effect);
     
     if (_debugSlots)
     {
