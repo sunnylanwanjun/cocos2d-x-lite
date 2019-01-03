@@ -31,35 +31,12 @@
 #include "base/CCScheduler.h"
 #include "MiddlewareMacro.h"
 
-#define INITIAL_WORLD_VERTICES_LENGTH 1000
-// Used for transforming attachments for bounding boxes & debug rendering
-static float* worldVertices = nullptr;
-static size_t worldVerticesLength = 0;
-
-void ensureWorldVerticesCapacity(size_t capacity) {
-	if (worldVerticesLength < capacity) {
-		float* newWorldVertices = new float[capacity];
-		memcpy(newWorldVertices, worldVertices, capacity * sizeof(float));
-		delete[] worldVertices;
-		worldVertices = newWorldVertices;
-		worldVerticesLength = capacity;
-	}
-}
-
 USING_NS_CC;
 USING_NS_MW;
 
 using std::min;
 using std::max;
 using namespace spine;
-
-void SpineRenderer::destroyScratchBuffers() {
-    if (worldVertices) {
-        delete[] worldVertices;
-        worldVertices = nullptr;
-        worldVerticesLength = 0;
-    }
-}
 
 SpineRenderer* SpineRenderer::create ()
 {
@@ -97,11 +74,6 @@ SpineRenderer* SpineRenderer::createWithFile (const std::string& skeletonDataFil
 
 void SpineRenderer::initialize ()
 {
-    if (!worldVertices) 
-    {
-        worldVertices = new float[INITIAL_WORLD_VERTICES_LENGTH];
-        worldVerticesLength = INITIAL_WORLD_VERTICES_LENGTH;
-    }
     _clipper = spSkeletonClipping_create();
     beginSchedule();
     
@@ -417,14 +389,15 @@ void SpineRenderer::update (float deltaTime)
                 
                 if(_debugSlots)
                 {
-                    _debugBuffer->writeFloat32(_worldVertices[0]);
-                    _debugBuffer->writeFloat32(_worldVertices[1]);
-                    _debugBuffer->writeFloat32(_worldVertices[2]);
-                    _debugBuffer->writeFloat32(_worldVertices[3]);
-                    _debugBuffer->writeFloat32(_worldVertices[4]);
-                    _debugBuffer->writeFloat32(_worldVertices[5]);
-                    _debugBuffer->writeFloat32(_worldVertices[6]);
-                    _debugBuffer->writeFloat32(_worldVertices[7]);
+                    float* vertices = isTwoColorTint ? (float*)trianglesTwoColor.verts : (float*)triangles.verts;
+                    int stride = isTwoColorTint ? vs2 : vs1;
+                    // Quadrangle has 4 vertex.
+                    for (int ii = 0; ii < 4; ii ++)
+                    {
+                        _debugBuffer->writeFloat32(vertices[0]);
+                        _debugBuffer->writeFloat32(vertices[1]);
+                        vertices += stride;
+                    }
                     debugSlotsLen+=8;
                 }
                 

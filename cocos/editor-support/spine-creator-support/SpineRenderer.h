@@ -90,10 +90,6 @@ namespace spine {
         
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
-		
-		// Frees global memory used for temporay vertex transformations.
-		static void destroyScratchBuffers();
-	
 
         /**
          * @return debug data,it's a Float32Array,
@@ -160,7 +156,6 @@ namespace spine {
 		bool                _ownsSkeleton = true;
         spAtlas*            _atlas = nullptr;
         spAttachmentLoader* _attachmentLoader = nullptr;
-        float*              _worldVertices = nullptr;
         spSkeleton*         _skeleton = nullptr;
         float               _timeScale = 1;
         bool                _paused = false;
