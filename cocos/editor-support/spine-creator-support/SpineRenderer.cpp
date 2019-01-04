@@ -74,13 +74,17 @@ SpineRenderer* SpineRenderer::createWithFile (const std::string& skeletonDataFil
 
 void SpineRenderer::initialize ()
 {
-    _clipper = spSkeletonClipping_create();
-    beginSchedule();
+    if (_clipper == nullptr)
+    {
+        _clipper = spSkeletonClipping_create();
+    }
     
     if (_materialBuffer == nullptr)
     {
         _materialBuffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, MAX_MATERIAL_BUFFER_SIZE);
     }
+    
+    beginSchedule();
 }
 
 void SpineRenderer::beginSchedule()
@@ -134,7 +138,7 @@ SpineRenderer::~SpineRenderer ()
 	if (_ownsSkeleton) spSkeleton_dispose(_skeleton);
 	if (_atlas) spAtlas_dispose(_atlas);
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
-	spSkeletonClipping_dispose(_clipper);
+	if (_clipper) spSkeletonClipping_dispose(_clipper);
     
     if (_materialBuffer)
     {
@@ -255,8 +259,6 @@ void SpineRenderer::update (float deltaTime)
         _materialBuffer->writeUint32(0, 0);
         return;
     }
-
-    if (_effect) _effect->begin(_effect, _skeleton);
     
     Color4F color;
     Color4F darkColor;
@@ -559,69 +561,25 @@ void SpineRenderer::update (float deltaTime)
                 
                 float* verts = _clipper->clippedVertices->items;
                 float* uvs = _clipper->clippedUVs->items;
-                if (_effect) {
-                    spColor light;
-                    spColor dark;
-                    light.r = color.r / 255.0f;
-                    light.g = color.g / 255.0f;
-                    light.b = color.b / 255.0f;
-                    light.a = color.a / 255.0f;
-                    dark.r = dark.g = dark.b = dark.a = 0;
-                    for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv+=2) {
-                        V2F_T2F_C4B* vertex = triangles.verts + v;
-                        spColor lightCopy = light;
-                        spColor darkCopy = dark;
-                        vertex->vertices.x = verts[vv];
-                        vertex->vertices.y = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
-                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
-                    }
-                } else {
-                    for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv+=2) {
-                        V2F_T2F_C4B* vertex = triangles.verts + v;
-                        vertex->vertices.x = verts[vv];
-                        vertex->vertices.y = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
-                        vertex->colors.r = (GLubyte)color.r;
-                        vertex->colors.g = (GLubyte)color.g;
-                        vertex->colors.b = (GLubyte)color.b;
-                        vertex->colors.a = (GLubyte)color.a;
-                    }
+                for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv+=2) {
+                    V2F_T2F_C4B* vertex = triangles.verts + v;
+                    vertex->vertices.x = verts[vv];
+                    vertex->vertices.y = verts[vv + 1];
+                    vertex->texCoords.u = uvs[vv];
+                    vertex->texCoords.v = uvs[vv + 1];
+                    vertex->colors.r = (GLubyte)color.r;
+                    vertex->colors.g = (GLubyte)color.g;
+                    vertex->colors.b = (GLubyte)color.b;
+                    vertex->colors.a = (GLubyte)color.a;
                 }
             // No cliping logic
             } else {
-                if (_effect) {
-                    spColor light;
-                    spColor dark;
-                    light.r = color.r / 255.0f;
-                    light.g = color.g / 255.0f;
-                    light.b = color.b / 255.0f;
-                    light.a = color.a / 255.0f;
-                    dark.r = dark.g = dark.b = dark.a = 0;
-                    for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
-                        V2F_T2F_C4B* vertex = triangles.verts + v;
-                        spColor lightCopy = light;
-                        spColor darkCopy = dark;
-                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
-                    }
-                } else {
-                    for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
-                        V2F_T2F_C4B* vertex = triangles.verts + v;
-                        vertex->colors.r = (GLubyte)color.r;
-                        vertex->colors.g = (GLubyte)color.g;
-                        vertex->colors.b = (GLubyte)color.b;
-                        vertex->colors.a = (GLubyte)color.a;
-                    }
+                for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
+                    V2F_T2F_C4B* vertex = triangles.verts + v;
+                    vertex->colors.r = (GLubyte)color.r;
+                    vertex->colors.g = (GLubyte)color.g;
+                    vertex->colors.b = (GLubyte)color.b;
+                    vertex->colors.a = (GLubyte)color.a;
                 }
             }
         }
@@ -648,92 +606,33 @@ void SpineRenderer::update (float deltaTime)
                 float* verts = _clipper->clippedVertices->items;
                 float* uvs = _clipper->clippedUVs->items;
                 
-                if (_effect) {
-                    spColor light;
-                    spColor dark;
-                    light.r = color.r / 255.0f;
-                    light.g = color.g / 255.0f;
-                    light.b = color.b / 255.0f;
-                    light.a = color.a / 255.0f;
-                    dark.r = darkColor.r / 255.0f;
-                    dark.g = darkColor.g / 255.0f;
-                    dark.b = darkColor.b / 255.0f;
-                    // dark.a = darkColor.a / 255.0f;
-                    for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
-                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
-                        spColor lightCopy = light;
-                        spColor darkCopy = dark;
-                        vertex->vertices.x = verts[vv];
-                        vertex->vertices.y = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
-                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
-                        vertex->colors2.r = (GLubyte)(darkCopy.r * 255);
-                        vertex->colors2.g = (GLubyte)(darkCopy.g * 255);
-                        vertex->colors2.b = (GLubyte)(darkCopy.b * 255);
-                        vertex->colors2.a = (GLubyte)darkColor.a;
-                    }
-                } else {
-                    for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
-                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
-                        vertex->vertices.x = verts[vv];
-                        vertex->vertices.y = verts[vv + 1];
-                        vertex->texCoords.u = uvs[vv];
-                        vertex->texCoords.v = uvs[vv + 1];
-                        vertex->colors.r = (GLubyte)color.r;
-                        vertex->colors.g = (GLubyte)color.g;
-                        vertex->colors.b = (GLubyte)color.b;
-                        vertex->colors.a = (GLubyte)color.a;
-                        vertex->colors2.r = (GLubyte)darkColor.r;
-                        vertex->colors2.g = (GLubyte)darkColor.g;
-                        vertex->colors2.b = (GLubyte)darkColor.b;
-                        vertex->colors2.a = (GLubyte)darkColor.a;
-                    }
+                for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
+                    V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
+                    vertex->vertices.x = verts[vv];
+                    vertex->vertices.y = verts[vv + 1];
+                    vertex->texCoords.u = uvs[vv];
+                    vertex->texCoords.v = uvs[vv + 1];
+                    vertex->colors.r = (GLubyte)color.r;
+                    vertex->colors.g = (GLubyte)color.g;
+                    vertex->colors.b = (GLubyte)color.b;
+                    vertex->colors.a = (GLubyte)color.a;
+                    vertex->colors2.r = (GLubyte)darkColor.r;
+                    vertex->colors2.g = (GLubyte)darkColor.g;
+                    vertex->colors2.b = (GLubyte)darkColor.b;
+                    vertex->colors2.a = (GLubyte)darkColor.a;
                 }
-            } else {
                 
-                if (_effect) {
-                    spColor light;
-                    spColor dark;
-                    light.r = color.r / 255.0f;
-                    light.g = color.g / 255.0f;
-                    light.b = color.b / 255.0f;
-                    light.a = color.a / 255.0f;
-                    dark.r = darkColor.r / 255.0f;
-                    dark.g = darkColor.g / 255.0f;
-                    dark.b = darkColor.b / 255.0f;
-                    dark.a = darkColor.a / 255.0f;
-                    
-                    for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
-                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
-                        spColor lightCopy = light;
-                        spColor darkCopy = dark;
-                        _effect->transform(_effect, &vertex->vertices.x, &vertex->vertices.y, &vertex->texCoords.u, &vertex->texCoords.v, &lightCopy, &darkCopy);
-                        vertex->colors.r = (GLubyte)(lightCopy.r * 255);
-                        vertex->colors.g = (GLubyte)(lightCopy.g * 255);
-                        vertex->colors.b = (GLubyte)(lightCopy.b * 255);
-                        vertex->colors.a = (GLubyte)(lightCopy.a * 255);
-                        vertex->colors2.r = (GLubyte)(darkCopy.r * 255);
-                        vertex->colors2.g = (GLubyte)(darkCopy.g * 255);
-                        vertex->colors2.b = (GLubyte)(darkCopy.b * 255);
-                        // vertex->color2.a = (GLubyte)darkColor.a;
-                    }
-                } else {
-                    for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
-                        V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
-                        vertex->colors.r = (GLubyte)color.r;
-                        vertex->colors.g = (GLubyte)color.g;
-                        vertex->colors.b = (GLubyte)color.b;
-                        vertex->colors.a = (GLubyte)color.a;
-                        vertex->colors2.r = (GLubyte)darkColor.r;
-                        vertex->colors2.g = (GLubyte)darkColor.g;
-                        vertex->colors2.b = (GLubyte)darkColor.b;
-                        vertex->colors2.a = (GLubyte)darkColor.a;
-                    }
+            } else {
+                for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
+                    V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
+                    vertex->colors.r = (GLubyte)color.r;
+                    vertex->colors.g = (GLubyte)color.g;
+                    vertex->colors.b = (GLubyte)color.b;
+                    vertex->colors.a = (GLubyte)color.a;
+                    vertex->colors2.r = (GLubyte)darkColor.r;
+                    vertex->colors2.g = (GLubyte)darkColor.g;
+                    vertex->colors2.b = (GLubyte)darkColor.b;
+                    vertex->colors2.a = (GLubyte)darkColor.a;
                 }
             }
         }
@@ -765,7 +664,6 @@ void SpineRenderer::update (float deltaTime)
     } // End slot traverse
     
     spSkeletonClipping_clipEnd2(_clipper);
-    if (_effect) _effect->end(_effect);
     
     if (_debugSlots)
     {
@@ -881,15 +779,11 @@ spAttachment* SpineRenderer::getAttachment (const std::string& slotName, const s
 }
 
 void SpineRenderer::setTwoColorTint(bool enabled) {
-    // to do
+    _twoColorTint = enabled;
 }
 
 bool SpineRenderer::isTwoColorTint() {
-    return false;
-}
-
-void SpineRenderer::setVertexEffect(spVertexEffect *effect) {
-    this->_effect = effect;
+    return _twoColorTint;
 }
 
 void SpineRenderer::setSlotsRange(int startSlotIndex, int endSlotIndex) {

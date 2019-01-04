@@ -85,9 +85,6 @@ namespace spine {
         /* Whether two color tinting is enabled */
         bool isTwoColorTint();
         
-        /* Sets the vertex effect to be used, set to 0 to disable vertex effects */
-        void setVertexEffect(spVertexEffect* effect);
-        
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
@@ -165,12 +162,13 @@ namespace spine {
         cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
         bool                _premultipliedAlpha = false;
         spSkeletonClipping* _clipper = nullptr;
-        spVertexEffect*     _effect = nullptr;
+        bool                _twoColorTint = false;
         
         int                 _startSlotIndex = -1;
         int                 _endSlotIndex = -1;
-        cocos2d::middleware::IOTypedArray* _materialBuffer = nullptr;
-        cocos2d::middleware::IOTypedArray* _debugBuffer = nullptr;
+        
+        cocos2d::middleware::IOTypedArray*  _materialBuffer = nullptr;
+        cocos2d::middleware::IOTypedArray*  _debugBuffer = nullptr;
     };
 
 }
