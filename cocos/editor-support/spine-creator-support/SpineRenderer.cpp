@@ -117,6 +117,11 @@ SpineRenderer::SpineRenderer ()
 {
 }
 
+SpineRenderer::SpineRenderer(spSkeleton* skeleton, bool ownsSkeleton, bool ownsSkeletonData)
+{
+    initWithSkeleton(skeleton, ownsSkeleton, ownsSkeletonData);
+}
+
 SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
 {
 	initWithData(skeletonData, ownsSkeletonData);
@@ -264,9 +269,8 @@ void SpineRenderer::update (float deltaTime)
     Color4F darkColor;
     AttachmentVertices* attachmentVertices = nullptr;
     bool inRange = _startSlotIndex != -1 || _endSlotIndex != -1 ? false : true;
-    middleware::IOBuffer& vb = mgr->vb;
-    middleware::IOBuffer& ib = mgr->ib;
-    bool isTwoColorTint = this->isTwoColorTint();
+    middleware::IOBuffer& vb = mgr->getVB(_useTint? VF_XYUVCC : VF_XYUVC);
+    middleware::IOBuffer& ib = mgr->getIB();
     
     // vertex size in floats with one color
     int vs1 = sizeof(V2F_T2F_C4B) / sizeof(float);
@@ -352,7 +356,7 @@ void SpineRenderer::update (float deltaTime)
                     continue;
                 }
 
-                if (!isTwoColorTint)
+                if (!_useTint)
                 {
                     triangles.indexCount = attachmentVertices->_triangles->indexCount;
                     ibSize = triangles.indexCount * sizeof(unsigned short);
@@ -391,8 +395,8 @@ void SpineRenderer::update (float deltaTime)
                 
                 if(_debugSlots)
                 {
-                    float* vertices = isTwoColorTint ? (float*)trianglesTwoColor.verts : (float*)triangles.verts;
-                    int stride = isTwoColorTint ? vs2 : vs1;
+                    float* vertices = _useTint ? (float*)trianglesTwoColor.verts : (float*)triangles.verts;
+                    int stride = _useTint ? vs2 : vs1;
                     // Quadrangle has 4 vertex.
                     for (int ii = 0; ii < 4; ii ++)
                     {
@@ -416,7 +420,7 @@ void SpineRenderer::update (float deltaTime)
                     continue;
                 }
                 
-                if (!isTwoColorTint) {
+                if (!_useTint) {
                     triangles.indexCount = attachmentVertices->_triangles->indexCount;
                     ibSize = triangles.indexCount * sizeof(unsigned short);
                     ib.checkSpace(ibSize);
@@ -538,7 +542,7 @@ void SpineRenderer::update (float deltaTime)
         }
         
         // One color tint logic
-        if (!isTwoColorTint) {
+        if (!_useTint) {
             // Cliping logic
             if (spSkeletonClipping_isClipping(_clipper)) {
                 spSkeletonClipping_clipTriangles(_clipper, (float*)&triangles.verts[0].vertices, triangles.vertCount * vs1, triangles.indices, triangles.indexCount, (float*)&triangles.verts[0].texCoords, vs1);
@@ -586,7 +590,7 @@ void SpineRenderer::update (float deltaTime)
         // Two color tint logic
         else {
             if (spSkeletonClipping_isClipping(_clipper)) {
-                spSkeletonClipping_clipTriangles(_clipper, (float*)&trianglesTwoColor.verts[0].vertices, trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B) / 4, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float*)&trianglesTwoColor.verts[0].texCoords, vs2);
+                spSkeletonClipping_clipTriangles(_clipper, (float*)&trianglesTwoColor.verts[0].vertices, trianglesTwoColor.vertCount * vs2, trianglesTwoColor.indices, trianglesTwoColor.indexCount, (float*)&trianglesTwoColor.verts[0].texCoords, vs2);
                 
                 if (_clipper->clippedTriangles->size == 0){
                     spSkeletonClipping_clipEnd(_clipper, slot);
@@ -640,7 +644,7 @@ void SpineRenderer::update (float deltaTime)
         if (vbSize > 0 && ibSize > 0)
         {
             auto vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B);
-            if (isTwoColorTint)
+            if (_useTint)
             {
                 vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B_C4B);
             }
@@ -778,12 +782,8 @@ spAttachment* SpineRenderer::getAttachment (const std::string& slotName, const s
 	return spSkeleton_getAttachmentForSlotName(_skeleton, slotName.c_str(), attachmentName.c_str());
 }
 
-void SpineRenderer::setTwoColorTint(bool enabled) {
-    _twoColorTint = enabled;
-}
-
-bool SpineRenderer::isTwoColorTint() {
-    return _twoColorTint;
+void SpineRenderer::setUseTint(bool enabled) {
+    _useTint = enabled;
 }
 
 void SpineRenderer::setSlotsRange(int startSlotIndex, int endSlotIndex) {

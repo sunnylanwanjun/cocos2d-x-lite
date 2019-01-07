@@ -81,9 +81,7 @@ namespace spine {
         bool setAttachment (const std::string& slotName, const char* attachmentName);
         
         /* Enables/disables two color tinting for this instance. May break batching */
-        void setTwoColorTint(bool enabled);
-        /* Whether two color tinting is enabled */
-        bool isTwoColorTint();
+        void setUseTint(bool enabled);
         
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
@@ -162,7 +160,7 @@ namespace spine {
         cocos2d::Color4B    _nodeColor = cocos2d::Color4B::WHITE;
         bool                _premultipliedAlpha = false;
         spSkeletonClipping* _clipper = nullptr;
-        bool                _twoColorTint = false;
+        bool                _useTint = false;
         
         int                 _startSlotIndex = -1;
         int                 _endSlotIndex = -1;

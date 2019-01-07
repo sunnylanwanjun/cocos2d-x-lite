@@ -92,8 +92,8 @@ void CCArmatureDisplay::dbUpdate()
     auto mgr = MiddlewareManager::getInstance();
     if (!mgr->isUpdating) return;
     
-    IOBuffer& vb = mgr->vb;
-    IOBuffer& ib = mgr->ib;
+    IOBuffer& vb = mgr->getVB(VF_XYUVC);
+    IOBuffer& ib = mgr->getIB();
     
     _materialBuffer->reset();
     
@@ -113,7 +113,7 @@ void CCArmatureDisplay::dbUpdate()
     // Reserved space to save material len
     _materialBuffer->writeUint32(0);
     // Reserved space to save index offset
-    _materialBuffer->writeUint32((uint32_t)mgr->ib.getCurPos()/sizeof(unsigned short));
+    _materialBuffer->writeUint32((uint32_t)ib.getCurPos()/sizeof(unsigned short));
     
     // Traverse all aramture to fill vertex and index buffer.
     traverseArmature(_armature);
@@ -226,8 +226,8 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
 {
     auto& slots = armature->getSlots();
     auto mgr = MiddlewareManager::getInstance();
-    IOBuffer& vb = mgr->vb;
-    IOBuffer& ib = mgr->ib;
+    IOBuffer& vb = mgr->getVB(VF_XYUVC);
+    IOBuffer& ib = mgr->getIB();
     
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {
