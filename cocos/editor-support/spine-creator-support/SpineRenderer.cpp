@@ -339,6 +339,10 @@ void SpineRenderer::update (float deltaTime)
             continue;
         }
         
+        if (!slot->attachment) {
+            continue;
+        }
+        
         Triangles triangles;
         TwoColorTriangles trianglesTwoColor;
         
@@ -468,7 +472,7 @@ void SpineRenderer::update (float deltaTime)
                 continue;
         }
         
-        float alpha = nodeColor.a * _skeleton->color.a * slot->color.a * color.a * 255;
+        float alpha = _skeleton->color.a * slot->color.a * color.a * 255;
         // skip rendering if the color of this attachment is 0
         if (alpha == 0){
             spSkeletonClipping_clipEnd(_clipper, slot);
@@ -483,7 +487,7 @@ void SpineRenderer::update (float deltaTime)
         color.r = red * slot->color.r;
         color.g = green * slot->color.g;
         color.b = blue * slot->color.b;
-        color.a = alpha;
+        color.a = alpha * nodeColor.a;
         
         if (slot->darkColor) {
             darkColor.r = red * slot->darkColor->r;
