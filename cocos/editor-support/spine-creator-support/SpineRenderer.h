@@ -38,7 +38,8 @@ namespace spine {
 
     /** Draws a skeleton.
      */
-    class SpineRenderer: public cocos2d::middleware::IMiddleware, public cocos2d::Ref {
+    class SpineRenderer: public cocos2d::middleware::IMiddleware, public cocos2d::Ref
+    {
     public:
         static SpineRenderer* create ();
 	    static SpineRenderer* createWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
@@ -148,7 +149,7 @@ namespace spine {
         virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;
 
         bool                _ownsSkeletonData = true;
-		bool                _ownsSkeleton = true;
+        bool                _ownsSkeleton = true;
         spAtlas*            _atlas = nullptr;
         spAttachmentLoader* _attachmentLoader = nullptr;
         spSkeleton*         _skeleton = nullptr;

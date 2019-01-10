@@ -37,7 +37,8 @@ typedef std::function<void(spTrackEntry* entry, spEvent* event)> EventListener;
 /** Draws an animated skeleton, providing an AnimationState for applying one or
  *  more animations and queuing animations to be played later.
  */
-class SpineAnimation: public SpineRenderer {
+class SpineAnimation: public SpineRenderer
+{
 public:
     static SpineAnimation* create();
 	static SpineAnimation* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);

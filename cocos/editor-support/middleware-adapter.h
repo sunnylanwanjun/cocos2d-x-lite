@@ -44,13 +44,13 @@ struct Tex2F
 struct V2F_T2F_C4B
 {
     // vertices (2F)
-    cocos2d::Vec2       vertices;             // 8 bytes
+    cocos2d::Vec2       vertex;             // 8 bytes
     
     // tex coords (2F)
-    Tex2F               texCoords;                 // 8 bytes
+    Tex2F               texCoord;                 // 8 bytes
     
     // colors (4B)
-    cocos2d::Color4B    colors;           // 4 bytes
+    cocos2d::Color4B    color;           // 4 bytes
 };
 
 /**
@@ -59,16 +59,16 @@ struct V2F_T2F_C4B
 struct V2F_T2F_C4B_C4B
 {
     // vertices (2F)
-    cocos2d::Vec2       vertices;             // 8 bytes
+    cocos2d::Vec2       vertex;             // 8 bytes
     
     // tex coords (2F)
-    Tex2F               texCoords;                 // 8 bytes
+    Tex2F               texCoord;                 // 8 bytes
     
     // colors (4B)
-    cocos2d::Color4B    colors;           // 4 bytes
+    cocos2d::Color4B    color;           // 4 bytes
     
     // colors (4B)
-    cocos2d::Color4B    colors2;          // 4 bytes
+    cocos2d::Color4B    color2;          // 4 bytes
 };
 
 struct Triangles

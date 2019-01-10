@@ -50,7 +50,8 @@ MiddlewareManager::~MiddlewareManager()
     for(auto vf : _vfList)
     {
         IOBuffer* buffer = _vbMap[vf];
-        if (buffer) {
+        if (buffer)
+        {
             delete buffer;
         }
         cocos2d::ccDeleteBuffers(1, &_glVBMap[vf]);
@@ -59,18 +60,24 @@ MiddlewareManager::~MiddlewareManager()
 
 cocos2d::middleware::IOBuffer& MiddlewareManager::getVB(int format)
 {
-    auto it = _vbMap.find(format);
-    if (it == _vbMap.end()) {
-        _vbMap[format] = new IOBuffer(MAX_VB_BUFFER_SIZE);
+    auto buffer = _vbMap[format];
+    if (buffer == nullptr)
+    {
+        buffer = new IOBuffer(MAX_VB_BUFFER_SIZE);
+        _vbMap[format] = buffer;
     }
-    return *_vbMap[format];
+    return *buffer;
 }
 
 void MiddlewareManager::update(float dt)
 {
     for(auto it : _vbMap)
     {
-        (it.second)->reset();
+        auto buffer = it.second;
+        if (buffer)
+        {
+            buffer->reset();
+        }
     }
     _ib.reset();
     
@@ -107,12 +114,12 @@ void MiddlewareManager::update(float dt)
     
     _removeList.clear();
     
-    for(auto vf : _vfList)
+    for(auto it : _vbMap)
     {
-        IOBuffer* vb = _vbMap[vf];
-        if (vb->isOutRange())
+        auto buffer = it.second;
+        if(buffer && buffer->isOutRange())
         {
-            vb->resize(vb->getCapacity() + INCREASE_BUFFER_SIZE, true);
+            buffer->resize(buffer->getCapacity() + INCREASE_BUFFER_SIZE, true);
         }
     }
     

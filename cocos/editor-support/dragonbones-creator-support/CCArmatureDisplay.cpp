@@ -312,12 +312,12 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         {
             middleware::V2F_T2F_C4B* vertex = triangles.verts + v;
             middleware::V2F_T2F_C4B* worldVertex = worldTriangles + v;
-            worldVertex->vertices.x = vertex->vertices.x * worldMatrix.m[0] + vertex->vertices.y * worldMatrix.m[4] + worldMatrix.m[12];
-            worldVertex->vertices.y = vertex->vertices.x * worldMatrix.m[1] + vertex->vertices.y * worldMatrix.m[5] + worldMatrix.m[13];
-            worldVertex->colors.r = (GLubyte)_finalColor.r;
-            worldVertex->colors.g = (GLubyte)_finalColor.g;
-            worldVertex->colors.b = (GLubyte)_finalColor.b;
-            worldVertex->colors.a = (GLubyte)_finalColor.a;
+            worldVertex->vertex.x = vertex->vertex.x * worldMatrix.m[0] + vertex->vertex.y * worldMatrix.m[4] + worldMatrix.m[12];
+            worldVertex->vertex.y = vertex->vertex.x * worldMatrix.m[1] + vertex->vertex.y * worldMatrix.m[5] + worldMatrix.m[13];
+            worldVertex->color.r = (GLubyte)_finalColor.r;
+            worldVertex->color.g = (GLubyte)_finalColor.g;
+            worldVertex->color.b = (GLubyte)_finalColor.b;
+            worldVertex->color.a = (GLubyte)_finalColor.a;
         }
         
         // Fill MiddlewareManager vertex buffer
