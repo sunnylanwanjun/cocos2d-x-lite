@@ -47,7 +47,7 @@ MiddlewareManager::~MiddlewareManager()
 {
     cocos2d::ccDeleteBuffers(1, &_glIBID);
     
-    for(auto vf : _vfList)
+    for (auto vf : _vfList)
     {
         IOBuffer* buffer = _vbMap[vf];
         if (buffer)
@@ -71,7 +71,7 @@ cocos2d::middleware::IOBuffer& MiddlewareManager::getVB(int format)
 
 void MiddlewareManager::update(float dt)
 {
-    for(auto it : _vbMap)
+    for (auto it : _vbMap)
     {
         auto buffer = it.second;
         if (buffer)
@@ -114,10 +114,10 @@ void MiddlewareManager::update(float dt)
     
     _removeList.clear();
     
-    for(auto it : _vbMap)
+    for (auto it : _vbMap)
     {
         auto buffer = it.second;
-        if(buffer && buffer->isOutRange())
+        if (buffer && buffer->isOutRange())
         {
             buffer->resize(buffer->getCapacity() + INCREASE_BUFFER_SIZE, true);
         }
