@@ -39,7 +39,6 @@ MiddlewareManager::MiddlewareManager()
     
     for(auto vf : _vfList)
     {
-        _vbMap[vf] = new IOBuffer(MAX_VB_BUFFER_SIZE);
         glGenBuffers(1, &_glVBMap[vf]);
     }
 }
@@ -50,16 +49,28 @@ MiddlewareManager::~MiddlewareManager()
     
     for(auto vf : _vfList)
     {
-        delete _vbMap[vf];
+        IOBuffer* buffer = _vbMap[vf];
+        if (buffer) {
+            delete buffer;
+        }
         cocos2d::ccDeleteBuffers(1, &_glVBMap[vf]);
     }
 }
 
+cocos2d::middleware::IOBuffer& MiddlewareManager::getVB(int format)
+{
+    auto it = _vbMap.find(format);
+    if (it == _vbMap.end()) {
+        _vbMap[format] = new IOBuffer(MAX_VB_BUFFER_SIZE);
+    }
+    return *_vbMap[format];
+}
+
 void MiddlewareManager::update(float dt)
 {
-    for(auto vf : _vfList)
+    for(auto it : _vbMap)
     {
-        _vbMap[vf]->reset();
+        (it.second)->reset();
     }
     _ib.reset();
     
@@ -140,6 +151,8 @@ void MiddlewareManager::uploadVB()
     for(auto vf : _vfList)
     {
         IOBuffer* vb = _vbMap[vf];
+        if (!vb) continue;
+        
         uint32_t glVBID = _glVBMap[vf];
         if (glVBID == 0)
         {

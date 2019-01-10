@@ -99,10 +99,7 @@ public:
         return _glVBMap[format];
     }
     
-    cocos2d::middleware::IOBuffer& getVB(int format)
-    {
-        return *_vbMap[format];
-    }
+    cocos2d::middleware::IOBuffer& getVB(int format);
     
     cocos2d::middleware::IOBuffer& getIB()
     {
