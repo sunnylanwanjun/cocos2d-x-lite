@@ -28,6 +28,7 @@
 #include <string>
 #include "MiddlewareMacro.h"
 #include <math.h>
+#include <functional>
 
 MIDDLEWARE_BEGIN
 /**
@@ -172,12 +173,12 @@ public:
     {
         return _curPos;
     }
-
+    
     inline std::size_t getCurPos () const
     {
         return _curPos;
     }
-
+    
     inline uint8_t* getCurBuffer () const
     {
         return _buffer + _curPos;
@@ -198,16 +199,40 @@ public:
         return _outRange;
     }
 
-	inline void checkSpace (std::size_t needSize, bool needCopy = false)
+	inline bool checkSpace (std::size_t needSize, bool needCopy = false)
 	{
-		auto needLen = _curPos + needSize;
+        auto needLen = _curPos + needSize;
+        auto isFull = false;
+        if (_maxSize > 0 && needLen > _maxSize)
+        {
+            isFull = true;
+            if (_fullCallback)
+            {
+                _fullCallback();
+            }
+            _curPos = 0;
+        }
+        
 		if (_bufferSize < needLen)
 		{
 			std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
 			resize(fitSize, needCopy);
 		}
+        
+        return isFull;
 	}
 
+    void setMaxSize(std::size_t maxSize)
+    {
+        _maxSize = maxSize;
+    }
+    
+    typedef std::function<void()> fullCallback;
+    void setFullCallback(fullCallback callback)
+    {
+        _fullCallback = callback;
+    }
+    
     /**
      * @brief Resize buffer
      * @param[in] newLen New size you want to adjustment.
@@ -219,7 +244,9 @@ protected:
     std::size_t                 _bufferSize = 0;
     std::size_t                 _curPos = 0;
     std::size_t                 _readPos = 0;
-    bool                        _outRange = false;
+	bool                        _outRange = false;
+    std::size_t                 _maxSize = 0;
+    fullCallback                _fullCallback = nullptr;
 };
 
 MIDDLEWARE_END
