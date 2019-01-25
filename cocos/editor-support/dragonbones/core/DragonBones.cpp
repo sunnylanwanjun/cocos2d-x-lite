@@ -81,7 +81,7 @@ void DragonBones::bufferObject(BaseObject* object)
 {
     if(object == nullptr || object->isInPool())return;
     auto it = std::find(_objects.begin(), _objects.end(), object);
-    if (it != _objects.end())
+    if (it == _objects.end())
     {
         _objects.push_back(object);
     }
