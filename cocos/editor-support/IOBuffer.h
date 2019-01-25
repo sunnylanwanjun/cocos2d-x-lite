@@ -173,12 +173,12 @@ public:
     {
         return _curPos;
     }
-    
+
     inline std::size_t getCurPos () const
     {
         return _curPos;
     }
-    
+
     inline uint8_t* getCurBuffer () const
     {
         return _buffer + _curPos;
@@ -212,12 +212,12 @@ public:
             }
             _curPos = 0;
         }
-        
-		if (_bufferSize < needLen)
-		{
-			std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
-			resize(fitSize, needCopy);
-		}
+
+        if (_bufferSize < needLen)
+        {
+            std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
+            resize(fitSize, needCopy);
+        }
         
         return isFull;
 	}
@@ -244,7 +244,7 @@ protected:
     std::size_t                 _bufferSize = 0;
     std::size_t                 _curPos = 0;
     std::size_t                 _readPos = 0;
-	bool                        _outRange = false;
+    bool                        _outRange = false;
     std::size_t                 _maxSize = 0;
     fullCallback                _fullCallback = nullptr;
 };
