@@ -199,8 +199,8 @@ public:
         return _outRange;
     }
 
-	inline bool checkSpace (std::size_t needSize, bool needCopy = false)
-	{
+    inline bool checkSpace (std::size_t needSize, bool needCopy = false)
+    {
         auto needLen = _curPos + needSize;
         auto isFull = false;
         if (_maxSize > 0 && needLen > _maxSize)
@@ -218,9 +218,9 @@ public:
             std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
             resize(fitSize, needCopy);
         }
-        
+
         return isFull;
-	}
+    }
 
     void setMaxSize(std::size_t maxSize)
     {
