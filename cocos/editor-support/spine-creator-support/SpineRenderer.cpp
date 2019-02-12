@@ -306,7 +306,7 @@ void SpineRenderer::update (float deltaTime)
     
     int debugSlotsLen = 0;
     int materialLen = 0;
-    bool isFull = false;
+    int isFull = 0;
     
     if (_debugSlots || _debugBones)
     {
@@ -331,6 +331,8 @@ void SpineRenderer::update (float deltaTime)
     
     for (int i = 0, n = _skeleton->slotsCount; i < n; ++i)
     {
+        // Reset isFull flag.
+        isFull = 0;
         spSlot* slot = _skeleton->drawOrder[i];
         if (_startSlotIndex >= 0 && _startSlotIndex == slot->data->index)
         {
@@ -392,7 +394,7 @@ void SpineRenderer::update (float deltaTime)
                     
                     triangles.vertCount = attachmentVertices->_triangles->vertCount;
                     vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
-                    isFull = vb.checkSpace(vbSize);
+                    isFull |= vb.checkSpace(vbSize);
                     triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
                     memcpy(triangles.verts, attachmentVertices->_triangles->verts, vbSize);
                     spRegionAttachment_computeWorldVertices(attachment, slot->bone, (float*)triangles.verts, 0, vs1);
@@ -408,7 +410,7 @@ void SpineRenderer::update (float deltaTime)
                     
                     trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                     vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                    isFull = vb.checkSpace(vbSize);
+                    isFull |= vb.checkSpace(vbSize);
                     trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                     for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++)
                     {
@@ -460,7 +462,7 @@ void SpineRenderer::update (float deltaTime)
                     
                     triangles.vertCount = attachmentVertices->_triangles->vertCount;
                     vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
-                    isFull = vb.checkSpace(vbSize);
+                    isFull |= vb.checkSpace(vbSize);
                     triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
                     memcpy(triangles.verts, attachmentVertices->_triangles->verts, vbSize);
                     spVertexAttachment_computeWorldVertices(SUPER(attachment), slot, 0, attachment->super.worldVerticesLength, (float*)triangles.verts, 0, vs1);
@@ -476,7 +478,7 @@ void SpineRenderer::update (float deltaTime)
                     
                     trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                     vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                    isFull = vb.checkSpace(vbSize);
+                    isFull |= vb.checkSpace(vbSize);
                     trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                     for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++)
                     {
@@ -550,7 +552,7 @@ void SpineRenderer::update (float deltaTime)
                 
                 triangles.vertCount = _clipper->clippedVertices->size >> 1;
                 vbSize = triangles.vertCount * sizeof(V2F_T2F_C4B);
-                isFull = vb.checkSpace(vbSize);
+                isFull |= vb.checkSpace(vbSize);
                 triangles.verts = (V2F_T2F_C4B*)vb.getCurBuffer();
                 
                 triangles.indexCount = _clipper->clippedTriangles->size;
@@ -602,7 +604,7 @@ void SpineRenderer::update (float deltaTime)
                 
                 trianglesTwoColor.vertCount = _clipper->clippedVertices->size >> 1;
                 vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                isFull = vb.checkSpace(vbSize);
+                isFull |= vb.checkSpace(vbSize);
                 trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                 
                 trianglesTwoColor.indexCount = _clipper->clippedTriangles->size;

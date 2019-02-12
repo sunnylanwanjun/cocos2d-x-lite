@@ -199,13 +199,13 @@ public:
         return _outRange;
     }
 
-    inline bool checkSpace (std::size_t needSize, bool needCopy = false)
+    inline int checkSpace (std::size_t needSize, bool needCopy = false)
     {
         auto needLen = _curPos + needSize;
-        auto isFull = false;
+        auto isFull = 0;
         if (_maxSize > 0 && needLen > _maxSize)
         {
-            isFull = true;
+            isFull = 1;
             if (_fullCallback)
             {
                 _fullCallback();

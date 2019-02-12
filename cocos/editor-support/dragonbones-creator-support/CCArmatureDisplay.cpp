@@ -230,10 +230,13 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
     MeshBuffer* mb = mgr->getMeshBuffer(VF_XYUVC);
     IOBuffer& vb = mb->getVB();
     IOBuffer& ib = mb->getIB();
-    auto isFull = false;
+    int isFull = 0;
     
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {
+        // Reset isFull flag.
+        isFull = 0;
+
         CCSlot* slot = (CCSlot*)slots[i];
         if (!slot->getVisible())
         {
@@ -275,7 +278,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         _curTextureIndex = texture->getRealTextureIndex();
         
         auto vbSize = slot->triangles.vertCount * sizeof(middleware::V2F_T2F_C4B);
-        isFull = vb.checkSpace(vbSize, true);
+        isFull |= vb.checkSpace(vbSize, true);
         
         // If texture or blendMode change,will change material.
         if (_preTextureIndex != _curTextureIndex || _preBlendDst != _curBlendDst || _preBlendSrc != _curBlendSrc || isFull)

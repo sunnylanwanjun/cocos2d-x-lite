@@ -81,6 +81,7 @@ void DragonBones::bufferEvent(EventObject* value)
 void DragonBones::bufferObject(BaseObject* object)
 {
     if(object == nullptr || object->isInPool())return;
+    // Just mark object will be put in pool next frame, 'true' is useless.
     _objectsMap[object] = true;
 }
 

@@ -22,10 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-// vertex buffer init capacity
-#define INIT_VB_BUFFER_SIZE 1310700
-// vertex max size
-#define MAX_VB_BUFFER_SIZE 1310700
 // index buffer init capacity
 #define INIT_IB_BUFFER_SIZE 1024000
 // can fill material data max capacity
@@ -47,5 +43,5 @@
 #define USING_NS_MW using namespace cocos2d::middleware
 #endif
 
-#define VF_XYUVC 1
-#define VF_XYUVCC 2
+#define VF_XYUVC 5
+#define VF_XYUVCC 6
