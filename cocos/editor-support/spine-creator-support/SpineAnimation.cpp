@@ -158,15 +158,16 @@ SpineAnimation::~SpineAnimation ()
 
 void SpineAnimation::update (float deltaTime)
 {
-	super::update(deltaTime);
-
     if (!_paused)
     {
+        spSkeleton_update(_skeleton, deltaTime * _timeScale);
         deltaTime *= _timeScale;
         spAnimationState_update(_state, deltaTime);
         spAnimationState_apply(_state, _skeleton);
         spSkeleton_updateWorldTransform(_skeleton);
     }
+    
+    super::update(deltaTime);
 }
 
 void SpineAnimation::setAnimationStateData (spAnimationStateData* stateData)
