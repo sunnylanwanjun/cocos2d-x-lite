@@ -160,8 +160,8 @@ void SpineAnimation::update (float deltaTime)
 {
     if (!_paused)
     {
-        spSkeleton_update(_skeleton, deltaTime * _timeScale);
         deltaTime *= _timeScale;
+        spSkeleton_update(_skeleton, deltaTime);
         spAnimationState_update(_state, deltaTime);
         spAnimationState_apply(_state, _skeleton);
         spSkeleton_updateWorldTransform(_skeleton);
