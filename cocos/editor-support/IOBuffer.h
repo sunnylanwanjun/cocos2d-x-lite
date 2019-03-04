@@ -203,16 +203,6 @@ public:
     {
         return _outRange;
     }
-
-    inline bool isFull (std::size_t needSize)
-    {
-        auto needLen = _curPos + needSize;
-        if (_maxSize > 0 && needLen > _maxSize)
-        {
-            return true;
-        }
-        return false;
-    }
     
     inline int checkSpace (std::size_t needSize, bool needCopy = false)
     {
