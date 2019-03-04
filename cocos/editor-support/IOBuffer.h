@@ -159,6 +159,11 @@ public:
         _readPos = 0;
     }
     
+    inline void clear ()
+    {
+        memset(_buffer, 0, _bufferSize);
+    }
+    
     inline void move (int pos)
     {
         if (_bufferSize < _curPos + pos)
@@ -199,6 +204,16 @@ public:
         return _outRange;
     }
 
+    inline bool isFull (std::size_t needSize)
+    {
+        auto needLen = _curPos + needSize;
+        if (_maxSize > 0 && needLen > _maxSize)
+        {
+            return true;
+        }
+        return false;
+    }
+    
     inline int checkSpace (std::size_t needSize, bool needCopy = false)
     {
         auto needLen = _curPos + needSize;
@@ -217,6 +232,10 @@ public:
         {
             std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
             resize(fitSize, needCopy);
+            if (_resizeCallback)
+            {
+                _resizeCallback();
+            }
         }
 
         return isFull;
@@ -233,6 +252,12 @@ public:
         _fullCallback = callback;
     }
     
+    typedef std::function<void()> resizeCallback;
+    void setResizeCallback(resizeCallback callback)
+    {
+        _resizeCallback = callback;
+    }
+    
     /**
      * @brief Resize buffer
      * @param[in] newLen New size you want to adjustment.
@@ -247,6 +272,7 @@ protected:
     bool                        _outRange = false;
     std::size_t                 _maxSize = 0;
     fullCallback                _fullCallback = nullptr;
+    resizeCallback              _resizeCallback = nullptr;
 };
 
 MIDDLEWARE_END
