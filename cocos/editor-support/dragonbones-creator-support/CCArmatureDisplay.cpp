@@ -94,11 +94,12 @@ void CCArmatureDisplay::dbUpdate()
     if (!mgr->isUpdating) return;
     
     auto renderMgr = RenderInfoMgr::getInstance();
-    auto& renderInfo = renderMgr->getBuffer();
+    auto renderInfo = renderMgr->getBuffer();
+    if (renderInfo == nullptr) return;
     
     _renderInfoOffset->reset();
     // store renderInfo offset
-    _renderInfoOffset->writeUint32((uint32_t)renderInfo.getCurPos() / sizeof(uint32_t));
+    _renderInfoOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
     
     _preBlendMode = -1;
     _preTextureIndex = -1;
@@ -113,18 +114,18 @@ void CCArmatureDisplay::dbUpdate()
     _materialLen = 0;
     
     // check enough space
-    renderInfo.checkSpace(sizeof(uint32_t), true);
-    _materialLenOffset = renderInfo.getCurPos();
+    renderInfo->checkSpace(sizeof(uint32_t), true);
+    _materialLenOffset = renderInfo->getCurPos();
     // Reserved space to save material len
-    renderInfo.writeUint32(0);
+    renderInfo->writeUint32(0);
     
     // Traverse all aramture to fill vertex and index buffer.
     traverseArmature(_armature);
     
-    renderInfo.writeUint32(_materialLenOffset, _materialLen);
+    renderInfo->writeUint32(_materialLenOffset, _materialLen);
     if (_preISegWritePos != -1)
     {
-        renderInfo.writeUint32(_preISegWritePos, _curISegLen);
+        renderInfo->writeUint32(_preISegWritePos, _curISegLen);
     }
     
     if (_debugDraw)
@@ -210,7 +211,9 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
     IOBuffer& vb = mb->getVB();
     IOBuffer& ib = mb->getIB();
     auto renderMgr = RenderInfoMgr::getInstance();
-    auto& renderInfo = renderMgr->getBuffer();
+    auto renderInfo = renderMgr->getBuffer();
+    if (!renderInfo) return;
+    
     CCSlot* slot = nullptr;
     middleware::Texture2D* texture = nullptr;
     int isFull = 0;
@@ -220,7 +223,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         // fill pre segment count field
         if (_preISegWritePos != -1)
         {
-            renderInfo.writeUint32(_preISegWritePos, _curISegLen);
+            renderInfo->writeUint32(_preISegWritePos, _curISegLen);
         }
         
         // prepare to fill new segment field
@@ -245,25 +248,25 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         }
         
         // check enough space
-        renderInfo.checkSpace(sizeof(uint32_t) * 7, true);
+        renderInfo->checkSpace(sizeof(uint32_t) * 7, true);
         
         // fill new texture index
-        renderInfo.writeUint32(_curTextureIndex);
+        renderInfo->writeUint32(_curTextureIndex);
         // fill new blend src and dst        
-        renderInfo.writeUint32(_curBlendSrc);
-        renderInfo.writeUint32(_curBlendDst);
+        renderInfo->writeUint32(_curBlendSrc);
+        renderInfo->writeUint32(_curBlendDst);
         // fill new index and vertex buffer id
         auto glIB = mb->getGLIB();
         auto glVB = mb->getGLVB();
-        renderInfo.writeUint32(glIB);
-        renderInfo.writeUint32(glVB);
+        renderInfo->writeUint32(glIB);
+        renderInfo->writeUint32(glVB);
         // fill new index offset
-        renderInfo.writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
+        renderInfo->writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
 
         // save new segment count pos field
-        _preISegWritePos = (int)renderInfo.getCurPos();
+        _preISegWritePos = (int)renderInfo->getCurPos();
         // reserve indice segamentation count        
-        renderInfo.writeUint32(0);
+        renderInfo->writeUint32(0);
 
         // reset pre blend mode to current
         _preBlendMode = (int)slot->_blendMode;  

@@ -275,7 +275,8 @@ void SpineRenderer::update (float deltaTime)
     if (!mgr->isUpdating) return;
     
     auto renderMgr = RenderInfoMgr::getInstance();
-    auto& renderInfo = renderMgr->getBuffer();
+    auto renderInfo = renderMgr->getBuffer();
+    if (!renderInfo) return;
     
     Color4F nodeColor;
     nodeColor.r = _nodeColor.r / (float)255;
@@ -285,13 +286,13 @@ void SpineRenderer::update (float deltaTime)
     
     _renderInfoOffset->reset();
     //  store renderInfo offset
-    _renderInfoOffset->writeUint32((uint32_t)renderInfo.getCurPos() / sizeof(uint32_t));
+    _renderInfoOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
     
     // If opacity is 0,then return.
     if (_skeleton->color.a == 0) 
     {
-        renderInfo.checkSpace(sizeof(uint32_t), true);
-        renderInfo.writeUint32(0);
+        renderInfo->checkSpace(sizeof(uint32_t), true);
+        renderInfo->writeUint32(0);
         return;
     }
     
@@ -343,17 +344,17 @@ void SpineRenderer::update (float deltaTime)
     }
     
     // check enough space
-    renderInfo.checkSpace(sizeof(uint32_t), true);
-    std::size_t materialLenOffset = renderInfo.getCurPos();
+    renderInfo->checkSpace(sizeof(uint32_t), true);
+    std::size_t materialLenOffset = renderInfo->getCurPos();
     //reserved space to save material len
-    renderInfo.writeUint32(0);
+    renderInfo->writeUint32(0);
     
     auto flush = [&]() 
     {
         // fill pre segment count field
         if (preISegWritePos != -1)
         {
-            renderInfo.writeUint32(preISegWritePos, curISegLen);
+            renderInfo->writeUint32(preISegWritePos, curISegLen);
         }
 
         // prepare to fill new segment field
@@ -377,25 +378,25 @@ void SpineRenderer::update (float deltaTime)
         }
         
         // check enough space
-        renderInfo.checkSpace(sizeof(uint32_t) * 7, true);
+        renderInfo->checkSpace(sizeof(uint32_t) * 7, true);
         
         // fill new texture index
-        renderInfo.writeUint32(curTextureIndex);
+        renderInfo->writeUint32(curTextureIndex);
         // fill new blend src and dst
-        renderInfo.writeUint32(curBlendSrc);
-        renderInfo.writeUint32(curBlendDst);
+        renderInfo->writeUint32(curBlendSrc);
+        renderInfo->writeUint32(curBlendDst);
         // fill new index and vertex buffer id
         auto glIB = mb->getGLIB();
         auto glVB = mb->getGLVB();
-        renderInfo.writeUint32(glIB);
-        renderInfo.writeUint32(glVB);
+        renderInfo->writeUint32(glIB);
+        renderInfo->writeUint32(glVB);
         // fill new index offset
-        renderInfo.writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
+        renderInfo->writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
 
         // save new segment count pos field
-        preISegWritePos = (int)renderInfo.getCurPos();
+        preISegWritePos = (int)renderInfo->getCurPos();
         // reserve indice segamentation count
-        renderInfo.writeUint32(0);
+        renderInfo->writeUint32(0);
         
         // reset pre blend mode to current
         preBlendMode = (int)slot->data->blendMode;
@@ -765,10 +766,10 @@ void SpineRenderer::update (float deltaTime)
         _debugBuffer->writeFloat32(0, debugSlotsLen);
     }
     
-    renderInfo.writeUint32(materialLenOffset, materialLen);
+    renderInfo->writeUint32(materialLenOffset, materialLen);
     if (preISegWritePos != -1)
     {
-        renderInfo.writeUint32(preISegWritePos, curISegLen);
+        renderInfo->writeUint32(preISegWritePos, curISegLen);
     }
     
     if (_debugBones)

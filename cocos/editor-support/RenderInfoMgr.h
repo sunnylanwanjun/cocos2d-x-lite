@@ -52,12 +52,15 @@ public:
     RenderInfoMgr ();
     virtual ~RenderInfoMgr ();
 
+    void init();
+    void afterCleanupHandle();
+    
     void reset ()
     {
-        _buffer.reset();
+        _buffer->reset();
     }
 
-    IOTypedArray& getBuffer()
+    IOTypedArray* getBuffer()
     {
         return _buffer;
     }
@@ -70,12 +73,12 @@ public:
 
     se_object_ptr getRenderInfo()
     {
-        return _buffer.getTypeArray();
+        return _buffer->getTypeArray();
     }
 
 private:
     static RenderInfoMgr* _instance;
-    IOTypedArray _buffer;
+    IOTypedArray* _buffer = nullptr;
     resizeCallback _resizeCallback = nullptr;
 };
 

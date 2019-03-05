@@ -27,20 +27,43 @@ MIDDLEWARE_BEGIN
 RenderInfoMgr* RenderInfoMgr::_instance = nullptr;
 
 RenderInfoMgr::RenderInfoMgr ()
-: _buffer(se::Object::TypedArrayType::UINT32, INIT_RENDER_INFO_BUFFER_SIZE)
 {
-    _buffer.setResizeCallback([this]
-    {
-        if (_resizeCallback)
-        {
-            _resizeCallback();
-        }
-    });
+    init();
 }
 
 RenderInfoMgr::~RenderInfoMgr ()
 {
-    
+    if (_buffer)
+    {
+        delete _buffer;
+        _buffer = nullptr;
+    }
+}
+
+void RenderInfoMgr::afterCleanupHandle()
+{
+    if (_buffer)
+    {
+        delete _buffer;
+        _buffer = nullptr;
+    }
+    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&RenderInfoMgr::init,this));
+}
+
+void RenderInfoMgr::init()
+{
+    if (!_buffer)
+    {
+        _buffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, INIT_RENDER_INFO_BUFFER_SIZE);
+        _buffer->setResizeCallback([this]
+        {
+           if (_resizeCallback)
+           {
+               _resizeCallback();
+           }
+        });
+    }
+    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&RenderInfoMgr::afterCleanupHandle,this));
 }
 
 MIDDLEWARE_END
