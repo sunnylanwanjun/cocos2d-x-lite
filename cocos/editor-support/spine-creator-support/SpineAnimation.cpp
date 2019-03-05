@@ -149,6 +149,9 @@ SpineAnimation::SpineAnimation (const std::string& skeletonDataFile, const std::
 
 SpineAnimation::~SpineAnimation ()
 {
+    // Clear all listener to avoid call js callback, or will triggle crash, because js object is being collected.
+    _destroying = true;
+
     if (_state)
     {
         if (_ownsAnimationStateData) spAnimationStateData_dispose(_state->data);
@@ -246,6 +249,8 @@ void SpineAnimation::clearTrack (int trackIndex)
 
 void SpineAnimation::onAnimationStateEvent (spTrackEntry* entry, spEventType type, spEvent* event)
 {
+    if (_destroying) return;
+    
 	switch (type)
     {
 	case SP_ANIMATION_START:
@@ -271,6 +276,8 @@ void SpineAnimation::onAnimationStateEvent (spTrackEntry* entry, spEventType typ
 
 void SpineAnimation::onTrackEntryEvent (spTrackEntry* entry, spEventType type, spEvent* event)
 {
+    if (_destroying) return;
+    
 	if (!entry->rendererObject) return;
 	_TrackEntryListeners* listeners = (_TrackEntryListeners*)entry->rendererObject;
 	switch (type)
