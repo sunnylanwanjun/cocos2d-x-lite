@@ -51,9 +51,6 @@ public:
 
     RenderInfoMgr ();
     virtual ~RenderInfoMgr ();
-
-    void init();
-    void afterCleanupHandle();
     
     void reset ()
     {
@@ -75,7 +72,9 @@ public:
     {
         return _buffer->getTypeArray();
     }
-
+private:
+    void init();
+    void afterCleanupHandle();
 private:
     static RenderInfoMgr* _instance;
     IOTypedArray* _buffer = nullptr;
