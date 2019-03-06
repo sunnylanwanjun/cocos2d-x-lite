@@ -155,11 +155,11 @@ SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::st
 
 SpineRenderer::~SpineRenderer ()
 {
-    if (_uuid != "") SkeletonDataMgr::getInstance()->releaseByUUID(_uuid);
 	if (_ownsSkeletonData) spSkeletonData_dispose(_skeleton->data);
 	if (_ownsSkeleton) spSkeleton_dispose(_skeleton);
 	if (_atlas) spAtlas_dispose(_atlas);
 	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
+    if (_uuid != "") SkeletonDataMgr::getInstance()->releaseByUUID(_uuid);
 	if (_clipper) spSkeletonClipping_dispose(_clipper);
     
     if (_renderInfoOffset)
