@@ -438,7 +438,7 @@ static bool js_register_spine_initSkeletonData (se::State& s)
     spAttachmentLoader* attachmentLoader = SUPER(CreatorAttachmentLoader_create(atlas));
     spSkeletonJson* json = spSkeletonJson_createWithLoader(attachmentLoader);
     json->scale = scale;
-    spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, skeletonDataFile.c_str());
+    spSkeletonData* skeletonData = spSkeletonJson_readSkeletonData(json, skeletonDataFile.c_str());
     CCASSERT(skeletonData, json->error ? json->error : "Error reading skeleton data.");
     spSkeletonJson_dispose(json);
     
