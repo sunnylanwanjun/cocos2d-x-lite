@@ -33,11 +33,7 @@ RenderInfoMgr::RenderInfoMgr ()
 
 RenderInfoMgr::~RenderInfoMgr ()
 {
-    if (_buffer)
-    {
-        delete _buffer;
-        _buffer = nullptr;
-    }
+    CC_SAFE_DELETE(_buffer);
 }
 
 void RenderInfoMgr::afterCleanupHandle()

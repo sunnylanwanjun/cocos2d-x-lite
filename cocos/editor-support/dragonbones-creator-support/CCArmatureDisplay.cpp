@@ -338,8 +338,8 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         auto vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B);
         vb.writeBytes((char*)worldTriangles, vbSize);
         
-		auto ibSize = triangles.indexCount * sizeof(unsigned short);
-		ib.checkSpace(ibSize, true);
+        auto ibSize = triangles.indexCount * sizeof(unsigned short);
+        ib.checkSpace(ibSize, true);
         // If vertex buffer current offset is zero,fill it directly or recalculate vertex offset.
         if (vertexOffset > 0)
         {

@@ -57,23 +57,23 @@ SpineRenderer* SpineRenderer::createWithSkeleton(spSkeleton* skeleton, bool owns
 
 SpineRenderer* SpineRenderer::createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData)
 {
-	SpineRenderer* node = new SpineRenderer(skeletonData, ownsSkeletonData);
-	node->autorelease();
-	return node;
+    SpineRenderer* node = new SpineRenderer(skeletonData, ownsSkeletonData);
+    node->autorelease();
+    return node;
 }
 
 SpineRenderer* SpineRenderer::createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
 {
-	SpineRenderer* node = new SpineRenderer(skeletonDataFile, atlas, scale);
-	node->autorelease();
-	return node;
+    SpineRenderer* node = new SpineRenderer(skeletonDataFile, atlas, scale);
+    node->autorelease();
+    return node;
 }
 
 SpineRenderer* SpineRenderer::createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
 {
-	SpineRenderer* node = new SpineRenderer(skeletonDataFile, atlasFile, scale);
-	node->autorelease();
-	return node;
+    SpineRenderer* node = new SpineRenderer(skeletonDataFile, atlasFile, scale);
+    node->autorelease();
+    return node;
 }
 
 void SpineRenderer::initialize ()
@@ -125,8 +125,8 @@ void SpineRenderer::stopSchedule()
 
 void SpineRenderer::setSkeletonData (spSkeletonData *skeletonData, bool ownsSkeletonData)
 {
-	_skeleton = spSkeleton_create(skeletonData);
-	_ownsSkeletonData = ownsSkeletonData;
+    _skeleton = spSkeleton_create(skeletonData);
+    _ownsSkeletonData = ownsSkeletonData;
 }
 
 SpineRenderer::SpineRenderer ()
@@ -140,27 +140,27 @@ SpineRenderer::SpineRenderer(spSkeleton* skeleton, bool ownsSkeleton, bool ownsS
 
 SpineRenderer::SpineRenderer (spSkeletonData *skeletonData, bool ownsSkeletonData)
 {
-	initWithData(skeletonData, ownsSkeletonData);
+    initWithData(skeletonData, ownsSkeletonData);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
 {
-	initWithJsonFile(skeletonDataFile, atlas, scale);
+    initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
 SpineRenderer::SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
 {
-	initWithJsonFile(skeletonDataFile, atlasFile, scale);
+    initWithJsonFile(skeletonDataFile, atlasFile, scale);
 }
 
 SpineRenderer::~SpineRenderer ()
 {
-	if (_ownsSkeletonData) spSkeletonData_dispose(_skeleton->data);
-	if (_ownsSkeleton) spSkeleton_dispose(_skeleton);
-	if (_atlas) spAtlas_dispose(_atlas);
-	if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
+    if (_ownsSkeletonData) spSkeletonData_dispose(_skeleton->data);
+    if (_ownsSkeleton) spSkeleton_dispose(_skeleton);
+    if (_atlas) spAtlas_dispose(_atlas);
+    if (_attachmentLoader) spAttachmentLoader_dispose(_attachmentLoader);
     if (_uuid != "") SkeletonDataMgr::getInstance()->releaseByUUID(_uuid);
-	if (_clipper) spSkeletonClipping_dispose(_clipper);
+    if (_clipper) spSkeletonClipping_dispose(_clipper);
     
     if (_renderInfoOffset)
     {
@@ -200,40 +200,40 @@ void SpineRenderer::initWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton, bo
 void SpineRenderer::initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData)
 {
     _ownsSkeleton = true;
-	setSkeletonData(skeletonData, ownsSkeletonData);
-	initialize();
+    setSkeletonData(skeletonData, ownsSkeletonData);
+    initialize();
 }
 
 void SpineRenderer::initWithJsonFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
 {
     _atlas = atlas;
-	_attachmentLoader = SUPER(CreatorAttachmentLoader_create(_atlas));
+    _attachmentLoader = SUPER(CreatorAttachmentLoader_create(_atlas));
 
-	spSkeletonJson* json = spSkeletonJson_createWithLoader(_attachmentLoader);
-	json->scale = scale;
-	spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, skeletonDataFile.c_str());
-	CCASSERT(skeletonData, json->error ? json->error : "Error reading skeleton data.");
-	spSkeletonJson_dispose(json);
+    spSkeletonJson* json = spSkeletonJson_createWithLoader(_attachmentLoader);
+    json->scale = scale;
+    spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, skeletonDataFile.c_str());
+    CCASSERT(skeletonData, json->error ? json->error : "Error reading skeleton data.");
+    spSkeletonJson_dispose(json);
     _ownsSkeleton = true;
-	setSkeletonData(skeletonData, true);
-	initialize();
+    setSkeletonData(skeletonData, true);
+    initialize();
 }
 
 void SpineRenderer::initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale)
 {
-	_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-	CCASSERT(_atlas, "Error reading atlas file.");
+    _atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
+    CCASSERT(_atlas, "Error reading atlas file.");
 
-	_attachmentLoader = SUPER(CreatorAttachmentLoader_create(_atlas));
+    _attachmentLoader = SUPER(CreatorAttachmentLoader_create(_atlas));
 
-	spSkeletonJson* json = spSkeletonJson_createWithLoader(_attachmentLoader);
-	json->scale = scale;
-	spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, skeletonDataFile.c_str());
-	CCASSERT(skeletonData, json->error ? json->error : "Error reading skeleton data file.");
-	spSkeletonJson_dispose(json);
+    spSkeletonJson* json = spSkeletonJson_createWithLoader(_attachmentLoader);
+    json->scale = scale;
+    spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, skeletonDataFile.c_str());
+    CCASSERT(skeletonData, json->error ? json->error : "Error reading skeleton data file.");
+    spSkeletonJson_dispose(json);
     _ownsSkeleton = true;
-	setSkeletonData(skeletonData, true);
-	initialize();
+    setSkeletonData(skeletonData, true);
+    initialize();
 }
     
 void SpineRenderer::initWithBinaryFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale)
@@ -808,47 +808,47 @@ AttachmentVertices* SpineRenderer::getAttachmentVertices (spMeshAttachment* atta
 
 void SpineRenderer::updateWorldTransform ()
 {
-	spSkeleton_updateWorldTransform(_skeleton);
+    spSkeleton_updateWorldTransform(_skeleton);
 }
 
 void SpineRenderer::setToSetupPose ()
 {
-	spSkeleton_setToSetupPose(_skeleton);
+    spSkeleton_setToSetupPose(_skeleton);
 }
 
 void SpineRenderer::setBonesToSetupPose ()
 {
-	spSkeleton_setBonesToSetupPose(_skeleton);
+    spSkeleton_setBonesToSetupPose(_skeleton);
 }
 
 void SpineRenderer::setSlotsToSetupPose ()
 {
-	spSkeleton_setSlotsToSetupPose(_skeleton);
+    spSkeleton_setSlotsToSetupPose(_skeleton);
 }
 
 spBone* SpineRenderer::findBone (const std::string& boneName) const
 {
-	return spSkeleton_findBone(_skeleton, boneName.c_str());
+    return spSkeleton_findBone(_skeleton, boneName.c_str());
 }
 
 spSlot* SpineRenderer::findSlot (const std::string& slotName) const
 {
-	return spSkeleton_findSlot(_skeleton, slotName.c_str());
+    return spSkeleton_findSlot(_skeleton, slotName.c_str());
 }
 
 bool SpineRenderer::setSkin (const std::string& skinName)
 {
-	return spSkeleton_setSkinByName(_skeleton, skinName.empty() ? 0 : skinName.c_str()) ? true : false;
+    return spSkeleton_setSkinByName(_skeleton, skinName.empty() ? 0 : skinName.c_str()) ? true : false;
 }
 
 bool SpineRenderer::setSkin (const char* skinName)
 {
-	return spSkeleton_setSkinByName(_skeleton, skinName) ? true : false;
+    return spSkeleton_setSkinByName(_skeleton, skinName) ? true : false;
 }
 
 spAttachment* SpineRenderer::getAttachment (const std::string& slotName, const std::string& attachmentName) const
 {
-	return spSkeleton_getAttachmentForSlotName(_skeleton, slotName.c_str(), attachmentName.c_str());
+    return spSkeleton_getAttachmentForSlotName(_skeleton, slotName.c_str(), attachmentName.c_str());
 }
 
 void SpineRenderer::setUseTint(bool enabled) {
@@ -863,27 +863,27 @@ void SpineRenderer::setSlotsRange(int startSlotIndex, int endSlotIndex)
 
 bool SpineRenderer::setAttachment (const std::string& slotName, const std::string& attachmentName)
 {
-	return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName.empty() ? 0 : attachmentName.c_str()) ? true : false;
+    return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName.empty() ? 0 : attachmentName.c_str()) ? true : false;
 }
 
 bool SpineRenderer::setAttachment (const std::string& slotName, const char* attachmentName)
 {
-	return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName) ? true : false;
+    return spSkeleton_setAttachment(_skeleton, slotName.c_str(), attachmentName) ? true : false;
 }
 
 spSkeleton* SpineRenderer::getSkeleton () const
 {
-	return _skeleton;
+    return _skeleton;
 }
 
 void SpineRenderer::setTimeScale (float scale)
 {
-	_timeScale = scale;
+    _timeScale = scale;
 }
 
 float SpineRenderer::getTimeScale () const
 {
-	return _timeScale;
+    return _timeScale;
 }
 
 void SpineRenderer::paused(bool value)

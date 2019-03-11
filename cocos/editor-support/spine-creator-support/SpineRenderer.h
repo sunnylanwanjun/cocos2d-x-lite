@@ -42,7 +42,7 @@ namespace spine {
     {
     public:
         static SpineRenderer* create ();
-	    static SpineRenderer* createWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
+        static SpineRenderer* createWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
         static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
         static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
         static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
