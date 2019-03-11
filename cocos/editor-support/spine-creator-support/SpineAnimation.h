@@ -110,8 +110,6 @@ protected:
     DisposeListener         _disposeListener = nullptr;
 	CompleteListener        _completeListener = nullptr;
 	EventListener           _eventListener = nullptr;
-    bool                    _destroying = false;
-
 private:
 	typedef SpineRenderer super;
 };
