@@ -46,7 +46,7 @@ namespace spine {
         static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
         static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
         static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
-
+        
         virtual void update (float deltaTime);
 
         spSkeleton* getSkeleton() const;

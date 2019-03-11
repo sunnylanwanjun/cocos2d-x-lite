@@ -46,7 +46,8 @@ public:
 	static SpineAnimation* createWithJsonFile (const std::string& skeletonJsonFile, const std::string& atlasFile, float scale = 1);
 	static SpineAnimation* createWithBinaryFile (const std::string& skeletonBinaryFile, spAtlas* atlas, float scale = 1);
 	static SpineAnimation* createWithBinaryFile (const std::string& skeletonBinaryFile, const std::string& atlasFile, float scale = 1);
-
+    static void setGlobalTimeScale(float timeScale);
+    
 	// Use createWithJsonFile instead
 	CC_DEPRECATED_ATTRIBUTE static SpineAnimation* createWithFile (const std::string& skeletonJsonFile, spAtlas* atlas, float scale = 1)
 	{

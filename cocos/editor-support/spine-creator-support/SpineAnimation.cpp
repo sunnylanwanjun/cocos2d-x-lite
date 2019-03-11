@@ -65,6 +65,12 @@ static _TrackEntryListeners* getListeners (spTrackEntry* entry)
 	return (_TrackEntryListeners*)entry->rendererObject;
 }
 
+static float globalTimeScale = 1.0f;
+void SpineAnimation::setGlobalTimeScale(float timeScale)
+{
+    globalTimeScale = timeScale;
+}
+
 SpineAnimation* SpineAnimation::create()
 {
     SpineAnimation* skeleton = new SpineAnimation();
@@ -163,7 +169,7 @@ void SpineAnimation::update (float deltaTime)
 {
     if (!_paused)
     {
-        deltaTime *= _timeScale;
+        deltaTime *= _timeScale * globalTimeScale;
         spSkeleton_update(_skeleton, deltaTime);
         spAnimationState_update(_state, deltaTime);
         spAnimationState_apply(_state, _skeleton);
