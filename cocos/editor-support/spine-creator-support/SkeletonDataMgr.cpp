@@ -35,7 +35,6 @@ public:
     SkeletonDataInfo (const std::string& uuid)
     {
         _uuid = uuid;
-        _dataMap[uuid] = this;
     }
     
     ~SkeletonDataInfo ()
@@ -57,8 +56,6 @@ public:
             spAttachmentLoader_dispose(attachmentLoader);
             attachmentLoader = nullptr;
         }
-        
-        _dataMap.erase(_dataMap.find(_uuid));
     }
     
     spSkeletonData* data = nullptr;
@@ -86,6 +83,7 @@ void SkeletonDataMgr::setSkeletonData (const std::string& uuid, spSkeletonData* 
     info->data = data;
     info->atlas = atlas;
     info->attachmentLoader = attachmentLoader;
+    _dataMap[uuid] = info;
 }
 
 spSkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid)
@@ -106,5 +104,11 @@ void SkeletonDataMgr::releaseByUUID (const std::string& uuid)
     {
         return;
     }
-    dataIt->second->release();
+    SkeletonDataInfo* info = dataIt->second;
+    // If info reference count is 1, then info will be destroy.
+    if (info->getReferenceCount() == 1)
+    {
+        _dataMap.erase(dataIt);
+    }
+    info->release();
 }
