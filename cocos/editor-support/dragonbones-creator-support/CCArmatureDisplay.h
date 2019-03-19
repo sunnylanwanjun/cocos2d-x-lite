@@ -50,7 +50,7 @@ public:
     static CCArmatureDisplay* create();
     
 private:
-    void traverseArmature(Armature* armature);
+    void traverseArmature(Armature* armature, float parentOpacity = 1.0f);
     
 protected:
     bool _debugDraw = false;

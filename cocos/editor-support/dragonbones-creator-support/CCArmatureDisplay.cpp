@@ -203,7 +203,7 @@ CCArmatureDisplay* CCArmatureDisplay::getRootDisplay()
     return (CCArmatureDisplay*)slot->_armature->getDisplay();
 }
 
-void CCArmatureDisplay::traverseArmature(Armature* armature)
+void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity)
 {
     auto& slots = armature->getSlots();
     auto mgr = MiddlewareManager::getInstance();
@@ -294,7 +294,8 @@ void CCArmatureDisplay::traverseArmature(Armature* armature)
         Armature* childArmature = slot->getChildArmature();
         if (childArmature != nullptr)
         {
-            traverseArmature(childArmature);
+            parentOpacity *= slot->color.a;
+            traverseArmature(childArmature, parentOpacity);
             continue;
         }
         
