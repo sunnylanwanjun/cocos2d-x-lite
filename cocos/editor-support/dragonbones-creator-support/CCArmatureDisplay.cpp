@@ -295,8 +295,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
         Armature* childArmature = slot->getChildArmature();
         if (childArmature != nullptr)
         {
-            parentOpacity *= slot->color.a / 255.0f;
-            traverseArmature(childArmature, parentOpacity);
+            traverseArmature(childArmature, parentOpacity * slot->color.a / 255.0f);
             continue;
         }
         
