@@ -314,7 +314,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
         
         // Calculation vertex color.
         a = _nodeColor.a * slot->color.a * parentOpacity;
-        float multiplier = _premultipliedAlpha ? a / 255.0f: 1.0f;
+        float multiplier = _premultipliedAlpha ? a / 255.0f : 1.0f;
         r = _nodeColor.r * slot->color.r * multiplier;
         g = _nodeColor.g * slot->color.g * multiplier;
         b = _nodeColor.b * slot->color.b * multiplier;
