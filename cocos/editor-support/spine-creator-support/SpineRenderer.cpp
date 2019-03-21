@@ -580,14 +580,14 @@ void SpineRenderer::update (float deltaTime)
                 continue;
         }
         
-        float alpha = _skeleton->color.a * slot->color.a * color.a * 255;
+        color.a = _skeleton->color.a * slot->color.a * color.a * _nodeColor.a * 255;
         // skip rendering if the color of this attachment is 0
-        if (alpha == 0)
+        if (color.a == 0)
         {
             spSkeletonClipping_clipEnd(_clipper, slot);
             continue;
         }
-        float multiplier = _premultipliedAlpha ? alpha : 255;
+        float multiplier = _premultipliedAlpha ? color.a : 255;
         
         float red = _nodeColor.r * _skeleton->color.r * color.r * multiplier;
         float green = _nodeColor.g * _skeleton->color.g * color.g * multiplier;
@@ -596,7 +596,6 @@ void SpineRenderer::update (float deltaTime)
         color.r = red * slot->color.r;
         color.g = green * slot->color.g;
         color.b = blue * slot->color.b;
-        color.a = alpha * _nodeColor.a;
         
         if (slot->darkColor)
         {
