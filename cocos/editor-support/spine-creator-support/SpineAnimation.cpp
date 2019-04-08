@@ -161,7 +161,6 @@ SpineAnimation::SpineAnimation (const std::string& skeletonDataFile, const std::
 
 SpineAnimation::~SpineAnimation ()
 {
-    clearTracks();
     _startListener = nullptr;
     _interruptListener = nullptr;
     _endListener = nullptr;
@@ -171,6 +170,7 @@ SpineAnimation::~SpineAnimation ()
 
     if (_state)
     {
+        clearTracks();
         if (_ownsAnimationStateData) spAnimationStateData_dispose(_state->data);
         spAnimationState_dispose(_state);
     }
@@ -256,9 +256,7 @@ spTrackEntry* SpineAnimation::getCurrent (int trackIndex)
 
 void SpineAnimation::clearTracks ()
 {
-    if (_state) {
-        spAnimationState_clearTracks(_state);
-    }
+    spAnimationState_clearTracks(_state);
 }
 
 void SpineAnimation::clearTrack (int trackIndex)
