@@ -256,7 +256,9 @@ spTrackEntry* SpineAnimation::getCurrent (int trackIndex)
 
 void SpineAnimation::clearTracks ()
 {
-    spAnimationState_clearTracks(_state);
+    if (_state) {
+        spAnimationState_clearTracks(_state);
+    }
 }
 
 void SpineAnimation::clearTrack (int trackIndex)
