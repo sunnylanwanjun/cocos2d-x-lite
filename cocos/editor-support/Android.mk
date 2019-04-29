@@ -86,7 +86,6 @@ spine-creator-support/SkeletonAnimation.cpp \
 spine-creator-support/SkeletonDataMgr.cpp \
 spine-creator-support/SkeletonRenderer.cpp \
 spine-creator-support/spine-cocos2dx.cpp \
-spine-creator-support/SpineAnimation.cpp \
 spine-creator-support/VertexEffectDelegate.cpp \
 ../scripting/js-bindings/manual/jsb_spine_manual.cpp \
 ../scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.cpp
