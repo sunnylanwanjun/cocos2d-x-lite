@@ -36,53 +36,45 @@ using namespace spine;
 class SkeletonDataInfo;
 static std::map<std::string, SkeletonDataInfo*> _dataMap;
 
-class SkeletonDataInfo : public cocos2d::Ref{
+class SkeletonDataInfo : public cocos2d::Ref {
 public:
-    SkeletonDataInfo (const std::string& uuid)
-    {
+    SkeletonDataInfo (const std::string& uuid) {
         _uuid = uuid;
     }
     
-    ~SkeletonDataInfo ()
-    {
-        if (data)
-        {
-            spSkeletonData_dispose(data);
+    ~SkeletonDataInfo () {
+        if (data) {
+            delete data;
             data = nullptr;
         }
         
-        if (atlas)
-        {
-            spAtlas_dispose(atlas);
+        if (atlas) {
+            delete atlas;
             atlas = nullptr;
         }
         
-        if (attachmentLoader)
-        {
-            spAttachmentLoader_dispose(attachmentLoader);
+        if (attachmentLoader) {
+            delete attachmentLoader;
             attachmentLoader = nullptr;
         }
     }
     
-    spSkeletonData* data = nullptr;
-    spAtlas* atlas = nullptr;
-    spAttachmentLoader* attachmentLoader = nullptr;
+    SkeletonData* data = nullptr;
+    Atlas* atlas = nullptr;
+    AttachmentLoader* attachmentLoader = nullptr;
     std::string _uuid;
 };
 
 SkeletonDataMgr* SkeletonDataMgr::_instance = nullptr;
 
-bool SkeletonDataMgr::hasSkeletonData (const std::string& uuid)
-{
+bool SkeletonDataMgr::hasSkeletonData (const std::string& uuid) {
     auto it = _dataMap.find(uuid);
     return it != _dataMap.end();
 }
 
-void SkeletonDataMgr::setSkeletonData (const std::string& uuid, spSkeletonData* data, spAtlas* atlas, spAttachmentLoader* attachmentLoader)
-{
+void SkeletonDataMgr::setSkeletonData (const std::string& uuid, SkeletonData* data, Atlas* atlas, AttachmentLoader* attachmentLoader) {
     auto it = _dataMap.find(uuid);
-    if (it != _dataMap.end())
-    {
+    if (it != _dataMap.end()) {
         releaseByUUID(uuid);
     }
     SkeletonDataInfo* info = new SkeletonDataInfo(uuid);
@@ -92,8 +84,7 @@ void SkeletonDataMgr::setSkeletonData (const std::string& uuid, spSkeletonData* 
     _dataMap[uuid] = info;
 }
 
-spSkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid)
-{
+SkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid) {
     auto dataIt = _dataMap.find(uuid);
     if (dataIt == _dataMap.end())
     {
@@ -103,17 +94,14 @@ spSkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid)
     return dataIt->second->data;
 }
 
-void SkeletonDataMgr::releaseByUUID (const std::string& uuid)
-{
+void SkeletonDataMgr::releaseByUUID (const std::string& uuid) {
     auto dataIt = _dataMap.find(uuid);
-    if (dataIt == _dataMap.end())
-    {
+    if (dataIt == _dataMap.end()) {
         return;
     }
     SkeletonDataInfo* info = dataIt->second;
     // If info reference count is 1, then info will be destroy.
-    if (info->getReferenceCount() == 1)
-    {
+    if (info->getReferenceCount() == 1) {
         _dataMap.erase(dataIt);
     }
     info->release();

@@ -29,16 +29,20 @@
  *****************************************************************************/
 
 #include "spine-creator-support/spine-cocos2dx.h"
-#include "spine/extension.h"
+#include "spine-creator-support/AttachmentVertices.h"
 #include "middleware-adapter.h"
 #include "base/CCData.h"
 #include "platform/CCFileUtils.h"
 
 namespace spine {
     static CustomTextureLoader _customTextureLoader = nullptr;
-    void spAtlasPage_setCustomTextureLoader (CustomTextureLoader texLoader)
-    {
+    void spAtlasPage_setCustomTextureLoader (CustomTextureLoader texLoader) {
         _customTextureLoader = texLoader;
+    }
+    
+    static SpineObjectDisposeCallback _spineObjectDisposeCallback = 0;
+    void setSpineObjectDisposeCallback(SpineObjectDisposeCallback callback) {
+        _spineObjectDisposeCallback = callback;
     }
 }
 
@@ -46,66 +50,119 @@ USING_NS_CC;
 USING_NS_MW;
 using namespace spine;
 
-GLuint wrap (spAtlasWrap wrap)
-{
-    return wrap == SP_ATLAS_CLAMPTOEDGE ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+static void deleteAttachmentVertices (void* vertices) {
+	delete (AttachmentVertices *) vertices;
 }
 
-GLuint filter (spAtlasFilter filter)
-{
-    switch (filter)
-    {
-    case SP_ATLAS_UNKNOWN_FILTER:
-        break;
-    case SP_ATLAS_NEAREST:
-        return GL_NEAREST;
-    case SP_ATLAS_LINEAR:
-        return GL_LINEAR;
-    case SP_ATLAS_MIPMAP:
-        return GL_LINEAR_MIPMAP_LINEAR;
-    case SP_ATLAS_MIPMAP_NEAREST_NEAREST:
-        return GL_NEAREST_MIPMAP_NEAREST;
-    case SP_ATLAS_MIPMAP_LINEAR_NEAREST:
-        return GL_LINEAR_MIPMAP_NEAREST;
-    case SP_ATLAS_MIPMAP_NEAREST_LINEAR:
-        return GL_NEAREST_MIPMAP_LINEAR;
-    case SP_ATLAS_MIPMAP_LINEAR_LINEAR:
-        return GL_LINEAR_MIPMAP_LINEAR;
-    }
-    return GL_LINEAR;
+static unsigned short quadTriangles[6] = {0, 1, 2, 2, 3, 0};
+
+static void setAttachmentVertices(RegionAttachment* attachment) {
+	AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
+	AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(), 4, quadTriangles, 6);
+	V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+	for (int i = 0, ii = 0; i < 4; ++i, ii += 2) {
+		vertices[i].texCoord.u = attachment->getUVs()[ii];
+		vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
+	}
+	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);	
 }
 
-void _spAtlasPage_createTexture (spAtlasPage* self, const char* path)
-{
+static void setAttachmentVertices(MeshAttachment* attachment) {
+	AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
+	AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(),
+																	attachment->getWorldVerticesLength() >> 1, attachment->getTriangles().buffer(), attachment->getTriangles().size());
+	V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+	for (size_t i = 0, ii = 0, nn = attachment->getWorldVerticesLength(); ii < nn; ++i, ii += 2) {
+		vertices[i].texCoord.u = attachment->getUVs()[ii];
+		vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
+	}
+	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);
+}
+
+Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas* atlas): AtlasAttachmentLoader(atlas) {	
+}
+
+Cocos2dAtlasAttachmentLoader::~Cocos2dAtlasAttachmentLoader() { }
+
+void Cocos2dAtlasAttachmentLoader::configureAttachment(Attachment* attachment) {
+	if (attachment->getRTTI().isExactly(RegionAttachment::rtti)) {
+		setAttachmentVertices((RegionAttachment*)attachment);
+	} else if (attachment->getRTTI().isExactly(MeshAttachment::rtti)) {
+		setAttachmentVertices((MeshAttachment*)attachment);
+	}
+}
+
+GLuint wrap (TextureWrap wrap) {
+	return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+}
+
+GLuint filter (TextureFilter filter) {
+	switch (filter) {
+	case TextureFilter_Unknown:
+		break;
+	case TextureFilter_Nearest:
+		return GL_NEAREST;
+	case TextureFilter_Linear:
+		return GL_LINEAR;
+	case TextureFilter_MipMap:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	case TextureFilter_MipMapNearestNearest:
+		return GL_NEAREST_MIPMAP_NEAREST;
+	case TextureFilter_MipMapLinearNearest:
+		return GL_LINEAR_MIPMAP_NEAREST;
+	case TextureFilter_MipMapNearestLinear:
+		return GL_NEAREST_MIPMAP_LINEAR;
+	case TextureFilter_MipMapLinearLinear:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	}
+	return GL_LINEAR;
+}
+
+Cocos2dTextureLoader::Cocos2dTextureLoader() : TextureLoader() { }
+Cocos2dTextureLoader::~Cocos2dTextureLoader() { }
+
+void Cocos2dTextureLoader::load(AtlasPage& page, const spine::String& path) {
     Texture2D* texture = nullptr;
     if (spine::_customTextureLoader)
     {
-        texture = spine::_customTextureLoader(path);
+        texture = spine::_customTextureLoader(path.buffer());
     }
     CCASSERT(texture != nullptr, "Invalid image");
     texture->retain();
 
-    Texture2D::TexParams textureParams = {filter(self->minFilter), filter(self->magFilter), wrap(self->uWrap), wrap(self->vWrap)};
+    Texture2D::TexParams textureParams = {filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap)};
     texture->setTexParameters(textureParams);
 
-    self->rendererObject = texture;
-    self->width = texture->getPixelsWide();
-    self->height = texture->getPixelsHigh();
+    page.setRendererObject(texture);
+	page.width = texture->getPixelsWide();
+	page.height = texture->getPixelsHigh();
 }
 
-void _spAtlasPage_disposeTexture (spAtlasPage* self)
-{
-    ((Texture2D*)self->rendererObject)->release();
+void Cocos2dTextureLoader::unload(void* texture) {
+	((Texture2D*)texture)->release();
 }
 
-char* _spUtil_readFile (const char* path, int* length)
-{
+
+Cocos2dExtension::Cocos2dExtension() : DefaultSpineExtension() { }
+	
+Cocos2dExtension::~Cocos2dExtension() { }
+
+char *Cocos2dExtension::_readFile(const spine::String &path, int *length) {
     *length = 0;
-    Data data = FileUtils::getInstance()->getDataFromFile(FileUtils::getInstance()->fullPathForFilename(path));
+    Data data = FileUtils::getInstance()->getDataFromFile(FileUtils::getInstance()->fullPathForFilename(path.buffer()));
     if (data.isNull()) return 0;
 
     char *ret = (char*)malloc(sizeof(unsigned char) * data.getSize());
     memcpy(ret, (char*)data.getBytes(), data.getSize());
     *length = (int)data.getSize();
     return ret;
+}
+
+SpineExtension *spine::getDefaultExtension () {
+    return new Cocos2dExtension();
+}
+
+void Cocos2dExtension::_free(void *mem, const char *file, int line) {
+    _spineObjectDisposeCallback(mem);
+    DefaultSpineExtension::_free(mem, file, line);
 }
