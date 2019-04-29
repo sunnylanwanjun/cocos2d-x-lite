@@ -37,8 +37,7 @@ namespace spine{
     /**
      *  Store attachment vertex and indice list
      */
-    class AttachmentVertices
-    {
+    class AttachmentVertices {
     public:
         AttachmentVertices (cocos2d::middleware::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
         virtual ~AttachmentVertices ();
