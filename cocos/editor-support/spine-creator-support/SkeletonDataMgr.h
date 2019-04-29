@@ -37,19 +37,15 @@ namespace spine {
  */
 class SkeletonDataMgr {
 public:
-    static SkeletonDataMgr* getInstance ()
-    {
-        if (_instance == nullptr)
-        {
+    static SkeletonDataMgr* getInstance () {
+        if (_instance == nullptr) {
             _instance = new SkeletonDataMgr();
         }
         return _instance;
     }
     
-    static void destroyInstance ()
-    {
-        if (_instance)
-        {
+    static void destroyInstance () {
+        if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
@@ -58,8 +54,8 @@ public:
     SkeletonDataMgr () {}
     virtual ~SkeletonDataMgr () {}
     bool hasSkeletonData (const std::string& uuid);
-    void setSkeletonData (const std::string& uuid, spSkeletonData* data, spAtlas* atlas, spAttachmentLoader* attachmentLoader);
-    spSkeletonData* retainByUUID (const std::string& uuid);
+    void setSkeletonData (const std::string& uuid, SkeletonData* data, Atlas* atlas, AttachmentLoader* attachmentLoader);
+    SkeletonData* retainByUUID (const std::string& uuid);
     void releaseByUUID (const std::string& uuid);
 private:
     static SkeletonDataMgr* _instance;

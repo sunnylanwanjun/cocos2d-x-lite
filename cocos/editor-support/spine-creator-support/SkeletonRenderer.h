@@ -37,6 +37,7 @@
 #include "scripting/js-bindings/jswrapper/Object.hpp"
 #include "IOTypedArray.h"
 #include "MiddlewareManager.h"
+#include "spine-creator-support/VertexEffectDelegate.h"
 
 namespace spine {
 
@@ -44,18 +45,17 @@ namespace spine {
 
     /** Draws a skeleton.
      */
-    class SpineRenderer: public cocos2d::middleware::IMiddleware, public cocos2d::Ref
-    {
+    class SkeletonRenderer: public cocos2d::middleware::IMiddleware, public cocos2d::Ref {
     public:
-        static SpineRenderer* create ();
-        static SpineRenderer* createWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
-        static SpineRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-        static SpineRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-        static SpineRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+        static SkeletonRenderer* create ();
+        static SkeletonRenderer* createWithSkeleton(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
+        static SkeletonRenderer* createWithData (SkeletonData* skeletonData, bool ownsSkeletonData = false);
+        static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
+        static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
         
         virtual void update (float deltaTime);
 
-        spSkeleton* getSkeleton() const;
+        Skeleton* getSkeleton() const;
 
         void setTimeScale (float scale);
         float getTimeScale () const;
@@ -68,19 +68,19 @@ namespace spine {
         void paused (bool value);
         
         /* Returns 0 if the bone was not found. */
-        spBone* findBone (const std::string& boneName) const;
+        Bone* findBone (const std::string& boneName) const;
         /* Returns 0 if the slot was not found. */
-        spSlot* findSlot (const std::string& slotName) const;
+        Slot* findSlot (const std::string& slotName) const;
         
-        /* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
-         * attached if the corresponding attachment from the old skin was attached. Returns false if the skin was not found.
-         * @param skin May be empty string ("") for no skin.*/
-        bool setSkin (const std::string& skinName);
+		/* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
+		 * attached if the corresponding attachment from the old skin was attached.
+		 * @param skin May be empty string ("") for no skin.*/
+        void setSkin (const std::string& skinName);
         /** @param skin May be 0 for no skin.*/
-        bool setSkin (const char* skinName);
+        void setSkin (const char* skinName);
         
         /* Returns 0 if the slot or attachment was not found. */
-        spAttachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
+        Attachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
         /* Returns false if the slot or attachment was not found.
          * @param attachmentName May be empty string ("") for no attachment. */
         bool setAttachment (const std::string& slotName, const std::string& attachmentName);
@@ -90,6 +90,8 @@ namespace spine {
         /* Enables/disables two color tinting for this instance. May break batching */
         void setUseTint(bool enabled);
         
+		/* Sets the vertex effect to be used, set to 0 to disable vertex effects */
+		void setVertexEffect(VertexEffectDelegate* effectDelegate);
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
@@ -97,10 +99,8 @@ namespace spine {
          * @return debug data,it's a Float32Array,
          * format |debug bones length|[beginX|beginY|toX|toY|...loop...]
          */
-        se_object_ptr getDebugData() const
-        {
-            if (_debugBuffer)
-            {
+        se_object_ptr getDebugData() const {
+            if (_debugBuffer) {
                 return _debugBuffer->getTypeArray();
             }
             return nullptr;
@@ -110,10 +110,8 @@ namespace spine {
          * @return render info offset,it's a Uint32Array,
          * format |render info offset|
          */
-        se_object_ptr getRenderInfoOffset() const
-        {
-            if (_renderInfoOffset)
-            {
+        se_object_ptr getRenderInfoOffset() const {
+            if (_renderInfoOffset) {
                 return _renderInfoOffset->getTypeArray();
             }
             return nullptr;
@@ -132,34 +130,34 @@ namespace spine {
         void onDisable();
         
     CC_CONSTRUCTOR_ACCESS:
-        SpineRenderer ();
-        SpineRenderer(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
-        SpineRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-        SpineRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-        SpineRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+        SkeletonRenderer ();
+        SkeletonRenderer(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false, bool ownsAtlas = false);
+        SkeletonRenderer (SkeletonData* skeletonData, bool ownsSkeletonData = false);
+        SkeletonRenderer (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
+        SkeletonRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
-        virtual ~SpineRenderer ();
+        virtual ~SkeletonRenderer ();
 
         void initWithUUID(const std::string& uuid);
-        void initWithSkeleton(spSkeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
-        void initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-        void initWithJsonFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        void initWithSkeleton(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false, bool ownsAtlas = false);
+        void initWithData (SkeletonData* skeletonData, bool ownsSkeletonData = false);
+        void initWithJsonFile (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
         void initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
-        void initWithBinaryFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
+        void initWithBinaryFile (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
         void initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
         virtual void initialize ();
         
     protected:
-        void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
-        virtual AttachmentVertices* getAttachmentVertices (spRegionAttachment* attachment) const;
-        virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;
+        void setSkeletonData (SkeletonData* skeletonData, bool ownsSkeletonData);
 
         bool                _ownsSkeletonData = true;
         bool                _ownsSkeleton = true;
-        spAtlas*            _atlas = nullptr;
-        spAttachmentLoader* _attachmentLoader = nullptr;
-        spSkeleton*         _skeleton = nullptr;
+		bool                _ownsAtlas = false;
+        Atlas*              _atlas = nullptr;
+        AttachmentLoader*   _attachmentLoader = nullptr;
+        Skeleton*           _skeleton = nullptr;
+        VertexEffectDelegate* _effectDelegate = nullptr;
         float               _timeScale = 1;
         bool                _paused = false;
         
@@ -167,7 +165,7 @@ namespace spine {
         bool                _debugBones = false;
         cocos2d::Color4F    _nodeColor = cocos2d::Color4F::WHITE;
         bool                _premultipliedAlpha = false;
-        spSkeletonClipping* _clipper = nullptr;
+        SkeletonClipping*   _clipper = nullptr;
         bool                _useTint = false;
         std::string         _uuid = "";
         

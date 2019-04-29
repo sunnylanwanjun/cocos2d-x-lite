@@ -347,7 +347,7 @@ bool native_ptr_to_seval(typename std::enable_if<!std::is_base_of<cocos2d::Ref,T
 }
 
 template<typename T>
-bool native_ptr_to_rooted_seval(typename std::enable_if<!std::is_base_of<cocos2d::Ref,T>::value,T>::type* v, se::Value* ret, bool* isReturnCachedValue = nullptr)
+bool native_ptr_to_rooted_seval(const typename std::enable_if<!std::is_base_of<cocos2d::Ref,T>::value,T>::type* v, se::Value* ret, bool* isReturnCachedValue = nullptr)
 {
     assert(ret != nullptr);
     if (v == nullptr)
@@ -357,14 +357,14 @@ bool native_ptr_to_rooted_seval(typename std::enable_if<!std::is_base_of<cocos2d
     }
 
     se::Object* obj = nullptr;
-    auto iter = se::NativePtrToObjectMap::find(v);
+    auto iter = se::NativePtrToObjectMap::find((void*)v);
     if (iter == se::NativePtrToObjectMap::end())
     { // If we couldn't find native object in map, then the native object is created from native code. e.g. TMXLayer::getTileAt
         se::Class* cls = JSBClassType::findClass<T>(v);
         assert(cls != nullptr);
         obj = se::Object::createObjectWithClass(cls);
         obj->root();
-        obj->setPrivateData(v);
+        obj->setPrivateData((void*)v);
 
         if (isReturnCachedValue != nullptr)
         {
@@ -584,18 +584,56 @@ bool Vector_to_seval(const cocos2d::Vector<T*>& v, se::Value* ret)
 
 // Spine conversions
 #if USE_SPINE
-bool speventdata_to_seval(const spEventData* v, se::Value* ret);
-bool spevent_to_seval(const spEvent* v, se::Value* ret);
-bool spbonedata_to_seval(const spBoneData* v, se::Value* ret);
-bool spbone_to_seval(const spBone* v, se::Value* ret);
-bool spskeleton_to_seval(const spSkeleton* v, se::Value* ret);
-bool spattachment_to_seval(const spAttachment* v, se::Value* ret);
-bool spslotdata_to_seval(const spSlotData* v, se::Value* ret);
-bool spslot_to_seval(const spSlot* v, se::Value* ret);
-bool sptimeline_to_seval(const spTimeline* v, se::Value* ret);
-bool spanimationstate_to_seval(const spAnimationState* v, se::Value* ret);
-bool spanimation_to_seval(const spAnimation* v, se::Value* ret);
-bool sptrackentry_to_seval(const spTrackEntry* v, se::Value* ret);
+
+template<typename T>
+bool spine_Vector_T_to_seval(const spine::Vector<T>& v, se::Value* ret)
+{
+    assert(ret != nullptr);
+    se::HandleObject obj(se::Object::createArrayObject(v.size()));
+    bool ok = true;
+    
+    spine::Vector<T> tmpv = v;
+    for (uint32_t i = 0, count = tmpv.size(); i < count; i++)
+    {
+        if (!obj->setArrayElement(i, se::Value(tmpv[i])))
+        {
+            ok = false;
+            ret->setUndefined();
+            break;
+        }
+    }
+    
+    if (ok)
+    ret->setObject(obj);
+    
+    return ok;
+}
+
+template<typename T>
+bool spine_Vector_T_ptr_to_seval(const spine::Vector<T*>& v, se::Value* ret)
+{
+    assert(ret != nullptr);
+    se::HandleObject obj(se::Object::createArrayObject(v.size()));
+    bool ok = true;
+    
+    spine::Vector<T*> tmpv = v;
+    for (uint32_t i = 0, count = tmpv.size(); i < count; i++)
+    {
+        se::Value tmp;
+        ok = native_ptr_to_rooted_seval<T>(tmpv[i], &tmp);
+        if (!ok || !obj->setArrayElement(i, tmp))
+        {
+            ok = false;
+            ret->setUndefined();
+            break;
+        }
+    }
+    
+    if (ok) ret->setObject(obj);
+    return ok;
+}
+
+bool spine_Vector_String_to_seval(const spine::Vector<spine::String>& v, se::Value* ret);
 #endif
 
 //
