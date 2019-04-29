@@ -2804,6 +2804,40 @@ bool std_vector_RenderTarget_to_seval(const std::vector<cocos2d::renderer::Rende
 
 // Spine conversions
 #if USE_SPINE
+
+bool seval_to_spine_Vector_String(const se::Value& v, spine::Vector<spine::String>* ret)
+{
+    assert(ret != nullptr);
+    assert(v.isObject());
+    se::Object* obj = v.toObject();
+    assert(obj->isArray());
+    
+    bool ok = true;
+    uint32_t len = 0;
+    ok = obj->getArrayLength(&len);
+    if (!ok)
+    {
+        ret->clear();
+        return false;
+    }
+    
+    se::Value tmp;
+    for (uint32_t i = 0; i < len; ++i)
+    {
+        ok = obj->getArrayElement(i, &tmp);
+        if (!ok || !tmp.isObject())
+        {
+            ret->clear();
+            return false;
+        }
+        
+        const char* str = tmp.toString().c_str();
+        ret->add(str);
+    }
+    
+    return true;
+}
+
 bool spine_Vector_String_to_seval(const spine::Vector<spine::String>& v, se::Value* ret)
 {
     assert(ret != nullptr);
@@ -2811,7 +2845,7 @@ bool spine_Vector_String_to_seval(const spine::Vector<spine::String>& v, se::Val
     bool ok = true;
     
     spine::Vector<spine::String> tmpv = v;
-    for (uint32_t i = 0, count = tmpv.size(); i < count; i++)
+    for (uint32_t i = 0, count = (uint32_t)tmpv.size(); i < count; i++)
     {
         if (!obj->setArrayElement(i, se::Value(tmpv[i].buffer())))
         {

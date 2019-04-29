@@ -221,6 +221,12 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_VertexAttachment_getWorldVerticesLength);
 SE_DECLARE_FUNC(js_cocos2dx_spine_VertexAttachment_applyDeform);
 SE_DECLARE_FUNC(js_cocos2dx_spine_VertexAttachment_setWorldVerticesLength);
 
+extern se::Object* __jsb_spine_BoundingBoxAttachment_proto;
+extern se::Class* __jsb_spine_BoundingBoxAttachment_class;
+
+bool js_register_spine_BoundingBoxAttachment(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+
 extern se::Object* __jsb_spine_ClippingAttachment_proto;
 extern se::Class* __jsb_spine_ClippingAttachment_class;
 
@@ -650,6 +656,12 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonBounds_intersectsSegment);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonBounds_containsPoint);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonBounds_getPolygon);
 
+extern se::Object* __jsb_spine_Polygon_proto;
+extern se::Class* __jsb_spine_Polygon_class;
+
+bool js_register_spine_Polygon(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+
 extern se::Object* __jsb_spine_SkeletonData_proto;
 extern se::Class* __jsb_spine_SkeletonData_class;
 
@@ -692,6 +704,52 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonData_findSlot);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonData_setAudioPath);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonData_findPathConstraint);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonData_getName);
+
+extern se::Object* __jsb_spine_Skin_proto;
+extern se::Class* __jsb_spine_Skin_class;
+
+bool js_register_spine_Skin(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Skin_findNamesForSlot);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Skin_addAttachment);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Skin_getName);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Skin_getAttachment);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Skin_findAttachmentsForSlot);
+
+extern se::Object* __jsb_spine_Slot_proto;
+extern se::Class* __jsb_spine_Slot_class;
+
+bool js_register_spine_Slot(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getBone);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_setAttachmentTime);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getDarkColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_setToSetupPose);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getAttachment);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getAttachmentTime);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_setAttachment);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_hasDarkColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getDeform);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getSkeleton);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getData);
+
+extern se::Object* __jsb_spine_SlotData_proto;
+extern se::Class* __jsb_spine_SlotData_class;
+
+bool js_register_spine_SlotData(se::Object* obj);
+bool register_all_cocos2dx_spine(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getIndex);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getDarkColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getAttachmentName);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getName);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_setBlendMode);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getBlendMode);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_hasDarkColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_setHasDarkColor);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_setAttachmentName);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SlotData_getBoneData);
 
 extern se::Object* __jsb_spine_TransformConstraint_proto;
 extern se::Class* __jsb_spine_TransformConstraint_class;
