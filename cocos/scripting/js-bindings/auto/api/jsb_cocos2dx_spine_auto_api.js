@@ -1684,6 +1684,13 @@ int
 };
 
 /**
+ * @class BoundingBoxAttachment
+ */
+spine.BoundingBoxAttachment = {
+
+};
+
+/**
  * @class ClippingAttachment
  */
 spine.ClippingAttachment = {
@@ -4633,6 +4640,13 @@ boundingboxattachment
 };
 
 /**
+ * @class Polygon
+ */
+spine.Polygon = {
+
+};
+
+/**
  * @class SkeletonData
  */
 spine.SkeletonData = {
@@ -5027,6 +5041,317 @@ getName : function (
 )
 {
     return sp.String;
+},
+
+};
+
+/**
+ * @class Skin
+ */
+spine.Skin = {
+
+/**
+ * @method findNamesForSlot
+ * @param {unsigned int} arg0
+ * @param {sp.Vector<sp.String>} arg1
+ */
+findNamesForSlot : function (
+int, 
+array 
+)
+{
+},
+
+/**
+ * @method addAttachment
+ * @param {unsigned int} arg0
+ * @param {sp.String} arg1
+ * @param {sp.Attachment} arg2
+ */
+addAttachment : function (
+int, 
+str, 
+attachment 
+)
+{
+},
+
+/**
+ * @method getName
+ * @return {sp.String}
+ */
+getName : function (
+)
+{
+    return sp.String;
+},
+
+/**
+ * @method getAttachment
+ * @param {unsigned int} arg0
+ * @param {sp.String} arg1
+ * @return {sp.Attachment}
+ */
+getAttachment : function (
+int, 
+str 
+)
+{
+    return sp.Attachment;
+},
+
+/**
+ * @method findAttachmentsForSlot
+ * @param {unsigned int} arg0
+ * @param {sp.Vector<sp.Attachment >} arg1
+ */
+findAttachmentsForSlot : function (
+int, 
+array 
+)
+{
+},
+
+};
+
+/**
+ * @class Slot
+ */
+spine.Slot = {
+
+/**
+ * @method getBone
+ * @return {sp.Bone}
+ */
+getBone : function (
+)
+{
+    return sp.Bone;
+},
+
+/**
+ * @method setAttachmentTime
+ * @param {float} arg0
+ */
+setAttachmentTime : function (
+float 
+)
+{
+},
+
+/**
+ * @method getDarkColor
+ * @return {sp.Color}
+ */
+getDarkColor : function (
+)
+{
+    return sp.Color;
+},
+
+/**
+ * @method getColor
+ * @return {sp.Color}
+ */
+getColor : function (
+)
+{
+    return sp.Color;
+},
+
+/**
+ * @method setToSetupPose
+ */
+setToSetupPose : function (
+)
+{
+},
+
+/**
+ * @method getAttachment
+ * @return {sp.Attachment}
+ */
+getAttachment : function (
+)
+{
+    return sp.Attachment;
+},
+
+/**
+ * @method getAttachmentTime
+ * @return {float}
+ */
+getAttachmentTime : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setAttachment
+ * @param {sp.Attachment} arg0
+ */
+setAttachment : function (
+attachment 
+)
+{
+},
+
+/**
+ * @method hasDarkColor
+ * @return {bool}
+ */
+hasDarkColor : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method getDeform
+ * @return {sp.Vector<float>}
+ */
+getDeform : function (
+)
+{
+    return sp.Vector<float>;
+},
+
+/**
+ * @method getSkeleton
+ * @return {sp.Skeleton}
+ */
+getSkeleton : function (
+)
+{
+    return sp.Skeleton;
+},
+
+/**
+ * @method getData
+ * @return {sp.SlotData}
+ */
+getData : function (
+)
+{
+    return sp.SlotData;
+},
+
+};
+
+/**
+ * @class SlotData
+ */
+spine.SlotData = {
+
+/**
+ * @method getIndex
+ * @return {int}
+ */
+getIndex : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getDarkColor
+ * @return {sp.Color}
+ */
+getDarkColor : function (
+)
+{
+    return sp.Color;
+},
+
+/**
+ * @method getAttachmentName
+ * @return {sp.String}
+ */
+getAttachmentName : function (
+)
+{
+    return sp.String;
+},
+
+/**
+ * @method getColor
+ * @return {sp.Color}
+ */
+getColor : function (
+)
+{
+    return sp.Color;
+},
+
+/**
+ * @method getName
+ * @return {sp.String}
+ */
+getName : function (
+)
+{
+    return sp.String;
+},
+
+/**
+ * @method setBlendMode
+ * @param {sp.BlendMode} arg0
+ */
+setBlendMode : function (
+blendmode 
+)
+{
+},
+
+/**
+ * @method getBlendMode
+ * @return {sp.BlendMode}
+ */
+getBlendMode : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method hasDarkColor
+ * @return {bool}
+ */
+hasDarkColor : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setHasDarkColor
+ * @param {bool} arg0
+ */
+setHasDarkColor : function (
+bool 
+)
+{
+},
+
+/**
+ * @method setAttachmentName
+ * @param {sp.String} arg0
+ */
+setAttachmentName : function (
+str 
+)
+{
+},
+
+/**
+ * @method getBoneData
+ * @return {sp.BoneData}
+ */
+getBoneData : function (
+)
+{
+    return sp.BoneData;
 },
 
 };

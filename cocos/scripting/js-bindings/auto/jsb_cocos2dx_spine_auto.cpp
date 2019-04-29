@@ -3368,6 +3368,27 @@ bool js_register_cocos2dx_spine_VertexAttachment(se::Object* obj)
     return true;
 }
 
+se::Object* __jsb_spine_BoundingBoxAttachment_proto = nullptr;
+se::Class* __jsb_spine_BoundingBoxAttachment_class = nullptr;
+
+
+extern se::Object* __jsb_spine_VertexAttachment_proto;
+
+
+bool js_register_cocos2dx_spine_BoundingBoxAttachment(se::Object* obj)
+{
+    auto cls = se::Class::create("BoundingBoxAttachment", obj, __jsb_spine_VertexAttachment_proto, nullptr);
+
+    cls->install();
+    JSBClassType::registerClass<spine::BoundingBoxAttachment>(cls);
+
+    __jsb_spine_BoundingBoxAttachment_proto = cls->getProto();
+    __jsb_spine_BoundingBoxAttachment_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
 se::Object* __jsb_spine_ClippingAttachment_proto = nullptr;
 se::Class* __jsb_spine_ClippingAttachment_class = nullptr;
 
@@ -3399,7 +3420,7 @@ static bool js_cocos2dx_spine_ClippingAttachment_getEndSlot(se::State& s)
     CC_UNUSED bool ok = true;
     if (argc == 0) {
         spine::SlotData* result = cobj->getEndSlot();
-        ok &= native_ptr_to_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_ClippingAttachment_getEndSlot : Error processing arguments");
         return true;
     }
@@ -6506,7 +6527,7 @@ static bool js_cocos2dx_spine_PathConstraint_getTarget(se::State& s)
     CC_UNUSED bool ok = true;
     if (argc == 0) {
         spine::Slot* result = cobj->getTarget();
-        ok &= native_ptr_to_seval<spine::Slot>((spine::Slot*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Slot>((spine::Slot*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_PathConstraint_getTarget : Error processing arguments");
         return true;
     }
@@ -6720,7 +6741,7 @@ static bool js_cocos2dx_spine_PathConstraintData_getTarget(se::State& s)
     CC_UNUSED bool ok = true;
     if (argc == 0) {
         spine::SlotData* result = cobj->getTarget();
-        ok &= native_ptr_to_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_PathConstraintData_getTarget : Error processing arguments");
         return true;
     }
@@ -8365,7 +8386,7 @@ static bool js_cocos2dx_spine_Skeleton_getSkin(se::State& s)
     CC_UNUSED bool ok = true;
     if (argc == 0) {
         spine::Skin* result = cobj->getSkin();
-        ok &= native_ptr_to_seval<spine::Skin>((spine::Skin*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Skin>((spine::Skin*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skeleton_getSkin : Error processing arguments");
         return true;
     }
@@ -9051,7 +9072,7 @@ static bool js_cocos2dx_spine_Skeleton_findSlot(se::State& s)
         arg0 = args[0].toStringForce().c_str();
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skeleton_findSlot : Error processing arguments");
         spine::Slot* result = cobj->findSlot(arg0);
-        ok &= native_ptr_to_seval<spine::Slot>((spine::Slot*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Slot>((spine::Slot*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skeleton_findSlot : Error processing arguments");
         return true;
     }
@@ -9287,7 +9308,7 @@ static bool js_cocos2dx_spine_SkeletonBounds_intersectsSegment(se::State& s)
             ok &= seval_to_float(args[3], &arg3);
             if (!ok) { ok = true; break; }
             spine::BoundingBoxAttachment* result = cobj->intersectsSegment(arg0, arg1, arg2, arg3);
-            ok &= native_ptr_to_seval<spine::BoundingBoxAttachment>((spine::BoundingBoxAttachment*)result, &s.rval());
+            ok &= native_ptr_to_rooted_seval<spine::BoundingBoxAttachment>((spine::BoundingBoxAttachment*)result, &s.rval());
             SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonBounds_intersectsSegment : Error processing arguments");
             return true;
         }
@@ -9314,7 +9335,7 @@ static bool js_cocos2dx_spine_SkeletonBounds_containsPoint(se::State& s)
             ok &= seval_to_float(args[1], &arg1);
             if (!ok) { ok = true; break; }
             spine::BoundingBoxAttachment* result = cobj->containsPoint(arg0, arg1);
-            ok &= native_ptr_to_seval<spine::BoundingBoxAttachment>((spine::BoundingBoxAttachment*)result, &s.rval());
+            ok &= native_ptr_to_rooted_seval<spine::BoundingBoxAttachment>((spine::BoundingBoxAttachment*)result, &s.rval());
             SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonBounds_containsPoint : Error processing arguments");
             return true;
         }
@@ -9355,7 +9376,7 @@ static bool js_cocos2dx_spine_SkeletonBounds_getPolygon(se::State& s)
         ok &= seval_to_native_ptr(args[0], &arg0);
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonBounds_getPolygon : Error processing arguments");
         spine::Polygon* result = cobj->getPolygon(arg0);
-        ok &= native_ptr_to_seval<spine::Polygon>((spine::Polygon*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Polygon>((spine::Polygon*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonBounds_getPolygon : Error processing arguments");
         return true;
     }
@@ -9383,6 +9404,26 @@ bool js_register_cocos2dx_spine_SkeletonBounds(se::Object* obj)
 
     __jsb_spine_SkeletonBounds_proto = cls->getProto();
     __jsb_spine_SkeletonBounds_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
+se::Object* __jsb_spine_Polygon_proto = nullptr;
+se::Class* __jsb_spine_Polygon_class = nullptr;
+
+
+
+
+bool js_register_cocos2dx_spine_Polygon(se::Object* obj)
+{
+    auto cls = se::Class::create("Polygon", obj, nullptr, nullptr);
+
+    cls->install();
+    JSBClassType::registerClass<spine::Polygon>(cls);
+
+    __jsb_spine_Polygon_proto = cls->getProto();
+    __jsb_spine_Polygon_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
@@ -9635,7 +9676,7 @@ static bool js_cocos2dx_spine_SkeletonData_getDefaultSkin(se::State& s)
     CC_UNUSED bool ok = true;
     if (argc == 0) {
         spine::Skin* result = cobj->getDefaultSkin();
-        ok &= native_ptr_to_seval<spine::Skin>((spine::Skin*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Skin>((spine::Skin*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonData_getDefaultSkin : Error processing arguments");
         return true;
     }
@@ -9933,7 +9974,7 @@ static bool js_cocos2dx_spine_SkeletonData_findSkin(se::State& s)
         arg0 = args[0].toStringForce().c_str();
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonData_findSkin : Error processing arguments");
         spine::Skin* result = cobj->findSkin(arg0);
-        ok &= native_ptr_to_seval<spine::Skin>((spine::Skin*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Skin>((spine::Skin*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonData_findSkin : Error processing arguments");
         return true;
     }
@@ -10032,7 +10073,7 @@ static bool js_cocos2dx_spine_SkeletonData_findSlot(se::State& s)
         arg0 = args[0].toStringForce().c_str();
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonData_findSlot : Error processing arguments");
         spine::SlotData* result = cobj->findSlot(arg0);
-        ok &= native_ptr_to_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::SlotData>((spine::SlotData*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonData_findSlot : Error processing arguments");
         return true;
     }
@@ -10148,6 +10189,616 @@ bool js_register_cocos2dx_spine_SkeletonData(se::Object* obj)
 
     __jsb_spine_SkeletonData_proto = cls->getProto();
     __jsb_spine_SkeletonData_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
+se::Object* __jsb_spine_Skin_proto = nullptr;
+se::Class* __jsb_spine_Skin_class = nullptr;
+
+static bool js_cocos2dx_spine_Skin_findNamesForSlot(se::State& s)
+{
+    spine::Skin* cobj = (spine::Skin*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Skin_findNamesForSlot : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        size_t arg0 = 0;
+        spine::Vector<spine::String> arg1;
+        ok &= seval_to_size(args[0], &arg0);
+        ok &= seval_to_spine_Vector_String(args[1], &arg1);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_findNamesForSlot : Error processing arguments");
+        cobj->findNamesForSlot(arg0, arg1);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Skin_findNamesForSlot)
+
+static bool js_cocos2dx_spine_Skin_addAttachment(se::State& s)
+{
+    spine::Skin* cobj = (spine::Skin*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Skin_addAttachment : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 3) {
+        size_t arg0 = 0;
+        spine::String arg1;
+        spine::Attachment* arg2 = nullptr;
+        ok &= seval_to_size(args[0], &arg0);
+        arg1 = args[1].toStringForce().c_str();
+        ok &= seval_to_native_ptr(args[2], &arg2);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_addAttachment : Error processing arguments");
+        cobj->addAttachment(arg0, arg1, arg2);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 3);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Skin_addAttachment)
+
+static bool js_cocos2dx_spine_Skin_getName(se::State& s)
+{
+    spine::Skin* cobj = (spine::Skin*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Skin_getName : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        const spine::String& result = cobj->getName();
+        s.rval().setString(result.buffer());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_getName : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Skin_getName)
+
+static bool js_cocos2dx_spine_Skin_getAttachment(se::State& s)
+{
+    spine::Skin* cobj = (spine::Skin*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Skin_getAttachment : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        size_t arg0 = 0;
+        spine::String arg1;
+        ok &= seval_to_size(args[0], &arg0);
+        arg1 = args[1].toStringForce().c_str();
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_getAttachment : Error processing arguments");
+        spine::Attachment* result = cobj->getAttachment(arg0, arg1);
+        ok &= native_ptr_to_rooted_seval<spine::Attachment>((spine::Attachment*)result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_getAttachment : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Skin_getAttachment)
+
+static bool js_cocos2dx_spine_Skin_findAttachmentsForSlot(se::State& s)
+{
+    spine::Skin* cobj = (spine::Skin*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Skin_findAttachmentsForSlot : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        size_t arg0 = 0;
+        spine::Vector<spine::Attachment *> arg1;
+        ok &= seval_to_size(args[0], &arg0);
+        ok &= seval_to_spine_Vector_T_ptr(args[1], &arg1);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Skin_findAttachmentsForSlot : Error processing arguments");
+        cobj->findAttachmentsForSlot(arg0, arg1);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Skin_findAttachmentsForSlot)
+
+
+
+
+bool js_register_cocos2dx_spine_Skin(se::Object* obj)
+{
+    auto cls = se::Class::create("Skin", obj, nullptr, nullptr);
+
+    cls->defineFunction("findNamesForSlot", _SE(js_cocos2dx_spine_Skin_findNamesForSlot));
+    cls->defineFunction("addAttachment", _SE(js_cocos2dx_spine_Skin_addAttachment));
+    cls->defineFunction("getName", _SE(js_cocos2dx_spine_Skin_getName));
+    cls->defineFunction("getAttachment", _SE(js_cocos2dx_spine_Skin_getAttachment));
+    cls->defineFunction("findAttachmentsForSlot", _SE(js_cocos2dx_spine_Skin_findAttachmentsForSlot));
+    cls->install();
+    JSBClassType::registerClass<spine::Skin>(cls);
+
+    __jsb_spine_Skin_proto = cls->getProto();
+    __jsb_spine_Skin_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
+se::Object* __jsb_spine_Slot_proto = nullptr;
+se::Class* __jsb_spine_Slot_class = nullptr;
+
+static bool js_cocos2dx_spine_Slot_getBone(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getBone : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Bone& result = cobj->getBone();
+        ok &= native_ptr_to_rooted_seval<spine::Bone>((spine::Bone*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getBone : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getBone)
+
+static bool js_cocos2dx_spine_Slot_setAttachmentTime(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_setAttachmentTime : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        float arg0 = 0;
+        ok &= seval_to_float(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_setAttachmentTime : Error processing arguments");
+        cobj->setAttachmentTime(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_setAttachmentTime)
+
+static bool js_cocos2dx_spine_Slot_getDarkColor(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getDarkColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Color& result = cobj->getDarkColor();
+        ok &= native_ptr_to_rooted_seval<spine::Color>((spine::Color*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getDarkColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getDarkColor)
+
+static bool js_cocos2dx_spine_Slot_getColor(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Color& result = cobj->getColor();
+        ok &= native_ptr_to_rooted_seval<spine::Color>((spine::Color*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getColor)
+
+static bool js_cocos2dx_spine_Slot_setToSetupPose(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_setToSetupPose : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->setToSetupPose();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_setToSetupPose)
+
+static bool js_cocos2dx_spine_Slot_getAttachment(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getAttachment : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Attachment* result = cobj->getAttachment();
+        ok &= native_ptr_to_rooted_seval<spine::Attachment>((spine::Attachment*)result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getAttachment : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getAttachment)
+
+static bool js_cocos2dx_spine_Slot_getAttachmentTime(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getAttachmentTime : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        float result = cobj->getAttachmentTime();
+        ok &= float_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getAttachmentTime : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getAttachmentTime)
+
+static bool js_cocos2dx_spine_Slot_setAttachment(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_setAttachment : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        spine::Attachment* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_setAttachment : Error processing arguments");
+        cobj->setAttachment(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_setAttachment)
+
+static bool js_cocos2dx_spine_Slot_hasDarkColor(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_hasDarkColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        bool result = cobj->hasDarkColor();
+        ok &= boolean_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_hasDarkColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_hasDarkColor)
+
+static bool js_cocos2dx_spine_Slot_getDeform(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getDeform : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Vector<float>& result = cobj->getDeform();
+        ok &= spine_Vector_T_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getDeform : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getDeform)
+
+static bool js_cocos2dx_spine_Slot_getSkeleton(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getSkeleton : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Skeleton& result = cobj->getSkeleton();
+        ok &= native_ptr_to_rooted_seval<spine::Skeleton>((spine::Skeleton*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getSkeleton : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getSkeleton)
+
+static bool js_cocos2dx_spine_Slot_getData(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getData : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::SlotData& result = cobj->getData();
+        ok &= native_ptr_to_rooted_seval<spine::SlotData>((spine::SlotData*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getData : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getData)
+
+
+
+
+bool js_register_cocos2dx_spine_Slot(se::Object* obj)
+{
+    auto cls = se::Class::create("Slot", obj, nullptr, nullptr);
+
+    cls->defineFunction("getBone", _SE(js_cocos2dx_spine_Slot_getBone));
+    cls->defineFunction("setAttachmentTime", _SE(js_cocos2dx_spine_Slot_setAttachmentTime));
+    cls->defineFunction("getDarkColor", _SE(js_cocos2dx_spine_Slot_getDarkColor));
+    cls->defineFunction("getColor", _SE(js_cocos2dx_spine_Slot_getColor));
+    cls->defineFunction("setToSetupPose", _SE(js_cocos2dx_spine_Slot_setToSetupPose));
+    cls->defineFunction("getAttachment", _SE(js_cocos2dx_spine_Slot_getAttachment));
+    cls->defineFunction("getAttachmentTime", _SE(js_cocos2dx_spine_Slot_getAttachmentTime));
+    cls->defineFunction("setAttachment", _SE(js_cocos2dx_spine_Slot_setAttachment));
+    cls->defineFunction("hasDarkColor", _SE(js_cocos2dx_spine_Slot_hasDarkColor));
+    cls->defineFunction("getDeform", _SE(js_cocos2dx_spine_Slot_getDeform));
+    cls->defineFunction("getSkeleton", _SE(js_cocos2dx_spine_Slot_getSkeleton));
+    cls->defineFunction("getData", _SE(js_cocos2dx_spine_Slot_getData));
+    cls->install();
+    JSBClassType::registerClass<spine::Slot>(cls);
+
+    __jsb_spine_Slot_proto = cls->getProto();
+    __jsb_spine_Slot_class = cls;
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+
+se::Object* __jsb_spine_SlotData_proto = nullptr;
+se::Class* __jsb_spine_SlotData_class = nullptr;
+
+static bool js_cocos2dx_spine_SlotData_getIndex(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getIndex : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        int result = cobj->getIndex();
+        ok &= int32_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getIndex : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getIndex)
+
+static bool js_cocos2dx_spine_SlotData_getDarkColor(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getDarkColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Color& result = cobj->getDarkColor();
+        ok &= native_ptr_to_rooted_seval<spine::Color>((spine::Color*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getDarkColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getDarkColor)
+
+static bool js_cocos2dx_spine_SlotData_getAttachmentName(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getAttachmentName : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        const spine::String& result = cobj->getAttachmentName();
+        s.rval().setString(result.buffer());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getAttachmentName : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getAttachmentName)
+
+static bool js_cocos2dx_spine_SlotData_getColor(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Color& result = cobj->getColor();
+        ok &= native_ptr_to_rooted_seval<spine::Color>((spine::Color*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getColor)
+
+static bool js_cocos2dx_spine_SlotData_getName(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getName : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        const spine::String& result = cobj->getName();
+        s.rval().setString(result.buffer());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getName : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getName)
+
+static bool js_cocos2dx_spine_SlotData_setBlendMode(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_setBlendMode : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        spine::BlendMode arg0;
+        ok &= seval_to_uint32(args[0], (uint32_t*)&arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_setBlendMode : Error processing arguments");
+        cobj->setBlendMode(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_setBlendMode)
+
+static bool js_cocos2dx_spine_SlotData_getBlendMode(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getBlendMode : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        unsigned int result = (unsigned int)cobj->getBlendMode();
+        ok &= uint32_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getBlendMode : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getBlendMode)
+
+static bool js_cocos2dx_spine_SlotData_hasDarkColor(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_hasDarkColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        bool result = cobj->hasDarkColor();
+        ok &= boolean_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_hasDarkColor : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_hasDarkColor)
+
+static bool js_cocos2dx_spine_SlotData_setHasDarkColor(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_setHasDarkColor : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        bool arg0;
+        ok &= seval_to_boolean(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_setHasDarkColor : Error processing arguments");
+        cobj->setHasDarkColor(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_setHasDarkColor)
+
+static bool js_cocos2dx_spine_SlotData_setAttachmentName(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_setAttachmentName : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        spine::String arg0;
+        arg0 = args[0].toStringForce().c_str();
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_setAttachmentName : Error processing arguments");
+        cobj->setAttachmentName(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_setAttachmentName)
+
+static bool js_cocos2dx_spine_SlotData_getBoneData(se::State& s)
+{
+    spine::SlotData* cobj = (spine::SlotData*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SlotData_getBoneData : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::BoneData& result = cobj->getBoneData();
+        ok &= native_ptr_to_rooted_seval<spine::BoneData>((spine::BoneData*)&result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SlotData_getBoneData : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SlotData_getBoneData)
+
+
+
+
+bool js_register_cocos2dx_spine_SlotData(se::Object* obj)
+{
+    auto cls = se::Class::create("SlotData", obj, nullptr, nullptr);
+
+    cls->defineFunction("getIndex", _SE(js_cocos2dx_spine_SlotData_getIndex));
+    cls->defineFunction("getDarkColor", _SE(js_cocos2dx_spine_SlotData_getDarkColor));
+    cls->defineFunction("getAttachmentName", _SE(js_cocos2dx_spine_SlotData_getAttachmentName));
+    cls->defineFunction("getColor", _SE(js_cocos2dx_spine_SlotData_getColor));
+    cls->defineFunction("getName", _SE(js_cocos2dx_spine_SlotData_getName));
+    cls->defineFunction("setBlendMode", _SE(js_cocos2dx_spine_SlotData_setBlendMode));
+    cls->defineFunction("getBlendMode", _SE(js_cocos2dx_spine_SlotData_getBlendMode));
+    cls->defineFunction("hasDarkColor", _SE(js_cocos2dx_spine_SlotData_hasDarkColor));
+    cls->defineFunction("setHasDarkColor", _SE(js_cocos2dx_spine_SlotData_setHasDarkColor));
+    cls->defineFunction("setAttachmentName", _SE(js_cocos2dx_spine_SlotData_setAttachmentName));
+    cls->defineFunction("getBoneData", _SE(js_cocos2dx_spine_SlotData_getBoneData));
+    cls->install();
+    JSBClassType::registerClass<spine::SlotData>(cls);
+
+    __jsb_spine_SlotData_proto = cls->getProto();
+    __jsb_spine_SlotData_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
@@ -12210,7 +12861,7 @@ static bool js_cocos2dx_spine_SkeletonRenderer_findSlot(se::State& s)
         ok &= seval_to_std_string(args[0], &arg0);
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonRenderer_findSlot : Error processing arguments");
         spine::Slot* result = cobj->findSlot(arg0);
-        ok &= native_ptr_to_seval<spine::Slot>((spine::Slot*)result, &s.rval());
+        ok &= native_ptr_to_rooted_seval<spine::Slot>((spine::Slot*)result, &s.rval());
         SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonRenderer_findSlot : Error processing arguments");
         return true;
     }
@@ -13334,10 +13985,12 @@ bool register_all_cocos2dx_spine(se::Object* obj)
     }
     se::Object* ns = nsVal.toObject();
 
+    js_register_cocos2dx_spine_Slot(ns);
     js_register_cocos2dx_spine_Timeline(ns);
     js_register_cocos2dx_spine_CurveTimeline(ns);
     js_register_cocos2dx_spine_TranslateTimeline(ns);
     js_register_cocos2dx_spine_ShearTimeline(ns);
+    js_register_cocos2dx_spine_Polygon(ns);
     js_register_cocos2dx_spine_Attachment(ns);
     js_register_cocos2dx_spine_VertexAttachment(ns);
     js_register_cocos2dx_spine_VertexEffect(ns);
@@ -13362,6 +14015,7 @@ bool register_all_cocos2dx_spine(se::Object* obj)
     js_register_cocos2dx_spine_SkeletonData(ns);
     js_register_cocos2dx_spine_PathAttachment(ns);
     js_register_cocos2dx_spine_TransformConstraint(ns);
+    js_register_cocos2dx_spine_BoundingBoxAttachment(ns);
     js_register_cocos2dx_spine_ClippingAttachment(ns);
     js_register_cocos2dx_spine_DeformTimeline(ns);
     js_register_cocos2dx_spine_SkeletonBounds(ns);
@@ -13378,6 +14032,8 @@ bool register_all_cocos2dx_spine(se::Object* obj)
     js_register_cocos2dx_spine_RegionAttachment(ns);
     js_register_cocos2dx_spine_IkConstraint(ns);
     js_register_cocos2dx_spine_RotateTimeline(ns);
+    js_register_cocos2dx_spine_SlotData(ns);
+    js_register_cocos2dx_spine_Skin(ns);
     js_register_cocos2dx_spine_VertexEffectDelegate(ns);
     js_register_cocos2dx_spine_EventData(ns);
     js_register_cocos2dx_spine_Event(ns);
