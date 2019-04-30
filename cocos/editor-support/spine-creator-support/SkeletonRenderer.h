@@ -72,9 +72,9 @@ namespace spine {
         /* Returns 0 if the slot was not found. */
         Slot* findSlot (const std::string& slotName) const;
         
-		/* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
-		 * attached if the corresponding attachment from the old skin was attached.
-		 * @param skin May be empty string ("") for no skin.*/
+        /* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
+         * attached if the corresponding attachment from the old skin was attached.
+         * @param skin May be empty string ("") for no skin.*/
         void setSkin (const std::string& skinName);
         /** @param skin May be 0 for no skin.*/
         void setSkin (const char* skinName);
@@ -90,8 +90,8 @@ namespace spine {
         /* Enables/disables two color tinting for this instance. May break batching */
         void setUseTint(bool enabled);
         
-		/* Sets the vertex effect to be used, set to 0 to disable vertex effects */
-		void setVertexEffect(VertexEffectDelegate* effectDelegate);
+        /* Sets the vertex effect to be used, set to 0 to disable vertex effects */
+        void setVertexEffect(VertexEffectDelegate* effectDelegate);
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
@@ -150,10 +150,10 @@ namespace spine {
         
     protected:
         void setSkeletonData (SkeletonData* skeletonData, bool ownsSkeletonData);
-
+        
         bool                _ownsSkeletonData = false;
         bool                _ownsSkeleton = false;
-		bool                _ownsAtlas = false;
+        bool                _ownsAtlas = false;
         Atlas*              _atlas = nullptr;
         AttachmentLoader*   _attachmentLoader = nullptr;
         Skeleton*           _skeleton = nullptr;

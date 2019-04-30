@@ -41,33 +41,33 @@ namespace spine {
     void spAtlasPage_setCustomTextureLoader(CustomTextureLoader texLoader);
 
     class Cocos2dAtlasAttachmentLoader: public AtlasAttachmentLoader {
-	public:
-		Cocos2dAtlasAttachmentLoader(Atlas* atlas);
-		virtual ~Cocos2dAtlasAttachmentLoader();
-		virtual void configureAttachment(Attachment* attachment);
-	};
-	
-	class Cocos2dTextureLoader: public TextureLoader {
-	public:
-		Cocos2dTextureLoader();
-		
-		virtual ~Cocos2dTextureLoader();
-		
-		virtual void load(AtlasPage& page, const String& path);
-		
-		virtual void unload(void* texture);
-	};
-	
-	class Cocos2dExtension: public DefaultSpineExtension {
-	public:
-		Cocos2dExtension();
-		
-		virtual ~Cocos2dExtension();
+    public:
+        Cocos2dAtlasAttachmentLoader(Atlas* atlas);
+        virtual ~Cocos2dAtlasAttachmentLoader();
+        virtual void configureAttachment(Attachment* attachment);
+    };
+    
+    class Cocos2dTextureLoader: public TextureLoader {
+    public:
+        Cocos2dTextureLoader();
         
-		virtual void _free(void *mem, const char *file, int line);
-	protected:
-		virtual char *_readFile(const String &path, int *length);
-	};
+        virtual ~Cocos2dTextureLoader();
+        
+        virtual void load(AtlasPage& page, const String& path);
+        
+        virtual void unload(void* texture);
+    };
+    
+    class Cocos2dExtension: public DefaultSpineExtension {
+    public:
+        Cocos2dExtension();
+        
+        virtual ~Cocos2dExtension();
+        
+        virtual void _free(void *mem, const char *file, int line);
+    protected:
+        virtual char *_readFile(const String &path, int *length);
+    };
     
     typedef void (*SpineObjectDisposeCallback)(void*);
     void setSpineObjectDisposeCallback(SpineObjectDisposeCallback callback);
