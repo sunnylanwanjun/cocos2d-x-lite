@@ -51,71 +51,71 @@ USING_NS_MW;
 using namespace spine;
 
 static void deleteAttachmentVertices (void* vertices) {
-	delete (AttachmentVertices *) vertices;
+    delete (AttachmentVertices *) vertices;
 }
 
 static unsigned short quadTriangles[6] = {0, 1, 2, 2, 3, 0};
 
 static void setAttachmentVertices(RegionAttachment* attachment) {
-	AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
-	AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(), 4, quadTriangles, 6);
-	V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
-	for (int i = 0, ii = 0; i < 4; ++i, ii += 2) {
-		vertices[i].texCoord.u = attachment->getUVs()[ii];
-		vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
-	}
-	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);	
+    AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
+    AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(), 4, quadTriangles, 6);
+    V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+    for (int i = 0, ii = 0; i < 4; ++i, ii += 2) {
+        vertices[i].texCoord.u = attachment->getUVs()[ii];
+        vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
+    }
+    attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);    
 }
 
 static void setAttachmentVertices(MeshAttachment* attachment) {
-	AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
-	AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(),
-																	attachment->getWorldVerticesLength() >> 1, attachment->getTriangles().buffer(), attachment->getTriangles().size());
-	V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
-	for (size_t i = 0, ii = 0, nn = attachment->getWorldVerticesLength(); ii < nn; ++i, ii += 2) {
-		vertices[i].texCoord.u = attachment->getUVs()[ii];
-		vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
-	}
-	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);
+    AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
+    AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(),
+                                                                    attachment->getWorldVerticesLength() >> 1, attachment->getTriangles().buffer(), attachment->getTriangles().size());
+    V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+    for (size_t i = 0, ii = 0, nn = attachment->getWorldVerticesLength(); ii < nn; ++i, ii += 2) {
+        vertices[i].texCoord.u = attachment->getUVs()[ii];
+        vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
+    }
+    attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);
 }
 
-Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas* atlas): AtlasAttachmentLoader(atlas) {	
+Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas* atlas): AtlasAttachmentLoader(atlas) {    
 }
 
 Cocos2dAtlasAttachmentLoader::~Cocos2dAtlasAttachmentLoader() { }
 
 void Cocos2dAtlasAttachmentLoader::configureAttachment(Attachment* attachment) {
-	if (attachment->getRTTI().isExactly(RegionAttachment::rtti)) {
-		setAttachmentVertices((RegionAttachment*)attachment);
-	} else if (attachment->getRTTI().isExactly(MeshAttachment::rtti)) {
-		setAttachmentVertices((MeshAttachment*)attachment);
-	}
+    if (attachment->getRTTI().isExactly(RegionAttachment::rtti)) {
+        setAttachmentVertices((RegionAttachment*)attachment);
+    } else if (attachment->getRTTI().isExactly(MeshAttachment::rtti)) {
+        setAttachmentVertices((MeshAttachment*)attachment);
+    }
 }
 
 GLuint wrap (TextureWrap wrap) {
-	return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+    return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
 }
 
 GLuint filter (TextureFilter filter) {
-	switch (filter) {
-	case TextureFilter_Unknown:
-		break;
-	case TextureFilter_Nearest:
-		return GL_NEAREST;
-	case TextureFilter_Linear:
-		return GL_LINEAR;
-	case TextureFilter_MipMap:
-		return GL_LINEAR_MIPMAP_LINEAR;
-	case TextureFilter_MipMapNearestNearest:
-		return GL_NEAREST_MIPMAP_NEAREST;
-	case TextureFilter_MipMapLinearNearest:
-		return GL_LINEAR_MIPMAP_NEAREST;
-	case TextureFilter_MipMapNearestLinear:
-		return GL_NEAREST_MIPMAP_LINEAR;
-	case TextureFilter_MipMapLinearLinear:
-		return GL_LINEAR_MIPMAP_LINEAR;
-	}
-	return GL_LINEAR;
+    switch (filter) {
+    case TextureFilter_Unknown:
+        break;
+    case TextureFilter_Nearest:
+        return GL_NEAREST;
+    case TextureFilter_Linear:
+        return GL_LINEAR;
+    case TextureFilter_MipMap:
+        return GL_LINEAR_MIPMAP_LINEAR;
+    case TextureFilter_MipMapNearestNearest:
+        return GL_NEAREST_MIPMAP_NEAREST;
+    case TextureFilter_MipMapLinearNearest:
+        return GL_LINEAR_MIPMAP_NEAREST;
+    case TextureFilter_MipMapNearestLinear:
+        return GL_NEAREST_MIPMAP_LINEAR;
+    case TextureFilter_MipMapLinearLinear:
+        return GL_LINEAR_MIPMAP_LINEAR;
+    }
+    return GL_LINEAR;
 }
 
 Cocos2dTextureLoader::Cocos2dTextureLoader() : TextureLoader() { }
@@ -134,17 +134,17 @@ void Cocos2dTextureLoader::load(AtlasPage& page, const spine::String& path) {
     texture->setTexParameters(textureParams);
 
     page.setRendererObject(texture);
-	page.width = texture->getPixelsWide();
-	page.height = texture->getPixelsHigh();
+    page.width = texture->getPixelsWide();
+    page.height = texture->getPixelsHigh();
 }
 
 void Cocos2dTextureLoader::unload(void* texture) {
-	((Texture2D*)texture)->release();
+    ((Texture2D*)texture)->release();
 }
 
 
 Cocos2dExtension::Cocos2dExtension() : DefaultSpineExtension() { }
-	
+    
 Cocos2dExtension::~Cocos2dExtension() { }
 
 char *Cocos2dExtension::_readFile(const spine::String &path, int *length) {
