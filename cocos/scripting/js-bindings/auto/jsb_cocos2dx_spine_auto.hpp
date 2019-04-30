@@ -729,8 +729,8 @@ SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_setToSetupPose);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getAttachment);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getAttachmentTime);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_setAttachment);
+SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getAttachmentVertices);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_hasDarkColor);
-SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getDeform);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getSkeleton);
 SE_DECLARE_FUNC(js_cocos2dx_spine_Slot_getData);
 

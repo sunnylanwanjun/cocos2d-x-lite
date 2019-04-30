@@ -144,7 +144,7 @@ SkeletonAnimation::~SkeletonAnimation () {
 void SkeletonAnimation::update (float deltaTime) {
     if (!_paused) {
         deltaTime *= _timeScale * globalTimeScale;
-        _skeleton->update(deltaTime);
+        if (_ownsSkeleton) _skeleton->update(deltaTime);
         _state->update(deltaTime);
         _state->apply(*_skeleton);
         _skeleton->updateWorldTransform();
@@ -174,7 +174,9 @@ TrackEntry* SkeletonAnimation::setAnimation (int trackIndex, const std::string& 
 		log("Spine: Animation not found: %s", name.c_str());
 		return 0;
 	}
-	return _state->setAnimation(trackIndex, animation, loop);
+    auto trackEntry = _state->setAnimation(trackIndex, animation, loop);
+    _state->apply(*_skeleton);
+    return trackEntry;
 }
 
 TrackEntry* SkeletonAnimation::addAnimation (int trackIndex, const std::string& name, bool loop, float delay) {

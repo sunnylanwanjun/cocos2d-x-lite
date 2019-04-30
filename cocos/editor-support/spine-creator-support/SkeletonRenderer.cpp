@@ -390,9 +390,10 @@ void SkeletonRenderer::update (float deltaTime) {
         effect->begin(*_skeleton);
     }
 
-    for (size_t i = 0, n = _skeleton->getSlots().size(); i < n; ++i) {
+    auto& drawOrder = _skeleton->getDrawOrder();
+    for (size_t i = 0, n = drawOrder.size(); i < n; ++i) {
         isFull = 0;
-        slot = _skeleton->getDrawOrder()[i];
+        slot = drawOrder[i];
         if (_startSlotIndex >= 0 && _startSlotIndex == slot->getData().getIndex()) {
             inRange = true;
         }
