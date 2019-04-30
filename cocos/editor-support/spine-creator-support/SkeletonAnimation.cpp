@@ -61,10 +61,10 @@ void trackEntryCallback (AnimationState* state, EventType type, TrackEntry* entr
 
 static _TrackEntryListeners* getListeners (TrackEntry* entry) {
     if (!entry->getRendererObject()) {
-		entry->setRendererObject(new spine::_TrackEntryListeners());
-		entry->setListener(trackEntryCallback);
-	}
-	return (_TrackEntryListeners*)entry->getRendererObject();
+        entry->setRendererObject(new spine::_TrackEntryListeners());
+        entry->setListener(trackEntryCallback);
+    }
+    return (_TrackEntryListeners*)entry->getRendererObject();
 }
 
 static float globalTimeScale = 1.0f;
@@ -118,8 +118,8 @@ void SkeletonAnimation::initialize () {
 
     _ownsAnimationStateData = true;
     _state = new (__FILE__, __LINE__) AnimationState(new (__FILE__, __LINE__) AnimationStateData(_skeleton->getData()));
-	_state->setRendererObject(this);
-	_state->setListener(animationCallback);
+    _state->setRendererObject(this);
+    _state->setListener(animationCallback);
 }
 
 SkeletonAnimation::SkeletonAnimation ()
@@ -135,7 +135,7 @@ SkeletonAnimation::~SkeletonAnimation () {
     _eventListener = nullptr;
 
     if (_state) {
-		clearTracks();
+        clearTracks();
         if (_ownsAnimationStateData) delete _state->getData();
         delete _state;
     }
@@ -156,12 +156,12 @@ void SkeletonAnimation::setAnimationStateData (AnimationStateData* stateData) {
     CCASSERT(stateData, "stateData cannot be null.");
 
     if (_ownsAnimationStateData) delete _state->getData();
-	delete _state;
+    delete _state;
 
-	_ownsAnimationStateData = false;
-	_state = new (__FILE__, __LINE__) AnimationState(stateData);
-	_state->setRendererObject(this);
-	_state->setListener(animationCallback);
+    _ownsAnimationStateData = false;
+    _state = new (__FILE__, __LINE__) AnimationState(stateData);
+    _state->setRendererObject(this);
+    _state->setListener(animationCallback);
 }
 
 void SkeletonAnimation::setMix (const std::string& fromAnimation, const std::string& toAnimation, float duration) {
@@ -170,10 +170,10 @@ void SkeletonAnimation::setMix (const std::string& fromAnimation, const std::str
 
 TrackEntry* SkeletonAnimation::setAnimation (int trackIndex, const std::string& name, bool loop) {
     Animation* animation = _skeleton->getData()->findAnimation(name.c_str());
-	if (!animation) {
-		log("Spine: Animation not found: %s", name.c_str());
-		return 0;
-	}
+    if (!animation) {
+        log("Spine: Animation not found: %s", name.c_str());
+        return 0;
+    }
     auto trackEntry = _state->setAnimation(trackIndex, animation, loop);
     _state->apply(*_skeleton);
     return trackEntry;
@@ -181,11 +181,11 @@ TrackEntry* SkeletonAnimation::setAnimation (int trackIndex, const std::string& 
 
 TrackEntry* SkeletonAnimation::addAnimation (int trackIndex, const std::string& name, bool loop, float delay) {
     Animation* animation = _skeleton->getData()->findAnimation(name.c_str());
-	if (!animation) {
-		log("Spine: Animation not found: %s", name.c_str());
-		return 0;
-	}
-	return _state->addAnimation(trackIndex, animation, loop, delay);
+    if (!animation) {
+        log("Spine: Animation not found: %s", name.c_str());
+        return 0;
+    }
+    return _state->addAnimation(trackIndex, animation, loop, delay);
 }
 
 TrackEntry* SkeletonAnimation::setEmptyAnimation (int trackIndex, float mixDuration) {
@@ -218,50 +218,50 @@ void SkeletonAnimation::clearTrack (int trackIndex) {
 
 void SkeletonAnimation::onAnimationStateEvent (TrackEntry* entry, EventType type, Event* event) {
     switch (type) {
-	case EventType_Start:
-		if (_startListener) _startListener(entry);
-		break;
+    case EventType_Start:
+        if (_startListener) _startListener(entry);
+        break;
     case EventType_Interrupt:
         if (_interruptListener) _interruptListener(entry);
         break;
-	case EventType_End:
-		if (_endListener) _endListener(entry);
-		break;
+    case EventType_End:
+        if (_endListener) _endListener(entry);
+        break;
     case EventType_Dispose:
         if (_disposeListener) _disposeListener(entry);
         break;
-	case EventType_Complete:
-		if (_completeListener) _completeListener(entry);
-		break;
-	case EventType_Event:
-		if (_eventListener) _eventListener(entry, event);
-		break;
-	}
+    case EventType_Complete:
+        if (_completeListener) _completeListener(entry);
+        break;
+    case EventType_Event:
+        if (_eventListener) _eventListener(entry, event);
+        break;
+    }
 }
 
 void SkeletonAnimation::onTrackEntryEvent (TrackEntry* entry, EventType type, Event* event) {
     if (!entry->getRendererObject()) return;
-	_TrackEntryListeners* listeners = (_TrackEntryListeners*)entry->getRendererObject();
-	switch (type) {
-	case EventType_Start:
-		if (listeners->startListener) listeners->startListener(entry);
-		break;
+    _TrackEntryListeners* listeners = (_TrackEntryListeners*)entry->getRendererObject();
+    switch (type) {
+    case EventType_Start:
+        if (listeners->startListener) listeners->startListener(entry);
+        break;
     case EventType_Interrupt:
         if (listeners->interruptListener) listeners->interruptListener(entry);
         break;
-	case EventType_End:
-		if (listeners->endListener) listeners->endListener(entry);
-		break;
+    case EventType_End:
+        if (listeners->endListener) listeners->endListener(entry);
+        break;
     case EventType_Dispose:
         if (listeners->disposeListener) listeners->disposeListener(entry);
         break;
-	case EventType_Complete:
-		if (listeners->completeListener) listeners->completeListener(entry);
-		break;
-	case EventType_Event:
-		if (listeners->eventListener) listeners->eventListener(entry, event);
-		break;
-	}
+    case EventType_Complete:
+        if (listeners->completeListener) listeners->completeListener(entry);
+        break;
+    case EventType_Event:
+        if (listeners->eventListener) listeners->eventListener(entry, event);
+        break;
+    }
 }
 
 void SkeletonAnimation::setStartListener (const StartListener& listener) {

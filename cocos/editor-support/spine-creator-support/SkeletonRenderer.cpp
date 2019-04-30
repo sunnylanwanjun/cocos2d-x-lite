@@ -89,7 +89,7 @@ void SkeletonRenderer::initialize () {
     }
     
     _skeleton->setToSetupPose();
-	_skeleton->updateWorldTransform();
+    _skeleton->updateWorldTransform();
     beginSchedule();
 }
 
@@ -219,7 +219,7 @@ void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, co
     delete json;
 
     _ownsSkeleton = true;
-	_ownsAtlas = true;
+    _ownsAtlas = true;
     setSkeletonData(skeletonData, true);
 
     initialize();
@@ -483,7 +483,7 @@ void SkeletonRenderer::update (float deltaTime) {
             }
         } else if (slot->getAttachment()->getRTTI().isExactly(MeshAttachment::rtti)) {
             MeshAttachment* attachment = (MeshAttachment*)slot->getAttachment();
-			attachmentVertices = (AttachmentVertices*)attachment->getRendererObject();
+            attachmentVertices = (AttachmentVertices*)attachment->getRendererObject();
             
             // Early exit if attachment is invisible
             if (attachment->getColor().a == 0) {
@@ -527,7 +527,7 @@ void SkeletonRenderer::update (float deltaTime) {
             color.a = attachment->getColor().a;
         } else if (slot->getAttachment()->getRTTI().isExactly(ClippingAttachment::rtti)) {
             ClippingAttachment* clip = (ClippingAttachment*)slot->getAttachment();
-			_clipper->clipStart(*slot, clip);
+            _clipper->clipStart(*slot, clip);
             continue;
         } else {
             _clipper->clipEnd(*slot);
@@ -584,7 +584,7 @@ void SkeletonRenderer::update (float deltaTime) {
                 memcpy(triangles.indices, _clipper->getClippedTriangles().buffer(), sizeof(unsigned short) * _clipper->getClippedTriangles().size());
                 
                 float* verts = _clipper->getClippedVertices().buffer();
-				float* uvs = _clipper->getClippedUVs().buffer();
+                float* uvs = _clipper->getClippedUVs().buffer();
                 if (effect) {
                     Color light;
                     Color dark;
@@ -672,7 +672,7 @@ void SkeletonRenderer::update (float deltaTime) {
                 memcpy(trianglesTwoColor.indices, _clipper->getClippedTriangles().buffer(), sizeof(unsigned short) * _clipper->getClippedTriangles().size());
                 
                 float* verts = _clipper->getClippedVertices().buffer();
-				float* uvs = _clipper->getClippedUVs().buffer();
+                float* uvs = _clipper->getClippedUVs().buffer();
                 
                 if (effect) {
                     Color light;
