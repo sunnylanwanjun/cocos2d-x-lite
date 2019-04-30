@@ -109,7 +109,7 @@ public:
 
 	void setAttachmentTime(float inValue);
 
-	Vector<float> &getDeform();
+	Vector<float> &getAttachmentVertices();
 
 private:
 	SlotData &_data;
@@ -120,7 +120,7 @@ private:
 	bool _hasDarkColor;
 	Attachment *_attachment;
 	float _attachmentTime;
-	Vector<float> _deform;
+	Vector<float> _attachmentVertices;
 };
 }
 
