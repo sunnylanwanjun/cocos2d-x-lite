@@ -58,16 +58,6 @@ namespace spine {
     class RotateTimeline;
     
     typedef void (*AnimationStateListener) (AnimationState* state, EventType type, TrackEntry* entry, Event* event);
-
-	/// Abstract class to inherit from to create a callback object
-	class SP_API AnimationStateListenerObject {
-	public:
-		AnimationStateListenerObject() = default;
-		virtual ~AnimationStateListenerObject() = default;
-	public:
-		/// The callback function to be called
-		virtual void callback(AnimationState* state, EventType type, TrackEntry* entry, Event* event) = 0;
-	};
     
     /// State for the playback of an animation
     class SP_API TrackEntry : public SpineObject, public HasRendererObject {
@@ -251,8 +241,6 @@ namespace spine {
         
         void setListener(AnimationStateListener listener);
 
-		void setListener(AnimationStateListenerObject* listener);
-
     private:
         Animation* _animation;
         
@@ -271,7 +259,6 @@ namespace spine {
         Vector<TrackEntry*> _timelineHoldMix;
         Vector<float> _timelinesRotation;
         AnimationStateListener _listener;
-		AnimationStateListenerObject* _listenerObject;
         
         void reset();
     };
@@ -409,7 +396,6 @@ namespace spine {
         void setTimeScale(float inValue);
 
         void setListener(AnimationStateListener listener);
-		void setListener(AnimationStateListenerObject* listener);
 
 		void disableQueue();
 		void enableQueue();
@@ -427,7 +413,6 @@ namespace spine {
         bool _animationsChanged;
 
         AnimationStateListener _listener;
-		AnimationStateListenerObject* _listenerObject;
         
         float _timeScale;
 
@@ -443,24 +428,22 @@ namespace spine {
         void queueEvents(TrackEntry* entry, float animationTime);
         
         /// Sets the active TrackEntry for a given track number.
-        void setCurrent(size_t index, TrackEntry *current, bool interrupt);
+        void setCurrent(size_t index, TrackEntry* current, bool interrupt);
 
         TrackEntry* expandToIndex(size_t index);
 
         /// Object-pooling version of new TrackEntry. Obtain an unused TrackEntry from the pool and clear/initialize its values.
         /// @param last May be NULL.
-        TrackEntry* newTrackEntry(size_t trackIndex, Animation *animation, bool loop, TrackEntry *last);
+        TrackEntry* newTrackEntry(size_t trackIndex, Animation* animation, bool loop, TrackEntry* last);
 
         /// Dispose all track entries queued after the given TrackEntry.
         void disposeNext(TrackEntry* entry);
 
         void animationsChanged();
 
-        void computeHold(TrackEntry *entry);
+        void setTimelineModes(TrackEntry* entry);
 
-        void computeNotLast(TrackEntry *entry);
-
-        bool hasTimeline(TrackEntry *entry, int inId);
+        bool hasTimeline(TrackEntry* entry, int inId);
     };
 }
 

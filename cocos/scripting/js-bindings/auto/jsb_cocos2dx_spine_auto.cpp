@@ -10471,6 +10471,24 @@ static bool js_cocos2dx_spine_Slot_setAttachment(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_Slot_setAttachment)
 
+static bool js_cocos2dx_spine_Slot_getAttachmentVertices(se::State& s)
+{
+    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getAttachmentVertices : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        spine::Vector<float>& result = cobj->getAttachmentVertices();
+        ok &= spine_Vector_T_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getAttachmentVertices : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_Slot_getAttachmentVertices)
+
 static bool js_cocos2dx_spine_Slot_hasDarkColor(se::State& s)
 {
     spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
@@ -10488,24 +10506,6 @@ static bool js_cocos2dx_spine_Slot_hasDarkColor(se::State& s)
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_spine_Slot_hasDarkColor)
-
-static bool js_cocos2dx_spine_Slot_getDeform(se::State& s)
-{
-    spine::Slot* cobj = (spine::Slot*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_Slot_getDeform : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        spine::Vector<float>& result = cobj->getDeform();
-        ok &= spine_Vector_T_to_seval(result, &s.rval());
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_Slot_getDeform : Error processing arguments");
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_spine_Slot_getDeform)
 
 static bool js_cocos2dx_spine_Slot_getSkeleton(se::State& s)
 {
@@ -10558,8 +10558,8 @@ bool js_register_cocos2dx_spine_Slot(se::Object* obj)
     cls->defineFunction("getAttachment", _SE(js_cocos2dx_spine_Slot_getAttachment));
     cls->defineFunction("getAttachmentTime", _SE(js_cocos2dx_spine_Slot_getAttachmentTime));
     cls->defineFunction("setAttachment", _SE(js_cocos2dx_spine_Slot_setAttachment));
+    cls->defineFunction("getAttachmentVertices", _SE(js_cocos2dx_spine_Slot_getAttachmentVertices));
     cls->defineFunction("hasDarkColor", _SE(js_cocos2dx_spine_Slot_hasDarkColor));
-    cls->defineFunction("getDeform", _SE(js_cocos2dx_spine_Slot_getDeform));
     cls->defineFunction("getSkeleton", _SE(js_cocos2dx_spine_Slot_getSkeleton));
     cls->defineFunction("getData", _SE(js_cocos2dx_spine_Slot_getData));
     cls->install();

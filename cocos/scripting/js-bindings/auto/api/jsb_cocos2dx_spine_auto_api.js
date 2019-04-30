@@ -5198,6 +5198,16 @@ attachment
 },
 
 /**
+ * @method getAttachmentVertices
+ * @return {sp.Vector<float>}
+ */
+getAttachmentVertices : function (
+)
+{
+    return sp.Vector<float>;
+},
+
+/**
  * @method hasDarkColor
  * @return {bool}
  */
@@ -5205,16 +5215,6 @@ hasDarkColor : function (
 )
 {
     return false;
-},
-
-/**
- * @method getDeform
- * @return {sp.Vector<float>}
- */
-getDeform : function (
-)
-{
-    return sp.Vector<float>;
 },
 
 /**
