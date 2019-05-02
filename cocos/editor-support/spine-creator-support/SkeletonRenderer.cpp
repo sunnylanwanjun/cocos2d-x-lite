@@ -48,6 +48,13 @@ using namespace spine;
 
 static Cocos2dTextureLoader textureLoader;
 
+enum DebugType {
+    None = 0,
+    Slots,
+    Mesh,
+    Bones
+};
+
 SkeletonRenderer* SkeletonRenderer::create () {
     SkeletonRenderer* skeleton = new SkeletonRenderer();
     skeleton->autorelease();
@@ -304,22 +311,16 @@ void SkeletonRenderer::update (float deltaTime) {
     int preISegWritePos = -1;
     int curISegLen = 0;
     
-    int debugSlotsLen = 0;
     int materialLen = 0;
     Slot* slot = nullptr;
     int isFull = 0;
     
-    if (_debugSlots || _debugBones) {
+    if (_debugSlots || _debugBones || _debugMesh) {
         // If enable debug draw,then init debug buffer.
         if (_debugBuffer == nullptr) {
             _debugBuffer = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, MAX_DEBUG_BUFFER_SIZE);
         }
         _debugBuffer->reset();
-        
-        if (_debugSlots) {
-            //reserved 4 bytes to save debug slots len
-            _debugBuffer->writeUint32(0);
-        }
     }
     
     // check enough space
@@ -387,6 +388,9 @@ void SkeletonRenderer::update (float deltaTime) {
     VertexEffect* effect = nullptr;
     if (_effectDelegate) {
         effect = _effectDelegate->getVertexEffect();
+    }
+    
+    if (effect) {
         effect->begin(*_skeleton);
     }
 
@@ -471,6 +475,8 @@ void SkeletonRenderer::update (float deltaTime) {
             color.a = attachment->getColor().a;
             
             if(_debugSlots) {
+                _debugBuffer->writeFloat32(DebugType::Slots);
+                _debugBuffer->writeFloat32(8);
                 float* vertices = _useTint ? (float*)trianglesTwoColor.verts : (float*)triangles.verts;
                 int stride = _useTint ? vs2 : vs1;
                 // Quadrangle has 4 vertex.
@@ -479,7 +485,6 @@ void SkeletonRenderer::update (float deltaTime) {
                     _debugBuffer->writeFloat32(vertices[1]);
                     vertices += stride;
                 }
-                debugSlotsLen+=8;
             }
         } else if (slot->getAttachment()->getRTTI().isExactly(MeshAttachment::rtti)) {
             MeshAttachment* attachment = (MeshAttachment*)slot->getAttachment();
@@ -525,6 +530,28 @@ void SkeletonRenderer::update (float deltaTime) {
             color.g = attachment->getColor().g;
             color.b = attachment->getColor().b;
             color.a = attachment->getColor().a;
+            
+            if(_debugMesh) {
+                int indexCount = _useTint ? trianglesTwoColor.indexCount : triangles.indexCount;
+                unsigned short* indices = _useTint ? (unsigned short*)trianglesTwoColor.indices : (unsigned short*)triangles.indices;
+                float* vertices = _useTint ? (float*)trianglesTwoColor.verts : (float*)triangles.verts;
+                
+                int stride = _useTint ? vs2 : vs1;
+                _debugBuffer->writeFloat32(DebugType::Mesh);
+                _debugBuffer->writeFloat32(indexCount * 2);
+                for (int ii = 0; ii < indexCount; ii += 3) {
+                    int v1 = indices[ii] * stride;
+                    int v2 = indices[ii + 1] * stride;
+                    int v3 = indices[ii + 2] * stride;
+                    _debugBuffer->writeFloat32(vertices[v1]);
+                    _debugBuffer->writeFloat32(vertices[v1 + 1]);
+                    _debugBuffer->writeFloat32(vertices[v2]);
+                    _debugBuffer->writeFloat32(vertices[v2 + 1]);
+                    _debugBuffer->writeFloat32(vertices[v3]);
+                    _debugBuffer->writeFloat32(vertices[v3 + 1]);
+                }
+            }
+            
         } else if (slot->getAttachment()->getRTTI().isExactly(ClippingAttachment::rtti)) {
             ClippingAttachment* clip = (ClippingAttachment*)slot->getAttachment();
             _clipper->clipStart(*slot, clip);
@@ -796,10 +823,6 @@ void SkeletonRenderer::update (float deltaTime) {
     
     if (effect) effect->end();
     
-    if (_debugSlots) {
-        _debugBuffer->writeFloat32(0, debugSlotsLen);
-    }
-    
     renderInfo->writeUint32(materialLenOffset, materialLen);
     if (preISegWritePos != -1) {
         renderInfo->writeUint32(preISegWritePos, curISegLen);
@@ -808,6 +831,7 @@ void SkeletonRenderer::update (float deltaTime) {
     if (_debugBones) {
         auto& bones = _skeleton->getBones();
         size_t bonesCount = bones.size();
+        _debugBuffer->writeFloat32(DebugType::Bones);
         _debugBuffer->writeFloat32(bonesCount * 4);
         for (size_t i = 0, n = bonesCount; i < n; i++) {
             Bone *bone = bones[i];
@@ -820,11 +844,14 @@ void SkeletonRenderer::update (float deltaTime) {
         }
     }
     
-    if ((_debugSlots || _debugBones) &&  _debugBuffer->isOutRange()) {
-        _debugBuffer->writeFloat32(0, 0);
-        _debugBuffer->writeFloat32(sizeof(float), 0);
-        cocos2d::log("Spine debug data is too large,debug buffer has no space to put in it!!!!!!!!!!");
-        cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE in Macro");
+    // debug end
+    if (_debugBuffer) {
+        if (_debugBuffer->isOutRange()) {
+            _debugBuffer->reset();
+            cocos2d::log("Spine debug data is too large, debug buffer has no space to put in it!!!!!!!!!!");
+            cocos2d::log("You can adjust MAX_DEBUG_BUFFER_SIZE macro");
+        }
+        _debugBuffer->writeFloat32(DebugType::None);
     }
 }
 
@@ -876,9 +903,12 @@ void SkeletonRenderer::setUseTint(bool enabled) {
     _useTint = enabled;
 }
 
-void SkeletonRenderer::setVertexEffect(VertexEffectDelegate *effectDelegate) {
+void SkeletonRenderer::setVertexEffectDelegate(VertexEffectDelegate *effectDelegate) {
+    if (_effectDelegate == effectDelegate) {
+        return;
+    }
     CC_SAFE_RELEASE(_effectDelegate);
-    this->_effectDelegate = effectDelegate;
+    _effectDelegate = effectDelegate;
     CC_SAFE_RETAIN(_effectDelegate);
 }
 
@@ -917,7 +947,11 @@ void SkeletonRenderer::setDebugBonesEnabled (bool enabled) {
 void SkeletonRenderer::setDebugSlotsEnabled (bool enabled) {
     _debugSlots = enabled;
 }
-    
+
+void SkeletonRenderer::setDebugMeshEnabled (bool enabled) {
+    _debugMesh = enabled;
+}
+
 void SkeletonRenderer::setOpacityModifyRGB (bool value) {
     _premultipliedAlpha = value;
 }

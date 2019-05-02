@@ -5963,49 +5963,65 @@ getRadius : function (
 spine.VertexEffectDelegate = {
 
 /**
- * @method getSwirlVertexEffec
- * @return {sp.SwirlVertexEffect}
+ * @method getEffectType
+ * @return {String}
  */
-getSwirlVertexEffec : function (
+getEffectType : function (
 )
 {
-    return sp.SwirlVertexEffect;
+    return ;
 },
 
 /**
  * @method initSwirlWithPowOut
  * @param {float} arg0
  * @param {int} arg1
+ * @return {sp.SwirlVertexEffect}
  */
 initSwirlWithPowOut : function (
 float, 
 int 
 )
 {
+    return sp.SwirlVertexEffect;
 },
 
 /**
  * @method initSwirlWithPow
  * @param {float} arg0
  * @param {int} arg1
+ * @return {sp.SwirlVertexEffect}
  */
 initSwirlWithPow : function (
 float, 
 int 
 )
 {
+    return sp.SwirlVertexEffect;
 },
 
 /**
  * @method initJitter
  * @param {float} arg0
  * @param {float} arg1
+ * @return {sp.JitterVertexEffect}
  */
 initJitter : function (
 float, 
 float 
 )
 {
+    return sp.JitterVertexEffect;
+},
+
+/**
+ * @method getSwirlVertexEffect
+ * @return {sp.SwirlVertexEffect}
+ */
+getSwirlVertexEffect : function (
+)
+{
+    return sp.SwirlVertexEffect;
 },
 
 /**
@@ -6026,6 +6042,14 @@ getJitterVertexEffect : function (
 )
 {
     return sp.JitterVertexEffect;
+},
+
+/**
+ * @method clear
+ */
+clear : function (
+)
+{
 },
 
 /**
@@ -6197,6 +6221,22 @@ float
 },
 
 /**
+ * @method initWithSkeleton
+ * @param {sp.Skeleton} arg0
+ * @param {bool} arg1
+ * @param {bool} arg2
+ * @param {bool} arg3
+ */
+initWithSkeleton : function (
+skeleton, 
+bool, 
+bool, 
+bool 
+)
+{
+},
+
+/**
  * @method beginSchedule
  */
 beginSchedule : function (
@@ -6215,19 +6255,15 @@ getDebugData : function (
 },
 
 /**
- * @method initWithSkeleton
- * @param {sp.Skeleton} arg0
- * @param {bool} arg1
- * @param {bool} arg2
- * @param {bool} arg3
+ * @method findBone
+ * @param {String} arg0
+ * @return {sp.Bone}
  */
-initWithSkeleton : function (
-skeleton, 
-bool, 
-bool, 
-bool 
+findBone : function (
+str 
 )
 {
+    return sp.Bone;
 },
 
 /**
@@ -6252,6 +6288,16 @@ str
 )
 {
     return sp.Attachment;
+},
+
+/**
+ * @method setDebugMeshEnabled
+ * @param {bool} arg0
+ */
+setDebugMeshEnabled : function (
+bool 
+)
+{
 },
 
 /**
@@ -6323,16 +6369,6 @@ color4b
 },
 
 /**
- * @method setVertexEffect
- * @param {sp.VertexEffectDelegate} arg0
- */
-setVertexEffect : function (
-vertexeffectdelegate 
-)
-{
-},
-
-/**
  * @method setSkin
 * @param {char|String} char
 */
@@ -6373,15 +6409,13 @@ getSkeleton : function (
 },
 
 /**
- * @method findBone
- * @param {String} arg0
- * @return {sp.Bone}
+ * @method setVertexEffectDelegate
+ * @param {sp.VertexEffectDelegate} arg0
  */
-findBone : function (
-str 
+setVertexEffectDelegate : function (
+vertexeffectdelegate 
 )
 {
-    return sp.Bone;
 },
 
 /**

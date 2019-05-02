@@ -113,7 +113,19 @@ static bool js_register_spine_initSkeletonData (se::State& s)
     CCASSERT(skeletonData, !json->getError().isEmpty() ? json->getError().buffer() : "Error reading skeleton data.");
     delete json;
     
-    mgr->setSkeletonData(uuid, skeletonData, atlas, attachmentLoader);
+    if (skeletonData) {
+        mgr->setSkeletonData(uuid, skeletonData, atlas, attachmentLoader);
+        native_ptr_to_rooted_seval<spine::SkeletonData>((spine::SkeletonData*)skeletonData, &s.rval());
+    } else {
+        if (atlas) {
+            delete atlas;
+            atlas = nullptr;
+        }
+        if (attachmentLoader) {
+            delete attachmentLoader;
+            attachmentLoader = nullptr;
+        }
+    }
     return true;
 }
 SE_BIND_FUNC(js_register_spine_initSkeletonData)

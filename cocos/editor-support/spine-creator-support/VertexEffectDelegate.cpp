@@ -48,22 +48,39 @@ namespace spine {
             delete _vertexEffect;
             _vertexEffect = nullptr;
         }
+        _effectType = "none";
     }
     
-    void VertexEffectDelegate::initJitter (float jitterX, float jitterY) {
+    JitterVertexEffect* VertexEffectDelegate::initJitter (float jitterX, float jitterY) {
         clear();
         _vertexEffect = new JitterVertexEffect(jitterX, jitterY);
+        _effectType = "jitter";
+        return (JitterVertexEffect*)_vertexEffect;
     }
     
-    void VertexEffectDelegate::initSwirlWithPow(float radius, int power) {
+    SwirlVertexEffect* VertexEffectDelegate::initSwirlWithPow(float radius, int power) {
         clear();
         _interpolation = new PowInterpolation(power);
         _vertexEffect = new SwirlVertexEffect(radius, *_interpolation);
+        _effectType = "swirl";
+        return (SwirlVertexEffect*)_vertexEffect;
     }
     
-    void VertexEffectDelegate::initSwirlWithPowOut(float radius, int power) {
+    SwirlVertexEffect* VertexEffectDelegate::initSwirlWithPowOut(float radius, int power) {
         clear();
         _interpolation = new PowOutInterpolation(power);
         _vertexEffect = new SwirlVertexEffect(radius, *_interpolation);
+        _effectType = "swirl";
+        return (SwirlVertexEffect*)_vertexEffect;
+    }
+    
+    JitterVertexEffect* VertexEffectDelegate::getJitterVertexEffect () {
+        JitterVertexEffect* jitter = dynamic_cast<JitterVertexEffect*>(_vertexEffect);
+        return jitter;
+    }
+    
+    SwirlVertexEffect* VertexEffectDelegate::getSwirlVertexEffect () {
+        SwirlVertexEffect* swirl = dynamic_cast<SwirlVertexEffect*>(_vertexEffect);
+        return swirl;
     }
 }

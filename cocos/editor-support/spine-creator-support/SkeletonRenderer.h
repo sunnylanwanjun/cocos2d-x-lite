@@ -91,7 +91,7 @@ namespace spine {
         void setUseTint(bool enabled);
         
         /* Sets the vertex effect to be used, set to 0 to disable vertex effects */
-        void setVertexEffect(VertexEffectDelegate* effectDelegate);
+        void setVertexEffectDelegate(VertexEffectDelegate* effectDelegate);
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
@@ -120,6 +120,7 @@ namespace spine {
         void setColor (cocos2d::Color4B& color);
         void setDebugBonesEnabled (bool enabled);
         void setDebugSlotsEnabled (bool enabled);
+        void setDebugMeshEnabled (bool enabled);
         
         void setOpacityModifyRGB (bool value);
         bool isOpacityModifyRGB () const;
@@ -161,6 +162,7 @@ namespace spine {
         float               _timeScale = 1;
         bool                _paused = false;
         
+        bool                _debugMesh = false;
         bool                _debugSlots = false;
         bool                _debugBones = false;
         cocos2d::Color4F    _nodeColor = cocos2d::Color4F::WHITE;
