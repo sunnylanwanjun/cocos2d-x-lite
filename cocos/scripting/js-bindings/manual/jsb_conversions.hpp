@@ -274,7 +274,7 @@ bool Vec3_to_seval(const cocos2d::Vec3& v, se::Value* ret);
 bool Vec4_to_seval(const cocos2d::Vec4& v, se::Value* ret);
 bool Mat4_to_seval(const cocos2d::Mat4& v, se::Value* ret);
 bool Size_to_seval(const cocos2d::Size& v, se::Value* ret);
-//bool Rect_to_seval(const cocos2d::Rect& v, se::Value* ret);
+bool Rect_to_seval(const cocos2d::Rect& v, se::Value* ret);
 bool Color3B_to_seval(const cocos2d::Color3B& v, se::Value* ret);
 bool Color4B_to_seval(const cocos2d::Color4B& v, se::Value* ret);
 bool Color3F_to_seval(const cocos2d::Color3F& v, se::Value* ret);

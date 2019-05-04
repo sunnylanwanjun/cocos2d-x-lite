@@ -12236,6 +12236,25 @@ static bool js_cocos2dx_spine_SkeletonRenderer_setTimeScale(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_setTimeScale)
 
+static bool js_cocos2dx_spine_SkeletonRenderer_initWithUUID(se::State& s)
+{
+    spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonRenderer_initWithUUID : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        std::string arg0;
+        ok &= seval_to_std_string(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonRenderer_initWithUUID : Error processing arguments");
+        cobj->initWithUUID(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_initWithUUID)
+
 static bool js_cocos2dx_spine_SkeletonRenderer_setOpacityModifyRGB(se::State& s)
 {
     spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer*)s.nativeThisObject();
@@ -12638,20 +12657,23 @@ static bool js_cocos2dx_spine_SkeletonRenderer_initWithSkeleton(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_initWithSkeleton)
 
-static bool js_cocos2dx_spine_SkeletonRenderer_beginSchedule(se::State& s)
+static bool js_cocos2dx_spine_SkeletonRenderer_getBoundingBox(se::State& s)
 {
     spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonRenderer_beginSchedule : Invalid Native Object");
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonRenderer_getBoundingBox : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
+    CC_UNUSED bool ok = true;
     if (argc == 0) {
-        cobj->beginSchedule();
+        cocos2d::Rect result = cobj->getBoundingBox();
+        ok &= Rect_to_seval(result, &s.rval());
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonRenderer_getBoundingBox : Error processing arguments");
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_beginSchedule)
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_getBoundingBox)
 
 static bool js_cocos2dx_spine_SkeletonRenderer_getDebugData(se::State& s)
 {
@@ -12753,24 +12775,20 @@ static bool js_cocos2dx_spine_SkeletonRenderer_setDebugMeshEnabled(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_setDebugMeshEnabled)
 
-static bool js_cocos2dx_spine_SkeletonRenderer_initWithUUID(se::State& s)
+static bool js_cocos2dx_spine_SkeletonRenderer_beginSchedule(se::State& s)
 {
     spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonRenderer_initWithUUID : Invalid Native Object");
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonRenderer_beginSchedule : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        std::string arg0;
-        ok &= seval_to_std_string(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonRenderer_initWithUUID : Error processing arguments");
-        cobj->initWithUUID(arg0);
+    if (argc == 0) {
+        cobj->beginSchedule();
         return true;
     }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_initWithUUID)
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonRenderer_beginSchedule)
 
 static bool js_cocos2dx_spine_SkeletonRenderer_initialize(se::State& s)
 {
@@ -13160,6 +13178,7 @@ bool js_register_cocos2dx_spine_SkeletonRenderer(se::Object* obj)
 
     cls->defineFunction("setUseTint", _SE(js_cocos2dx_spine_SkeletonRenderer_setUseTint));
     cls->defineFunction("setTimeScale", _SE(js_cocos2dx_spine_SkeletonRenderer_setTimeScale));
+    cls->defineFunction("initWithUUID", _SE(js_cocos2dx_spine_SkeletonRenderer_initWithUUID));
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_spine_SkeletonRenderer_setOpacityModifyRGB));
     cls->defineFunction("paused", _SE(js_cocos2dx_spine_SkeletonRenderer_paused));
     cls->defineFunction("setAttachment", _SE(js_cocos2dx_spine_SkeletonRenderer_setAttachment));
@@ -13174,13 +13193,13 @@ bool js_register_cocos2dx_spine_SkeletonRenderer(se::Object* obj)
     cls->defineFunction("setSlotsToSetupPose", _SE(js_cocos2dx_spine_SkeletonRenderer_setSlotsToSetupPose));
     cls->defineFunction("initWithBinaryFile", _SE(js_cocos2dx_spine_SkeletonRenderer_initWithBinaryFile));
     cls->defineFunction("initWithSkeleton", _SE(js_cocos2dx_spine_SkeletonRenderer_initWithSkeleton));
-    cls->defineFunction("beginSchedule", _SE(js_cocos2dx_spine_SkeletonRenderer_beginSchedule));
+    cls->defineFunction("getBoundingBox", _SE(js_cocos2dx_spine_SkeletonRenderer_getBoundingBox));
     cls->defineFunction("getDebugData", _SE(js_cocos2dx_spine_SkeletonRenderer_getDebugData));
     cls->defineFunction("findBone", _SE(js_cocos2dx_spine_SkeletonRenderer_findBone));
     cls->defineFunction("update", _SE(js_cocos2dx_spine_SkeletonRenderer_update));
     cls->defineFunction("getAttachment", _SE(js_cocos2dx_spine_SkeletonRenderer_getAttachment));
     cls->defineFunction("setDebugMeshEnabled", _SE(js_cocos2dx_spine_SkeletonRenderer_setDebugMeshEnabled));
-    cls->defineFunction("initWithUUID", _SE(js_cocos2dx_spine_SkeletonRenderer_initWithUUID));
+    cls->defineFunction("beginSchedule", _SE(js_cocos2dx_spine_SkeletonRenderer_beginSchedule));
     cls->defineFunction("initialize", _SE(js_cocos2dx_spine_SkeletonRenderer_initialize));
     cls->defineFunction("setDebugBonesEnabled", _SE(js_cocos2dx_spine_SkeletonRenderer_setDebugBonesEnabled));
     cls->defineFunction("getTimeScale", _SE(js_cocos2dx_spine_SkeletonRenderer_getTimeScale));
