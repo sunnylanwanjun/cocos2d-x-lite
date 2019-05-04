@@ -6089,6 +6089,16 @@ float
 },
 
 /**
+ * @method initWithUUID
+ * @param {String} arg0
+ */
+initWithUUID : function (
+str 
+)
+{
+},
+
+/**
  * @method setOpacityModifyRGB
  * @param {bool} arg0
  */
@@ -6237,11 +6247,13 @@ bool
 },
 
 /**
- * @method beginSchedule
+ * @method getBoundingBox
+ * @return {rect_object}
  */
-beginSchedule : function (
+getBoundingBox : function (
 )
 {
+    return cc.Rect;
 },
 
 /**
@@ -6301,11 +6313,9 @@ bool
 },
 
 /**
- * @method initWithUUID
- * @param {String} arg0
+ * @method beginSchedule
  */
-initWithUUID : function (
-str 
+beginSchedule : function (
 )
 {
 },

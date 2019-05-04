@@ -53,7 +53,8 @@ namespace spine {
         static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
         
         virtual void update (float deltaTime);
-
+        virtual cocos2d::Rect getBoundingBox () const;
+        
         Skeleton* getSkeleton() const;
 
         void setTimeScale (float scale);

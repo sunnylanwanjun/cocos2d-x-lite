@@ -2034,18 +2034,18 @@ bool Size_to_seval(const cocos2d::Size& v, se::Value* ret)
     return true;
 }
 
-//bool Rect_to_seval(const cocos2d::Rect& v, se::Value* ret)
-//{
-//    assert(ret != nullptr);
-//    se::HandleObject obj(se::Object::createPlainObject());
-//    obj->setProperty("x", se::Value(v.origin.x));
-//    obj->setProperty("y", se::Value(v.origin.y));
-//    obj->setProperty("width", se::Value(v.size.width));
-//    obj->setProperty("height", se::Value(v.size.height));
-//    ret->setObject(obj);
-//
-//    return true;
-//}
+bool Rect_to_seval(const cocos2d::Rect& v, se::Value* ret)
+{
+    assert(ret != nullptr);
+    se::HandleObject obj(se::Object::createPlainObject());
+    obj->setProperty("x", se::Value(v.origin.x));
+    obj->setProperty("y", se::Value(v.origin.y));
+    obj->setProperty("width", se::Value(v.size.width));
+    obj->setProperty("height", se::Value(v.size.height));
+    ret->setObject(obj);
+
+    return true;
+}
 
 bool Color3B_to_seval(const cocos2d::Color3B& v, se::Value* ret)
 {

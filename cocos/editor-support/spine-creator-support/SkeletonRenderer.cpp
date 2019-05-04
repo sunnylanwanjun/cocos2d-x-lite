@@ -854,6 +854,40 @@ void SkeletonRenderer::update (float deltaTime) {
     }
 }
 
+cocos2d::Rect SkeletonRenderer::getBoundingBox () const {
+    static IOBuffer buffer(1024);
+    float* worldVertices = nullptr;
+    float minX = FLT_MAX, minY = FLT_MAX, maxX = -FLT_MAX, maxY = -FLT_MAX;
+    for (int i = 0; i < _skeleton->getSlots().size(); ++i) {
+        Slot* slot = _skeleton->getSlots()[i];
+        if (!slot->getAttachment()) continue;
+        int verticesCount;
+        if (slot->getAttachment()->getRTTI().isExactly(RegionAttachment::rtti)) {
+            RegionAttachment* attachment = (RegionAttachment*)slot->getAttachment();
+            buffer.checkSpace(8 * sizeof(float));
+            worldVertices = (float*)buffer.getCurBuffer();
+            attachment->computeWorldVertices(slot->getBone(), worldVertices, 0, 2);
+            verticesCount = 8;
+        } else if (slot->getAttachment()->getRTTI().isExactly(MeshAttachment::rtti)) {
+            MeshAttachment* mesh = (MeshAttachment*)slot->getAttachment();
+            buffer.checkSpace(mesh->getWorldVerticesLength() * sizeof(float));
+            worldVertices = (float*)buffer.getCurBuffer();
+            mesh->computeWorldVertices(*slot, 0, mesh->getWorldVerticesLength(), worldVertices, 0, 2);
+            verticesCount = (int)mesh->getWorldVerticesLength();
+        } else
+            continue;
+        for (int ii = 0; ii < verticesCount; ii += 2) {
+            float x = worldVertices[ii], y = worldVertices[ii + 1];
+            minX = min(minX, x);
+            minY = min(minY, y);
+            maxX = max(maxX, x);
+            maxY = max(maxY, y);
+        }
+    }
+    if (minX == FLT_MAX) minX = minY = maxX = maxY = 0;
+    return Rect(minX, minY, maxX - minX, maxY - minY);
+}
+
 void SkeletonRenderer::updateWorldTransform () {
     _skeleton->updateWorldTransform();
 }
