@@ -885,7 +885,7 @@ cocos2d::Rect SkeletonRenderer::getBoundingBox () const {
         }
     }
     if (minX == FLT_MAX) minX = minY = maxX = maxY = 0;
-    return Rect(minX, minY, maxX - minX, maxY - minY);
+    return cocos2d::Rect(minX, minY, maxX - minX, maxY - minY);
 }
 
 void SkeletonRenderer::updateWorldTransform () {
