@@ -278,6 +278,9 @@ void SpineRenderer::update (float deltaTime)
 {
     if (!_skeleton) return;
 
+    _renderInfoOffset->reset();
+    _renderInfoOffset->clear();
+    
     // avoid other place call update.
     auto mgr = MiddlewareManager::getInstance();
     if (!mgr->isUpdating) return;
@@ -286,7 +289,6 @@ void SpineRenderer::update (float deltaTime)
     auto renderInfo = renderMgr->getBuffer();
     if (!renderInfo) return;
     
-    _renderInfoOffset->reset();
     //  store renderInfo offset
     _renderInfoOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
     
