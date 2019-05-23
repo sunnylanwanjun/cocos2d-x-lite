@@ -114,7 +114,11 @@ void CCArmatureDisplay::dbUpdate()
     _materialLen = 0;
     
     // check enough space
-    renderInfo->checkSpace(sizeof(uint32_t), true);
+    renderInfo->checkSpace(sizeof(uint32_t) * 2, true);
+    
+    // write borde
+    renderInfo->writeUint32(0xffffffff);
+    
     _materialLenOffset = renderInfo->getCurPos();
     // Reserved space to save material len
     renderInfo->writeUint32(0);
