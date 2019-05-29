@@ -141,6 +141,7 @@ SkeletonAnimation::~SkeletonAnimation () {
 }
 
 void SkeletonAnimation::update (float deltaTime) {
+	if (!_skeleton) return;
     if (!_paused) {
         deltaTime *= _timeScale * globalTimeScale;
         if (_ownsSkeleton) _skeleton->update(deltaTime);
@@ -154,8 +155,10 @@ void SkeletonAnimation::update (float deltaTime) {
 void SkeletonAnimation::setAnimationStateData (AnimationStateData* stateData) {
     CCASSERT(stateData, "stateData cannot be null.");
 
-    if (_ownsAnimationStateData) delete _state->getData();
-    delete _state;
+	if (_state) {
+    	if (_ownsAnimationStateData) delete _state->getData();
+    	delete _state;
+	}
 
     _ownsAnimationStateData = false;
     _state = new (__FILE__, __LINE__) AnimationState(stateData);
@@ -164,10 +167,13 @@ void SkeletonAnimation::setAnimationStateData (AnimationStateData* stateData) {
 }
 
 void SkeletonAnimation::setMix (const std::string& fromAnimation, const std::string& toAnimation, float duration) {
-    _state->getData()->setMix(fromAnimation.c_str(), toAnimation.c_str(), duration);
+    if (_state) {
+    	_state->getData()->setMix(fromAnimation.c_str(), toAnimation.c_str(), duration);
+	}
 }
 
 TrackEntry* SkeletonAnimation::setAnimation (int trackIndex, const std::string& name, bool loop) {
+	if (!_skeleton) return 0;
     Animation* animation = _skeleton->getData()->findAnimation(name.c_str());
     if (!animation) {
         log("Spine: Animation not found: %s", name.c_str());
@@ -179,6 +185,7 @@ TrackEntry* SkeletonAnimation::setAnimation (int trackIndex, const std::string& 
 }
 
 TrackEntry* SkeletonAnimation::addAnimation (int trackIndex, const std::string& name, bool loop, float delay) {
+	if (!_skeleton) return 0;
     Animation* animation = _skeleton->getData()->findAnimation(name.c_str());
     if (!animation) {
         log("Spine: Animation not found: %s", name.c_str());
@@ -188,31 +195,49 @@ TrackEntry* SkeletonAnimation::addAnimation (int trackIndex, const std::string& 
 }
 
 TrackEntry* SkeletonAnimation::setEmptyAnimation (int trackIndex, float mixDuration) {
-    return _state->setEmptyAnimation(trackIndex, mixDuration);
+	if (_state) {
+    	return _state->setEmptyAnimation(trackIndex, mixDuration);
+	}
+	return nullptr;
 }
 
 void SkeletonAnimation::setEmptyAnimations (float mixDuration) {
-    _state->setEmptyAnimations(mixDuration);
+    if (_state) {
+        _state->setEmptyAnimations(mixDuration);
+    }
 }
 
 TrackEntry* SkeletonAnimation::addEmptyAnimation (int trackIndex, float mixDuration, float delay) {
-    return _state->addEmptyAnimation(trackIndex, mixDuration, delay);
+    if (_state) {
+        return _state->addEmptyAnimation(trackIndex, mixDuration, delay);
+    }
+    return nullptr;
 }
 
 Animation* SkeletonAnimation::findAnimation(const std::string& name) const {
-    return _skeleton->getData()->findAnimation(name.c_str());
+    if (_skeleton) {
+        return _skeleton->getData()->findAnimation(name.c_str());
+    }
+    return nullptr;
 }
 
 TrackEntry* SkeletonAnimation::getCurrent (int trackIndex) {
-    return _state->getCurrent(trackIndex);
+    if (_state) {
+        return _state->getCurrent(trackIndex);
+    }
+    return nullptr;
 }
 
 void SkeletonAnimation::clearTracks () {
-    _state->clearTracks();
+    if (_state) {
+        _state->clearTracks();
+    }
 }
 
 void SkeletonAnimation::clearTrack (int trackIndex) {
-    _state->clearTrack(trackIndex);
+    if (_state) {
+        _state->clearTrack(trackIndex);
+    }
 }
 
 void SkeletonAnimation::onAnimationStateEvent (TrackEntry* entry, EventType type, Event* event) {

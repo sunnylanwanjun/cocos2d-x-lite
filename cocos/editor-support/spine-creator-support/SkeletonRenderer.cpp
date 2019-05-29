@@ -265,6 +265,10 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 }
 
 void SkeletonRenderer::update (float deltaTime) {
+    if (!_skeleton) return;
+
+    _renderInfoOffset->reset();
+    _renderInfoOffset->clear();
     // avoid other place call update.
     auto mgr = MiddlewareManager::getInstance();
     if (!mgr->isUpdating) return;
@@ -273,14 +277,21 @@ void SkeletonRenderer::update (float deltaTime) {
     auto renderInfo = renderMgr->getBuffer();
     if (!renderInfo) return;
     
-    _renderInfoOffset->reset();
     //  store renderInfo offset
     _renderInfoOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
     
+    // check enough space
+    renderInfo->checkSpace(sizeof(uint32_t) * 2, true);
+    // write border
+    renderInfo->writeUint32(0xffffffff);
+    
+    std::size_t materialLenOffset = renderInfo->getCurPos();
+    //reserved space to save material len
+    renderInfo->writeUint32(0);
+    
     // If opacity is 0,then return.
     if (_skeleton->getColor().a == 0) {
-        renderInfo->checkSpace(sizeof(uint32_t), true);
-        renderInfo->writeUint32(0);
+    {
         return;
     }
     
@@ -889,47 +900,74 @@ cocos2d::Rect SkeletonRenderer::getBoundingBox () const {
 }
 
 void SkeletonRenderer::updateWorldTransform () {
-    _skeleton->updateWorldTransform();
+	if (_skeleton) {
+    	_skeleton->updateWorldTransform();
+	}
 }
 
 void SkeletonRenderer::setToSetupPose () {
-    _skeleton->setToSetupPose();
+	if (_skeleton) {
+    	_skeleton->setToSetupPose();
+	}
 }
 
 void SkeletonRenderer::setBonesToSetupPose () {
-    _skeleton->setBonesToSetupPose();
+    if (_skeleton) {
+    	_skeleton->setBonesToSetupPose();
+	}
 }
 
 void SkeletonRenderer::setSlotsToSetupPose () {
-    _skeleton->setSlotsToSetupPose();
+	if (_skeleton) {
+    	_skeleton->setSlotsToSetupPose();
+	}
 }
 
 Bone* SkeletonRenderer::findBone (const std::string& boneName) const {
-    return _skeleton->findBone(boneName.c_str());
+    if (_skeleton) {
+    	return _skeleton->findBone(boneName.c_str());
+	}
+	return nullptr;
 }
 
 Slot* SkeletonRenderer::findSlot (const std::string& slotName) const {
-    return _skeleton->findSlot(slotName.c_str());
+    if (_skeleton) {
+        return _skeleton->findSlot(slotName.c_str());
+    }
+    return nullptr;
 }
 
 void SkeletonRenderer::setSkin (const std::string& skinName) {
-    _skeleton->setSkin(skinName.empty() ? 0 : skinName.c_str());
+    if (_skeleton) {
+    	_skeleton->setSkin(skinName.empty() ? 0 : skinName.c_str());
+	}
 }
 
 void SkeletonRenderer::setSkin (const char* skinName) {
-    _skeleton->setSkin(skinName);
+	if (_skeleton) {
+	    _skeleton->setSkin(skinName);
+	}
 }
 
 Attachment* SkeletonRenderer::getAttachment (const std::string& slotName, const std::string& attachmentName) const {
-    return _skeleton->getAttachment(slotName.c_str(), attachmentName.c_str());
+    if (_skeleton) {
+        return _skeleton->getAttachment(slotName.c_str(), attachmentName.c_str());
+    }
+    return nullptr;
 }
 
 bool SkeletonRenderer::setAttachment (const std::string& slotName, const std::string& attachmentName) {
-    return _skeleton->getAttachment(slotName.c_str(), attachmentName.empty() ? 0 : attachmentName.c_str()) ? true : false;
+    if (_skeleton) {
+        return _skeleton->getAttachment(slotName.c_str(), attachmentName.empty() ? 0 : attachmentName.c_str()) ? true : false;
+    }
+    return false;
 }
 
 bool SkeletonRenderer::setAttachment (const std::string& slotName, const char* attachmentName) {
-    return _skeleton->getAttachment(slotName.c_str(), attachmentName) ? true : false;
+    if (_skeleton) {
+        return _skeleton->getAttachment(slotName.c_str(), attachmentName) ? true : false;
+    }
+    return false;
 }
 
 void SkeletonRenderer::setUseTint(bool enabled) {
