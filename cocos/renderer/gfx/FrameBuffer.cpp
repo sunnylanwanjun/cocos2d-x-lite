@@ -46,19 +46,22 @@ void FrameBuffer::destroy()
 {
     for (auto colorBufffer : _colorBuffers)
         RENDERER_SAFE_RELEASE(colorBufffer);
+    _colorBuffers.clear();
     
     RENDERER_SAFE_RELEASE(_depthBuffer);
+    _depthBuffer = nullptr;
+    
     RENDERER_SAFE_RELEASE(_stencilBuffer);
+    _stencilBuffer = nullptr;
+    
     RENDERER_SAFE_RELEASE(_depthStencilBuffer);
+    _depthStencilBuffer = nullptr;
     
-    if (_glID == 0)
+    if (_glID != 0)
     {
-        RENDERER_LOGE("The frame-buffer is invalid!");
-        return;
+        glDeleteFramebuffers(1, &_glID);
+        _glID = 0;
     }
-    
-    glDeleteFramebuffers(1, &_glID);
-    _glID = 0;
 }
 
 bool FrameBuffer::init(DeviceGraphics* device, uint16_t width, uint16_t height)
