@@ -87,12 +87,11 @@ void FrameBuffer::setColorBuffer(RenderTarget* rt, int index)
 
 void FrameBuffer::setColorBuffers(const std::vector<RenderTarget*>& renderTargets)
 {
+    for (auto& colorBufffer : renderTargets)
+        RENDERER_SAFE_RETAIN(colorBufffer);
     for (auto& colorBufffer : _colorBuffers)
         RENDERER_SAFE_RELEASE(colorBufffer);
-
     _colorBuffers = renderTargets;
-    for (auto& colorBufffer : _colorBuffers)
-        RENDERER_SAFE_RETAIN(colorBufffer);
 }
 
 void FrameBuffer::setDepthBuffer(RenderTarget* rt)
