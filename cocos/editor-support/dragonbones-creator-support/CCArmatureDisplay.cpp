@@ -25,6 +25,7 @@
 #include "MiddlewareMacro.h"
 #include "renderer/renderer/Pass.h"
 #include "renderer/renderer/Technique.h"
+#include "renderer/gfx/Texture.h"
 
 USING_NS_CC;
 USING_NS_MW;
@@ -337,7 +338,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
         
         texture = slot->getTexture();
         if (!texture) continue;
-        _curTextureIndex = texture->getRealTextureIndex();
+        _curTextureIndex = texture->getNativeTexture()->getHandle();
         
         auto vbSize = slot->triangles.vertCount * sizeof(middleware::V2F_T2F_C4B);
         isFull |= vb.checkSpace(vbSize, true);

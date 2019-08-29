@@ -191,8 +191,8 @@ private:
     cocos2d::Color4F _nodeColor = cocos2d::Color4F::WHITE;
     
     int _preBlendMode = -1;
-    int _preTextureIndex = -1;
-    int _curTextureIndex = -1;
+    GLuint _preTextureIndex = -1;
+    GLuint _curTextureIndex = -1;
     cocos2d::renderer::BlendFactor _curBlendSrc;
     cocos2d::renderer::BlendFactor _curBlendDst;
     

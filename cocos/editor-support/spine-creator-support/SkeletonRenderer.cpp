@@ -37,6 +37,7 @@
 #include "renderer/renderer/Technique.h"
 #include "renderer/scene/assembler/CustomAssembler.hpp"
 #include "SkeletonDataMgr.h"
+#include "renderer/gfx/Texture.h"
 
 USING_NS_CC;
 USING_NS_MW;
@@ -306,8 +307,8 @@ void SkeletonRenderer::render (float deltaTime) {
     BlendFactor curBlendDst = BlendFactor::ZERO;
     int curBlendMode = -1;
     int preBlendMode = -1;
-    int preTextureIndex = -1;
-    int curTextureIndex = -1;
+    GLuint preTextureIndex = -1;
+    GLuint curTextureIndex = -1;
     
 	int preISegWritePos = -1;
     int curISegLen = 0;
@@ -812,7 +813,7 @@ void SkeletonRenderer::render (float deltaTime) {
         }
         
         texture = attachmentVertices->_texture;
-        curTextureIndex = attachmentVertices->_texture->getRealTextureIndex();
+        curTextureIndex = attachmentVertices->_texture->getNativeTexture()->getHandle();
         // If texture or blendMode change,will change material.
         if (preTextureIndex != curTextureIndex || preBlendMode != slot->getData().getBlendMode() || isFull) {
             flush();

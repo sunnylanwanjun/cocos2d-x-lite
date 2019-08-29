@@ -134,8 +134,8 @@ namespace spine {
         void setOpacityModifyRGB (bool value);
         bool isOpacityModifyRGB () const;
         
-        void beginSchedule();
-        void stopSchedule();
+        virtual void beginSchedule();
+        virtual void stopSchedule();
         void onEnable();
         void onDisable();
         
