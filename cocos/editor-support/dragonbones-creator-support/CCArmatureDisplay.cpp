@@ -33,7 +33,6 @@ using namespace cocos2d::renderer;
 
 static const std::string techStage = "opaque";
 static const std::string textureKey = "texture";
-static const uint8_t moduleID = MiddlewareManager::generateModuleID();
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -251,7 +250,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
                 break;
         }
         
-        double curHash = _curTextureIndex + (moduleID << 16) + ((uint8_t)slot->_blendMode << 24);
+        double curHash = _curTextureIndex + ((uint8_t)slot->_blendMode << 24);
         
         Effect* renderEffect = _assembler->getEffect(_materialLen);
         Technique::Parameter* param = nullptr;

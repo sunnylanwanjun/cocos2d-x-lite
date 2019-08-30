@@ -185,6 +185,7 @@ public:
      */
     CCArmatureDisplay* getRootDisplay();
     
+    static uint8_t ModuleID;
 private:
     std::map<std::string,bool> _listenerIDMap;
     cocos2d::middleware::IOTypedArray* _debugBuffer = nullptr;

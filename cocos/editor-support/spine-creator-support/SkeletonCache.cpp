@@ -194,7 +194,7 @@ namespace spine {
         }
         
         AnimationData* animationData = it->second;
-        if (!animationData || animationData->needUpdate(toFrameIdx)) {
+        if (!animationData || !animationData->needUpdate(toFrameIdx)) {
             return;
         }
         
@@ -243,9 +243,6 @@ namespace spine {
         int vbSize = 0;
         int ibSize = 0;
         
-        BlendFactor curBlendSrc = BlendFactor::ONE;
-        BlendFactor curBlendDst = BlendFactor::ZERO;
-        int curBlendMode = -1;
         int preBlendMode = -1;
         GLuint preTextureIndex = -1;
         GLuint curTextureIndex = -1;
@@ -256,7 +253,6 @@ namespace spine {
         
         int materialLen = 0;
         Slot* slot = nullptr;
-        int isFull = 0;
         
         middleware::Texture2D* texture = nullptr;
         
@@ -268,29 +264,9 @@ namespace spine {
                 preSegmentData->vertexFloatCount = curVSegLen;
             }
             
-            // prepare to fill new segment field
-            curBlendMode = slot->getData().getBlendMode();
-            switch (curBlendMode) {
-                case BlendMode_Additive:
-                    curBlendSrc = _premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA;
-                    curBlendDst = BlendFactor::ONE;
-                    break;
-                case BlendMode_Multiply:
-                    curBlendSrc = BlendFactor::DST_COLOR;
-                    curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
-                    break;
-                case BlendMode_Screen:
-                    curBlendSrc = BlendFactor::ONE;
-                    curBlendDst = BlendFactor::ONE_MINUS_SRC_COLOR;
-                    break;
-                default:
-                    curBlendSrc = _premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA;
-                    curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
-            }
-            
             SegmentData* segmentData = frameData->buildSegmentData(materialLen);
             segmentData->setTexture(texture);
-            segmentData->blendMode = curBlendMode;
+            segmentData->blendMode = slot->getData().getBlendMode();
             
             // save new segment count pos field
             preISegWritePos = (int)ib.getCurPos() / sizeof(unsigned short);
@@ -308,7 +284,6 @@ namespace spine {
         
         auto& drawOrder = _skeleton->getDrawOrder();
         for (size_t i = 0, n = drawOrder.size(); i < n; ++i) {
-            isFull = 0;
             slot = drawOrder[i];
             
             if (!slot->getAttachment()) {
@@ -336,7 +311,7 @@ namespace spine {
                 
                 trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                 vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                isFull |= vb.checkSpace(vbSize, true);
+                vb.checkSpace(vbSize, true);
                 trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                 for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                     trianglesTwoColor.verts[ii].texCoord = attachmentVertices->_triangles->verts[ii].texCoord;
@@ -366,7 +341,7 @@ namespace spine {
                 
                 trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
                 vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                isFull |= vb.checkSpace(vbSize, true);
+                vb.checkSpace(vbSize, true);
                 trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                 for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                     trianglesTwoColor.verts[ii].texCoord = attachmentVertices->_triangles->verts[ii].texCoord;
@@ -400,9 +375,9 @@ namespace spine {
                 continue;
             }
             
-            float red = _nodeColor.r * _skeleton->getColor().r * color.r * 255;
-            float green = _nodeColor.g * _skeleton->getColor().g * color.g * 255;
-            float blue = _nodeColor.b * _skeleton->getColor().b * color.b * 255;
+            float red = _skeleton->getColor().r * color.r * 255;
+            float green = _skeleton->getColor().g * color.g * 255;
+            float blue = _skeleton->getColor().b * color.b * 255;
             
             color.r = red * slot->getColor().r;
             color.g = green * slot->getColor().g;
@@ -443,7 +418,7 @@ namespace spine {
                 
                 trianglesTwoColor.vertCount = (int)_clipper->getClippedVertices().size() >> 1;
                 vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
-                isFull |= vb.checkSpace(vbSize, true);
+                vb.checkSpace(vbSize, true);
                 trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
                 
                 trianglesTwoColor.indexCount = (int)_clipper->getClippedTriangles().size();
@@ -486,12 +461,12 @@ namespace spine {
             texture = attachmentVertices->_texture;
             curTextureIndex = attachmentVertices->_texture->getNativeTexture()->getHandle();
             // If texture or blendMode change,will change material.
-            if (preTextureIndex != curTextureIndex || preBlendMode != slot->getData().getBlendMode() || isFull) {
+            if (preTextureIndex != curTextureIndex || preBlendMode != slot->getData().getBlendMode()) {
                 flush();
             }
             
             if (vbSize > 0 && ibSize > 0) {
-                auto vertexOffset = vb.getCurPos() / vbs2;
+                auto vertexOffset = curVSegLen / vs2;
                 
                 if (vertexOffset > 0) {
                     unsigned short* ibBuffer = (unsigned short*)ib.getCurBuffer();

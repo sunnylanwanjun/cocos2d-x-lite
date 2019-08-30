@@ -50,7 +50,6 @@ using namespace cocos2d::renderer;
 
 static const std::string techStage = "opaque";
 static const std::string textureKey = "texture";
-static const uint8_t moduleID = MiddlewareManager::generateModuleID();
 
 static Cocos2dTextureLoader textureLoader;
 
@@ -353,7 +352,7 @@ void SkeletonRenderer::render (float deltaTime) {
                 curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
         }
         
-		double curHash = curTextureIndex + (moduleID << 16) + (curBlendMode << 24) + ((int)_useTint << 25) + ((int)_batch << 27);
+		double curHash = curTextureIndex + (curBlendMode << 24) + ((int)_useTint << 25) + ((int)_batch << 27);
         Effect* renderEffect = assembler->getEffect(materialLen);
         Technique::Parameter* param = nullptr;
         Pass* pass = nullptr;
