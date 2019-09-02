@@ -51,8 +51,7 @@ public:
     }
     
     void removeSkeletonCache (std::string uuid);
-    void releaseSkeletonCache (std::string uuid);
-    SkeletonCache* retainSkeletonCache (std::string uuid);
+    SkeletonCache* buildSkeletonCache (std::string uuid);
 private:
     static SkeletonCacheMgr* _instance;
     cocos2d::Map<std::string, SkeletonCache*> _caches;

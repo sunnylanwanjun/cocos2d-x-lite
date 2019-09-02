@@ -14229,25 +14229,6 @@ bool js_register_cocos2dx_spine_SkeletonDataMgr(se::Object* obj)
 se::Object* __jsb_spine_SkeletonCacheMgr_proto = nullptr;
 se::Class* __jsb_spine_SkeletonCacheMgr_class = nullptr;
 
-static bool js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache(se::State& s)
-{
-    spine::SkeletonCacheMgr* cobj = (spine::SkeletonCacheMgr*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        std::string arg0;
-        ok &= seval_to_std_string(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache : Error processing arguments");
-        cobj->releaseSkeletonCache(arg0);
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache)
-
 static bool js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache(se::State& s)
 {
     spine::SkeletonCacheMgr* cobj = (spine::SkeletonCacheMgr*)s.nativeThisObject();
@@ -14267,26 +14248,26 @@ static bool js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache)
 
-static bool js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache(se::State& s)
+static bool js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache(se::State& s)
 {
     spine::SkeletonCacheMgr* cobj = (spine::SkeletonCacheMgr*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache : Invalid Native Object");
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 1) {
         std::string arg0;
         ok &= seval_to_std_string(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache : Error processing arguments");
-        spine::SkeletonCache* result = cobj->retainSkeletonCache(arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache : Error processing arguments");
+        spine::SkeletonCache* result = cobj->buildSkeletonCache(arg0);
         ok &= native_ptr_to_seval<spine::SkeletonCache>((spine::SkeletonCache*)result, &s.rval());
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache : Error processing arguments");
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache : Error processing arguments");
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache)
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache)
 
 static bool js_cocos2dx_spine_SkeletonCacheMgr_destroyInstance(se::State& s)
 {
@@ -14337,9 +14318,8 @@ bool js_register_cocos2dx_spine_SkeletonCacheMgr(se::Object* obj)
 {
     auto cls = se::Class::create("SkeletonCacheMgr", obj, nullptr, nullptr);
 
-    cls->defineFunction("releaseSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache));
     cls->defineFunction("removeSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache));
-    cls->defineFunction("retainSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache));
+    cls->defineFunction("retainSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache));
     cls->defineStaticFunction("destroyInstance", _SE(js_cocos2dx_spine_SkeletonCacheMgr_destroyInstance));
     cls->defineStaticFunction("getInstance", _SE(js_cocos2dx_spine_SkeletonCacheMgr_getInstance));
     cls->defineFinalizeFunction(_SE(js_spine_SkeletonCacheMgr_finalize));

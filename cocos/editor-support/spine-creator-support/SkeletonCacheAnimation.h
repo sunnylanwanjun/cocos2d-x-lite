@@ -104,7 +104,6 @@ namespace spine {
         bool                _batch = false;
         cocos2d::Color4F    _nodeColor = cocos2d::Color4F::WHITE;
         bool                _premultipliedAlpha = false;
-        std::string         _uuid = "";
         
         cocos2d::renderer::NodeProxy*   _nodeProxy = nullptr;
         cocos2d::renderer::Effect*      _effect = nullptr;

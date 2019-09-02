@@ -84,6 +84,9 @@
     <ClCompile Include="..\cocos\editor-support\particle\ParticleSimulator.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonAnimation.cpp" />
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonCache.cpp" />
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonCacheAnimation.cpp" />
+    <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonCacheMgr.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonDataMgr.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\SkeletonRenderer.cpp" />
     <ClCompile Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.cpp" />
@@ -376,6 +379,9 @@
     <ClInclude Include="..\cocos\editor-support\particle\ParticleSimulator.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\AttachmentVertices.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonAnimation.h" />
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonCache.h" />
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonCacheAnimation.h" />
+    <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonCacheMgr.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonDataMgr.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\SkeletonRenderer.h" />
     <ClInclude Include="..\cocos\editor-support\spine-creator-support\spine-cocos2dx.h" />
