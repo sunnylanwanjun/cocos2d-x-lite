@@ -2674,6 +2674,16 @@ int
 },
 
 /**
+ * @method getDragonBones
+ * @return {dragonBones::DragonBones}
+ */
+getDragonBones : function (
+)
+{
+    return dragonBones::DragonBones;
+},
+
+/**
  * @method parseDragonBonesDataByPath
  * @param {String} arg0
  * @param {String} arg1
@@ -2738,6 +2748,16 @@ int
 },
 
 /**
+ * @method getTimeScale
+ * @return {float}
+ */
+getTimeScale : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method isInit
  * @return {bool}
  */
@@ -2780,6 +2800,190 @@ getFactory : function (
  * @constructor
  */
 CCFactory : function (
+)
+{
+},
+
+};
+
+/**
+ * @class CCArmatureCacheDisplay
+ */
+dragonBones.CCArmatureCacheDisplay = {
+
+/**
+ * @method getAnimation
+ * @return {dragonBones::Animation}
+ */
+getAnimation : function (
+)
+{
+    return dragonBones::Animation;
+},
+
+/**
+ * @method setTimeScale
+ * @param {float} arg0
+ */
+setTimeScale : function (
+float 
+)
+{
+},
+
+/**
+ * @method onDisable
+ */
+onDisable : function (
+)
+{
+},
+
+/**
+ * @method bindNodeProxy
+ * @param {cc.renderer::NodeProxy} arg0
+ */
+bindNodeProxy : function (
+nodeproxy 
+)
+{
+},
+
+/**
+ * @method render
+ * @param {float} arg0
+ */
+render : function (
+float 
+)
+{
+},
+
+/**
+ * @method setBatchEnabled
+ * @param {bool} arg0
+ */
+setBatchEnabled : function (
+bool 
+)
+{
+},
+
+/**
+ * @method setEffect
+ * @param {cc.renderer::Effect} arg0
+ */
+setEffect : function (
+effect 
+)
+{
+},
+
+/**
+ * @method dispose
+ */
+dispose : function (
+)
+{
+},
+
+/**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
+ * @method getArmature
+ * @return {dragonBones::Armature}
+ */
+getArmature : function (
+)
+{
+    return dragonBones::Armature;
+},
+
+/**
+ * @method setOpacityModifyRGB
+ * @param {bool} arg0
+ */
+setOpacityModifyRGB : function (
+bool 
+)
+{
+},
+
+/**
+ * @method setDBEventCallback
+ * @param {function} arg0
+ */
+setDBEventCallback : function (
+func 
+)
+{
+},
+
+/**
+ * @method beginSchedule
+ */
+beginSchedule : function (
+)
+{
+},
+
+/**
+ * @method stopSchedule
+ */
+stopSchedule : function (
+)
+{
+},
+
+/**
+ * @method setColor
+ * @param {color4b_object} arg0
+ */
+setColor : function (
+color4b 
+)
+{
+},
+
+/**
+ * @method onEnable
+ */
+onEnable : function (
+)
+{
+},
+
+/**
+ * @method getTimeScale
+ * @return {float}
+ */
+getTimeScale : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method CCArmatureCacheDisplay
+ * @constructor
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @param {bool} arg3
+ */
+CCArmatureCacheDisplay : function (
+str, 
+str, 
+str, 
+bool 
 )
 {
 },

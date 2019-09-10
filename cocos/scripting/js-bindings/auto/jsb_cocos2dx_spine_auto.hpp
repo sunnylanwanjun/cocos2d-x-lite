@@ -949,9 +949,8 @@ extern se::Class* __jsb_spine_SkeletonCacheMgr_class;
 
 bool js_register_spine_SkeletonCacheMgr(se::Object* obj);
 bool register_all_cocos2dx_spine(se::Object* obj);
-SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_releaseSkeletonCache);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache);
-SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_retainSkeletonCache);
+SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_destroyInstance);
 SE_DECLARE_FUNC(js_cocos2dx_spine_SkeletonCacheMgr_getInstance);
 

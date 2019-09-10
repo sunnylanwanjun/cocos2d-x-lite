@@ -14319,7 +14319,7 @@ bool js_register_cocos2dx_spine_SkeletonCacheMgr(se::Object* obj)
     auto cls = se::Class::create("SkeletonCacheMgr", obj, nullptr, nullptr);
 
     cls->defineFunction("removeSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_removeSkeletonCache));
-    cls->defineFunction("retainSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache));
+    cls->defineFunction("buildSkeletonCache", _SE(js_cocos2dx_spine_SkeletonCacheMgr_buildSkeletonCache));
     cls->defineStaticFunction("destroyInstance", _SE(js_cocos2dx_spine_SkeletonCacheMgr_destroyInstance));
     cls->defineStaticFunction("getInstance", _SE(js_cocos2dx_spine_SkeletonCacheMgr_getInstance));
     cls->defineFinalizeFunction(_SE(js_spine_SkeletonCacheMgr_finalize));

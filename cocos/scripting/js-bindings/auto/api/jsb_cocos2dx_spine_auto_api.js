@@ -6793,16 +6793,6 @@ SkeletonDataMgr : function (
 spine.SkeletonCacheMgr = {
 
 /**
- * @method releaseSkeletonCache
- * @param {String} arg0
- */
-releaseSkeletonCache : function (
-str 
-)
-{
-},
-
-/**
  * @method removeSkeletonCache
  * @param {String} arg0
  */
@@ -6813,11 +6803,11 @@ str
 },
 
 /**
- * @method retainSkeletonCache
+ * @method buildSkeletonCache
  * @param {String} arg0
  * @return {sp.SkeletonCache}
  */
-retainSkeletonCache : function (
+buildSkeletonCache : function (
 str 
 )
 {
