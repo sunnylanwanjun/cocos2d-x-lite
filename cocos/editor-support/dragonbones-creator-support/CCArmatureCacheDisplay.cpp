@@ -382,4 +382,15 @@ Animation* CCArmatureCacheDisplay::getAnimation() const
 	return armature->getAnimation();
 }
 
+void CCArmatureCacheDisplay::playAnimation(const std::string& name, int playTimes)
+{
+	_playTimes = playTimes;
+	_animationName = name;
+	_animationData = _armatureCache->buildAnimationData(_animationName);
+	_isAniComplete = false;
+	_accTime = 0.0f;
+	_playCount = 0;
+	_curFrameIndex = 0;
+}
+
 DRAGONBONES_NAMESPACE_END

@@ -98,6 +98,8 @@ public:
 		_dbEventCallback = callback;
 	}
 
+	void playAnimation(const std::string& name, int playTimes);
+
 private:
 	float _timeScale = 1;
 	int	_curFrameIndex = -1;

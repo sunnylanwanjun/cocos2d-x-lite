@@ -7616,7 +7616,7 @@ bool js_register_cocos2dx_dragonbones_CCArmatureCacheDisplay(se::Object* obj)
     cls->defineFunction("setEffect", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setEffect));
     cls->defineFunction("dispose", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_dispose));
     cls->defineFunction("update", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_update));
-    cls->defineFunction("getArmature", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getArmature));
+    cls->defineFunction("armature", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getArmature));
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setOpacityModifyRGB));
     cls->defineFunction("setDBEventCallback", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setDBEventCallback));
     cls->defineFunction("beginSchedule", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_beginSchedule));
