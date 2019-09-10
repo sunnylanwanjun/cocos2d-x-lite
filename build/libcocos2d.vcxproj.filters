@@ -827,6 +827,12 @@
     <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCacheMgr.cpp">
       <Filter>editor-support\dragonbones-creator-support</Filter>
     </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCache.cpp">
+      <Filter>editor-support\dragonbones-creator-support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureCacheDisplay.cpp">
+      <Filter>editor-support\dragonbones-creator-support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cocos\base\base64.h">
@@ -1860,6 +1866,9 @@
       <Filter>editor-support\dragonbones-creator-support</Filter>
     </ClInclude>
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCache.h">
+      <Filter>editor-support\dragonbones-creator-support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureCacheDisplay.h">
       <Filter>editor-support\dragonbones-creator-support</Filter>
     </ClInclude>
   </ItemGroup>

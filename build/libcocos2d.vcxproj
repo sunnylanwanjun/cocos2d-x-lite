@@ -41,7 +41,9 @@
     <ClCompile Include="..\cocos\base\TGAlib.cpp" />
     <ClCompile Include="..\cocos\base\ZipUtils.cpp" />
     <ClCompile Include="..\cocos\cocos2d.cpp" />
+    <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCache.cpp" />
     <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCacheMgr.cpp" />
+    <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureCacheDisplay.cpp" />
     <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureDisplay.cpp" />
     <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\CCFactory.cpp" />
     <ClCompile Include="..\cocos\editor-support\dragonbones-creator-support\CCSlot.cpp" />
@@ -330,6 +332,7 @@
     <ClInclude Include="..\cocos\cocos2d.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCache.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\ArmatureCacheMgr.h" />
+    <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureCacheDisplay.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\CCArmatureDisplay.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\CCDragonBonesHeaders.h" />
     <ClInclude Include="..\cocos\editor-support\dragonbones-creator-support\CCFactory.h" />

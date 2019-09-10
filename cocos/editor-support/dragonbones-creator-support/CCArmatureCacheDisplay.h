@@ -28,6 +28,7 @@
 #include "renderer/scene/NodeProxy.hpp"
 #include "renderer/scene/assembler/CustomAssembler.hpp"
 #include "CCArmatureDisplay.h"
+#include "ArmatureCache.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 class CCArmatureCacheDisplay : public cocos2d::middleware::IMiddleware, public cocos2d::Ref
