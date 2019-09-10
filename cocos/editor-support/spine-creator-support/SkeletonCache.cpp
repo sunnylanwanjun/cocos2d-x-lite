@@ -228,6 +228,7 @@ namespace spine {
         
         Color4F preColor(-1.0f, -1.0f, -1.0f, -1.0f);
         Color4F preDarkColor(-1.0f, -1.0f, -1.0f, -1.0f);
+		// range [0.0, 1.0]
         Color4F color;
         Color4F darkColor;
         
@@ -394,7 +395,7 @@ namespace spine {
             }
             darkColor.a = 0;
             
-            if(preColor != color || preDarkColor != darkColor) {
+            if (preColor != color || preDarkColor != darkColor) {
                 preColor = color;
                 preDarkColor = darkColor;
                 auto colorCount = frameData->getColorCount();

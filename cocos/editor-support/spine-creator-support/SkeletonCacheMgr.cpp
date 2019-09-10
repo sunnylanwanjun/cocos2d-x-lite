@@ -31,7 +31,7 @@
 
 namespace spine {
     SkeletonCacheMgr* SkeletonCacheMgr::_instance = nullptr;
-    SkeletonCache* SkeletonCacheMgr::buildSkeletonCache(std::string uuid) {
+    SkeletonCache* SkeletonCacheMgr::buildSkeletonCache(const std::string& uuid) {
         SkeletonCache* animation = _caches.at(uuid);
         if (!animation) {
             animation = new SkeletonCache();
@@ -42,7 +42,7 @@ namespace spine {
         return animation;
     }
     
-    void SkeletonCacheMgr::removeSkeletonCache (std::string uuid) {
+    void SkeletonCacheMgr::removeSkeletonCache (const std::string& uuid) {
         auto it = _caches.find(uuid);
         if (it != _caches.end()) {
             _caches.erase(it);

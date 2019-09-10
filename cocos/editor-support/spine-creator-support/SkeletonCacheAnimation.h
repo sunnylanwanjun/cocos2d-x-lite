@@ -96,38 +96,36 @@ namespace spine {
         void setCompleteListener (const CacheFrameEvent& listener);
         
     private:
-        Skeleton*           _skeleton = nullptr;
-        float               _timeScale = 1;
-        bool                _paused = false;
-        bool                _isShare = true;
+        float _timeScale = 1;
+        bool _paused = false;
         
-        bool                _batch = false;
-        cocos2d::Color4F    _nodeColor = cocos2d::Color4F::WHITE;
-        bool                _premultipliedAlpha = false;
+        bool _batch = false;
+        cocos2d::Color4F _nodeColor = cocos2d::Color4F::WHITE;
+        bool _premultipliedAlpha = false;
         
-        cocos2d::renderer::NodeProxy*   _nodeProxy = nullptr;
-        cocos2d::renderer::Effect*      _effect = nullptr;
+        cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
+        cocos2d::renderer::Effect* _effect = nullptr;
         
-        CacheFrameEvent _startListener = nullptr;
+        CacheFrameEvent	_startListener = nullptr;
         CacheFrameEvent _endListener = nullptr;
         CacheFrameEvent _completeListener = nullptr;
         
-        SkeletonCache*  _skeletonCache = nullptr;
+        SkeletonCache* _skeletonCache = nullptr;
         SkeletonCache::AnimationData* _animationData = nullptr;
         int _curFrameIndex = -1;
         
-        float           _accTime = 0.0f;
-        int             _playCount = 0;
-        int             _playTimes = 0;
-        bool            _isAniComplete = true;
-        std::string     _animationName = "";
+        float _accTime = 0.0f;
+        int _playCount = 0;
+        int _playTimes = 0;
+        bool _isAniComplete = true;
+        std::string _animationName = "";
         
         struct AniQueueData {
             std::string animationName = "";
             bool loop = false;
             float delay = 0.0f;
         };
-        std::queue<AniQueueData*>    _animationQueue;
-        AniQueueData*                _headAnimation = nullptr;
+        std::queue<AniQueueData*> _animationQueue;
+        AniQueueData* _headAnimation = nullptr;
     };
 }

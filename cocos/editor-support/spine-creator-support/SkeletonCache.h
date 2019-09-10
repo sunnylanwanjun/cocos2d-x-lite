@@ -31,7 +31,6 @@
 
 #include "SkeletonAnimation.h"
 #include "IOBuffer.h"
-#include "base/CCVector.h"
 #include "middleware-adapter.h"
 #include <vector>
 

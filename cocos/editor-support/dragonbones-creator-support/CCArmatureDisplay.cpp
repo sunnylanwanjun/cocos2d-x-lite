@@ -141,7 +141,7 @@ void CCArmatureDisplay::dbRender()
         auto& bones = _armature->getBones();
         std::size_t count = bones.size();
         
-       _debugBuffer->writeFloat32(count*4);
+       _debugBuffer->writeFloat32(count * 4);
         for (int i = 0; i < count; i++)
         {
             Bone* bone = (Bone*)bones[i];
@@ -216,6 +216,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
     IOBuffer& ib = mb->getIB();
 	float realOpacity = _nodeProxy->getRealOpacity() / 255.0f;
     
+	// range [0.0, 255.0]
 	float r, g, b, a;
     CCSlot* slot = nullptr;
 	middleware::Texture2D* texture = nullptr;
@@ -415,12 +416,6 @@ void CCArmatureDisplay::addDBEventListener(const std::string& type, const std::f
 
 void CCArmatureDisplay::dispatchDBEvent(const std::string& type, EventObject* value)
 {
-    auto it = _listenerIDMap.find(type);
-    if (it == _listenerIDMap.end())
-    {
-        return;
-    }
-    
     if (_dbEventCallback)
     {
         _dbEventCallback(value);

@@ -280,6 +280,7 @@ void SkeletonRenderer::render (float deltaTime) {
         return;
     }
 	
+	// color range is [0.0, 1.0]
     Color4F color;
     Color4F darkColor;
     AttachmentVertices* attachmentVertices = nullptr;

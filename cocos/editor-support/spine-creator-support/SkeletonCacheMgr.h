@@ -28,7 +28,6 @@
  *****************************************************************************/
 
 #pragma once
-#include "renderer/scene/assembler/CustomAssembler.hpp"
 #include "SkeletonCache.h"
 #include "base/CCMap.h"
 
@@ -50,8 +49,8 @@ public:
         }
     }
     
-    void removeSkeletonCache (std::string uuid);
-    SkeletonCache* buildSkeletonCache (std::string uuid);
+    void removeSkeletonCache (const std::string& uuid);
+    SkeletonCache* buildSkeletonCache (const std::string& uuid);
 private:
     static SkeletonCacheMgr* _instance;
     cocos2d::Map<std::string, SkeletonCache*> _caches;

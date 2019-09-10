@@ -43,8 +43,7 @@ static const std::string textureKey = "texture";
 
 namespace spine {
     
-    SkeletonCacheAnimation::SkeletonCacheAnimation (const std::string& uuid, bool isShare)
-    :_isShare(isShare) {
+    SkeletonCacheAnimation::SkeletonCacheAnimation (const std::string& uuid, bool isShare) {
         if (isShare) {
             _skeletonCache = SkeletonCacheMgr::getInstance()->buildSkeletonCache(uuid);
 			_skeletonCache->retain();
