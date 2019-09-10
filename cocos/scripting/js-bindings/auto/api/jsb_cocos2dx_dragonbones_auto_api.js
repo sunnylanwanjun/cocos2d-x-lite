@@ -2860,13 +2860,23 @@ float
 },
 
 /**
- * @method setBatchEnabled
- * @param {bool} arg0
+ * @method setDBEventCallback
+ * @param {function} arg0
  */
-setBatchEnabled : function (
-bool 
+setDBEventCallback : function (
+func 
 )
 {
+},
+
+/**
+ * @method getArmature
+ * @return {dragonBones::Armature}
+ */
+getArmature : function (
+)
+{
+    return dragonBones::Armature;
 },
 
 /**
@@ -2898,13 +2908,15 @@ float
 },
 
 /**
- * @method getArmature
- * @return {dragonBones::Armature}
+ * @method playAnimation
+ * @param {String} arg0
+ * @param {int} arg1
  */
-getArmature : function (
+playAnimation : function (
+str, 
+int 
 )
 {
-    return dragonBones::Armature;
 },
 
 /**
@@ -2918,11 +2930,11 @@ bool
 },
 
 /**
- * @method setDBEventCallback
- * @param {function} arg0
+ * @method setBatchEnabled
+ * @param {bool} arg0
  */
-setDBEventCallback : function (
-func 
+setBatchEnabled : function (
+bool 
 )
 {
 },
