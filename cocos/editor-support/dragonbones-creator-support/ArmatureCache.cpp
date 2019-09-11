@@ -244,11 +244,11 @@ void ArmatureCache::updateToFrame(const std::string& animationName, int toFrameI
 	}
 
 	auto armature = _armatureDisplay->getArmature();
+	auto animation = armature->getAnimation();
 
 	// init animation
 	if (animationData->getFrameCount() == 0) 
-	{
-		auto animation = armature->getAnimation();
+	{	
 		animation->play(animationName, 1);
 	}
 
@@ -256,6 +256,10 @@ void ArmatureCache::updateToFrame(const std::string& animationName, int toFrameI
 		armature->advanceTime(FrameTime);
 		renderAnimationFrame(animationData);
 		animationData->_totalTime += FrameTime;
+		if (animation->isCompleted()) 
+		{
+			animationData->_isComplete = true;
+		}
 	} while (animationData->needUpdate(toFrameIdx));
 }
 

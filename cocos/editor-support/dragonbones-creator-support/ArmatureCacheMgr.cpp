@@ -38,12 +38,19 @@ ArmatureCache* ArmatureCacheMgr::buildArmatureCache(const std::string& armatureN
 	return animation;
 }
 
-void ArmatureCacheMgr::removeArmatureCache(const std::string& armatureKey)
+void ArmatureCacheMgr::removeArmatureCache(const std::string& uuid)
 {
-	auto it = _caches.find(armatureKey);
-	if (it != _caches.end()) 
+	for (auto it = _caches.begin(); it != _caches.end();) 
 	{
-		_caches.erase(it);
+		auto found = it->first.find(uuid);
+		if (found != std::string::npos)
+		{
+			it = _caches.erase(it);
+		}
+		else
+		{
+			it++;
+		}
 	}
 }
 

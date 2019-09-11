@@ -70,8 +70,7 @@ void CCArmatureCacheDisplay::dispose()
 	}
 	if (_eventObject)
 	{
-		auto dragonbones = CCFactory::getFactory()->getDragonBones();
-		dragonbones->bufferEvent(_eventObject);
+		_eventObject->returnToPool();
 		_eventObject = nullptr;
 	}
 	CC_SAFE_RELEASE_NULL(_nodeProxy);
