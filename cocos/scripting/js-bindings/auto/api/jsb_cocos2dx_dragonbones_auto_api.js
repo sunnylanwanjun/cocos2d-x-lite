@@ -2812,39 +2812,11 @@ CCFactory : function (
 dragonBones.CCArmatureCacheDisplay = {
 
 /**
- * @method getAnimation
- * @return {dragonBones::Animation}
- */
-getAnimation : function (
-)
-{
-    return dragonBones::Animation;
-},
-
-/**
  * @method setTimeScale
  * @param {float} arg0
  */
 setTimeScale : function (
 float 
-)
-{
-},
-
-/**
- * @method onDisable
- */
-onDisable : function (
-)
-{
-},
-
-/**
- * @method bindNodeProxy
- * @param {cc.renderer::NodeProxy} arg0
- */
-bindNodeProxy : function (
-nodeproxy 
 )
 {
 },
@@ -2860,23 +2832,31 @@ float
 },
 
 /**
- * @method setDBEventCallback
- * @param {function} arg0
+ * @method addDBEventListener
+ * @param {String} arg0
  */
-setDBEventCallback : function (
-func 
+addDBEventListener : function (
+str 
 )
 {
 },
 
 /**
- * @method getArmature
- * @return {dragonBones::Armature}
+ * @method removeDBEventListener
+ * @param {String} arg0
  */
-getArmature : function (
+removeDBEventListener : function (
+str 
 )
 {
-    return dragonBones::Armature;
+},
+
+/**
+ * @method onEnable
+ */
+onEnable : function (
+)
+{
 },
 
 /**
@@ -2893,6 +2873,36 @@ effect
  * @method dispose
  */
 dispose : function (
+)
+{
+},
+
+/**
+ * @method setOpacityModifyRGB
+ * @param {bool} arg0
+ */
+setOpacityModifyRGB : function (
+bool 
+)
+{
+},
+
+/**
+ * @method dispatchDBEvent
+ * @param {String} arg0
+ * @param {dragonBones::EventObject} arg1
+ */
+dispatchDBEvent : function (
+str, 
+eventobject 
+)
+{
+},
+
+/**
+ * @method beginSchedule
+ */
+beginSchedule : function (
 )
 {
 },
@@ -2920,37 +2930,39 @@ int
 },
 
 /**
- * @method setOpacityModifyRGB
- * @param {bool} arg0
+ * @method setDBEventCallback
+ * @param {function} arg0
  */
-setOpacityModifyRGB : function (
-bool 
+setDBEventCallback : function (
+func 
 )
 {
 },
 
 /**
- * @method setBatchEnabled
- * @param {bool} arg0
+ * @method getTimeScale
+ * @return {float}
  */
-setBatchEnabled : function (
-bool 
+getTimeScale : function (
 )
 {
+    return 0;
 },
 
 /**
- * @method beginSchedule
+ * @method getAnimation
+ * @return {dragonBones::Animation}
  */
-beginSchedule : function (
+getAnimation : function (
 )
 {
+    return dragonBones::Animation;
 },
 
 /**
- * @method stopSchedule
+ * @method onDisable
  */
-stopSchedule : function (
+onDisable : function (
 )
 {
 },
@@ -2966,21 +2978,41 @@ color4b
 },
 
 /**
- * @method onEnable
+ * @method bindNodeProxy
+ * @param {cc.renderer::NodeProxy} arg0
  */
-onEnable : function (
+bindNodeProxy : function (
+nodeproxy 
 )
 {
 },
 
 /**
- * @method getTimeScale
- * @return {float}
+ * @method setBatchEnabled
+ * @param {bool} arg0
  */
-getTimeScale : function (
+setBatchEnabled : function (
+bool 
 )
 {
-    return 0;
+},
+
+/**
+ * @method getArmature
+ * @return {dragonBones::Armature}
+ */
+getArmature : function (
+)
+{
+    return dragonBones::Armature;
+},
+
+/**
+ * @method stopSchedule
+ */
+stopSchedule : function (
+)
+{
 },
 
 /**
