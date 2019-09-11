@@ -2807,6 +2807,57 @@ CCFactory : function (
 };
 
 /**
+ * @class ArmatureCacheMgr
+ */
+dragonBones.ArmatureCacheMgr = {
+
+/**
+ * @method removeArmatureCache
+ * @param {String} arg0
+ */
+removeArmatureCache : function (
+str 
+)
+{
+},
+
+/**
+ * @method buildArmatureCache
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @return {dragonBones::ArmatureCache}
+ */
+buildArmatureCache : function (
+str, 
+str, 
+str 
+)
+{
+    return dragonBones::ArmatureCache;
+},
+
+/**
+ * @method destroyInstance
+ */
+destroyInstance : function (
+)
+{
+},
+
+/**
+ * @method getInstance
+ * @return {dragonBones::ArmatureCacheMgr}
+ */
+getInstance : function (
+)
+{
+    return dragonBones::ArmatureCacheMgr;
+},
+
+};
+
+/**
  * @class CCArmatureCacheDisplay
  */
 dragonBones.CCArmatureCacheDisplay = {

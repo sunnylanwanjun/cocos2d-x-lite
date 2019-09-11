@@ -397,6 +397,16 @@ SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getClock);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_getFactory);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCFactory_CCFactory);
 
+extern se::Object* __jsb_dragonBones_ArmatureCacheMgr_proto;
+extern se::Class* __jsb_dragonBones_ArmatureCacheMgr_class;
+
+bool js_register_dragonBones_ArmatureCacheMgr(se::Object* obj);
+bool register_all_cocos2dx_dragonbones(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_ArmatureCacheMgr_removeArmatureCache);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_ArmatureCacheMgr_buildArmatureCache);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_ArmatureCacheMgr_destroyInstance);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_ArmatureCacheMgr_getInstance);
+
 extern se::Object* __jsb_dragonBones_CCArmatureCacheDisplay_proto;
 extern se::Class* __jsb_dragonBones_CCArmatureCacheDisplay_class;
 
