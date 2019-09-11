@@ -83,12 +83,10 @@ void CCArmatureCacheDisplay::update(float dt)
 	auto gTimeScale = dragonBones::CCFactory::getFactory()->getTimeScale();
 	dt *= _timeScale * gTimeScale;
 
-	if (_isAniComplete) 
+	if (_isAniComplete || !_animationData)
 	{
 		return;
 	}
-
-	if (!_animationData) return;
 
 	if (_accTime <= 0.00001 && _playCount == 0) 
 	{
@@ -184,12 +182,11 @@ void CCArmatureCacheDisplay::render(float dt)
 	BlendFactor curBlendSrc = BlendFactor::ONE;
 	BlendFactor curBlendDst = BlendFactor::ZERO;
 
-	if (_nodeColor.r - 1.0f > 0.0001f ||
-		_nodeColor.g - 1.0f > 0.0001f ||
-		_nodeColor.b - 1.0f > 0.0001f ||
-		_nodeColor.a - 1.0f > 0.0001f ||
-		_premultipliedAlpha) 
-	{
+	if (abs(_nodeColor.r - 1.0f) > 0.0001f ||
+		abs(_nodeColor.g - 1.0f) > 0.0001f ||
+		abs(_nodeColor.b - 1.0f) > 0.0001f ||
+		abs(_nodeColor.a - 1.0f) > 0.0001f ||
+		_premultipliedAlpha) {
 		needColor = true;
 	}
 
