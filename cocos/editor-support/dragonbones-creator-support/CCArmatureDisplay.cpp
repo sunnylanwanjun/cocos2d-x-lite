@@ -416,6 +416,12 @@ void CCArmatureDisplay::addDBEventListener(const std::string& type, const std::f
 
 void CCArmatureDisplay::dispatchDBEvent(const std::string& type, EventObject* value)
 {
+	auto it = _listenerIDMap.find(type);
+	if (it == _listenerIDMap.end())
+	{
+		return;
+	}
+
     if (_dbEventCallback)
     {
         _dbEventCallback(value);

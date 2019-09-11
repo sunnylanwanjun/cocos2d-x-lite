@@ -32,6 +32,9 @@ USING_NS_MW;
 using namespace cocos2d::renderer;
 static const std::string techStage = "opaque";
 static const std::string textureKey = "texture";
+static const std::string startEvent = "start";
+static const std::string loopCompleteEvent = "loopComplete";
+static const std::string completeEvent = "complete";
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -91,10 +94,7 @@ void CCArmatureCacheDisplay::update(float dt)
 	if (_accTime <= 0.00001 && _playCount == 0) 
 	{
 		_eventObject->type = EventObject::START;
-		if (_dbEventCallback)
-		{
-			_dbEventCallback(_eventObject);
-		}
+		dispatchDBEvent(startEvent, _eventObject);
 	}
 
 	_accTime += dt;
@@ -121,16 +121,10 @@ void CCArmatureCacheDisplay::update(float dt)
 		}
 
 		_eventObject->type = EventObject::COMPLETE;
-		if (_dbEventCallback)
-		{
-			_dbEventCallback(_eventObject);
-		}
+		dispatchDBEvent(completeEvent, _eventObject);
 
 		_eventObject->type = EventObject::LOOP_COMPLETE;
-		if (_dbEventCallback)
-		{
-			_dbEventCallback(_eventObject);
-		}
+		dispatchDBEvent(loopCompleteEvent, _eventObject);
 	}
 	_curFrameIndex = frameIdx;
 }
@@ -391,6 +385,34 @@ void CCArmatureCacheDisplay::playAnimation(const std::string& name, int playTime
 	_accTime = 0.0f;
 	_playCount = 0;
 	_curFrameIndex = 0;
+}
+
+void CCArmatureCacheDisplay::addDBEventListener(const std::string& type)
+{
+	_listenerIDMap[type] = true;
+}
+
+void CCArmatureCacheDisplay::removeDBEventListener(const std::string& type)
+{
+	auto it = _listenerIDMap.find(type);
+	if (it != _listenerIDMap.end())
+	{
+		_listenerIDMap.erase(it);
+	}
+}
+
+void CCArmatureCacheDisplay::dispatchDBEvent(const std::string& type, EventObject* value)
+{
+	auto it = _listenerIDMap.find(type);
+	if (it == _listenerIDMap.end())
+	{
+		return;
+	}
+
+	if (_dbEventCallback)
+	{
+		_dbEventCallback(value);
+	}
 }
 
 DRAGONBONES_NAMESPACE_END

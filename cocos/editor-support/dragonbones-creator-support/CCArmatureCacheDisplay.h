@@ -97,6 +97,9 @@ public:
 	{
 		_dbEventCallback = callback;
 	}
+	void addDBEventListener(const std::string& type);
+	void removeDBEventListener(const std::string& type);
+	void dispatchDBEvent(const std::string& type, EventObject* value);
 
 	void playAnimation(const std::string& name, int playTimes);
 
