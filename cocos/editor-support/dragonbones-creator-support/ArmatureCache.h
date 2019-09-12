@@ -39,16 +39,16 @@ public:
 		void setTexture(cocos2d::middleware::Texture2D* value);
 		cocos2d::middleware::Texture2D* getTexture() const;
 	public:
-		int indexCount = 0;
-		int vertexFloatCount = 0;
 		int blendMode = 0;
+        std::size_t indexCount = 0;
+        std::size_t vertexFloatCount = 0;
 	private:
 		cocos2d::middleware::Texture2D* _texture = nullptr;
 	};
 
 	struct ColorData {
 		cocos2d::Color4F color;
-		int vertexFloatOffset = 0;
+        std::size_t vertexFloatOffset = 0;
 	};
 
 	struct FrameData {

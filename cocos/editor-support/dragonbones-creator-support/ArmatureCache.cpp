@@ -311,9 +311,11 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 	Color4F color;
 	middleware::Texture2D* texture = nullptr;
 
-	auto flush = [&]() {
+	auto flush = [&]()
+    {
 		// fill pre segment count field
-		if (_preISegWritePos != -1) {
+		if (_preISegWritePos != -1)
+        {
 			SegmentData* preSegmentData = _frameData->buildSegmentData(_materialLen - 1);
 			preSegmentData->indexCount = _curISegLen;
 			preSegmentData->vertexFloatCount = _curVSegLen;
@@ -378,7 +380,7 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 			auto colorCount = _frameData->getColorCount();
 			if (colorCount > 0) {
 				ColorData* preColorData = _frameData->buildColorData(colorCount - 1);
-				preColorData->vertexFloatOffset = (int)vb.getCurPos() / sizeof(float);
+				preColorData->vertexFloatOffset = vb.getCurPos() / sizeof(float);
 			}
 			ColorData* colorData = _frameData->buildColorData(colorCount);
 			colorData->color = color;
@@ -413,7 +415,6 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
             ib.writeUint16(triangles.indices[ii] + vertexOffset);
         }
 
-		// Record this turn index segmentation count,it will store in material buffer in the end.
 		_curISegLen += triangles.indexCount;
 		_curVSegLen += vbSize / sizeof(float);
 	} // End slot traverse

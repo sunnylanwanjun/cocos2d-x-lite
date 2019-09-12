@@ -171,14 +171,14 @@ void CCArmatureCacheDisplay::render(float dt)
 	Color4B color;
 	float tempR = 0.0f, tempG = 0.0f, tempB = 0.0f;
 	float multiplier = 1.0f;
-	int srcVertexBytesOffset = 0;
-	int vertexBytes = 0;
-	int srcIndexBytesOffset = 0;
-	int indexBytes = 0;
+    std::size_t srcVertexBytesOffset = 0;
+    std::size_t srcIndexBytesOffset = 0;
+    std::size_t vertexBytes = 0;
+	std::size_t indexBytes = 0;
 	GLuint textureHandle = 0;
 	double effectHash = 0;
 	BlendMode blendMode = BlendMode::Normal;
-	int dstVertexOffset = 0;
+    std::size_t dstVertexOffset = 0;
 	float* dstVertexBuffer = nullptr;
 	unsigned int* dstColorBuffer = nullptr;
 	unsigned short* dstIndexBuffer = nullptr;
@@ -216,7 +216,7 @@ void CCArmatureCacheDisplay::render(float dt)
 
 		// fill vertex buffer
 		vb.checkSpace(vertexBytes, true);
-		dstVertexOffset = (int)vb.getCurPos() / sizeof(V2F_T2F_C4B);
+		dstVertexOffset = vb.getCurPos() / sizeof(V2F_T2F_C4B);
 		dstVertexBuffer = (float*)vb.getCurBuffer();
 		dstColorBuffer = (unsigned int*)vb.getCurBuffer();
 		vb.writeBytes((char*)srcVB.getBuffer() + srcVertexBytesOffset, vertexBytes);
@@ -239,7 +239,7 @@ void CCArmatureCacheDisplay::render(float dt)
 		// handle vertex color
 		if (needColor) 
 		{
-			int frameFloatOffset = srcVertexBytesOffset / sizeof(float);
+			auto frameFloatOffset = srcVertexBytesOffset / sizeof(float);
 			for (auto colorIndex = 0; colorIndex < segment->vertexFloatCount; colorIndex += 5)
 			{
 				if (frameFloatOffset >= maxVFOffset) 
@@ -258,7 +258,7 @@ void CCArmatureCacheDisplay::render(float dt)
 		// fill index buffer
 		indexBytes = segment->indexCount * sizeof(unsigned short);
 		ib.checkSpace(indexBytes, true);
-		assembler->updateIARange(segIndex, (int)ib.getCurPos() / sizeof(unsigned short), segment->indexCount);
+		assembler->updateIARange(segIndex, (int)ib.getCurPos() / sizeof(unsigned short), (int)segment->indexCount);
 		dstIndexBuffer = (unsigned short*)ib.getCurBuffer();
 		ib.writeBytes((char*)srcIB.getBuffer() + srcIndexBytesOffset, indexBytes);
 		for (auto indexPos = 0; indexPos < segment->indexCount; indexPos++) 
@@ -416,11 +416,13 @@ void CCArmatureCacheDisplay::dispatchDBEvent(const std::string& type, EventObjec
 	}
 }
 
-void CCArmatureCacheDisplay::updateAnimationCache (const std::string& animationName) {
+void CCArmatureCacheDisplay::updateAnimationCache (const std::string& animationName)
+{
     _armatureCache->resetAnimationData(animationName);
 }
 
-void CCArmatureCacheDisplay::updateAllAnimationCache () {
+void CCArmatureCacheDisplay::updateAllAnimationCache ()
+{
     _armatureCache->resetAllAnimationData();
 }
 

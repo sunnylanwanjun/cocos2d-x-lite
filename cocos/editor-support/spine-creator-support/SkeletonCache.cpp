@@ -471,8 +471,7 @@ namespace spine {
                 
                 if (vertexOffset > 0) {
                     unsigned short* ibBuffer = (unsigned short*)ib.getCurBuffer();
-                    for (int ii = 0, nn = ibSize / sizeof(unsigned short); ii < nn; ii++)
-                    {
+                    for (int ii = 0, nn = ibSize / sizeof(unsigned short); ii < nn; ii++) {
                         ibBuffer[ii] += vertexOffset;
                     }
                 }
