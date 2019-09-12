@@ -7532,6 +7532,21 @@ static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_beginSchedule(se::Sta
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_beginSchedule)
 
+static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAllAnimationCache(se::State& s)
+{
+    dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAllAnimationCache : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->updateAllAnimationCache();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAllAnimationCache)
+
 static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_update(se::State& s)
 {
     dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
@@ -7619,6 +7634,25 @@ static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setDBEventCallback(se
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setDBEventCallback)
+
+static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAnimationCache(se::State& s)
+{
+    dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAnimationCache : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        std::string arg0;
+        ok &= seval_to_std_string(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAnimationCache : Error processing arguments");
+        cobj->updateAnimationCache(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAnimationCache)
 
 static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getTimeScale(se::State& s)
 {
@@ -7808,9 +7842,11 @@ bool js_register_cocos2dx_dragonbones_CCArmatureCacheDisplay(se::Object* obj)
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setOpacityModifyRGB));
     cls->defineFunction("dispatchDBEvent", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_dispatchDBEvent));
     cls->defineFunction("beginSchedule", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_beginSchedule));
+    cls->defineFunction("updateAllAnimationCache", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAllAnimationCache));
     cls->defineFunction("update", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_update));
     cls->defineFunction("playAnimation", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_playAnimation));
     cls->defineFunction("setDBEventCallback", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setDBEventCallback));
+    cls->defineFunction("updateAnimationCache", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_updateAnimationCache));
     cls->defineFunction("getTimeScale", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getTimeScale));
     cls->defineFunction("getAnimation", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getAnimation));
     cls->defineFunction("onDisable", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_onDisable));

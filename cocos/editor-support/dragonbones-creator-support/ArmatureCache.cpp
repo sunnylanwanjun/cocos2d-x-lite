@@ -248,7 +248,8 @@ void ArmatureCache::updateToFrame(const std::string& animationName, int toFrameI
 
 	// init animation
 	if (animationData->getFrameCount() == 0) 
-	{	
+	{
+        // animation->reset();
 		animation->play(animationName, 1);
 	}
 
@@ -303,9 +304,6 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 {
 	middleware::IOBuffer& vb = _frameData->vb;
 	middleware::IOBuffer& ib = _frameData->ib;
-
-	int vbSize = 0;
-	int ibSize = 0;
 
 	auto& slots = armature->getSlots();
 	CCSlot* slot = nullptr;
@@ -431,9 +429,21 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 
 void ArmatureCache::resetAllAnimationData() 
 {
-	for (auto it = _animationCaches.begin(); it != _animationCaches.end(); it++) {
+	for (auto it = _animationCaches.begin(); it != _animationCaches.end(); it++)
+    {
 		it->second->reset();
 	}
+}
+
+void ArmatureCache::resetAnimationData(const std::string& animationName) {
+    for (auto it = _animationCaches.begin(); it != _animationCaches.end(); it++)
+    {
+        if (it->second->_animationName == animationName)
+        {
+            it->second->reset();
+            break;
+        }
+    }
 }
 
 CCArmatureDisplay* ArmatureCache::getArmatureDisplay()

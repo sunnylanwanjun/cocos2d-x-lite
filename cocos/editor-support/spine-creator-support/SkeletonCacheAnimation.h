@@ -94,7 +94,8 @@ namespace spine {
         void setStartListener (const CacheFrameEvent& listener);
         void setEndListener (const CacheFrameEvent& listener);
         void setCompleteListener (const CacheFrameEvent& listener);
-        
+        void updateAnimationCache (const std::string& animationName);
+        void updateAllAnimationCache ();
     private:
         float _timeScale = 1;
         bool _paused = false;

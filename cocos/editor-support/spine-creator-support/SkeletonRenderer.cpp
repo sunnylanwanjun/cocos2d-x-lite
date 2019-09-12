@@ -353,7 +353,7 @@ void SkeletonRenderer::render (float deltaTime) {
                 curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
         }
         
-		double curHash = curTextureIndex + (curBlendMode << 24) + ((int)_useTint << 25) + ((int)_batch << 27);
+		double curHash = curTextureIndex + (curBlendMode << 16) + ((int)_useTint << 24) + ((int)_batch << 25);
         Effect* renderEffect = assembler->getEffect(materialLen);
         Technique::Parameter* param = nullptr;
         Pass* pass = nullptr;

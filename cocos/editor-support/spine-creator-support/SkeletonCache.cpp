@@ -521,4 +521,13 @@ namespace spine {
             it->second->reset();
         }
     }
+    
+    void SkeletonCache::resetAnimationData(const std::string& animationName) {
+        for (auto it = _animationCaches.begin(); it != _animationCaches.end(); it++) {
+            if (it->second->_animationName == animationName) {
+                it->second->reset();
+                break;
+            }
+        }
+    }
 }

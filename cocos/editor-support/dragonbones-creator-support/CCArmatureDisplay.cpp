@@ -251,7 +251,7 @@ void CCArmatureDisplay::traverseArmature(Armature* armature, float parentOpacity
                 break;
         }
         
-        double curHash = _curTextureIndex + ((uint8_t)slot->_blendMode << 24);
+        double curHash = _curTextureIndex + ((uint8_t)slot->_blendMode << 16) + ((uint8_t)_batch << 24);
         
         Effect* renderEffect = _assembler->getEffect(_materialLen);
         Technique::Parameter* param = nullptr;

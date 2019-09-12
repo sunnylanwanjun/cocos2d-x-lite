@@ -14688,6 +14688,21 @@ static bool js_cocos2dx_spine_SkeletonCacheAnimation_beginSchedule(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheAnimation_beginSchedule)
 
+static bool js_cocos2dx_spine_SkeletonCacheAnimation_updateAllAnimationCache(se::State& s)
+{
+    spine::SkeletonCacheAnimation* cobj = (spine::SkeletonCacheAnimation*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonCacheAnimation_updateAllAnimationCache : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->updateAllAnimationCache();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheAnimation_updateAllAnimationCache)
+
 static bool js_cocos2dx_spine_SkeletonCacheAnimation_addAnimation(se::State& s)
 {
     spine::SkeletonCacheAnimation* cobj = (spine::SkeletonCacheAnimation*)s.nativeThisObject();
@@ -14761,6 +14776,25 @@ static bool js_cocos2dx_spine_SkeletonCacheAnimation_getAttachment(se::State& s)
     return false;
 }
 SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheAnimation_getAttachment)
+
+static bool js_cocos2dx_spine_SkeletonCacheAnimation_updateAnimationCache(se::State& s)
+{
+    spine::SkeletonCacheAnimation* cobj = (spine::SkeletonCacheAnimation*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_spine_SkeletonCacheAnimation_updateAnimationCache : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        std::string arg0;
+        ok &= seval_to_std_string(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_spine_SkeletonCacheAnimation_updateAnimationCache : Error processing arguments");
+        cobj->updateAnimationCache(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_spine_SkeletonCacheAnimation_updateAnimationCache)
 
 static bool js_cocos2dx_spine_SkeletonCacheAnimation_getTimeScale(se::State& s)
 {
@@ -15005,9 +15039,11 @@ bool js_register_cocos2dx_spine_SkeletonCacheAnimation(se::Object* obj)
     cls->defineFunction("setOpacityModifyRGB", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_setOpacityModifyRGB));
     cls->defineFunction("setEndListener", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_setEndListener));
     cls->defineFunction("beginSchedule", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_beginSchedule));
+    cls->defineFunction("updateAllAnimationCache", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_updateAllAnimationCache));
     cls->defineFunction("addAnimation", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_addAnimation));
     cls->defineFunction("update", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_update));
     cls->defineFunction("getAttachment", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_getAttachment));
+    cls->defineFunction("updateAnimationCache", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_updateAnimationCache));
     cls->defineFunction("getTimeScale", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_getTimeScale));
     cls->defineFunction("findBone", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_findBone));
     cls->defineFunction("onDisable", _SE(js_cocos2dx_spine_SkeletonCacheAnimation_onDisable));

@@ -275,7 +275,7 @@ namespace spine {
             // handle material
             textureHandle = segment->getTexture()->getNativeTexture()->getHandle();
             blendMode = segment->blendMode;
-            effectHash = textureHandle + (blendMode << 24) + (1/*_useTint*/ << 25) + ((int)_batch << 27);
+            effectHash = textureHandle + (blendMode << 16) + (1/*_useTint*/ << 24) + ((int)_batch << 25);
             Effect* renderEffect = assembler->getEffect(segIndex);
             Technique::Parameter* param = nullptr;
             Pass* pass = nullptr;
@@ -365,11 +365,13 @@ namespace spine {
     
     void SkeletonCacheAnimation::setSkin (const std::string& skinName) {
         _skeletonCache->setSkin(skinName);
+        _skeletonCache->setToSetupPose();
         _skeletonCache->resetAllAnimationData();
     }
 
     void SkeletonCacheAnimation::setSkin (const char* skinName) {
         _skeletonCache->setSkin(skinName);
+        _skeletonCache->setToSetupPose();
         _skeletonCache->resetAllAnimationData();
     }
     
@@ -456,5 +458,13 @@ namespace spine {
     
     void SkeletonCacheAnimation::setCompleteListener (const CacheFrameEvent& listener) {
         _completeListener = listener;
+    }
+    
+    void SkeletonCacheAnimation::updateAnimationCache (const std::string& animationName) {
+        _skeletonCache->resetAnimationData(animationName);
+    }
+    
+    void SkeletonCacheAnimation::updateAllAnimationCache () {
+        _skeletonCache->resetAllAnimationData();
     }
 }

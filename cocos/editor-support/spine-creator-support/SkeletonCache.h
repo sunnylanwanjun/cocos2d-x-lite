@@ -123,6 +123,7 @@ namespace spine {
         AnimationData* buildAnimationData (const std::string& animationName);
         AnimationData* getAnimationData (const std::string& animationName);
         void resetAllAnimationData();
+        void resetAnimationData(const std::string& animationName);
     private:
         void renderAnimationFrame (AnimationData* animationData);
     public:

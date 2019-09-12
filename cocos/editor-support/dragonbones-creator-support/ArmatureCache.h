@@ -110,8 +110,10 @@ public:
 	// if animation data is empty, it will build new one.
 	AnimationData* buildAnimationData(const std::string& animationName);
 	AnimationData* getAnimationData(const std::string& animationName);
-	void resetAllAnimationData();
 	CCArmatureDisplay* getArmatureDisplay();
+    
+    void resetAllAnimationData();
+    void resetAnimationData(const std::string& animationName);
 private:
 	void renderAnimationFrame(AnimationData* animationData);
 	void traverseArmature(Armature* armature, float parentOpacity = 1.0f);

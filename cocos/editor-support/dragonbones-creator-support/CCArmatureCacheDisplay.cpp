@@ -269,7 +269,8 @@ void CCArmatureCacheDisplay::render(float dt)
 		// handle material
 		textureHandle = segment->getTexture()->getNativeTexture()->getHandle();
 		blendMode = (BlendMode)segment->blendMode;
-		effectHash = textureHandle + (int)blendMode << 24;
+
+		effectHash = textureHandle + ((uint8_t)blendMode << 16) + ((uint8_t)_batch << 24);
 		Effect* renderEffect = assembler->getEffect(segIndex);
 		Technique::Parameter* param = nullptr;
 		Pass* pass = nullptr;
@@ -409,6 +410,14 @@ void CCArmatureCacheDisplay::dispatchDBEvent(const std::string& type, EventObjec
 	{
 		_dbEventCallback(value);
 	}
+}
+
+void CCArmatureCacheDisplay::updateAnimationCache (const std::string& animationName) {
+    _armatureCache->resetAnimationData(animationName);
+}
+
+void CCArmatureCacheDisplay::updateAllAnimationCache () {
+    _armatureCache->resetAllAnimationData();
 }
 
 DRAGONBONES_NAMESPACE_END

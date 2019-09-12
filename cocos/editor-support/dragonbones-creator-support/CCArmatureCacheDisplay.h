@@ -102,7 +102,8 @@ public:
 	void dispatchDBEvent(const std::string& type, EventObject* value);
 
 	void playAnimation(const std::string& name, int playTimes);
-
+    void updateAnimationCache (const std::string& animationName);
+    void updateAllAnimationCache ();
 private:
 	float _timeScale = 1;
 	int	_curFrameIndex = -1;

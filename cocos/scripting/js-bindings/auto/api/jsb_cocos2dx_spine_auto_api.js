@@ -6974,6 +6974,14 @@ beginSchedule : function (
 },
 
 /**
+ * @method updateAllAnimationCache
+ */
+updateAllAnimationCache : function (
+)
+{
+},
+
+/**
  * @method addAnimation
  * @param {String} arg0
  * @param {bool} arg1
@@ -7009,6 +7017,16 @@ str
 )
 {
     return sp.Attachment;
+},
+
+/**
+ * @method updateAnimationCache
+ * @param {String} arg0
+ */
+updateAnimationCache : function (
+str 
+)
+{
 },
 
 /**

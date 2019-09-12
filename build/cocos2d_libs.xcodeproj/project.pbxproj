@@ -611,6 +611,18 @@
 		04F8563522ABCB9900063A20 /* TiledMapAssembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F8563222ABCB9900063A20 /* TiledMapAssembler.cpp */; };
 		04F8563622ABCB9900063A20 /* TiledMapAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 04F8563322ABCB9900063A20 /* TiledMapAssembler.hpp */; };
 		04F8563722ABCB9900063A20 /* TiledMapAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 04F8563322ABCB9900063A20 /* TiledMapAssembler.hpp */; };
+		04FB24092328D42A0021DD02 /* CCArmatureCacheDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24032328D42A0021DD02 /* CCArmatureCacheDisplay.h */; };
+		04FB240A2328D42A0021DD02 /* CCArmatureCacheDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24032328D42A0021DD02 /* CCArmatureCacheDisplay.h */; };
+		04FB240B2328D42A0021DD02 /* ArmatureCacheMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24042328D42A0021DD02 /* ArmatureCacheMgr.h */; };
+		04FB240C2328D42A0021DD02 /* ArmatureCacheMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24042328D42A0021DD02 /* ArmatureCacheMgr.h */; };
+		04FB240D2328D42A0021DD02 /* ArmatureCacheMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24052328D42A0021DD02 /* ArmatureCacheMgr.cpp */; };
+		04FB240E2328D42A0021DD02 /* ArmatureCacheMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24052328D42A0021DD02 /* ArmatureCacheMgr.cpp */; };
+		04FB240F2328D42A0021DD02 /* ArmatureCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24062328D42A0021DD02 /* ArmatureCache.cpp */; };
+		04FB24102328D42A0021DD02 /* ArmatureCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24062328D42A0021DD02 /* ArmatureCache.cpp */; };
+		04FB24112328D42A0021DD02 /* ArmatureCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24072328D42A0021DD02 /* ArmatureCache.h */; };
+		04FB24122328D42A0021DD02 /* ArmatureCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 04FB24072328D42A0021DD02 /* ArmatureCache.h */; };
+		04FB24132328D42A0021DD02 /* CCArmatureCacheDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24082328D42A0021DD02 /* CCArmatureCacheDisplay.cpp */; };
+		04FB24142328D42A0021DD02 /* CCArmatureCacheDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB24082328D42A0021DD02 /* CCArmatureCacheDisplay.cpp */; };
 		1A14FD912080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD922080B4E300E10ABE /* CCGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14FD8F2080B4E300E10ABE /* CCGLUtils.cpp */; };
 		1A14FD932080B4E300E10ABE /* CCGLUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A14FD902080B4E300E10ABE /* CCGLUtils.h */; };
@@ -1717,6 +1729,12 @@
 		04ED68D721F8188F006E82F8 /* MeshBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshBuffer.h; path = "../cocos/editor-support/MeshBuffer.h"; sourceTree = "<group>"; };
 		04F8563222ABCB9900063A20 /* TiledMapAssembler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TiledMapAssembler.cpp; sourceTree = "<group>"; };
 		04F8563322ABCB9900063A20 /* TiledMapAssembler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TiledMapAssembler.hpp; sourceTree = "<group>"; };
+		04FB24032328D42A0021DD02 /* CCArmatureCacheDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCArmatureCacheDisplay.h; path = "../cocos/editor-support/dragonbones-creator-support/CCArmatureCacheDisplay.h"; sourceTree = "<group>"; };
+		04FB24042328D42A0021DD02 /* ArmatureCacheMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArmatureCacheMgr.h; path = "../cocos/editor-support/dragonbones-creator-support/ArmatureCacheMgr.h"; sourceTree = "<group>"; };
+		04FB24052328D42A0021DD02 /* ArmatureCacheMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArmatureCacheMgr.cpp; path = "../cocos/editor-support/dragonbones-creator-support/ArmatureCacheMgr.cpp"; sourceTree = "<group>"; };
+		04FB24062328D42A0021DD02 /* ArmatureCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArmatureCache.cpp; path = "../cocos/editor-support/dragonbones-creator-support/ArmatureCache.cpp"; sourceTree = "<group>"; };
+		04FB24072328D42A0021DD02 /* ArmatureCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArmatureCache.h; path = "../cocos/editor-support/dragonbones-creator-support/ArmatureCache.h"; sourceTree = "<group>"; };
+		04FB24082328D42A0021DD02 /* CCArmatureCacheDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCArmatureCacheDisplay.cpp; path = "../cocos/editor-support/dragonbones-creator-support/CCArmatureCacheDisplay.cpp"; sourceTree = "<group>"; };
 		051C016F21E2F85C00D4A347 /* CCModuleConfigIOS.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CCModuleConfigIOS.debug.xcconfig; sourceTree = "<group>"; };
 		051C017021E2F85C00D4A347 /* CCModuleConfigIOS.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CCModuleConfigIOS.release.xcconfig; sourceTree = "<group>"; };
 		051C017121E2F86900D4A347 /* CCModuleConfigMac.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CCModuleConfigMac.release.xcconfig; sourceTree = "<group>"; };
@@ -2468,6 +2486,12 @@
 		046E040B2181A9BE00B24E2D /* dragonbones-creator-support */ = {
 			isa = PBXGroup;
 			children = (
+				04FB24062328D42A0021DD02 /* ArmatureCache.cpp */,
+				04FB24072328D42A0021DD02 /* ArmatureCache.h */,
+				04FB24052328D42A0021DD02 /* ArmatureCacheMgr.cpp */,
+				04FB24042328D42A0021DD02 /* ArmatureCacheMgr.h */,
+				04FB24082328D42A0021DD02 /* CCArmatureCacheDisplay.cpp */,
+				04FB24032328D42A0021DD02 /* CCArmatureCacheDisplay.h */,
 				046E06112185B37100B24E2D /* CCArmatureDisplay.cpp */,
 				046E060B2185B37000B24E2D /* CCArmatureDisplay.h */,
 				046E06102185B37100B24E2D /* CCDragonBonesHeaders.h */,
@@ -3618,6 +3642,7 @@
 				46AE3FDF2092F3A600F3A228 /* env.h in Headers */,
 				46AE3FE72092F3A600F3A228 /* inspector_io.h in Headers */,
 				04DBD45922AE2DBD00DBE4CD /* PointAttachment.h in Headers */,
+				04FB24092328D42A0021DD02 /* CCArmatureCacheDisplay.h in Headers */,
 				04ED68DA21F8188F006E82F8 /* MeshBuffer.h in Headers */,
 				46FDDBCF202ADDCE00931238 /* CCMap.h in Headers */,
 				1A52DB34205BCD9200350EE3 /* Object.hpp in Headers */,
@@ -3779,6 +3804,7 @@
 				1A52DB68205BCDC700350EE3 /* Base.h in Headers */,
 				50ABBD521925AB0000A911A9 /* Quaternion.h in Headers */,
 				1A52DB2D205BCD9200350EE3 /* ObjectWrap.h in Headers */,
+				04FB240B2328D42A0021DD02 /* ArmatureCacheMgr.h in Headers */,
 				04DBD47322AE2DBD00DBE4CD /* AttachmentType.h in Headers */,
 				042058CF22A61B340092DE5D /* RenderDataList.hpp in Headers */,
 				1A52DB6A205BCDC700350EE3 /* HelperMacros.h in Headers */,
@@ -3899,6 +3925,7 @@
 				0482F1A7228D87970019ECF7 /* NodeProxy.hpp in Headers */,
 				1A28FF951F20AFAB007A1D9D /* SocketRocket.h in Headers */,
 				46AE40012092F3A600F3A228 /* SHA1.h in Headers */,
+				04FB24112328D42A0021DD02 /* ArmatureCache.h in Headers */,
 				046E06992185B45300B24E2D /* Matrix.h in Headers */,
 				046E06142185B37100B24E2D /* CCArmatureDisplay.h in Headers */,
 				04DBD3E722AE2DBD00DBE4CD /* PathConstraintMixTimeline.h in Headers */,
@@ -4029,6 +4056,7 @@
 				294D7D9B1D0E93A2002CE7B7 /* CCDevice-apple.h in Headers */,
 				46178650205224DA008256E1 /* CCDownloaderImpl-apple.h in Headers */,
 				46FDDAA6202ACC6A00931238 /* Scene.h in Headers */,
+				04FB240A2328D42A0021DD02 /* CCArmatureCacheDisplay.h in Headers */,
 				46AE3FE62092F3A600F3A228 /* base64.h in Headers */,
 				1A586C4A2064C97800B47573 /* EJConvert.h in Headers */,
 				04DBD42422AE2DBD00DBE4CD /* SlotData.h in Headers */,
@@ -4196,6 +4224,7 @@
 				04DBD3DE22AE2DBD00DBE4CD /* SkeletonData.h in Headers */,
 				1A28FF721F20AFAB007A1D9D /* SRHash.h in Headers */,
 				50ABBD431925AB0000A911A9 /* CCMathBase.h in Headers */,
+				04FB24122328D42A0021DD02 /* ArmatureCache.h in Headers */,
 				46FDDBDE202ADDCE00931238 /* TGAlib.h in Headers */,
 				046E06DC2185B49F00B24E2D /* ConstraintData.h in Headers */,
 				469303812046AE05004A3D6C /* config.hpp in Headers */,
@@ -4299,6 +4328,7 @@
 				46FDDA76202ACC6A00931238 /* Config.h in Headers */,
 				04DBD3D022AE2DBD00DBE4CD /* Triangulator.h in Headers */,
 				50643BD519BFAECF00EF68ED /* CCGL.h in Headers */,
+				04FB240C2328D42A0021DD02 /* ArmatureCacheMgr.h in Headers */,
 				046E06D62185B49F00B24E2D /* ArmatureData.h in Headers */,
 				46FDDB84202ADDCE00931238 /* ccRandom.h in Headers */,
 				1AAAC8EA205CB6E9005321B9 /* AudioMacros.h in Headers */,
@@ -4491,6 +4521,7 @@
 				04DBD4B122AE2DBD00DBE4CD /* TwoColorTimeline.cpp in Sources */,
 				04DBD48522AE2DBD00DBE4CD /* EventTimeline.cpp in Sources */,
 				046E06DD2185B49F00B24E2D /* AnimationData.cpp in Sources */,
+				04FB24132328D42A0021DD02 /* CCArmatureCacheDisplay.cpp in Sources */,
 				046E06202185B37100B24E2D /* CCArmatureDisplay.cpp in Sources */,
 				0494CFD422BEFC6D00B73B79 /* ParallelTask.cpp in Sources */,
 				046E06882185B44A00B24E2D /* BaseFactory.cpp in Sources */,
@@ -4543,6 +4574,7 @@
 				04DBD4B522AE2DBD00DBE4CD /* RTTI.cpp in Sources */,
 				0482F1A5228D87970019ECF7 /* MeshBuffer.cpp in Sources */,
 				46FDDA89202ACC6A00931238 /* Effect.cpp in Sources */,
+				04FB240F2328D42A0021DD02 /* ArmatureCache.cpp in Sources */,
 				1ABAD24E20C29F3800BC71C0 /* CCCanvasRenderingContext2D-apple.mm in Sources */,
 				046E06E12185B49F00B24E2D /* DragonBonesData.cpp in Sources */,
 				ED30577E1BEC76C90083C3ED /* ioapi_mem.cpp in Sources */,
@@ -4588,6 +4620,7 @@
 				469303BE2046AE05004A3D6C /* jsb_renderer_auto.cpp in Sources */,
 				04DBD43722AE2DBD00DBE4CD /* TranslateTimeline.cpp in Sources */,
 				50ABC0191926664800A911A9 /* CCSAXParser.cpp in Sources */,
+				04FB240D2328D42A0021DD02 /* ArmatureCacheMgr.cpp in Sources */,
 				1A28FF571F20AFAB007A1D9D /* SRIOConsumerPool.m in Sources */,
 				04DBD42922AE2DBD00DBE4CD /* RegionAttachment.cpp in Sources */,
 				46FDDB7B202ADDCE00931238 /* CCRef.cpp in Sources */,
@@ -4776,6 +4809,7 @@
 				04DBD41422AE2DBD00DBE4CD /* Triangulator.cpp in Sources */,
 				046B68AF21A294B100B33469 /* jsb_cocos2dx_spine_auto.cpp in Sources */,
 				04DBD3E622AE2DBD00DBE4CD /* PointAttachment.cpp in Sources */,
+				04FB24102328D42A0021DD02 /* ArmatureCache.cpp in Sources */,
 				ED30578B1BEC774D0083C3ED /* ioapi_mem.cpp in Sources */,
 				1A28FF9A1F20AFAB007A1D9D /* SRSecurityPolicy.m in Sources */,
 				04DBD42022AE2DBD00DBE4CD /* Animation.cpp in Sources */,
@@ -4918,6 +4952,7 @@
 				469304132046AE06004A3D6C /* jsb_classtype.cpp in Sources */,
 				46FDDAA4202ACC6A00931238 /* InputAssembler.cpp in Sources */,
 				1A28FF941F20AFAB007A1D9D /* NSURLRequest+SRWebSocket.m in Sources */,
+				04FB24142328D42A0021DD02 /* CCArmatureCacheDisplay.cpp in Sources */,
 				4693042F2046AE06004A3D6C /* jsb_helper.cpp in Sources */,
 				046E065B2185B41B00B24E2D /* DeformVertices.cpp in Sources */,
 				4693043D2046AE06004A3D6C /* jsb_gfx_manual.cpp in Sources */,
@@ -4967,6 +5002,7 @@
 				46FDDAAA202ACC6A00931238 /* Types.cpp in Sources */,
 				04DBD44622AE2DBD00DBE4CD /* AnimationState.cpp in Sources */,
 				1A29D797205666F500168D9A /* jsb_opengl_utils.cpp in Sources */,
+				04FB240E2328D42A0021DD02 /* ArmatureCacheMgr.cpp in Sources */,
 				04DBD4BC22AE2DBD00DBE4CD /* PathConstraintPositionTimeline.cpp in Sources */,
 				046E06E22185B49F00B24E2D /* DragonBonesData.cpp in Sources */,
 				04DBD4B822AE2DBD00DBE4CD /* SkeletonBounds.cpp in Sources */,

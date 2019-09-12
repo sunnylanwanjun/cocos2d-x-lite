@@ -2959,6 +2959,14 @@ beginSchedule : function (
 },
 
 /**
+ * @method updateAllAnimationCache
+ */
+updateAllAnimationCache : function (
+)
+{
+},
+
+/**
  * @method update
  * @param {float} arg0
  */
@@ -2986,6 +2994,16 @@ int
  */
 setDBEventCallback : function (
 func 
+)
+{
+},
+
+/**
+ * @method updateAnimationCache
+ * @param {String} arg0
+ */
+updateAnimationCache : function (
+str 
 )
 {
 },
