@@ -249,7 +249,6 @@ void ArmatureCache::updateToFrame(const std::string& animationName, int toFrameI
 	// init animation
 	if (animationData->getFrameCount() == 0) 
 	{
-        // animation->reset();
 		animation->play(animationName, 1);
 	}
 
@@ -403,23 +402,16 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 			worldVertex->color.a = (GLubyte)color.a;
 		}
 
-		auto vertexOffset = vb.getCurPos() / sizeof(middleware::V2F_T2F_C4B);
 		vb.writeBytes((char*)worldTriangles, vbSize);
 
 		auto ibSize = triangles.indexCount * sizeof(unsigned short);
 		ib.checkSpace(ibSize, true);
-		// If vertex buffer current offset is zero, fill it directly or recalculate vertex offset.
-		if (vertexOffset > 0)
-		{
-			for (int ii = 0, nn = triangles.indexCount; ii < nn; ii++)
-			{
-				ib.writeUint16(triangles.indices[ii] + vertexOffset);
-			}
-		}
-		else
-		{
-			ib.writeBytes((char*)triangles.indices, ibSize);
-		}
+
+        auto vertexOffset = _curVSegLen / 5;
+        for (int ii = 0, nn = triangles.indexCount; ii < nn; ii++)
+        {
+            ib.writeUint16(triangles.indices[ii] + vertexOffset);
+        }
 
 		// Record this turn index segmentation count,it will store in material buffer in the end.
 		_curISegLen += triangles.indexCount;

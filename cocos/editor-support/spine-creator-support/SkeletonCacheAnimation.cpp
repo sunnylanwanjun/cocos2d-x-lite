@@ -79,6 +79,9 @@ namespace spine {
         
         if (_isAniComplete) {
             if (_animationQueue.empty() && !_headAnimation) {
+                if (_animationData && !_animationData->isComplete()) {
+                    _skeletonCache->updateToFrame(_animationName);
+                }
                 return;
             }
             if (!_headAnimation) {
@@ -135,12 +138,6 @@ namespace spine {
     }
     
     void SkeletonCacheAnimation::render(float dt) {
-        if (!_animationData) return;
-        SkeletonCache::FrameData* frameData = _animationData->getFrameData(_curFrameIndex);
-        if (!frameData) return;
-        
-        auto mgr = MiddlewareManager::getInstance();
-        if (!mgr->isRendering) return;
         
         if (_nodeProxy == nullptr) {
             return;
@@ -152,6 +149,13 @@ namespace spine {
         }
         assembler->reset();
         assembler->setUseModel(!_batch);
+        
+        if (!_animationData) return;
+        SkeletonCache::FrameData* frameData = _animationData->getFrameData(_curFrameIndex);
+        if (!frameData) return;
+        
+        auto mgr = MiddlewareManager::getInstance();
+        if (!mgr->isRendering) return;
         
         _nodeColor.a = _nodeProxy->getRealOpacity() / (float)255;
         

@@ -85,6 +85,10 @@ void CCArmatureCacheDisplay::update(float dt)
 
 	if (_isAniComplete || !_animationData)
 	{
+        if (_animationData && !_animationData->isComplete())
+        {
+            _armatureCache->updateToFrame(_animationName);
+        }
 		return;
 	}
 
@@ -128,25 +132,25 @@ void CCArmatureCacheDisplay::update(float dt)
 
 void CCArmatureCacheDisplay::render(float dt) 
 {
+    if (_nodeProxy == nullptr)
+    {
+        return;
+    }
+    
+    CustomAssembler* assembler = (CustomAssembler*)_nodeProxy->getAssembler();
+    if (assembler == nullptr)
+    {
+        return;
+    }
+    assembler->reset();
+    assembler->setUseModel(!_batch);
+    
 	if (!_animationData) return;
 	ArmatureCache::FrameData* frameData = _animationData->getFrameData(_curFrameIndex);
 	if (!frameData) return;
 
 	auto mgr = MiddlewareManager::getInstance();
 	if (!mgr->isRendering) return;
-
-	if (_nodeProxy == nullptr) 
-	{
-		return;
-	}
-
-	CustomAssembler* assembler = (CustomAssembler*)_nodeProxy->getAssembler();
-	if (assembler == nullptr) 
-	{
-		return;
-	}
-	assembler->reset();
-	assembler->setUseModel(!_batch);
 
 	_nodeColor.a = _nodeProxy->getRealOpacity() / (float)255;
 

@@ -93,12 +93,6 @@ void CCArmatureDisplay::dbUpdate() {}
 
 void CCArmatureDisplay::dbRender()
 {
-    if (this->_armature->getParent())
-        return;
-    
-    auto mgr = MiddlewareManager::getInstance();
-    if (!mgr->isRendering) return;
-	
     if (_nodeProxy == nullptr)
     {
         return;
@@ -111,6 +105,12 @@ void CCArmatureDisplay::dbRender()
     }
     _assembler->reset();
     _assembler->setUseModel(!_batch);
+    
+    if (this->_armature->getParent())
+        return;
+    
+    auto mgr = MiddlewareManager::getInstance();
+    if (!mgr->isRendering) return;
     
     _preBlendMode = -1;
     _preTextureIndex = -1;

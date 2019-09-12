@@ -257,10 +257,6 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 }
 
 void SkeletonRenderer::render (float deltaTime) {
-    if (!_skeleton) return;
-    // avoid other place call update.
-    auto mgr = MiddlewareManager::getInstance();
-    if (!mgr->isRendering) return;
     
     if (_nodeProxy == nullptr) {
         return;
@@ -272,6 +268,11 @@ void SkeletonRenderer::render (float deltaTime) {
     }
     assembler->reset();
     assembler->setUseModel(!_batch);
+    
+    if (!_skeleton) return;
+    // avoid other place call update.
+    auto mgr = MiddlewareManager::getInstance();
+    if (!mgr->isRendering) return;
     
     _nodeColor.a = _nodeProxy->getRealOpacity() / (float)255;
     
