@@ -28,30 +28,30 @@ DRAGONBONES_NAMESPACE_BEGIN
 ArmatureCacheMgr* ArmatureCacheMgr::_instance = nullptr;
 ArmatureCache* ArmatureCacheMgr::buildArmatureCache(const std::string& armatureName, const std::string& armatureKey, const std::string& atlasUUID)
 {
-	ArmatureCache* animation = _caches.at(armatureKey);
-	if (!animation) 
-	{
-		animation = new ArmatureCache(armatureName, armatureKey, atlasUUID);
-		_caches.insert(armatureKey, animation);
-		animation->autorelease();
-	}
-	return animation;
+    ArmatureCache* animation = _caches.at(armatureKey);
+    if (!animation) 
+    {
+        animation = new ArmatureCache(armatureName, armatureKey, atlasUUID);
+        _caches.insert(armatureKey, animation);
+        animation->autorelease();
+    }
+    return animation;
 }
 
 void ArmatureCacheMgr::removeArmatureCache(const std::string& uuid)
 {
-	for (auto it = _caches.begin(); it != _caches.end();) 
-	{
-		auto found = it->first.find(uuid);
-		if (found != std::string::npos)
-		{
-			it = _caches.erase(it);
-		}
-		else
-		{
-			it++;
-		}
-	}
+    for (auto it = _caches.begin(); it != _caches.end();) 
+    {
+        auto found = it->first.find(uuid);
+        if (found != std::string::npos)
+        {
+            it = _caches.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
 }
 
 DRAGONBONES_NAMESPACE_END

@@ -107,7 +107,7 @@ namespace spine {
         cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
         cocos2d::renderer::Effect* _effect = nullptr;
         
-        CacheFrameEvent	_startListener = nullptr;
+        CacheFrameEvent    _startListener = nullptr;
         CacheFrameEvent _endListener = nullptr;
         CacheFrameEvent _completeListener = nullptr;
         

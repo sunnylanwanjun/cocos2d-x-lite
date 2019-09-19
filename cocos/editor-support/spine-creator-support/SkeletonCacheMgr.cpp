@@ -37,7 +37,7 @@ namespace spine {
             animation = new SkeletonCache();
             animation->initWithUUID(uuid);
             _caches.insert(uuid, animation);
-			animation->autorelease();
+            animation->autorelease();
         }
         return animation;
     }

@@ -46,21 +46,21 @@ namespace spine {
     SkeletonCacheAnimation::SkeletonCacheAnimation (const std::string& uuid, bool isShare) {
         if (isShare) {
             _skeletonCache = SkeletonCacheMgr::getInstance()->buildSkeletonCache(uuid);
-			_skeletonCache->retain();
+            _skeletonCache->retain();
         } else {
             _skeletonCache = new SkeletonCache();
-			_skeletonCache->initWithUUID(uuid);
-			_skeletonCache->retain();
-			_skeletonCache->autorelease();
+            _skeletonCache->initWithUUID(uuid);
+            _skeletonCache->retain();
+            _skeletonCache->autorelease();
         }
-		beginSchedule();
+        beginSchedule();
     }
     
     SkeletonCacheAnimation::~SkeletonCacheAnimation () {
-		if (_skeletonCache) {
-			_skeletonCache->release();
-			_skeletonCache = nullptr;
-		}
+        if (_skeletonCache) {
+            _skeletonCache->release();
+            _skeletonCache = nullptr;
+        }
         while (!_animationQueue.empty()) {
             auto ani = _animationQueue.front();
             _animationQueue.pop();

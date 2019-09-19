@@ -30,28 +30,28 @@ DRAGONBONES_NAMESPACE_BEGIN
 
 class ArmatureCacheMgr {
 public:
-	static ArmatureCacheMgr* getInstance() 
-	{
-		if (_instance == nullptr) 
-		{
-			_instance = new ArmatureCacheMgr();
-		}
-		return _instance;
-	}
+    static ArmatureCacheMgr* getInstance() 
+    {
+        if (_instance == nullptr) 
+        {
+            _instance = new ArmatureCacheMgr();
+        }
+        return _instance;
+    }
 
-	static void destroyInstance() 
-	{
-		if (_instance) {
-			delete _instance;
-			_instance = nullptr;
-		}
-	}
+    static void destroyInstance() 
+    {
+        if (_instance) {
+            delete _instance;
+            _instance = nullptr;
+        }
+    }
 
-	void removeArmatureCache(const std::string& armatureKey);
-	ArmatureCache* buildArmatureCache(const std::string& armatureName, const std::string& armatureKey, const std::string& atlasUUID);
+    void removeArmatureCache(const std::string& armatureKey);
+    ArmatureCache* buildArmatureCache(const std::string& armatureName, const std::string& armatureKey, const std::string& atlasUUID);
 private:
-	static ArmatureCacheMgr* _instance;
-	cocos2d::Map<std::string, ArmatureCache*> _caches;
+    static ArmatureCacheMgr* _instance;
+    cocos2d::Map<std::string, ArmatureCache*> _caches;
 };
 
 DRAGONBONES_NAMESPACE_END
