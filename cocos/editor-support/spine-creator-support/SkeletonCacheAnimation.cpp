@@ -176,7 +176,7 @@ namespace spine {
         int vs1 = vbs1 / sizeof(float);
         // vertex size int bytes with two color
         int vbs2 = sizeof(V2F_T2F_C4B_C4B);
-        // verex size in floats with two color
+        // vertex size in floats with two color
         int vs2 = vbs2 / sizeof(float);
         
         int vs = _useTint ? vs2 : vs1;
@@ -281,16 +281,26 @@ namespace spine {
             // handle vertex color
             if (needColor) {
                 int srcVertexFloatOffset = srcVertexBytesOffset / sizeof(float);
-                for (auto colorIndex = 0; colorIndex < vertexFloats; colorIndex += vs, srcVertexFloatOffset += vs2)
-                {
-                    if (srcVertexFloatOffset >= maxVFOffset) {
-                        nowColor = colors[colorOffset++];
-                        handleColor(nowColor);
-                        maxVFOffset = nowColor->vertexFloatOffset;
-                    }
-                    memcpy(dstColorBuffer + colorIndex + 4, &finalColor, sizeof(finalColor));
-                    if (_useTint) {
+                if (_useTint) {
+                    for (auto colorIndex = 0; colorIndex < vertexFloats; colorIndex += vs, srcVertexFloatOffset += vs2)
+                    {
+                        if (srcVertexFloatOffset >= maxVFOffset) {
+                            nowColor = colors[colorOffset++];
+                            handleColor(nowColor);
+                            maxVFOffset = nowColor->vertexFloatOffset;
+                        }
+                        memcpy(dstColorBuffer + colorIndex + 4, &finalColor, sizeof(finalColor));
                         memcpy(dstColorBuffer + colorIndex + 5, &darkColor, sizeof(darkColor));
+                    }
+                } else {
+                    for (auto colorIndex = 0; colorIndex < vertexFloats; colorIndex += vs, srcVertexFloatOffset += vs2)
+                    {
+                        if (srcVertexFloatOffset >= maxVFOffset) {
+                            nowColor = colors[colorOffset++];
+                            handleColor(nowColor);
+                            maxVFOffset = nowColor->vertexFloatOffset;
+                        }
+                        memcpy(dstColorBuffer + colorIndex + 4, &finalColor, sizeof(finalColor));
                     }
                 }
             }
