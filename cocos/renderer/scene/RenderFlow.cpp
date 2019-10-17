@@ -183,6 +183,13 @@ void RenderFlow::calculateLocalMatrix(int tid)
             cocos2d::Mat4::createScale(trs->sx, trs->sy, trsSZ, &matTemp);
             cocos2d::Mat4::multiply(*localMat, matTemp, localMat);
             
+            if (trs->skx > 0.0 || trs->sky > 0.0) {
+                matTemp.setIdentity();
+                matTemp.m[1] = (float)tanf(CC_DEGREES_TO_RADIANS(trs->sky));
+                matTemp.m[4] = (float)tanf(CC_DEGREES_TO_RADIANS(trs->skx));
+                cocos2d::Mat4::multiply(*localMat, matTemp, localMat);
+            }
+            
             *dirty &= ~LOCAL_TRANSFORM;
             *dirty |= WORLD_TRANSFORM;
         }

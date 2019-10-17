@@ -42,6 +42,8 @@ struct TRS {
     float sx;
     float sy;
     float sz;
+    float skx;
+    float sky;
 };
 
 #define PARENT_INVALID 0xffffffff
