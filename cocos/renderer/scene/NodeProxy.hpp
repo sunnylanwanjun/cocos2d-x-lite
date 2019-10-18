@@ -34,8 +34,8 @@
 #include "base/CCMap.h"
 #include "math/CCMath.h"
 #include "assembler/AssemblerBase.hpp"
-
 #include "MemPool.hpp"
+#include <functional>
 
 namespace se {
     class Object;
@@ -284,6 +284,15 @@ public:
      *  @brief Is node flag dirty
      */
     bool isDirty(uint32_t flag) const { return *_dirty & flag; }
+    
+    /*
+     *  @brief update skew x and skew y
+     */
+    void updateSkew(float skewX, float skewY);
+    
+public:
+    typedef std::function<ModelBatcher*, Scene*> TraverseFunc;
+    TraverseFunc traverseHandle = nullptr;
 protected:
     void updateLevel();
     void childrenAlloc();
@@ -298,6 +307,8 @@ private:
     std::string _id = "";
     std::string _name = "";
     std::size_t _level = 0;
+    float _skewX = 0.0;
+    float _skewY = 0.0;
     
     uint32_t* _dirty = nullptr;
     TRS* _trs = nullptr;
