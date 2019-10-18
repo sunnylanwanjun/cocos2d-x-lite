@@ -183,7 +183,7 @@ void RenderFlow::calculateLocalMatrix(int tid)
             cocos2d::Mat4::createScale(trs->sx, trs->sy, trsSZ, &matTemp);
             cocos2d::Mat4::multiply(*localMat, matTemp, localMat);
             
-            if (trs->skx > 0.0 || trs->sky > 0.0) {
+            if (trs->skx != 0.0 || trs->sky != 0.0) {
                 auto a = localMat->m[0];
                 auto b = localMat->m[1];
                 auto c = localMat->m[4];
