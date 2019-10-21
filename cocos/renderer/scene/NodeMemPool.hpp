@@ -50,6 +50,11 @@ struct ParentInfo {
     uint32_t index;
 };
 
+struct Skew {
+    float_t x;
+    float_t y;
+};
+
 class UnitNode: public UnitBase {
 public:
     UnitNode();
@@ -65,6 +70,7 @@ public:
     void setIs3D(se::Object* jsData);
     void setNode(se::Object* jsData);
     void setLevel(se::Object* jsData);
+    void setSkew(se::Object* jsData);
     
     uint32_t* getDirty(std::size_t index)
     {
@@ -115,6 +121,11 @@ public:
     {
         return nodeData + index;
     }
+    
+    Skew* getSkew(std::size_t index)
+    {
+        return (Skew*)skewData + index;
+    }
 protected:
     se::Object* dirty = nullptr;
     uint32_t* dirtyData = nullptr;
@@ -155,6 +166,10 @@ protected:
     se::Object* node = nullptr;
     uint64_t* nodeData = nullptr;
     std::size_t nodeLen = 0;
+    
+    se::Object* skew = nullptr;
+    float_t* skewData = nullptr;
+    std::size_t skewLen = 0;
 };
 
 class NodeMemPool: public MemPool {
@@ -169,7 +184,7 @@ public:
     
     void removeNodeData(std::size_t unitID);
 
-    void updateNodeData(std::size_t unitID, se_object_ptr dirty, se_object_ptr trs, se_object_ptr localMat, se_object_ptr worldMat, se_object_ptr parent, se_object_ptr zOrder, se_object_ptr cullingMask, se_object_ptr opacity, se_object_ptr is3D, se_object_ptr node);
+    void updateNodeData(std::size_t unitID, se_object_ptr dirty, se_object_ptr trs, se_object_ptr localMat, se_object_ptr worldMat, se_object_ptr parent, se_object_ptr zOrder, se_object_ptr cullingMask, se_object_ptr opacity, se_object_ptr is3D, se_object_ptr node, se_object_ptr skew);
     
     UnitNode* getUnit(std::size_t unitID) const;
     const std::vector<UnitNode*>& getNodePool() const;

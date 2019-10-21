@@ -47,6 +47,16 @@ class ModelBatcher;
 class Scene;
 struct TRS;
 struct ParentInfo;
+struct Skew;
+
+/*
+ *  @brief Visit the node but do not transform position.
+ */
+void ProxyRender(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
+/*
+ *  @brief Visit the node as a ordinary node but not a root node.
+ */
+void ProxyVisit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
 
 /**
  * @addtogroup scene
@@ -65,6 +75,8 @@ struct ParentInfo;
  */
 class NodeProxy : public Ref
 {
+    friend void ProxyRender(NodeProxy*, ModelBatcher*, Scene*);
+    friend void ProxyVisit(NodeProxy*, ModelBatcher*, Scene*);
 public:
     /*
      * @brief The default constructor.
@@ -232,14 +244,6 @@ public:
      */
     AssemblerBase* getAssembler() const;
     /*
-     *  @brief Visit the node as a ordinary node but not a root node.
-     */
-    void visit(ModelBatcher* batcher, Scene* scene);
-    /*
-     *  @brief Visit the node but do not transform position.
-     */
-    void render(ModelBatcher* batcher, Scene* scene);
-    /*
      *  @brief Enables visit.
      */
     void enableVisit() { _needVisit = true; }
@@ -286,12 +290,15 @@ public:
     bool isDirty(uint32_t flag) const { return *_dirty & flag; }
     
     /*
-     *  @brief update skew x and skew y
+     *  @brief switch traverse interface to visit
      */
-    void updateSkew(float skewX, float skewY);
-    
+    void switchTraverseToVisit() { traverseHandle = ProxyVisit; }
+    /*
+     *  @brief switch traverse interface to render
+     */
+    void switchTraverseToRender() { traverseHandle = ProxyRender; }
 public:
-    typedef std::function<ModelBatcher*, Scene*> TraverseFunc;
+    typedef std::function<void(NodeProxy*, ModelBatcher*, Scene*)> TraverseFunc;
     TraverseFunc traverseHandle = nullptr;
 protected:
     void updateLevel();
@@ -307,8 +314,6 @@ private:
     std::string _id = "";
     std::string _name = "";
     std::size_t _level = 0;
-    float _skewX = 0.0;
-    float _skewY = 0.0;
     
     uint32_t* _dirty = nullptr;
     TRS* _trs = nullptr;
@@ -319,6 +324,8 @@ private:
     int32_t* _cullingMask = nullptr;
     uint8_t* _opacity = nullptr;
     uint8_t* _is3DNode = nullptr;
+    Skew* _skew = nullptr;
+    
     std::size_t _unitID = 0;
     std::size_t _index = 0;
     
