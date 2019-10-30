@@ -32,16 +32,16 @@ RENDERER_BEGIN
 class NodeProxy;
 
 struct TRS {
-    float x = 0.0;
-    float y = 0.0;
-    float z = 0.0;
-    float qx = 0.0;
-    float qy = 0.0;
-    float qz = 0.0;
-    float qw = 0.0;
-    float sx = 0.0;
-    float sy = 0.0;
-    float sz = 0.0;
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+    float qx = 0.0f;
+    float qy = 0.0f;
+    float qz = 0.0f;
+    float qw = 0.0f;
+    float sx = 0.0f;
+    float sy = 0.0f;
+    float sz = 0.0f;
 };
 
 #define PARENT_INVALID 0xffffffff
@@ -51,8 +51,8 @@ struct ParentInfo {
 };
 
 struct Skew {
-    float_t x = 0.0;
-    float_t y = 0.0;
+    float_t x = 0.0f;
+    float_t y = 0.0f;
 };
 
 class UnitNode: public UnitBase {
