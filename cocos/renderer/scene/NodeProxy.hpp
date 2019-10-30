@@ -67,6 +67,17 @@ struct Skew;
 class NodeProxy : public Ref
 {
 public:
+    typedef std::function<void(NodeProxy*, ModelBatcher*, Scene*)> TraverseFunc;
+    
+    /*
+     *  @brief Visit the node but do not transform position.
+     */
+    static void render(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
+    /*
+     *  @brief Visit the node as a ordinary node but not a root node.
+     */
+    static void visit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
+    
     /*
      * @brief The default constructor.
      */
@@ -286,17 +297,10 @@ public:
      *  @brief switch traverse interface to render
      */
     void switchTraverseToRender() { traverseHandle = render; }
-    
+
     /*
-     *  @brief Visit the node but do not transform position.
+     *  @brief traverse handle
      */
-    static void render(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
-    /*
-     *  @brief Visit the node as a ordinary node but not a root node.
-     */
-    static void visit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
-public:
-    typedef std::function<void(NodeProxy*, ModelBatcher*, Scene*)> TraverseFunc;
     TraverseFunc traverseHandle = nullptr;
 protected:
     void updateLevel();

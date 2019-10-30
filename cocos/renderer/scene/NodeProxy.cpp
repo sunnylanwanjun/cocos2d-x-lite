@@ -456,7 +456,7 @@ void NodeProxy::updateWorldMatrix(const cocos2d::Mat4& parentMatrix)
 
 void NodeProxy::updateLocalMatrix()
 {
-    bool skew = _skew->x != 0.0 || _skew->y != 0.0;
+    bool skew = std::abs(_skew->x - 0.0f) > MATH_EPSILON || std::abs(_skew->y - 0.0f) > MATH_EPSILON;
     if (*_dirty & RenderFlow::LOCAL_TRANSFORM || skew)
     {
         _localMat->setIdentity();
