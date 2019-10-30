@@ -49,15 +49,6 @@ struct TRS;
 struct ParentInfo;
 struct Skew;
 
-/*
- *  @brief Visit the node but do not transform position.
- */
-void ProxyRender(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
-/*
- *  @brief Visit the node as a ordinary node but not a root node.
- */
-void ProxyVisit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
-
 /**
  * @addtogroup scene
  * @{
@@ -75,8 +66,6 @@ void ProxyVisit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
  */
 class NodeProxy : public Ref
 {
-    friend void ProxyRender(NodeProxy*, ModelBatcher*, Scene*);
-    friend void ProxyVisit(NodeProxy*, ModelBatcher*, Scene*);
 public:
     /*
      * @brief The default constructor.
@@ -292,11 +281,20 @@ public:
     /*
      *  @brief switch traverse interface to visit
      */
-    void switchTraverseToVisit() { traverseHandle = ProxyVisit; }
+    void switchTraverseToVisit() { traverseHandle = visit; }
     /*
      *  @brief switch traverse interface to render
      */
-    void switchTraverseToRender() { traverseHandle = ProxyRender; }
+    void switchTraverseToRender() { traverseHandle = render; }
+    
+    /*
+     *  @brief Visit the node but do not transform position.
+     */
+    static void render(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
+    /*
+     *  @brief Visit the node as a ordinary node but not a root node.
+     */
+    static void visit(NodeProxy* node, ModelBatcher* batcher, Scene* scene);
 public:
     typedef std::function<void(NodeProxy*, ModelBatcher*, Scene*)> TraverseFunc;
     TraverseFunc traverseHandle = nullptr;

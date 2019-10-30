@@ -32,27 +32,27 @@ RENDERER_BEGIN
 class NodeProxy;
 
 struct TRS {
-    float x;
-    float y;
-    float z;
-    float qx;
-    float qy;
-    float qz;
-    float qw;
-    float sx;
-    float sy;
-    float sz;
+    float x = 0.0;
+    float y = 0.0;
+    float z = 0.0;
+    float qx = 0.0;
+    float qy = 0.0;
+    float qz = 0.0;
+    float qw = 0.0;
+    float sx = 0.0;
+    float sy = 0.0;
+    float sz = 0.0;
 };
 
 #define PARENT_INVALID 0xffffffff
 struct ParentInfo {
-    uint32_t unitID;
-    uint32_t index;
+    uint32_t unitID = 0;
+    uint32_t index = 0;
 };
 
 struct Skew {
-    float_t x;
-    float_t y;
+    float_t x = 0.0;
+    float_t y = 0.0;
 };
 
 class UnitNode: public UnitBase {
@@ -72,57 +72,57 @@ public:
     void setLevel(se::Object* jsData);
     void setSkew(se::Object* jsData);
     
-    uint32_t* getDirty(std::size_t index)
+    uint32_t* getDirty(std::size_t index) const
     {
         return dirtyData + index;
     }
     
-    TRS* getTRS(std::size_t index)
+    TRS* getTRS(std::size_t index) const
     {
         return (TRS*)trsData + index;
     }
     
-    cocos2d::Mat4* getLocalMat(std::size_t index)
+    cocos2d::Mat4* getLocalMat(std::size_t index) const
     {
         return (cocos2d::Mat4*)localMatData + index;
     }
     
-    cocos2d::Mat4* getWorldMat(std::size_t index)
+    cocos2d::Mat4* getWorldMat(std::size_t index) const
     {
         return (cocos2d::Mat4*)worldMatData + index;
     }
     
-    ParentInfo* getParent(std::size_t index)
+    ParentInfo* getParent(std::size_t index) const
     {
         return (ParentInfo*)parentData + index;
     }
     
-    int32_t* getZOrder(std::size_t index)
+    int32_t* getZOrder(std::size_t index) const
     {
         return zOrderData + index;
     }
     
-    int32_t* getCullingMask(std::size_t index)
+    int32_t* getCullingMask(std::size_t index) const
     {
         return cullingMaskData + index;
     }
     
-    uint8_t* getOpacity(std::size_t index)
+    uint8_t* getOpacity(std::size_t index) const
     {
         return opacityData + index;
     }
     
-    uint8_t* getIs3D(std::size_t index)
+    uint8_t* getIs3D(std::size_t index) const
     {
         return is3DData + index;
     }
     
-    uint64_t* getNode(std::size_t index)
+    uint64_t* getNode(std::size_t index) const
     {
         return nodeData + index;
     }
     
-    Skew* getSkew(std::size_t index)
+    Skew* getSkew(std::size_t index) const
     {
         return (Skew*)skewData + index;
     }

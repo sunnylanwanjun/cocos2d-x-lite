@@ -41,7 +41,7 @@ RENDERER_BEGIN
 
 NodeProxy::NodeProxy(std::size_t unitID, std::size_t index, const std::string& id, const std::string& name)
 {
-    traverseHandle = ProxyRender;
+    traverseHandle = render;
     
     _id = id;
     _unitID = unitID;
@@ -496,7 +496,7 @@ void NodeProxy::updateLocalMatrix()
     }
 }
 
-void ProxyRender(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
+void NodeProxy::render(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
 {
     if (!node->_needVisit || node->_realOpacity == 0) return;
 
@@ -522,7 +522,7 @@ void ProxyRender(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
     if (node->_assembler && needPostRender) node->_assembler->postHandle(node, batcher, scene);
 }
 
-void ProxyVisit(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
+void NodeProxy::visit(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
 {
     if (!node->_needVisit) return;
 
@@ -549,7 +549,7 @@ void ProxyVisit(NodeProxy* node, ModelBatcher* batcher, Scene* scene)
     node->reorderChildren();
     for (const auto& child : node->_children)
     {
-        ProxyVisit(child, batcher, scene);
+        visit(child, batcher, scene);
     }
     
     // post render

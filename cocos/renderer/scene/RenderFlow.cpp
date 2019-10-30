@@ -367,7 +367,7 @@ void RenderFlow::render(NodeProxy* scene, float deltaTime)
 
 void RenderFlow::visit(NodeProxy* rootNode)
 {
-    ProxyVisit(rootNode, _batcher, _scene);
+    NodeProxy::visit(rootNode, _batcher, _scene);
 }
 
 RENDERER_END
