@@ -367,6 +367,7 @@ SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setColor);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_bindNodeProxy);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setBatchEnabled);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_dbRender);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_getArmature);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_convertToRootSpace);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_create);
@@ -433,8 +434,31 @@ SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_onDisable);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setColor);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_bindNodeProxy);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setBatchEnabled);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getArmature);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_stopSchedule);
 SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_CCArmatureCacheDisplay);
+
+extern se::Object* __jsb_dragonBones_AttachedNode_proto;
+extern se::Class* __jsb_dragonBones_AttachedNode_class;
+
+bool js_register_dragonBones_AttachedNode(se::Object* obj);
+bool register_all_cocos2dx_dragonbones(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_AttachedNode_getSlotInfos);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode);
+
+extern se::Object* __jsb_dragonBones_RealTimeAttachedNode_proto;
+extern se::Class* __jsb_dragonBones_RealTimeAttachedNode_class;
+
+bool js_register_dragonBones_RealTimeAttachedNode(se::Object* obj);
+bool register_all_cocos2dx_dragonbones(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_RealTimeAttachedNode_RealTimeAttachedNode);
+
+extern se::Object* __jsb_dragonBones_CacheModeAttachedNode_proto;
+extern se::Class* __jsb_dragonBones_CacheModeAttachedNode_class;
+
+bool js_register_dragonBones_CacheModeAttachedNode(se::Object* obj);
+bool register_all_cocos2dx_dragonbones(se::Object* obj);
+SE_DECLARE_FUNC(js_cocos2dx_dragonbones_CacheModeAttachedNode_CacheModeAttachedNode);
 
 #endif //#if USE_DRAGONBONES > 0

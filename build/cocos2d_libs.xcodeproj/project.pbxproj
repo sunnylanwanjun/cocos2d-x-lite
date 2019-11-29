@@ -31,6 +31,10 @@
 		04355817217EADF300B9C056 /* IOBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04355814217EADF300B9C056 /* IOBuffer.cpp */; };
 		04355818217EADF300B9C056 /* IOBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 04355815217EADF300B9C056 /* IOBuffer.h */; };
 		04355819217EADF300B9C056 /* IOBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 04355815217EADF300B9C056 /* IOBuffer.h */; };
+		043F19DD238F6FD6000BC7D4 /* AttachedNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043F19DB238F6FD6000BC7D4 /* AttachedNode.cpp */; };
+		043F19DE238F6FD6000BC7D4 /* AttachedNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043F19DB238F6FD6000BC7D4 /* AttachedNode.cpp */; };
+		043F19DF238F6FD6000BC7D4 /* AttachedNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 043F19DC238F6FD6000BC7D4 /* AttachedNode.h */; };
+		043F19E0238F6FD6000BC7D4 /* AttachedNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 043F19DC238F6FD6000BC7D4 /* AttachedNode.h */; };
 		045F672822A50A8D0033F7BD /* RenderData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045F672622A50A8C0033F7BD /* RenderData.cpp */; };
 		045F672922A50A8D0033F7BD /* RenderData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045F672622A50A8C0033F7BD /* RenderData.cpp */; };
 		045F672A22A50A8D0033F7BD /* RenderData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 045F672722A50A8C0033F7BD /* RenderData.hpp */; };
@@ -1459,6 +1463,8 @@
 		0431A06E22CCA7C1003356C9 /* SimpleSprite2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SimpleSprite2D.hpp; sourceTree = "<group>"; };
 		04355814217EADF300B9C056 /* IOBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IOBuffer.cpp; path = "../cocos/editor-support/IOBuffer.cpp"; sourceTree = "<group>"; };
 		04355815217EADF300B9C056 /* IOBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOBuffer.h; path = "../cocos/editor-support/IOBuffer.h"; sourceTree = "<group>"; };
+		043F19DB238F6FD6000BC7D4 /* AttachedNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AttachedNode.cpp; path = "../cocos/editor-support/dragonbones-creator-support/AttachedNode.cpp"; sourceTree = "<group>"; };
+		043F19DC238F6FD6000BC7D4 /* AttachedNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AttachedNode.h; path = "../cocos/editor-support/dragonbones-creator-support/AttachedNode.h"; sourceTree = "<group>"; };
 		045F672622A50A8C0033F7BD /* RenderData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RenderData.cpp; sourceTree = "<group>"; };
 		045F672722A50A8C0033F7BD /* RenderData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RenderData.hpp; sourceTree = "<group>"; };
 		046B6888219FA61200B33469 /* MiddlewareManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MiddlewareManager.cpp; path = "../cocos/editor-support/MiddlewareManager.cpp"; sourceTree = "<group>"; };
@@ -2535,6 +2541,8 @@
 				046E06132185B37100B24E2D /* CCSlot.h */,
 				046E06122185B37100B24E2D /* CCTextureAtlasData.cpp */,
 				046E060D2185B37000B24E2D /* CCTextureAtlasData.h */,
+				043F19DB238F6FD6000BC7D4 /* AttachedNode.cpp */,
+				043F19DC238F6FD6000BC7D4 /* AttachedNode.h */,
 			);
 			name = "dragonbones-creator-support";
 			sourceTree = "<group>";
@@ -3731,7 +3739,6 @@
 				1A28FF751F20AFAB007A1D9D /* SRHTTPConnectMessage.h in Headers */,
 				46FDDADF202ACC6A00931238 /* RenderTarget.h in Headers */,
 				426947BB234ED0130044C66E /* SimpleSprite3D.hpp in Headers */,
-				04DBD43D22AE2DBD00DBE4CD /* SkeletonBinary.h in Headers */,
 				4617862920522469008256E1 /* Uri.h in Headers */,
 				469303902046AE05004A3D6C /* MappingUtils.hpp in Headers */,
 				1AAAC8F5205CB6E9005321B9 /* Export.h in Headers */,
@@ -3948,6 +3955,7 @@
 				04F0A9CE234F14BE002C3533 /* Timeline.h in Headers */,
 				046E06762185B42500B24E2D /* DragonBones.h in Headers */,
 				46FDDB6B202ADDCE00931238 /* base64.h in Headers */,
+				043F19DF238F6FD6000BC7D4 /* AttachedNode.h in Headers */,
 				04F0A9D6234F14BE002C3533 /* TranslateTimeline.h in Headers */,
 				046E06D92185B49F00B24E2D /* CanvasData.h in Headers */,
 				1A52DB45205BCD9200350EE3 /* Base.h in Headers */,
@@ -4071,6 +4079,7 @@
 				04F0A9DB234F14BE002C3533 /* DeformTimeline.h in Headers */,
 				046E06A02185B45300B24E2D /* Point.h in Headers */,
 				1A28FF961F20AFAB007A1D9D /* SocketRocket.h in Headers */,
+				043F19E0238F6FD6000BC7D4 /* AttachedNode.h in Headers */,
 				4617864620522469008256E1 /* HttpAsynConnection-apple.h in Headers */,
 				46FDDAA8202ACC6A00931238 /* ForwardRenderer.h in Headers */,
 				04F0A9F9234F14BE002C3533 /* SkeletonClipping.h in Headers */,
@@ -4318,7 +4327,6 @@
 				1A28FF4E1F20AFAB007A1D9D /* SRDelegateController.h in Headers */,
 				04F0A9C9234F14BE002C3533 /* EventData.h in Headers */,
 				469301D0203FC696004A3D6C /* CCConfiguration.h in Headers */,
-				04DBD45A22AE2DBD00DBE4CD /* PointAttachment.h in Headers */,
 				426947BC234ED0130044C66E /* SimpleSprite3D.hpp in Headers */,
 				46FDDB6E202ADDCE00931238 /* etc1.h in Headers */,
 				461DCA3720BBFA2D00B22827 /* EditBox.h in Headers */,
@@ -4814,6 +4822,7 @@
 				046E065C2185B41B00B24E2D /* Constraint.cpp in Sources */,
 				1A29D796205666F500168D9A /* jsb_opengl_utils.cpp in Sources */,
 				BA21055A21009A2600E19975 /* AssetsManagerEx.cpp in Sources */,
+				043F19DD238F6FD6000BC7D4 /* AttachedNode.cpp in Sources */,
 				046E06742185B42500B24E2D /* DragonBones.cpp in Sources */,
 				04F0A9FC234F14BE002C3533 /* MathUtil.cpp in Sources */,
 				04F0A98A234F14BE002C3533 /* SkeletonClipping.cpp in Sources */,
@@ -4856,7 +4865,6 @@
 				50ABC0161926664800A911A9 /* CCImage.cpp in Sources */,
 				04F0A94F234F14BE002C3533 /* IkConstraintData.cpp in Sources */,
 				425D3FF222D86BEF00BCED11 /* Mat3.cpp in Sources */,
-				04DBD40E22AE2DBD00DBE4CD /* VertexAttachment.cpp in Sources */,
 				426947BA234ED0130044C66E /* SimpleSprite3D.cpp in Sources */,
 				04F0A939234F14BE002C3533 /* Attachment.cpp in Sources */,
 				04F0AA1F234F14BE002C3533 /* AnimationStateData.cpp in Sources */,
@@ -5125,6 +5133,7 @@
 				04F0AA0B234F14BE002C3533 /* Skeleton.cpp in Sources */,
 				04F0A937234F14BE002C3533 /* SpineObject.cpp in Sources */,
 				469303952046AE05004A3D6C /* RefCounter.cpp in Sources */,
+				043F19DE238F6FD6000BC7D4 /* AttachedNode.cpp in Sources */,
 				04F0A94D234F14BE002C3533 /* AttachmentLoader.cpp in Sources */,
 				46FDDABC202ACC6A00931238 /* VertexFormat.cpp in Sources */,
 				046E061D2185B37100B24E2D /* CCFactory.cpp in Sources */,

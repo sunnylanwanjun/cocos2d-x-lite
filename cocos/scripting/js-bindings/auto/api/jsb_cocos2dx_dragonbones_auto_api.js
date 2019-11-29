@@ -2550,6 +2550,16 @@ dbRender : function (
 },
 
 /**
+ * @method setAttachedNode
+ * @param {dragonBones::RealTimeAttachedNode} arg0
+ */
+setAttachedNode : function (
+realtimeattachednode 
+)
+{
+},
+
+/**
  * @method getArmature
  * @return {dragonBones::Armature}
  */
@@ -3067,6 +3077,16 @@ bool
 },
 
 /**
+ * @method setAttachedNode
+ * @param {dragonBones::CacheModeAttachedNode} arg0
+ */
+setAttachedNode : function (
+cachemodeattachednode 
+)
+{
+},
+
+/**
  * @method getArmature
  * @return {dragonBones::Armature}
  */
@@ -3097,6 +3117,69 @@ str,
 str, 
 str, 
 bool 
+)
+{
+},
+
+};
+
+/**
+ * @class AttachedNode
+ */
+dragonBones.AttachedNode = {
+
+/**
+ * @method getSlotInfos
+ * @param {dragonBones::Armature} arg0
+ * @return {Array}
+ */
+getSlotInfos : function (
+armature 
+)
+{
+    return new Array();
+},
+
+/**
+ * @method associateAttachedNode
+ * @param {dragonBones::Armature} arg0
+ * @param {cc.renderer::NodeProxy} arg1
+ */
+associateAttachedNode : function (
+armature, 
+nodeproxy 
+)
+{
+},
+
+};
+
+/**
+ * @class RealTimeAttachedNode
+ */
+dragonBones.RealTimeAttachedNode = {
+
+/**
+ * @method RealTimeAttachedNode
+ * @constructor
+ */
+RealTimeAttachedNode : function (
+)
+{
+},
+
+};
+
+/**
+ * @class CacheModeAttachedNode
+ */
+dragonBones.CacheModeAttachedNode = {
+
+/**
+ * @method CacheModeAttachedNode
+ * @constructor
+ */
+CacheModeAttachedNode : function (
 )
 {
 },

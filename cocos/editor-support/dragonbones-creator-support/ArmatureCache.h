@@ -46,6 +46,12 @@ public:
         cocos2d::middleware::Texture2D* _texture = nullptr;
     };
 
+    struct SlotData {
+        cocos2d::Mat4 worldMatrix;
+        int zOrder = true;
+        bool visible = true;
+    };
+    
     struct ColorData {
         cocos2d::Color4F color;
         std::size_t vertexFloatOffset = 0;
@@ -57,6 +63,12 @@ public:
         FrameData();
         ~FrameData();
 
+        const std::vector<SlotData*>& getSlots() const
+        {
+            return _slots;
+        }
+        std::size_t getSlotCount() const;
+        
         const std::vector<ColorData*>& getColors() const 
         {
             return _colors;
@@ -73,7 +85,10 @@ public:
         SegmentData* buildSegmentData(std::size_t index);
         // if color data is empty, it will build new one.
         ColorData* buildColorData(std::size_t index);
-
+        // if slot data is empty, it will build new one.
+        SlotData* buildSlotData(std::size_t index);
+        
+        std::vector<SlotData*> _slots;
         std::vector<ColorData*> _colors;
         std::vector<SegmentData*> _segments;
     public:

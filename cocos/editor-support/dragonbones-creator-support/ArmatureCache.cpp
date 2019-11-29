@@ -64,6 +64,12 @@ ArmatureCache::FrameData::FrameData()
 
 ArmatureCache::FrameData::~FrameData() 
 {
+    for (std::size_t i = 0, c = _slots.size(); i < c; i++)
+    {
+        delete _slots[i];
+    }
+    _slots.clear();
+    
     for (std::size_t i = 0, c = _colors.size(); i < c; i++) 
     {
         delete _colors[i];
@@ -75,6 +81,21 @@ ArmatureCache::FrameData::~FrameData()
         delete _segments[i];
     }
     _segments.clear();
+}
+
+ArmatureCache::SlotData* ArmatureCache::FrameData::buildSlotData(std::size_t index)
+{
+    if (index > _slots.size()) return nullptr;
+    if (index == _slots.size()) {
+        SlotData* slotData = new SlotData;
+        _slots.push_back(slotData);
+    }
+    return _slots[index];
+}
+
+std::size_t ArmatureCache::FrameData::getSlotCount() const
+{
+    return _slots.size();
 }
 
 ArmatureCache::ColorData* ArmatureCache::FrameData::buildColorData(std::size_t index) 
@@ -341,13 +362,22 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 
     for (std::size_t i = 0, len = slots.size(); i < len; i++)
     {
+        auto slotCount = _frameData->getSlotCount();
+        SlotData* slotData = _frameData->buildSlotData(slotCount);
         slot = (CCSlot*)slots[i];
+        
+        slotData->visible = slot->getVisible();
+        slotData->zOrder = slot->_zOrder;
+        
         if (!slot->getVisible())
         {
             continue;
         }
         slot->updateWorldMatrix();
-
+        
+        cocos2d::Mat4* worldMatrix = &slot->worldMatrix;
+        slotData->worldMatrix = *worldMatrix;
+        
         // If slots has child armature,will traverse child first.
         Armature* childArmature = slot->getChildArmature();
         if (childArmature != nullptr)
@@ -388,9 +418,8 @@ void ArmatureCache::traverseArmature(Armature* armature, float parentOpacity/*= 
 
         // Transform component matrix to global matrix
         middleware::Triangles& triangles = slot->triangles;
-        cocos2d::Mat4* worldMatrix = &slot->worldMatrix;
         middleware::V2F_T2F_C4B* worldTriangles = slot->worldVerts;
-
+        
         for (int v = 0, w = 0, vn = triangles.vertCount; v < vn; ++v, w += 2)
         {
             middleware::V2F_T2F_C4B* vertex = triangles.verts + v;
