@@ -46,10 +46,8 @@ public:
         cocos2d::middleware::Texture2D* _texture = nullptr;
     };
 
-    struct SlotData {
-        cocos2d::Mat4 worldMatrix;
-        int zOrder = true;
-        bool visible = true;
+    struct BoneData {
+        cocos2d::Mat4 globalTransformMatrix;
     };
     
     struct ColorData {
@@ -63,11 +61,11 @@ public:
         FrameData();
         ~FrameData();
 
-        const std::vector<SlotData*>& getSlots() const
+        const std::vector<BoneData*>& getBones() const
         {
-            return _slots;
+            return _bones;
         }
-        std::size_t getSlotCount() const;
+        std::size_t getBoneCount() const;
         
         const std::vector<ColorData*>& getColors() const 
         {
@@ -85,10 +83,10 @@ public:
         SegmentData* buildSegmentData(std::size_t index);
         // if color data is empty, it will build new one.
         ColorData* buildColorData(std::size_t index);
-        // if slot data is empty, it will build new one.
-        SlotData* buildSlotData(std::size_t index);
+        // if bone data is empty, it will build new one.
+        BoneData* buildBoneData(std::size_t index);
         
-        std::vector<SlotData*> _slots;
+        std::vector<BoneData*> _bones;
         std::vector<ColorData*> _colors;
         std::vector<SegmentData*> _segments;
     public:

@@ -2392,6 +2392,16 @@ getRootDisplay : function (
 },
 
 /**
+ * @method setAttachUtil
+ * @param {dragonBones::RealTimeAttachUtil} arg0
+ */
+setAttachUtil : function (
+realtimeattachutil 
+)
+{
+},
+
+/**
  * @method removeDBEventListener
  * @param {String} arg0
  * @param {function} arg1
@@ -2545,16 +2555,6 @@ bool
  * @method dbRender
  */
 dbRender : function (
-)
-{
-},
-
-/**
- * @method setAttachedNode
- * @param {dragonBones::RealTimeAttachedNode} arg0
- */
-setAttachedNode : function (
-realtimeattachednode 
 )
 {
 },
@@ -2903,6 +2903,16 @@ str
 },
 
 /**
+ * @method setAttachUtil
+ * @param {dragonBones::CacheModeAttachUtil} arg0
+ */
+setAttachUtil : function (
+cachemodeattachutil 
+)
+{
+},
+
+/**
  * @method removeDBEventListener
  * @param {String} arg0
  */
@@ -3077,16 +3087,6 @@ bool
 },
 
 /**
- * @method setAttachedNode
- * @param {dragonBones::CacheModeAttachedNode} arg0
- */
-setAttachedNode : function (
-cachemodeattachednode 
-)
-{
-},
-
-/**
  * @method getArmature
  * @return {dragonBones::Armature}
  */
@@ -3124,21 +3124,9 @@ bool
 };
 
 /**
- * @class AttachedNode
+ * @class AttachUtilBase
  */
-dragonBones.AttachedNode = {
-
-/**
- * @method getSlotInfos
- * @param {dragonBones::Armature} arg0
- * @return {Array}
- */
-getSlotInfos : function (
-armature 
-)
-{
-    return new Array();
-},
+dragonBones.AttachUtilBase = {
 
 /**
  * @method associateAttachedNode
@@ -3155,15 +3143,15 @@ nodeproxy
 };
 
 /**
- * @class RealTimeAttachedNode
+ * @class RealTimeAttachUtil
  */
-dragonBones.RealTimeAttachedNode = {
+dragonBones.RealTimeAttachUtil = {
 
 /**
- * @method RealTimeAttachedNode
+ * @method RealTimeAttachUtil
  * @constructor
  */
-RealTimeAttachedNode : function (
+RealTimeAttachUtil : function (
 )
 {
 },
@@ -3171,15 +3159,15 @@ RealTimeAttachedNode : function (
 };
 
 /**
- * @class CacheModeAttachedNode
+ * @class CacheModeAttachUtil
  */
-dragonBones.CacheModeAttachedNode = {
+dragonBones.CacheModeAttachUtil = {
 
 /**
- * @method CacheModeAttachedNode
+ * @method CacheModeAttachUtil
  * @constructor
  */
-CacheModeAttachedNode : function (
+CacheModeAttachUtil : function (
 )
 {
 },

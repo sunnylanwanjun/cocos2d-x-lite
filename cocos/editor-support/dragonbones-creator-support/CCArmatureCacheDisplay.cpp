@@ -21,12 +21,12 @@
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include "dragonbones-creator-support/AttachUtil.h"
 #include "CCArmatureCacheDisplay.h"
 #include "MiddlewareManager.h"
 #include "ArmatureCacheMgr.h"
 #include "CCFactory.h"
 #include "renderer/gfx/Texture.h"
-#include "AttachedNode.h"
 
 USING_NS_CC;
 USING_NS_MW;
@@ -74,7 +74,7 @@ void CCArmatureCacheDisplay::dispose()
         _eventObject->returnToPool();
         _eventObject = nullptr;
     }
-    CC_SAFE_RELEASE_NULL(_attachedNode);
+    CC_SAFE_RELEASE_NULL(_attachUtil);
     CC_SAFE_RELEASE_NULL(_nodeProxy);
     CC_SAFE_RELEASE_NULL(_effect);
     stopSchedule();
@@ -349,9 +349,9 @@ void CCArmatureCacheDisplay::render(float dt)
         renderEffect->updateHash(effectHash);
     }
     
-    if (_attachedNode)
+    if (_attachUtil)
     {
-        _attachedNode->syncAttachedNode(_nodeProxy, frameData);
+        _attachUtil->syncAttachedNode(_nodeProxy, frameData);
     }
 }
 
@@ -451,12 +451,12 @@ void CCArmatureCacheDisplay::setEffect(cocos2d::renderer::Effect* effect)
     CC_SAFE_RETAIN(_effect);
 }
 
-void CCArmatureCacheDisplay::setAttachedNode(CacheModeAttachedNode* attachedNode)
+void CCArmatureCacheDisplay::setAttachUtil(CacheModeAttachUtil* attachUtil)
 {
-    if (attachedNode == _attachedNode) return;
-    CC_SAFE_RELEASE(_attachedNode);
-    _attachedNode = attachedNode;
-    CC_SAFE_RETAIN(_attachedNode);
+    if (attachUtil == _attachUtil) return;
+    CC_SAFE_RELEASE(_attachUtil);
+    _attachUtil = attachUtil;
+    CC_SAFE_RETAIN(_attachUtil);
 }
 
 void CCArmatureCacheDisplay::setColor(cocos2d::Color4B& color)

@@ -32,7 +32,7 @@
 
 DRAGONBONES_NAMESPACE_BEGIN
 
-class CacheModeAttachedNode;
+class CacheModeAttachUtil;
 
 class CCArmatureCacheDisplay : public cocos2d::middleware::IMiddleware, public cocos2d::Ref
 {
@@ -66,7 +66,7 @@ public:
 
     void setEffect(cocos2d::renderer::Effect* effect);
 
-    void setAttachedNode(CacheModeAttachedNode* attachedNode);
+    void setAttachUtil(CacheModeAttachUtil* attachUtil);
     
     void setColor(cocos2d::Color4B& color);
 
@@ -114,7 +114,7 @@ private:
     cocos2d::renderer::CustomAssembler* _assembler = nullptr;
     ArmatureCache* _armatureCache = nullptr;
     EventObject* _eventObject;
-    CacheModeAttachedNode* _attachedNode = nullptr;
+    CacheModeAttachUtil* _attachUtil = nullptr;
 };
 
 DRAGONBONES_NAMESPACE_END

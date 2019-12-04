@@ -6326,6 +6326,25 @@ static bool js_cocos2dx_dragonbones_CCArmatureDisplay_getRootDisplay(se::State& 
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_getRootDisplay)
 
+static bool js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachUtil(se::State& s)
+{
+    dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachUtil : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        dragonBones::RealTimeAttachUtil* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachUtil : Error processing arguments");
+        cobj->setAttachUtil(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachUtil)
+
 static bool js_cocos2dx_dragonbones_CCArmatureDisplay_removeDBEventListener(se::State& s)
 {
     dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
@@ -6684,25 +6703,6 @@ static bool js_cocos2dx_dragonbones_CCArmatureDisplay_dbRender(se::State& s)
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_dbRender)
 
-static bool js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode(se::State& s)
-{
-    dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        dragonBones::RealTimeAttachedNode* arg0 = nullptr;
-        ok &= seval_to_native_ptr(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode : Error processing arguments");
-        cobj->setAttachedNode(arg0);
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode)
-
 static bool js_cocos2dx_dragonbones_CCArmatureDisplay_getArmature(se::State& s)
 {
     dragonBones::CCArmatureDisplay* cobj = (dragonBones::CCArmatureDisplay*)s.nativeThisObject();
@@ -6789,6 +6789,7 @@ bool js_register_cocos2dx_dragonbones_CCArmatureDisplay(se::Object* obj)
     cls->defineFunction("dbInit", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dbInit));
     cls->defineFunction("addDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_addDBEventListener));
     cls->defineFunction("getRootDisplay", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getRootDisplay));
+    cls->defineFunction("setAttachUtil", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachUtil));
     cls->defineFunction("removeDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_removeDBEventListener));
     cls->defineFunction("setEffect", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setEffect));
     cls->defineFunction("dispose", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dispose));
@@ -6805,7 +6806,6 @@ bool js_register_cocos2dx_dragonbones_CCArmatureDisplay(se::Object* obj)
     cls->defineFunction("bindNodeProxy", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_bindNodeProxy));
     cls->defineFunction("setBatchEnabled", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setBatchEnabled));
     cls->defineFunction("dbRender", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_dbRender));
-    cls->defineFunction("setAttachedNode", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_setAttachedNode));
     cls->defineFunction("armature", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_getArmature));
     cls->defineFunction("convertToRootSpace", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_convertToRootSpace));
     cls->defineStaticFunction("create", _SE(js_cocos2dx_dragonbones_CCArmatureDisplay_create));
@@ -7458,6 +7458,25 @@ static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_addDBEventListener(se
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_addDBEventListener)
 
+static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachUtil(se::State& s)
+{
+    dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachUtil : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        dragonBones::CacheModeAttachUtil* arg0 = nullptr;
+        ok &= seval_to_native_ptr(args[0], &arg0);
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachUtil : Error processing arguments");
+        cobj->setAttachUtil(arg0);
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachUtil)
+
 static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_removeDBEventListener(se::State& s)
 {
     dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
@@ -7811,25 +7830,6 @@ static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setBatchEnabled(se::S
 }
 SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setBatchEnabled)
 
-static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode(se::State& s)
-{
-    dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        dragonBones::CacheModeAttachedNode* arg0 = nullptr;
-        ok &= seval_to_native_ptr(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode : Error processing arguments");
-        cobj->setAttachedNode(arg0);
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode)
-
 static bool js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getArmature(se::State& s)
 {
     dragonBones::CCArmatureCacheDisplay* cobj = (dragonBones::CCArmatureCacheDisplay*)s.nativeThisObject();
@@ -7903,6 +7903,7 @@ bool js_register_cocos2dx_dragonbones_CCArmatureCacheDisplay(se::Object* obj)
     cls->defineFunction("setTimeScale", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setTimeScale));
     cls->defineFunction("render", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_render));
     cls->defineFunction("addDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_addDBEventListener));
+    cls->defineFunction("setAttachUtil", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachUtil));
     cls->defineFunction("removeDBEventListener", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_removeDBEventListener));
     cls->defineFunction("onEnable", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_onEnable));
     cls->defineFunction("setEffect", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setEffect));
@@ -7921,7 +7922,6 @@ bool js_register_cocos2dx_dragonbones_CCArmatureCacheDisplay(se::Object* obj)
     cls->defineFunction("setColor", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setColor));
     cls->defineFunction("bindNodeProxy", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_bindNodeProxy));
     cls->defineFunction("setBatchEnabled", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setBatchEnabled));
-    cls->defineFunction("setAttachedNode", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_setAttachedNode));
     cls->defineFunction("armature", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_getArmature));
     cls->defineFunction("stopSchedule", _SE(js_cocos2dx_dragonbones_CCArmatureCacheDisplay_stopSchedule));
     cls->defineFinalizeFunction(_SE(js_dragonBones_CCArmatureCacheDisplay_finalize));
@@ -7935,34 +7935,13 @@ bool js_register_cocos2dx_dragonbones_CCArmatureCacheDisplay(se::Object* obj)
     return true;
 }
 
-se::Object* __jsb_dragonBones_AttachedNode_proto = nullptr;
-se::Class* __jsb_dragonBones_AttachedNode_class = nullptr;
+se::Object* __jsb_dragonBones_AttachUtilBase_proto = nullptr;
+se::Class* __jsb_dragonBones_AttachUtilBase_class = nullptr;
 
-static bool js_cocos2dx_dragonbones_AttachedNode_getSlotInfos(se::State& s)
+static bool js_cocos2dx_dragonbones_AttachUtilBase_associateAttachedNode(se::State& s)
 {
-    dragonBones::AttachedNode* cobj = (dragonBones::AttachedNode*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_AttachedNode_getSlotInfos : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        dragonBones::Armature* arg0 = nullptr;
-        ok &= seval_to_native_ptr(args[0], &arg0);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_AttachedNode_getSlotInfos : Error processing arguments");
-        const std::vector<std::string>& result = cobj->getSlotInfos(arg0);
-        ok &= std_vector_string_to_seval(result, &s.rval());
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_AttachedNode_getSlotInfos : Error processing arguments");
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_cocos2dx_dragonbones_AttachedNode_getSlotInfos)
-
-static bool js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode(se::State& s)
-{
-    dragonBones::AttachedNode* cobj = (dragonBones::AttachedNode*)s.nativeThisObject();
-    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode : Invalid Native Object");
+    dragonBones::AttachUtilBase* cobj = (dragonBones::AttachUtilBase*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_cocos2dx_dragonbones_AttachUtilBase_associateAttachedNode : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
@@ -7971,111 +7950,110 @@ static bool js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode(se::State
         cocos2d::renderer::NodeProxy* arg1 = nullptr;
         ok &= seval_to_native_ptr(args[0], &arg0);
         ok &= seval_to_native_ptr(args[1], &arg1);
-        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode : Error processing arguments");
+        SE_PRECONDITION2(ok, false, "js_cocos2dx_dragonbones_AttachUtilBase_associateAttachedNode : Error processing arguments");
         cobj->associateAttachedNode(arg0, arg1);
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
     return false;
 }
-SE_BIND_FUNC(js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode)
+SE_BIND_FUNC(js_cocos2dx_dragonbones_AttachUtilBase_associateAttachedNode)
 
 
 
 
-bool js_register_cocos2dx_dragonbones_AttachedNode(se::Object* obj)
+bool js_register_cocos2dx_dragonbones_AttachUtilBase(se::Object* obj)
 {
-    auto cls = se::Class::create("AttachedNode", obj, nullptr, nullptr);
+    auto cls = se::Class::create("AttachUtilBase", obj, nullptr, nullptr);
 
-    cls->defineFunction("getSlotInfos", _SE(js_cocos2dx_dragonbones_AttachedNode_getSlotInfos));
-    cls->defineFunction("associateAttachedNode", _SE(js_cocos2dx_dragonbones_AttachedNode_associateAttachedNode));
+    cls->defineFunction("associateAttachedNode", _SE(js_cocos2dx_dragonbones_AttachUtilBase_associateAttachedNode));
     cls->install();
-    JSBClassType::registerClass<dragonBones::AttachedNode>(cls);
+    JSBClassType::registerClass<dragonBones::AttachUtilBase>(cls);
 
-    __jsb_dragonBones_AttachedNode_proto = cls->getProto();
-    __jsb_dragonBones_AttachedNode_class = cls;
+    __jsb_dragonBones_AttachUtilBase_proto = cls->getProto();
+    __jsb_dragonBones_AttachUtilBase_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
 
-se::Object* __jsb_dragonBones_RealTimeAttachedNode_proto = nullptr;
-se::Class* __jsb_dragonBones_RealTimeAttachedNode_class = nullptr;
+se::Object* __jsb_dragonBones_RealTimeAttachUtil_proto = nullptr;
+se::Class* __jsb_dragonBones_RealTimeAttachUtil_class = nullptr;
 
-SE_DECLARE_FINALIZE_FUNC(js_dragonBones_RealTimeAttachedNode_finalize)
+SE_DECLARE_FINALIZE_FUNC(js_dragonBones_RealTimeAttachUtil_finalize)
 
-static bool js_cocos2dx_dragonbones_RealTimeAttachedNode_constructor(se::State& s)
+static bool js_cocos2dx_dragonbones_RealTimeAttachUtil_constructor(se::State& s)
 {
-    dragonBones::RealTimeAttachedNode* cobj = new (std::nothrow) dragonBones::RealTimeAttachedNode();
+    dragonBones::RealTimeAttachUtil* cobj = new (std::nothrow) dragonBones::RealTimeAttachUtil();
     s.thisObject()->setPrivateData(cobj);
     return true;
 }
-SE_BIND_CTOR(js_cocos2dx_dragonbones_RealTimeAttachedNode_constructor, __jsb_dragonBones_RealTimeAttachedNode_class, js_dragonBones_RealTimeAttachedNode_finalize)
+SE_BIND_CTOR(js_cocos2dx_dragonbones_RealTimeAttachUtil_constructor, __jsb_dragonBones_RealTimeAttachUtil_class, js_dragonBones_RealTimeAttachUtil_finalize)
 
 
 
-extern se::Object* __jsb_dragonBones_AttachedNode_proto;
+extern se::Object* __jsb_dragonBones_AttachUtilBase_proto;
 
-static bool js_dragonBones_RealTimeAttachedNode_finalize(se::State& s)
+static bool js_dragonBones_RealTimeAttachUtil_finalize(se::State& s)
 {
-    CCLOGINFO("jsbindings: finalizing JS object %p (dragonBones::RealTimeAttachedNode)", s.nativeThisObject());
-    dragonBones::RealTimeAttachedNode* cobj = (dragonBones::RealTimeAttachedNode*)s.nativeThisObject();
+    CCLOGINFO("jsbindings: finalizing JS object %p (dragonBones::RealTimeAttachUtil)", s.nativeThisObject());
+    dragonBones::RealTimeAttachUtil* cobj = (dragonBones::RealTimeAttachUtil*)s.nativeThisObject();
     cobj->release();
     return true;
 }
-SE_BIND_FINALIZE_FUNC(js_dragonBones_RealTimeAttachedNode_finalize)
+SE_BIND_FINALIZE_FUNC(js_dragonBones_RealTimeAttachUtil_finalize)
 
-bool js_register_cocos2dx_dragonbones_RealTimeAttachedNode(se::Object* obj)
+bool js_register_cocos2dx_dragonbones_RealTimeAttachUtil(se::Object* obj)
 {
-    auto cls = se::Class::create("RealTimeAttachedNode", obj, __jsb_dragonBones_AttachedNode_proto, _SE(js_cocos2dx_dragonbones_RealTimeAttachedNode_constructor));
+    auto cls = se::Class::create("RealTimeAttachUtil", obj, __jsb_dragonBones_AttachUtilBase_proto, _SE(js_cocos2dx_dragonbones_RealTimeAttachUtil_constructor));
 
-    cls->defineFinalizeFunction(_SE(js_dragonBones_RealTimeAttachedNode_finalize));
+    cls->defineFinalizeFunction(_SE(js_dragonBones_RealTimeAttachUtil_finalize));
     cls->install();
-    JSBClassType::registerClass<dragonBones::RealTimeAttachedNode>(cls);
+    JSBClassType::registerClass<dragonBones::RealTimeAttachUtil>(cls);
 
-    __jsb_dragonBones_RealTimeAttachedNode_proto = cls->getProto();
-    __jsb_dragonBones_RealTimeAttachedNode_class = cls;
+    __jsb_dragonBones_RealTimeAttachUtil_proto = cls->getProto();
+    __jsb_dragonBones_RealTimeAttachUtil_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
 
-se::Object* __jsb_dragonBones_CacheModeAttachedNode_proto = nullptr;
-se::Class* __jsb_dragonBones_CacheModeAttachedNode_class = nullptr;
+se::Object* __jsb_dragonBones_CacheModeAttachUtil_proto = nullptr;
+se::Class* __jsb_dragonBones_CacheModeAttachUtil_class = nullptr;
 
-SE_DECLARE_FINALIZE_FUNC(js_dragonBones_CacheModeAttachedNode_finalize)
+SE_DECLARE_FINALIZE_FUNC(js_dragonBones_CacheModeAttachUtil_finalize)
 
-static bool js_cocos2dx_dragonbones_CacheModeAttachedNode_constructor(se::State& s)
+static bool js_cocos2dx_dragonbones_CacheModeAttachUtil_constructor(se::State& s)
 {
-    dragonBones::CacheModeAttachedNode* cobj = new (std::nothrow) dragonBones::CacheModeAttachedNode();
+    dragonBones::CacheModeAttachUtil* cobj = new (std::nothrow) dragonBones::CacheModeAttachUtil();
     s.thisObject()->setPrivateData(cobj);
     return true;
 }
-SE_BIND_CTOR(js_cocos2dx_dragonbones_CacheModeAttachedNode_constructor, __jsb_dragonBones_CacheModeAttachedNode_class, js_dragonBones_CacheModeAttachedNode_finalize)
+SE_BIND_CTOR(js_cocos2dx_dragonbones_CacheModeAttachUtil_constructor, __jsb_dragonBones_CacheModeAttachUtil_class, js_dragonBones_CacheModeAttachUtil_finalize)
 
 
 
-extern se::Object* __jsb_dragonBones_AttachedNode_proto;
+extern se::Object* __jsb_dragonBones_AttachUtilBase_proto;
 
-static bool js_dragonBones_CacheModeAttachedNode_finalize(se::State& s)
+static bool js_dragonBones_CacheModeAttachUtil_finalize(se::State& s)
 {
-    CCLOGINFO("jsbindings: finalizing JS object %p (dragonBones::CacheModeAttachedNode)", s.nativeThisObject());
-    dragonBones::CacheModeAttachedNode* cobj = (dragonBones::CacheModeAttachedNode*)s.nativeThisObject();
+    CCLOGINFO("jsbindings: finalizing JS object %p (dragonBones::CacheModeAttachUtil)", s.nativeThisObject());
+    dragonBones::CacheModeAttachUtil* cobj = (dragonBones::CacheModeAttachUtil*)s.nativeThisObject();
     cobj->release();
     return true;
 }
-SE_BIND_FINALIZE_FUNC(js_dragonBones_CacheModeAttachedNode_finalize)
+SE_BIND_FINALIZE_FUNC(js_dragonBones_CacheModeAttachUtil_finalize)
 
-bool js_register_cocos2dx_dragonbones_CacheModeAttachedNode(se::Object* obj)
+bool js_register_cocos2dx_dragonbones_CacheModeAttachUtil(se::Object* obj)
 {
-    auto cls = se::Class::create("CacheModeAttachedNode", obj, __jsb_dragonBones_AttachedNode_proto, _SE(js_cocos2dx_dragonbones_CacheModeAttachedNode_constructor));
+    auto cls = se::Class::create("CacheModeAttachUtil", obj, __jsb_dragonBones_AttachUtilBase_proto, _SE(js_cocos2dx_dragonbones_CacheModeAttachUtil_constructor));
 
-    cls->defineFinalizeFunction(_SE(js_dragonBones_CacheModeAttachedNode_finalize));
+    cls->defineFinalizeFunction(_SE(js_dragonBones_CacheModeAttachUtil_finalize));
     cls->install();
-    JSBClassType::registerClass<dragonBones::CacheModeAttachedNode>(cls);
+    JSBClassType::registerClass<dragonBones::CacheModeAttachUtil>(cls);
 
-    __jsb_dragonBones_CacheModeAttachedNode_proto = cls->getProto();
-    __jsb_dragonBones_CacheModeAttachedNode_class = cls;
+    __jsb_dragonBones_CacheModeAttachUtil_proto = cls->getProto();
+    __jsb_dragonBones_CacheModeAttachUtil_class = cls;
 
     se::ScriptEngine::getInstance()->clearException();
     return true;
@@ -8094,8 +8072,8 @@ bool register_all_cocos2dx_dragonbones(se::Object* obj)
     se::Object* ns = nsVal.toObject();
 
     js_register_cocos2dx_dragonbones_Slot(ns);
-    js_register_cocos2dx_dragonbones_AttachedNode(ns);
-    js_register_cocos2dx_dragonbones_RealTimeAttachedNode(ns);
+    js_register_cocos2dx_dragonbones_AttachUtilBase(ns);
+    js_register_cocos2dx_dragonbones_RealTimeAttachUtil(ns);
     js_register_cocos2dx_dragonbones_Matrix(ns);
     js_register_cocos2dx_dragonbones_Transform(ns);
     js_register_cocos2dx_dragonbones_BaseObject(ns);
@@ -8109,13 +8087,13 @@ bool register_all_cocos2dx_dragonbones(se::Object* obj)
     js_register_cocos2dx_dragonbones_CCArmatureDisplay(ns);
     js_register_cocos2dx_dragonbones_AnimationState(ns);
     js_register_cocos2dx_dragonbones_BoneData(ns);
-    js_register_cocos2dx_dragonbones_CacheModeAttachedNode(ns);
     js_register_cocos2dx_dragonbones_ArmatureData(ns);
     js_register_cocos2dx_dragonbones_CCTextureAtlasData(ns);
     js_register_cocos2dx_dragonbones_TransformObject(ns);
     js_register_cocos2dx_dragonbones_CCSlot(ns);
     js_register_cocos2dx_dragonbones_Armature(ns);
     js_register_cocos2dx_dragonbones_Bone(ns);
+    js_register_cocos2dx_dragonbones_CacheModeAttachUtil(ns);
     js_register_cocos2dx_dragonbones_ArmatureCacheMgr(ns);
     js_register_cocos2dx_dragonbones_SkinData(ns);
     js_register_cocos2dx_dragonbones_EventObject(ns);

@@ -26,7 +26,7 @@
 #include "renderer/renderer/Pass.h"
 #include "renderer/renderer/Technique.h"
 #include "renderer/gfx/Texture.h"
-#include "AttachedNode.h"
+#include "dragonbones-creator-support/AttachUtil.h"
 
 USING_NS_CC;
 USING_NS_MW;
@@ -66,7 +66,7 @@ CCArmatureDisplay::~CCArmatureDisplay()
         _debugBuffer = nullptr;
     }
  
-    CC_SAFE_RELEASE(_attachedNode);
+    CC_SAFE_RELEASE(_attachUtil);
     CC_SAFE_RELEASE(_nodeProxy);
     CC_SAFE_RELEASE(_effect);
 }
@@ -131,9 +131,9 @@ void CCArmatureDisplay::dbRender()
     }
     
     // Synchronize attach node transform
-    if (_attachedNode)
+    if (_attachUtil)
     {
-        _attachedNode->syncAttachedNode(_nodeProxy);
+        _attachUtil->syncAttachedNode(_nodeProxy);
     }
     
     if (_debugDraw)
@@ -470,12 +470,12 @@ void CCArmatureDisplay::setEffect(cocos2d::renderer::Effect* effect)
     CC_SAFE_RETAIN(_effect);
 }
 
-void CCArmatureDisplay::setAttachedNode(RealTimeAttachedNode* attachedNode)
+void CCArmatureDisplay::setAttachUtil(RealTimeAttachUtil* attachUtil)
 {
-    if (attachedNode == _attachedNode) return;
-    CC_SAFE_RELEASE(_attachedNode);
-    _attachedNode = attachedNode;
-    CC_SAFE_RETAIN(_attachedNode);
+    if (attachUtil == _attachUtil) return;
+    CC_SAFE_RELEASE(_attachUtil);
+    _attachUtil = attachUtil;
+    CC_SAFE_RETAIN(_attachUtil);
 }
 
 void CCArmatureDisplay::setColor(cocos2d::Color4B& color)

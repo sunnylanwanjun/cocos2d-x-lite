@@ -40,7 +40,7 @@
 
 DRAGONBONES_NAMESPACE_BEGIN
 
-class RealTimeAttachedNode;
+class RealTimeAttachUtil;
 
 /**
  * CCArmatureDisplay is a armature tree.It can add or remove a childArmature.
@@ -136,7 +136,7 @@ public:
     
     void setEffect(cocos2d::renderer::Effect* effect);
     
-    void setAttachedNode(RealTimeAttachedNode* attachedNode);
+    void setAttachUtil(RealTimeAttachUtil* attachUtil);
     
     void setColor(cocos2d::Color4B& color);
     
@@ -189,7 +189,7 @@ private:
     cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
     cocos2d::renderer::Effect* _effect = nullptr;
     cocos2d::renderer::CustomAssembler* _assembler = nullptr;
-    RealTimeAttachedNode* _attachedNode = nullptr;
+    RealTimeAttachUtil* _attachUtil = nullptr;
 };
 
 DRAGONBONES_NAMESPACE_END

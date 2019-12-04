@@ -23,58 +23,50 @@
 
 #pragma once
 
-#include "CCSlot.h"
+#include "spine/spine.h"
 #include "renderer/scene/NodeProxy.hpp"
-#include "ArmatureCache.h"
+#include "spine-creator-support/SkeletonCache.h"
 #include "base/CCRef.h"
 #include <vector>
 #include <string>
 
-DRAGONBONES_NAMESPACE_BEGIN
-
-class AttachedNode : public cocos2d::Ref
-{
-public:
-    AttachedNode () {}
-    virtual ~AttachedNode()
+namespace spine {
+    class AttachUtilBase : public cocos2d::Ref
     {
-        releaseAttachedNode();
-    }
+    public:
+        AttachUtilBase () {}
+        virtual ~AttachUtilBase()
+        {
+            releaseAttachedNode();
+        }
+        
+        /**
+         * @brief Associate node with slot.
+         */
+        virtual void associateAttachedNode(spine::Skeleton* skeleton, cocos2d::renderer::NodeProxy* skeletonNode);
+        
+        /**
+         * @brief release attached node.
+         */
+        void releaseAttachedNode();
+    protected:
+        std::vector<cocos2d::renderer::NodeProxy*> _attachedNodes;
+        cocos2d::renderer::NodeProxy* _attachedRootNode = nullptr;
+    };
     
-    /**
-     * @return All slots name
-     */
-    const std::vector<std::string>& getSlotInfos(Armature* rootArmature) const;
+    class RealTimeAttachUtil : public AttachUtilBase
+    {
+    public:
+        RealTimeAttachUtil() {}
+        virtual ~RealTimeAttachUtil() {}
+        void syncAttachedNode(cocos2d::renderer::NodeProxy* skeletonNode, spine::Skeleton* skeleton);
+    };
     
-    /**
-     * @brief Associate node with slot.
-     */
-    virtual void associateAttachedNode(Armature* rootArmature, cocos2d::renderer::NodeProxy* armatureNode);
-    
-    /**
-     * @brief release attached node.
-     */
-    void releaseAttachedNode();
-protected:
-    std::vector<dragonBones::CCSlot*> _attachedSlots;
-    std::vector<cocos2d::renderer::NodeProxy*> _attachedNodes;
-    cocos2d::renderer::NodeProxy* _attachedRootNode = nullptr;
-};
-
-class RealTimeAttachedNode : public AttachedNode
-{
-public:
-    RealTimeAttachedNode() {}
-    virtual ~RealTimeAttachedNode() {}
-    void syncAttachedNode(cocos2d::renderer::NodeProxy* armatureNode);
-};
-
-class CacheModeAttachedNode : public AttachedNode
-{
-public:
-    CacheModeAttachedNode() {}
-    virtual ~CacheModeAttachedNode() {}
-    void syncAttachedNode(cocos2d::renderer::NodeProxy* armatureNode, ArmatureCache::FrameData* frameData);
-};
-
-DRAGONBONES_NAMESPACE_END
+    class CacheModeAttachUtil : public AttachUtilBase
+    {
+    public:
+        CacheModeAttachUtil() {}
+        virtual ~CacheModeAttachUtil() {}
+        void syncAttachedNode(cocos2d::renderer::NodeProxy* skeletonNode, SkeletonCache::FrameData* frameData);
+    };
+}
