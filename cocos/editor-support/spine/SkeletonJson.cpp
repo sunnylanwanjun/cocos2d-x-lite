@@ -510,7 +510,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 								// delete skeletonData;
 								// setError(root, "Error reading attachment: ", skinAttachmentName);
 								// return NULL;
-                                continue;
+								continue;
 							}
 
 							RegionAttachment *region = static_cast<RegionAttachment *>(attachment);
@@ -544,7 +544,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 								// delete skeletonData;
 								// setError(root, "Error reading attachment: ", skinAttachmentName);
 								// return NULL;
-                                continue;
+								continue;
 							}
 
 							MeshAttachment *mesh = static_cast<MeshAttachment *>(attachment);
@@ -671,14 +671,14 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 			// delete skeletonData;
 			// setError(root, "Skin not found: ", linkedMesh->_skin.buffer());
 			// return NULL;
-            continue;
+			continue;
 		}
 		Attachment *parent = skin->getAttachment(linkedMesh->_slotIndex, linkedMesh->_parent);
 		if (parent == NULL) {
 			// delete skeletonData;
 			// setError(root, "Parent mesh not found: ", linkedMesh->_parent.buffer());
 			// return NULL;
-            continue;
+			continue;
 		}
 		linkedMesh->_mesh->_deformAttachment = linkedMesh->_inheritDeform ? static_cast<VertexAttachment*>(parent) : linkedMesh->_mesh;
 		linkedMesh->_mesh->setParentMesh(static_cast<MeshAttachment *>(parent));
@@ -724,7 +724,7 @@ SkeletonData *SkeletonJson::readSkeletonData(const char *json) {
 				// delete skeletonData;
 				// delete root;
 				// return NULL;
-                continue;
+				continue;
 			}
 			skeletonData->_animations[animationsIndex++] = animation;
 		}
