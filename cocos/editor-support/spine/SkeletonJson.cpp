@@ -1056,7 +1056,7 @@ Animation *SkeletonJson::readAnimation(Json *root, SkeletonData *skeletonData) {
 					ContainerUtil::cleanUpVectorOfPointers(timelines);
 					// setError(NULL, "Attachment not found: ", timelineMap->_name);
 					// return NULL;
-                    continue;
+					continue;
 				}
 
 				VertexAttachment *attachment = static_cast<VertexAttachment *>(baseAttachment);
