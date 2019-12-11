@@ -86,9 +86,8 @@ void AttachUtilBase::associateAttachedNode(Armature* rootArmature, NodeProxy* ar
         }
         
         auto& bones = armature->getBones();
-        for (std::size_t i = 0, n = bones.size(); i < n; i++)
+        for (auto& bone : bones)
         {
-            auto bone = bones[i];
             _attachedBones.push_back(bone);
             std::string boneName = "ATTACHED_NODE:";
             boneName.append(bone->getName());
@@ -123,10 +122,10 @@ void AttachUtilBase::associateAttachedNode(Armature* rootArmature, NodeProxy* ar
         }
         
         auto& slots = armature->getSlots();
-        for (std::size_t i = 0, n = slots.size(); i < n; i++)
+        for(auto slot : slots)
         {
-            CCSlot* slot = (CCSlot*)slots[i];
-            Armature* childArmature = slot->getChildArmature();
+            CCSlot* ccSlot = (CCSlot*)slot;
+            Armature* childArmature = ccSlot->getChildArmature();
             if (childArmature != nullptr)
             {
                 traverse(childArmature);
