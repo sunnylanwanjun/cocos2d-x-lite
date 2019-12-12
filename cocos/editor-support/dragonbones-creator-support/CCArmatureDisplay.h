@@ -134,7 +134,7 @@ public:
     
     void bindNodeProxy(cocos2d::renderer::NodeProxy* node);
     
-    void setEffect(cocos2d::renderer::Effect* effect);
+    void setEffect(cocos2d::renderer::EffectVariant* effect);
     
     void setAttachUtil(RealTimeAttachUtil* attachUtil);
     
@@ -187,7 +187,7 @@ private:
     bool _premultipliedAlpha = false;
     dbEventCallback _dbEventCallback = nullptr;
     cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
-    cocos2d::renderer::Effect* _effect = nullptr;
+    cocos2d::renderer::EffectVariant* _effect = nullptr;
     cocos2d::renderer::CustomAssembler* _assembler = nullptr;
     RealTimeAttachUtil* _attachUtil = nullptr;
 };

@@ -41,6 +41,7 @@
 #include "base/CCMap.h"
 #include "middleware-adapter.h"
 #include "base/ccMacros.h"
+#include "renderer/renderer/EffectVariant.hpp"
 
 namespace spine {
 
@@ -107,7 +108,7 @@ namespace spine {
          */
         se_object_ptr getDebugData() const;
         void bindNodeProxy(cocos2d::renderer::NodeProxy* node);
-        void setEffect(cocos2d::renderer::Effect* effect);
+        void setEffect(cocos2d::renderer::EffectVariant* effect);
         void setAttachUtil(RealTimeAttachUtil* attachUtil);
         void setColor (cocos2d::Color4B& color);
         void setBatchEnabled (bool enabled);
@@ -169,7 +170,7 @@ namespace spine {
         
         cocos2d::middleware::IOTypedArray* _debugBuffer = nullptr;
         cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
-        cocos2d::renderer::Effect* _effect = nullptr;
+        cocos2d::renderer::EffectVariant* _effect = nullptr;
         RealTimeAttachUtil* _attachUtil = nullptr;
     };
 

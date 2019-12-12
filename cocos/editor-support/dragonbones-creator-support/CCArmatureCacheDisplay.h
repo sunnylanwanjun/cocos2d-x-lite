@@ -63,8 +63,8 @@ public:
     Animation* getAnimation() const;
 
     void bindNodeProxy(cocos2d::renderer::NodeProxy* node);
-
-    void setEffect(cocos2d::renderer::Effect* effect);
+    
+    void setEffect(cocos2d::renderer::EffectVariant* effect);
 
     void setAttachUtil(CacheModeAttachUtil* attachUtil);
     
@@ -110,7 +110,7 @@ private:
     bool _premultipliedAlpha = false;
     dbEventCallback _dbEventCallback = nullptr;
     cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
-    cocos2d::renderer::Effect* _effect = nullptr;
+    cocos2d::renderer::EffectVariant* _effect = nullptr;
     cocos2d::renderer::CustomAssembler* _assembler = nullptr;
     ArmatureCache* _armatureCache = nullptr;
     EventObject* _eventObject;

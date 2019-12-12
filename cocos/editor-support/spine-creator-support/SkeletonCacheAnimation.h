@@ -65,7 +65,7 @@ namespace spine {
         bool setAttachment (const std::string& slotName, const char* attachmentName);
         void setAttachUtil(CacheModeAttachUtil* attachUtil);
         void bindNodeProxy(cocos2d::renderer::NodeProxy* node);
-        void setEffect(cocos2d::renderer::Effect* effect);
+        void setEffect(cocos2d::renderer::EffectVariant* effect);
         void setColor (cocos2d::Color4B& color);
         void setBatchEnabled (bool enabled);
         
@@ -97,7 +97,7 @@ namespace spine {
         bool _premultipliedAlpha = false;
         
         cocos2d::renderer::NodeProxy* _nodeProxy = nullptr;
-        cocos2d::renderer::Effect* _effect = nullptr;
+        cocos2d::renderer::EffectVariant* _effect = nullptr;
         
         CacheFrameEvent _startListener = nullptr;
         CacheFrameEvent _endListener = nullptr;
