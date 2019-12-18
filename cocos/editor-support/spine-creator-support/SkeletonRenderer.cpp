@@ -1086,3 +1086,9 @@ void SkeletonRenderer::setAttachUtil(RealTimeAttachUtil* attachUtil)
     _attachUtil = attachUtil;
     CC_SAFE_RETAIN(_attachUtil);
 }
+
+uint32_t SkeletonRenderer::getRenderOrder() const
+{
+    if (!_nodeProxy) return 0;
+    return _nodeProxy->getRenderOrder();
+}
