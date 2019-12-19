@@ -109,8 +109,6 @@ public:
 private:
     void _clearRemoveList();
 private:
-
-    typedef std::vector<IMiddleware*>::iterator UpdateIterator;
     std::vector<IMiddleware*> _updateList;
     std::vector<IMiddleware*> _removeList;
     std::map<int, MeshBuffer*> _mbMap;
