@@ -160,9 +160,9 @@ void CCArmatureDisplay::dbRender()
             }
             
             float bx = bone->globalTransformMatrix.tx;
-            float by = -bone->globalTransformMatrix.ty;
+            float by = bone->globalTransformMatrix.ty;
             float endx = bx + bone->globalTransformMatrix.a * boneLen;
-            float endy = by - bone->globalTransformMatrix.b * boneLen;
+            float endy = by + bone->globalTransformMatrix.b * boneLen;
             
             _debugBuffer->writeFloat32(bx);
             _debugBuffer->writeFloat32(by);
