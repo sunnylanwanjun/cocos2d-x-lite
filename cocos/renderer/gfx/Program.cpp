@@ -226,9 +226,9 @@ namespace {
 
 RENDERER_BEGIN
 
-void Program::Uniform::setUniform(const void* value, UniformElementType elementType) const
+void Program::Uniform::setUniform(const void* value, size_t bytes, UniformElementType elementType, size_t fieldCount) const
 {
-    GLsizei count = size == -1 ? 1 : size;
+    GLsizei count = size == -1 ? 1 : (GLsizei)fieldCount;
     _callback(location, count, value, elementType);
 }
 
