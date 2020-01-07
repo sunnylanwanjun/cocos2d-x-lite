@@ -413,7 +413,7 @@ void DeviceGraphics::draw(size_t base, GLsizei count)
             continue;
         
         uniform.dirty = false;
-        uniformInfo.setUniform(uniform.value, uniform.bytes, uniform.elementType, uniform.count);
+        uniformInfo.setUniform(uniform.value, uniform.elementType, uniform.count);
     }
     
     // draw primitives
