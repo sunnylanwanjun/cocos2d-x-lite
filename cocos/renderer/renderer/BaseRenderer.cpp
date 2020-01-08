@@ -249,7 +249,7 @@ void BaseRenderer::setProperty (const Effect::Property* prop)
             
             _device->setTextureArray(propHashName,
                                      prop->getTextureArray(),
-                                     slots, prop->getCount());
+                                     slots);
         }
     }
     else

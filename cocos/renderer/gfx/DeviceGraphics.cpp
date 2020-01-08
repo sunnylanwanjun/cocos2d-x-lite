@@ -347,7 +347,7 @@ void DeviceGraphics::setTexture(size_t hashName, Texture* texture, int slot)
     setUniformi(hashName, slot);
 }
 
-void DeviceGraphics::setTextureArray(size_t hashName, const std::vector<Texture*>& textures, const std::vector<int>& slots, size_t fieldCount)
+void DeviceGraphics::setTextureArray(size_t hashName, const std::vector<Texture*>& textures, const std::vector<int>& slots)
 {
     auto len = textures.size();
     if (len >= _caps.maxTextureUnits)
@@ -362,7 +362,7 @@ void DeviceGraphics::setTextureArray(size_t hashName, const std::vector<Texture*
         _nextState->setTexture(slot, textures[i]);
     }
     
-    setUniformiv(hashName, slots.size(), slots.data(), fieldCount);
+    setUniformiv(hashName, slots.size(), slots.data(), slots.size());
 }
 
 void DeviceGraphics::setPrimitiveType(PrimitiveType type)
@@ -438,18 +438,18 @@ void DeviceGraphics::draw(size_t base, GLsizei count)
     _nextState->reset();
 }
 
-void DeviceGraphics::setUniform(size_t hashName, const void* v, size_t bytes, UniformElementType elementType, size_t fieldCount)
+void DeviceGraphics::setUniform(size_t hashName, const void* v, size_t bytes, UniformElementType elementType, size_t elementCount)
 {
     auto iter = _uniforms.find(hashName);
     if (iter == _uniforms.end())
     {
-        _uniforms[hashName] = Uniform(v, bytes, elementType, fieldCount);
+        _uniforms[hashName] = Uniform(v, bytes, elementType, elementCount);
     }
     else
     {
         auto& uniform = iter->second;
         uniform.dirty = true;
-        uniform.setValue(v, bytes, fieldCount);
+        uniform.setValue(v, bytes, elementCount);
     }
 }
 
@@ -476,9 +476,9 @@ void DeviceGraphics::setUniformi(size_t hashName, int i1, int i2, int i3, int i4
     setUniform(hashName, tempValue, 4 * sizeof(int), UniformElementType::INT);
 }
 
-void DeviceGraphics::setUniformiv(size_t hashName, size_t count, const int* value, size_t fieldCount)
+void DeviceGraphics::setUniformiv(size_t hashName, size_t count, const int* value, size_t elementCount)
 {
-    setUniform(hashName, value, count * sizeof(int), UniformElementType::INT, fieldCount);
+    setUniform(hashName, value, count * sizeof(int), UniformElementType::INT, elementCount);
 }
 
 void DeviceGraphics::setUniformf(size_t hashName, float f1)
@@ -504,9 +504,9 @@ void DeviceGraphics::setUniformf(size_t hashName, float f1, float f2, float f3, 
     setUniform(hashName, tempValue, 4 * sizeof(float), UniformElementType::FLOAT);
 }
 
-void DeviceGraphics::setUniformfv(size_t hashName, size_t count, const float* value, size_t fieldCount)
+void DeviceGraphics::setUniformfv(size_t hashName, size_t count, const float* value, size_t elementCount)
 {
-    setUniform(hashName, value, count * sizeof(float), UniformElementType::FLOAT, fieldCount);
+    setUniform(hashName, value, count * sizeof(float), UniformElementType::FLOAT, elementCount);
 }
 
 void DeviceGraphics::setUniformVec2(size_t hashName, const cocos2d::Vec2& value)
@@ -1157,7 +1157,7 @@ DeviceGraphics::Uniform& DeviceGraphics::Uniform::operator=(Uniform&& h)
     return *this;
 }
 
-void DeviceGraphics::Uniform::setValue(const void* v, size_t valueBytes, size_t fieldCount)
+void DeviceGraphics::Uniform::setValue(const void* v, size_t valueBytes, size_t elementCount)
 {
     if (bytes != valueBytes || !value) {
         if (value)
@@ -1165,7 +1165,7 @@ void DeviceGraphics::Uniform::setValue(const void* v, size_t valueBytes, size_t 
         value = malloc(valueBytes);
         
         bytes = valueBytes;
-        count = fieldCount;
+        count = elementCount;
     }
     
     memcpy(value, v, valueBytes);
