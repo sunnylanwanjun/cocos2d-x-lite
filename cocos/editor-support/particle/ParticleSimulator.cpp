@@ -403,7 +403,7 @@ void ParticleSimulator::render(float dt)
             auto& newPos = tpa;
             newPos.set(particle.pos);
             // free and relative mode need move particle to origin position by manual
-            if (positionType == PositionType::FREE || positionType == PositionType::RELATIVE)
+            if (positionType != PositionType::GROUPED)
             {
                 newPos.add(particle.startPos);
             }
