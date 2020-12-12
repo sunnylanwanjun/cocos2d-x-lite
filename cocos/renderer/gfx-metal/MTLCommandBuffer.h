@@ -23,7 +23,7 @@ class CCMTLCommandBuffer : public CommandBuffer {
 
 public:
     CCMTLCommandBuffer(Device *device);
-    ~CCMTLCommandBuffer();
+    ~CCMTLCommandBuffer() = default;
 
     virtual bool initialize(const CommandBufferInfo &info) override;
     virtual void destroy() override;
@@ -32,7 +32,7 @@ public:
     virtual void beginRenderPass(RenderPass *renderPass, Framebuffer *fbo, const Rect &renderArea, const Color *colors, float depth, int stencil) override;
     virtual void endRenderPass() override;
     virtual void bindPipelineState(PipelineState *pso) override;
-    virtual void bindDescriptorSet(uint set, DescriptorSet *descriptorSet, uint dynamicOffsetCount, const uint *dynamicOffsets) override;
+    virtual void bindDescriptorSet(uint set, DescriptorSet *descriptorSet, uint dynamicOffsetCount, const vector<uint>& dynamicOffsets) override;
     virtual void bindInputAssembler(InputAssembler *ia) override;
     virtual void setViewport(const Viewport &vp) override;
     virtual void setScissor(const Rect &rect) override;
@@ -46,9 +46,8 @@ public:
     virtual void updateBuffer(Buffer *buff, const void *data, uint size, uint offset) override;
     virtual void copyBuffersToTexture(const uint8_t *const *buffers, Texture *texture, const BufferTextureCopy *regions, uint count) override;
     virtual void execute(const CommandBuffer *const *cmdBuffs, uint32_t count) override;
-    CC_INLINE bool isCommandBufferBegan() const {
-        return _commandBufferBegan;
-    }
+    CC_INLINE bool isCommandBufferBegan() const { return _commandBufferBegan; }
+    CC_INLINE id<MTLCommandBuffer> getMTLCommandBuffer() const { return _mtlCommandBuffer; } 
 
 private:
     void bindDescriptorSets();
@@ -56,7 +55,6 @@ private:
 
 private:
     CCMTLGPUPipelineState *_gpuPipelineState = nullptr;
-    CCMTLFence *_fence = nullptr;
 
     vector<CCMTLGPUDescriptorSet *> _GPUDescriptorSets;
     vector<vector<uint>> _dynamicOffsets;
