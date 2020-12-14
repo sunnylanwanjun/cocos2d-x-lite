@@ -24,9 +24,8 @@
 #pragma once
 
 #include "IOBuffer.h"
+#include "IOTypedArray.h"
 #include <vector>
-#include "renderer/gfx/VertexBuffer.h"
-#include "renderer/gfx/IndexBuffer.h"
 
 MIDDLEWARE_BEGIN
 
@@ -38,16 +37,23 @@ public:
 
     virtual ~MeshBuffer();
 
-    inline cc::renderer::VertexBuffer* getGLVB()
+    se_object_ptr getVBTypedArray(std::size_t bufferPos)
     {
-        return _glVBArr[_bufferPos];
+        if (_vbArr.size() <= bufferPos) return nullptr;
+        return _vbArr[bufferPos]->getTypeArray();
     }
     
-    inline cc::renderer::IndexBuffer* getGLIB()
+    se_object_ptr getIBTypedArray(std::size_t bufferPos)
     {
-        return _glIBArr[_bufferPos];
+        if (_ibArr.size() <= bufferPos) return nullptr;
+        return _ibArr[bufferPos]->getTypeArray();
     }
     
+	std::size_t getBufferPos()
+	{
+		return _bufferPos;
+	}
+
     IOBuffer& getVB()
     {
         return _vb;
@@ -64,8 +70,8 @@ public:
 private:
     void next();
 private:
-    std::vector<cc::renderer::IndexBuffer*> _glIBArr;
-    std::vector<cc::renderer::VertexBuffer*> _glVBArr;
+    std::vector<IOTypedArray*> _ibArr;
+    std::vector<IOTypedArray*> _vbArr;
     
     std::size_t _bufferPos = 0;
     IOBuffer _vb;

@@ -27,7 +27,7 @@
 MIDDLEWARE_BEGIN
 
 MeshBuffer::MeshBuffer(int vertexFormat)
-    :MeshBuffer(vertexFormat, INIT_INDEX_BUFFER_SIZE,MAX_VERTEX_BUFFER_SIZE)
+    :MeshBuffer(vertexFormat, INIT_INDEX_BUFFER_SIZE, MAX_VERTEX_BUFFER_SIZE)
 {
 }
 
@@ -47,37 +47,23 @@ MeshBuffer::MeshBuffer(int vertexFormat, size_t indexSize, size_t vertexSize)
         next();
     });
     
-    auto glIB = new IndexBuffer();
-    glIB->init(DeviceGraphics::getInstance(), IndexFormat::UINT16, Usage::STATIC, nullptr, 0, (uint32_t)_ib.getCapacity() / sizeof(unsigned short));
-    _glIBArr.push_back(glIB);
+    auto rIB = new IOTypedArray(se::Object::TypedArrayType::UINT16, _ib.getCapacity());
+    _ibArr.push_back(rIB);
     
-    auto glVB = new VertexBuffer();
-    switch(_vertexFormat)
-    {
-        case VF_XYUVC:
-            glVB->init(DeviceGraphics::getInstance(), VertexFormat::XY_UV_Color, Usage::DYNAMIC, nullptr, 0, (uint32_t)_vb.getCapacity() / VertexFormat::XY_UV_Color->getBytes());
-            break;
-        case VF_XYUVCC:
-            glVB->init(DeviceGraphics::getInstance(), VertexFormat::XY_UV_Two_Color, Usage::DYNAMIC, nullptr, 0, (uint32_t)_vb.getCapacity() / VertexFormat::XY_UV_Two_Color->getBytes());
-            break;
-        default:
-            CCASSERT(false, "MeshBuffer constructor unknow vertex format");
-            break;
-    }
-    
-    _glVBArr.push_back(glVB);
+    auto rVB = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, _vb.getCapacity());
+    _vbArr.push_back(rVB);
 }
 
 MeshBuffer::~MeshBuffer()
 {
-    auto num = _glVBArr.size();
+    auto num = _vbArr.size();
     for (auto i = 0; i < num; i++)
     {
-        _glIBArr[i]->release();
-        _glVBArr[i]->release();
+        delete _ibArr[i];
+        delete _vbArr[i];
     }
-    _glIBArr.clear();
-    _glVBArr.clear();
+    _ibArr.clear();
+    _vbArr.clear();
 }
 
 void MeshBuffer::uploadVB()
@@ -85,8 +71,9 @@ void MeshBuffer::uploadVB()
     auto length = _vb.length();
     if (length == 0) return;
 
-    auto glVB = _glVBArr[_bufferPos];
-    glVB->update(0, _vb.getBuffer(), length);
+    auto rVB = _vbArr[_bufferPos];
+    rVB->reset();
+    rVB->writeBytes((const char*)_vb.getBuffer(), _vb.length());
 }
 
 void MeshBuffer::uploadIB()
@@ -94,38 +81,23 @@ void MeshBuffer::uploadIB()
     auto length = _ib.length();
     if (length == 0) return;
     
-    auto glIB = _glIBArr[_bufferPos];
-    glIB->update(0, _ib.getBuffer(), length);
+    auto rIB = _ibArr[_bufferPos];
+    rIB->writeBytes((const char *)_ib.getBuffer(), _ib.length());
 }
 
 void MeshBuffer::next()
 {
     _bufferPos++;
-    if (_glIBArr.size() <= _bufferPos)
+    if (_ibArr.size() <= _bufferPos)
     {
-        auto glIB = new IndexBuffer();
-        glIB->init(DeviceGraphics::getInstance(), IndexFormat::UINT16, Usage::STATIC, nullptr, 0, (uint32_t)_ib.getCapacity() / sizeof(unsigned short));
-        _glIBArr.push_back(glIB);
+        auto rIB = new IOTypedArray(se::Object::TypedArrayType::UINT16, _ib.getCapacity());
+        _ibArr.push_back(rIB);
     }
     
-    if (_glVBArr.size() <= _bufferPos)
+    if (_vbArr.size() <= _bufferPos)
     {
-        auto glVB = new VertexBuffer();
-        
-        switch(_vertexFormat)
-        {
-            case VF_XYUVC:
-                glVB->init(DeviceGraphics::getInstance(), VertexFormat::XY_UV_Color, Usage::DYNAMIC, nullptr, 0, (uint32_t)_vb.getCapacity() / VertexFormat::XY_UV_Color->getBytes());
-                break;
-            case VF_XYUVCC:
-                glVB->init(DeviceGraphics::getInstance(), VertexFormat::XY_UV_Two_Color, Usage::DYNAMIC, nullptr, 0, (uint32_t)_vb.getCapacity() / VertexFormat::XY_UV_Two_Color->getBytes());
-                break;
-            default:
-                CCASSERT(false, "MeshBuffer constructor unknow vertex format");
-                break;
-        }
-        
-        _glVBArr.push_back(glVB);
+        auto rVB = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, _vb.getCapacity());
+        _vbArr.push_back(rVB);
     }
 }
 

@@ -46,5 +46,6 @@
 #define USING_NS_MW using namespace cc::middleware
 #endif
 
-#define VF_XYUVC 5
-#define VF_XYUVCC 6
+// R G B A 分别占用32位
+#define VF_XYZUVC 9
+#define VF_XYZUVCC 13

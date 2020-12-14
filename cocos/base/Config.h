@@ -116,4 +116,16 @@ THE SOFTWARE.
 # define CC_ENABLE_PREMULTIPLIED_ALPHA 1
 #endif
 
+#ifndef USE_MIDDLEWARE
+#define USE_MIDDLEWARE 1
+#endif
+
+#ifndef USE_SPINE
+#define USE_SPINE 1
+#endif
+
+#ifndef USE_DRAGONBONES
+#define USE_DRAGONBONES 1
+#endif
+
 #endif // __CCCONFIG_H__

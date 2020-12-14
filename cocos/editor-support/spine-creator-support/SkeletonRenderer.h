@@ -162,7 +162,7 @@ namespace spine {
         float               _timeScale = 1;
         bool                _paused = false;
         
-        bool                _batch = false;
+        bool                _batch = true;
         bool                _debugMesh = false;
         bool                _debugSlots = false;
         bool                _debugBones = false;

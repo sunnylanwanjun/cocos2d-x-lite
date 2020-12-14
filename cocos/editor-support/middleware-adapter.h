@@ -26,19 +26,19 @@
 #include "MiddlewareMacro.h"
 #include "base/Ref.h"
 #include "math/Geometry.h"
-#include "math/Vec2.h"
+#include "math/Vec3.h"
 #include <functional>
 
 MIDDLEWARE_BEGIN
 
 struct Color4B {
-    Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
+    Color4B(uint32_t _r, uint32_t _g, uint32_t _b, uint32_t _a);
     Color4B();
 
-    uint8_t r = 0;
-    uint8_t g = 0;
-    uint8_t b = 0;
-    uint8_t a = 0;
+    uint32_t r = 0;
+    uint32_t g = 0;
+    uint32_t b = 0;
+    uint32_t a = 0;
 
 	static const Color4B WHITE;
 };
@@ -64,16 +64,16 @@ struct Tex2F {
 };
 
 /**
- *  Vertex Format with x y u v color.
+ *  Vertex Format with x y z u v color.
  */
 struct V2F_T2F_C4B {
-    // vertices (2F) 8 bytes
-    cc::Vec2 vertex;
+    // vertices (3F)
+    cc::Vec3 vertex;
 
-    // tex coords (2F) 8 bytes
+    // tex coords (2F)
     Tex2F texCoord;
 
-    // colors (4B) 4 bytes
+    // colors (4B)
     Color4B color;
 };
 
@@ -81,16 +81,16 @@ struct V2F_T2F_C4B {
  *  Vertex Format with x y u v color1 color2.
  */
 struct V2F_T2F_C4B_C4B {
-    // vertices (2F) 8 bytes
-    cc::Vec2 vertex;
+    // vertices (3F)
+    cc::Vec3 vertex;
 
-    // tex coords (2F) 8 bytes
+    // tex coords (2F)
     Tex2F texCoord;
 
-    // colors (4B) 4 bytes
+    // colors (4B)
     Color4B color;
 
-    // colors (4B) 4 bytes
+    // colors (4B)
     Color4B color2;
 };
 

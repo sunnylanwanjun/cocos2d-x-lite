@@ -30,8 +30,7 @@
 #pragma once
 
 #include "spine/spine.h"
-#include "base/CCRef.h"
-#include "base/ccTypes.h"
+#include "base/Ref.h"
 #include <string>
 
 namespace spine {

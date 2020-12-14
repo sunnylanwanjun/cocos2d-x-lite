@@ -27,14 +27,14 @@
 MIDDLEWARE_BEGIN
 
 const Color4F Color4F::WHITE(1.0f, 1.0f, 1.0f, 1.0f);
-const Color4B Color4B::WHITE(1, 1, 1, 1);
+const Color4B Color4B::WHITE(255, 255, 255, 255);
 
 Color4F::Color4F(float _r, float _g, float _b, float _a)
 : r(_r), g(_g), b(_b), a(_a) {}
 Color4F::Color4F() {}
 
 Color4B::Color4B() {}
-Color4B::Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
+Color4B::Color4B(uint32_t _r, uint32_t _g, uint32_t _b, uint32_t _a)
 : r(_r), g(_g), b(_b), a(_a) {}
 
 Texture2D::Texture2D() {

@@ -100,6 +100,9 @@ public:
     
     MeshBuffer* getMeshBuffer(int format);
     
+	se_object_ptr getVBTypedArray(int format, int bufferPos);
+    se_object_ptr getIBTypedArray(int format, int bufferPos);
+
     MiddlewareManager();
     ~MiddlewareManager();
     

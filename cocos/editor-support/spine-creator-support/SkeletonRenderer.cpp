@@ -34,9 +34,9 @@
 #include "core/gfx/GFXDef.h"
 // TODO
 // #include "spine-creator-support/AttachUtil.h"
+#include "math/Vec3.h"
 #include "spine-creator-support/AttachmentVertices.h"
 #include "spine-creator-support/spine-cocos2dx.h"
-#include "math/Vec3.h"
 #include <algorithm>
 
 USING_NS_MW;
@@ -101,6 +101,10 @@ void SkeletonRenderer::initialize() {
     if (_paramsBuffer == nullptr) {
         // store render order(1), world matrix(16)
         _paramsBuffer = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, sizeof(float) * 17);
+        // set render order to 0
+        _paramsBuffer->writeFloat32(0);
+        // set world transform to identity
+        _paramsBuffer->writeBytes((const char *)&cc::Mat4::IDENTITY, sizeof(float) * 16);
     }
 
     _skeleton->setToSetupPose();
@@ -180,7 +184,7 @@ SkeletonRenderer::~SkeletonRenderer() {
         _paramsBuffer = nullptr;
     }
 
-	// TODO
+    // TODO
     // CC_SAFE_RELEASE(_attachUtil);
     stopSchedule();
 }
@@ -312,7 +316,7 @@ void SkeletonRenderer::render(float deltaTime) {
     Color4F darkColor;
     AttachmentVertices *attachmentVertices = nullptr;
     bool inRange = _startSlotIndex != -1 || _endSlotIndex != -1 ? false : true;
-    auto vertexFormat = _useTint ? VF_XYUVCC : VF_XYUVC;
+    auto vertexFormat = _useTint ? VF_XYZUVCC : VF_XYZUVC;
     middleware::MeshBuffer *mb = mgr->getMeshBuffer(vertexFormat);
     middleware::IOBuffer &vb = mb->getVB();
     middleware::IOBuffer &ib = mb->getIB();
@@ -326,8 +330,13 @@ void SkeletonRenderer::render(float deltaTime) {
     // verex size in floats with two color
     int vs2 = vbs2 / sizeof(float);
 
-    auto buffer = _paramsBuffer->getBuffer();
-    const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&buffer[1];
+	auto vbs = vbs1;
+    if (_useTint) {
+        vbs = vbs2;
+    }
+
+    auto paramsBuffer = _paramsBuffer->getBuffer();
+    const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[1];
 
     int vbSize = 0;
     int ibSize = 0;
@@ -341,6 +350,8 @@ void SkeletonRenderer::render(float deltaTime) {
 
     int preISegWritePos = -1;
     int curISegLen = 0;
+    int preVSegWritePos = -1;
+    int curVSegLen = 0;
 
     int materialLen = 0;
     Slot *slot = nullptr;
@@ -355,9 +366,14 @@ void SkeletonRenderer::render(float deltaTime) {
     }
 
     auto flush = [&]() {
-        // fill pre segment count field
+        // fill pre segment indices count field
         if (preISegWritePos != -1) {
             renderInfo->writeUint32(preISegWritePos, curISegLen);
+        }
+
+        // fill pre segment vertices count field
+        if (preVSegWritePos != -1) {
+            renderInfo->writeUint32(preVSegWritePos, curVSegLen);
         }
 
         // prepare to fill new segment field
@@ -381,7 +397,7 @@ void SkeletonRenderer::render(float deltaTime) {
         }
 
         // check enough space
-        renderInfo->checkSpace(sizeof(uint32_t) * 7, true);
+        renderInfo->checkSpace(sizeof(uint32_t) * 9, true);
 
         // fill new texture index
         renderInfo->writeUint32(curTextureIndex);
@@ -389,16 +405,24 @@ void SkeletonRenderer::render(float deltaTime) {
         renderInfo->writeUint32(curBlendSrc);
         renderInfo->writeUint32(curBlendDst);
         // fill new index and vertex buffer id
-        auto glIB = mb->getGLIB();
-        auto glVB = mb->getGLVB();
-        renderInfo->writeUint32(glIB);
-        renderInfo->writeUint32(glVB);
+        auto rIB = mb->getBufferPos();
+        // because of use typedarray instead of gpu buffer, so index buffer handle same to vertex buffer handle
+        auto rVB = rIB;
+        renderInfo->writeUint32(rIB);
+        renderInfo->writeUint32(rVB);
+
         // fill new index offset
         renderInfo->writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
-
-        // save new segment count pos field
+        // save new segment indices count pos field
         preISegWritePos = (int)renderInfo->getCurPos();
         // reserve indice segamentation count
+        renderInfo->writeUint32(0);
+
+		// fill new vertex offset
+        renderInfo->writeUint32((uint32_t)vb.getCurPos() / vbs);
+        // save new segment vertices count pos field
+        preVSegWritePos = (int)renderInfo->getCurPos();
+        // reserve vertices segamentation count
         renderInfo->writeUint32(0);
 
         // reset pre blend mode to current
@@ -407,6 +431,8 @@ void SkeletonRenderer::render(float deltaTime) {
         preTextureIndex = curTextureIndex;
         // reset index segmentation count
         curISegLen = 0;
+        // reset vertex segmentation count
+        curVSegLen = 0;
         // material length increased
         materialLen++;
     };
@@ -651,10 +677,10 @@ void SkeletonRenderer::render(float deltaTime) {
                         vertex->texCoord.u = uvs[vv];
                         vertex->texCoord.v = uvs[vv + 1];
                         effect->transform(vertex->vertex.x, vertex->vertex.y, vertex->texCoord.u, vertex->texCoord.v, lightCopy, darkCopy);
-                        vertex->color.r = (uint8_t)(lightCopy.r * 255);
-                        vertex->color.g = (uint8_t)(lightCopy.g * 255);
-                        vertex->color.b = (uint8_t)(lightCopy.b * 255);
-                        vertex->color.a = (uint8_t)(lightCopy.a * 255);
+                        vertex->color.r = (uint32_t)(lightCopy.r * 255);
+                        vertex->color.g = (uint32_t)(lightCopy.g * 255);
+                        vertex->color.b = (uint32_t)(lightCopy.b * 255);
+                        vertex->color.a = (uint32_t)(lightCopy.a * 255);
                     }
                 } else {
                     for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv += 2) {
@@ -663,10 +689,10 @@ void SkeletonRenderer::render(float deltaTime) {
                         vertex->vertex.y = verts[vv + 1];
                         vertex->texCoord.u = uvs[vv];
                         vertex->texCoord.v = uvs[vv + 1];
-                        vertex->color.r = (uint8_t)color.r;
-                        vertex->color.g = (uint8_t)color.g;
-                        vertex->color.b = (uint8_t)color.b;
-                        vertex->color.a = (uint8_t)color.a;
+                        vertex->color.r = (uint32_t)color.r;
+                        vertex->color.g = (uint32_t)color.g;
+                        vertex->color.b = (uint32_t)color.b;
+                        vertex->color.a = (uint32_t)color.a;
                     }
                 }
                 // No cliping logic
@@ -684,18 +710,18 @@ void SkeletonRenderer::render(float deltaTime) {
                         Color lightCopy = light;
                         Color darkCopy = dark;
                         effect->transform(vertex->vertex.x, vertex->vertex.y, vertex->texCoord.u, vertex->texCoord.v, lightCopy, darkCopy);
-                        vertex->color.r = (uint8_t)(lightCopy.r * 255);
-                        vertex->color.g = (uint8_t)(lightCopy.g * 255);
-                        vertex->color.b = (uint8_t)(lightCopy.b * 255);
-                        vertex->color.a = (uint8_t)(lightCopy.a * 255);
+                        vertex->color.r = (uint32_t)(lightCopy.r * 255);
+                        vertex->color.g = (uint32_t)(lightCopy.g * 255);
+                        vertex->color.b = (uint32_t)(lightCopy.b * 255);
+                        vertex->color.a = (uint32_t)(lightCopy.a * 255);
                     }
                 } else {
                     for (int v = 0, vn = triangles.vertCount; v < vn; ++v) {
                         V2F_T2F_C4B *vertex = triangles.verts + v;
-                        vertex->color.r = (uint8_t)color.r;
-                        vertex->color.g = (uint8_t)color.g;
-                        vertex->color.b = (uint8_t)color.b;
-                        vertex->color.a = (uint8_t)color.a;
+                        vertex->color.r = (uint32_t)color.r;
+                        vertex->color.g = (uint32_t)color.g;
+                        vertex->color.b = (uint32_t)color.b;
+                        vertex->color.a = (uint32_t)color.a;
                     }
                 }
             }
@@ -743,14 +769,14 @@ void SkeletonRenderer::render(float deltaTime) {
                         vertex->texCoord.u = uvs[vv];
                         vertex->texCoord.v = uvs[vv + 1];
                         effect->transform(vertex->vertex.x, vertex->vertex.y, vertex->texCoord.u, vertex->texCoord.v, lightCopy, darkCopy);
-                        vertex->color.r = (uint8_t)(lightCopy.r * 255);
-                        vertex->color.g = (uint8_t)(lightCopy.g * 255);
-                        vertex->color.b = (uint8_t)(lightCopy.b * 255);
-                        vertex->color.a = (uint8_t)(lightCopy.a * 255);
-                        vertex->color2.r = (uint8_t)(darkCopy.r * 255);
-                        vertex->color2.g = (uint8_t)(darkCopy.g * 255);
-                        vertex->color2.b = (uint8_t)(darkCopy.b * 255);
-                        vertex->color2.a = (uint8_t)darkColor.a;
+                        vertex->color.r = (uint32_t)(lightCopy.r * 255);
+                        vertex->color.g = (uint32_t)(lightCopy.g * 255);
+                        vertex->color.b = (uint32_t)(lightCopy.b * 255);
+                        vertex->color.a = (uint32_t)(lightCopy.a * 255);
+                        vertex->color2.r = (uint32_t)(darkCopy.r * 255);
+                        vertex->color2.g = (uint32_t)(darkCopy.g * 255);
+                        vertex->color2.b = (uint32_t)(darkCopy.b * 255);
+                        vertex->color2.a = (uint32_t)darkColor.a;
                     }
                 } else {
                     for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
@@ -759,14 +785,14 @@ void SkeletonRenderer::render(float deltaTime) {
                         vertex->vertex.y = verts[vv + 1];
                         vertex->texCoord.u = uvs[vv];
                         vertex->texCoord.v = uvs[vv + 1];
-                        vertex->color.r = (uint8_t)color.r;
-                        vertex->color.g = (uint8_t)color.g;
-                        vertex->color.b = (uint8_t)color.b;
-                        vertex->color.a = (uint8_t)color.a;
-                        vertex->color2.r = (uint8_t)darkColor.r;
-                        vertex->color2.g = (uint8_t)darkColor.g;
-                        vertex->color2.b = (uint8_t)darkColor.b;
-                        vertex->color2.a = (uint8_t)darkColor.a;
+                        vertex->color.r = (uint32_t)color.r;
+                        vertex->color.g = (uint32_t)color.g;
+                        vertex->color.b = (uint32_t)color.b;
+                        vertex->color.a = (uint32_t)color.a;
+                        vertex->color2.r = (uint32_t)darkColor.r;
+                        vertex->color2.g = (uint32_t)darkColor.g;
+                        vertex->color2.b = (uint32_t)darkColor.b;
+                        vertex->color2.a = (uint32_t)darkColor.a;
                     }
                 }
             } else {
@@ -787,26 +813,26 @@ void SkeletonRenderer::render(float deltaTime) {
                         Color lightCopy = light;
                         Color darkCopy = dark;
                         effect->transform(vertex->vertex.x, vertex->vertex.y, vertex->texCoord.u, vertex->texCoord.v, lightCopy, darkCopy);
-                        vertex->color.r = (uint8_t)(lightCopy.r * 255);
-                        vertex->color.g = (uint8_t)(lightCopy.g * 255);
-                        vertex->color.b = (uint8_t)(lightCopy.b * 255);
-                        vertex->color.a = (uint8_t)(lightCopy.a * 255);
-                        vertex->color2.r = (uint8_t)(darkCopy.r * 255);
-                        vertex->color2.g = (uint8_t)(darkCopy.g * 255);
-                        vertex->color2.b = (uint8_t)(darkCopy.b * 255);
-                        vertex->color2.a = (uint8_t)darkColor.a;
+                        vertex->color.r = (uint32_t)(lightCopy.r * 255);
+                        vertex->color.g = (uint32_t)(lightCopy.g * 255);
+                        vertex->color.b = (uint32_t)(lightCopy.b * 255);
+                        vertex->color.a = (uint32_t)(lightCopy.a * 255);
+                        vertex->color2.r = (uint32_t)(darkCopy.r * 255);
+                        vertex->color2.g = (uint32_t)(darkCopy.g * 255);
+                        vertex->color2.b = (uint32_t)(darkCopy.b * 255);
+                        vertex->color2.a = (uint32_t)darkColor.a;
                     }
                 } else {
                     for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
                         V2F_T2F_C4B_C4B *vertex = trianglesTwoColor.verts + v;
-                        vertex->color.r = (uint8_t)color.r;
-                        vertex->color.g = (uint8_t)color.g;
-                        vertex->color.b = (uint8_t)color.b;
-                        vertex->color.a = (uint8_t)color.a;
-                        vertex->color2.r = (uint8_t)darkColor.r;
-                        vertex->color2.g = (uint8_t)darkColor.g;
-                        vertex->color2.b = (uint8_t)darkColor.b;
-                        vertex->color2.a = (uint8_t)darkColor.a;
+                        vertex->color.r = (uint32_t)color.r;
+                        vertex->color.g = (uint32_t)color.g;
+                        vertex->color.b = (uint32_t)color.b;
+                        vertex->color.a = (uint32_t)color.a;
+                        vertex->color2.r = (uint32_t)darkColor.r;
+                        vertex->color2.g = (uint32_t)darkColor.g;
+                        vertex->color2.b = (uint32_t)darkColor.b;
+                        vertex->color2.a = (uint32_t)darkColor.a;
                     }
                 }
             }
@@ -818,14 +844,9 @@ void SkeletonRenderer::render(float deltaTime) {
             flush();
         }
 
-        if (vbSize > 0 && ibSize > 0) {
-            auto vbs = vbs1;
-            auto vertexOffset = vb.getCurPos() / vbs1;
-            if (_useTint) {
-                vbs = vbs2;
-                vertexOffset = vb.getCurPos() / vbs2;
-            }
+        auto vertexOffset = vb.getCurPos() / vbs;
 
+        if (vbSize > 0 && ibSize > 0) {
             if (_batch) {
                 uint8_t *vbBuffer = vb.getCurBuffer();
                 cc::Vec3 *point = nullptr;
@@ -850,6 +871,7 @@ void SkeletonRenderer::render(float deltaTime) {
 
             // Record this turn index segmentation count,it will store in material buffer in the end.
             curISegLen += ibSize / sizeof(unsigned short);
+            curVSegLen += vbSize / vbs;
         }
 
         _clipper->clipEnd(*slot);
@@ -863,6 +885,10 @@ void SkeletonRenderer::render(float deltaTime) {
     if (preISegWritePos != -1) {
         renderInfo->writeUint32(preISegWritePos, curISegLen);
     }
+
+    if (preVSegWritePos != -1) {
+        renderInfo->writeUint32(preVSegWritePos, curVSegLen);
+	}
 
     if (_debugBones) {
         auto &bones = _skeleton->getBones();
@@ -879,7 +905,7 @@ void SkeletonRenderer::render(float deltaTime) {
             _debugBuffer->writeFloat32(y);
         }
     }
-	
+
     // debug end
     if (_debugBuffer) {
         if (_debugBuffer->isOutRange()) {
@@ -891,7 +917,7 @@ void SkeletonRenderer::render(float deltaTime) {
     }
 
     // Synchronize attach node transform
-	// TODO
+    // TODO
     // if (_attachUtil) {
     //    _attachUtil->syncAttachedNode(_nodeProxy, _skeleton);
     // }
@@ -1046,7 +1072,8 @@ void SkeletonRenderer::setColor(cc::middleware::Color4B &color) {
 }
 
 void SkeletonRenderer::setBatchEnabled(bool enabled) {
-    _batch = enabled;
+	// disable switch batch mode, force to enable batch, it may be changed in future version
+    // _batch = enabled;
 }
 
 void SkeletonRenderer::setDebugBonesEnabled(bool enabled) {
