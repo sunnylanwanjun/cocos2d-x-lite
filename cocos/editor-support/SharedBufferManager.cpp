@@ -27,7 +27,8 @@
 
 MIDDLEWARE_BEGIN
 
-SharedBufferManager::SharedBufferManager() {
+SharedBufferManager::SharedBufferManager(se::Object::TypedArrayType arrayType):
+	_arrayType(arrayType){
     init();
 }
 
@@ -45,7 +46,7 @@ void SharedBufferManager::afterCleanupHandle() {
 
 void SharedBufferManager::init() {
     if (!_buffer) {
-        _buffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, INIT_RENDER_INFO_BUFFER_SIZE);
+        _buffer = new IOTypedArray(_arrayType, INIT_RENDER_INFO_BUFFER_SIZE);
         _buffer->setResizeCallback([this] {
             if (_resizeCallback) {
                 _resizeCallback();

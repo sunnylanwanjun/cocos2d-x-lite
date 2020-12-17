@@ -863,13 +863,11 @@ void SkeletonRenderer::render(float deltaTime) {
             if (_batch) {
                 uint8_t *vbBuffer = vb.getCurBuffer();
                 cc::Vec3 *point = nullptr;
-                float tempZ = 0.0f;
                 for (int ii = 0, nn = vbSize; ii < nn; ii += vbs) {
                     point = (cc::Vec3 *)(vbBuffer + ii);
-                    tempZ = point->z;
+					// force z value to zero
                     point->z = 0;
-                    nodeWorldMat.transformPoint(point);
-                    point->z = tempZ;
+                    nodeWorldMat.transformPoint(point);                    
                 }
             }
 
@@ -908,10 +906,6 @@ void SkeletonRenderer::render(float deltaTime) {
 		size_t bonesCount = bones.size();
 
 		cc::Mat4 boneMat = cc::Mat4::IDENTITY;
-
-		// check enough space
-		attachInfo->checkSpace(sizeof(float), true);
-		attachInfo->writeFloat32(bonesCount);
 
 		if (_debugBones) {
 			_debugBuffer->writeFloat32(DebugType::Bones);

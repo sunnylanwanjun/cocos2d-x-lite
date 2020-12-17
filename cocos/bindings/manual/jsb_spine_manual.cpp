@@ -80,7 +80,7 @@ static bool js_register_spine_initSkeletonData (se::State& s)
     bool hasSkeletonData = mgr->hasSkeletonData(uuid);
     if (hasSkeletonData) {
         spine::SkeletonData* skeletonData = mgr->retainByUUID(uuid);
-        native_ptr_to_rooted_seval<spine::SkeletonData>(skeletonData, &s.rval());
+        native_ptr_to_seval<spine::SkeletonData>(skeletonData, &s.rval());
         return true;
     }
     
@@ -144,7 +144,7 @@ static bool js_register_spine_initSkeletonData (se::State& s)
             texturesIndex.push_back(it->second->getRealTextureIndex());
         }
         mgr->setSkeletonData(uuid, skeletonData, atlas, attachmentLoader, texturesIndex);
-        native_ptr_to_rooted_seval<spine::SkeletonData>(skeletonData, &s.rval());
+        native_ptr_to_seval<spine::SkeletonData>(skeletonData, &s.rval());
     } else {
         if (atlas) {
             delete atlas;
@@ -227,7 +227,7 @@ static bool js_register_spine_retainSkeletonData(se::State& s)
     bool hasSkeletonData = mgr->hasSkeletonData(uuid);
     if (hasSkeletonData) {
         spine::SkeletonData* skeletonData = mgr->retainByUUID(uuid);
-        native_ptr_to_rooted_seval<spine::SkeletonData>(skeletonData, &s.rval());
+        native_ptr_to_seval<spine::SkeletonData>(skeletonData, &s.rval());
     }
     return true;
 }
@@ -250,7 +250,11 @@ bool register_all_spine_manual(se::Object* obj)
     ns->defineFunction("retainSkeletonData", _SE(js_register_spine_retainSkeletonData));
     ns->defineFunction("disposeSkeletonData", _SE(js_register_spine_disposeSkeletonData));
     
-    spine::setSpineObjectDisposeCallback([](void* spineObj){
+    spine::setSpineObjectDisposeCallback([](void* spineObj) {
+		// Support Native Spine fo Creator V3.0
+		// There's no root object in spine, so no need to un root spine object
+		
+		/*
         se::Object* seObj = nullptr;
         
         auto iter = se::NativePtrToObjectMap::find(spineObj);
@@ -293,7 +297,7 @@ bool register_all_spine_manual(se::Object* obj)
         else
         {
             CleanupTask::pushTaskToAutoReleasePool(cleanup);
-        }
+        }*/
     });
     
     se::ScriptEngine::getInstance()->addBeforeCleanupHook([](){

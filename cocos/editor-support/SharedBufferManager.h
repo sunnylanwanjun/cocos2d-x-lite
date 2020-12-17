@@ -31,7 +31,7 @@ MIDDLEWARE_BEGIN
 
 class SharedBufferManager {
 public:
-    SharedBufferManager();
+    SharedBufferManager(se::Object::TypedArrayType arrayType);
     virtual ~SharedBufferManager();
     
     void reset ()
@@ -58,6 +58,7 @@ private:
     void init();
     void afterCleanupHandle();
 private:
+	se::Object::TypedArrayType _arrayType;
     IOTypedArray* _buffer = nullptr;
     resizeCallback _resizeCallback = nullptr;
 };

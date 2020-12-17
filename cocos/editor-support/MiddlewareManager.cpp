@@ -29,7 +29,9 @@ MIDDLEWARE_BEGIN
 
 MiddlewareManager *MiddlewareManager::_instance = nullptr;
 
-MiddlewareManager::MiddlewareManager() {
+MiddlewareManager::MiddlewareManager() :
+	_renderInfo(se::Object::TypedArrayType::UINT32),
+	_attachInfo(se::Object::TypedArrayType::FLOAT32) {
 }
 
 MiddlewareManager::~MiddlewareManager() {

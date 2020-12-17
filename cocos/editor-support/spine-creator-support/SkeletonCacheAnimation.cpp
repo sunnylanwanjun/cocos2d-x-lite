@@ -55,10 +55,32 @@ namespace spine {
             _skeletonCache->retain();
             _skeletonCache->autorelease();
         }
+
+		// store global TypedArray begin and end offset
+		_sharedBufferOffset = new IOTypedArray(se::Object::TypedArrayType::UINT32, sizeof(uint32_t) * 2);
+
+		// store render order(1), world matrix(16)
+		_paramsBuffer = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, sizeof(float) * 17);
+		// set render order to 0
+		_paramsBuffer->writeFloat32(0);
+		// set world transform to identity
+		_paramsBuffer->writeBytes((const char *)&cc::Mat4::IDENTITY, sizeof(float) * 16);
+
         beginSchedule();
     }
     
     SkeletonCacheAnimation::~SkeletonCacheAnimation () {
+
+		if (_sharedBufferOffset) {
+			delete _sharedBufferOffset;
+			_sharedBufferOffset = nullptr;
+		}
+
+		if (_paramsBuffer) {
+			delete _paramsBuffer;
+			_paramsBuffer = nullptr;
+		}
+
         if (_skeletonCache) {
             _skeletonCache->release();
             _skeletonCache = nullptr;
@@ -193,14 +215,14 @@ namespace spine {
         int vbs = _useTint ? vbs2 : vbs1;
         
         auto paramsBuffer = _paramsBuffer->getBuffer();
-        const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[1];
+        const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[4];
 
         int colorOffset = 0;
         SkeletonCache::ColorData* nowColor = colors[colorOffset++];
         auto maxVFOffset = nowColor->vertexFloatOffset;
         
-        Color4B finalColor;
-        Color4B darkColor;
+        Color4F finalColor;
+        Color4F darkColor;
         float tempR = 0.0f, tempG = 0.0f, tempB = 0.0f, tempA = 0.0f;
         float multiplier = 1.0f;
         int srcVertexBytesOffset = 0;
@@ -237,15 +259,15 @@ namespace spine {
             tempG = _nodeColor.g * multiplier;
             tempB = _nodeColor.b * multiplier;
             
-            finalColor.a = (uint32_t)tempA;
-            finalColor.r = (uint32_t)(colorData->finalColor.r * tempR);
-            finalColor.g = (uint32_t)(colorData->finalColor.g * tempG);
-            finalColor.b = (uint32_t)(colorData->finalColor.b * tempB);
+            finalColor.a = tempA / 255.0f;
+            finalColor.r = (colorData->finalColor.r * tempR) / 255.0f;
+            finalColor.g = (colorData->finalColor.g * tempG) / 255.0f;
+            finalColor.b = (colorData->finalColor.b * tempB) / 255.0f;
             
-            darkColor.r = (uint32_t)(colorData->darkColor.r * tempR);
-            darkColor.g = (uint32_t)(colorData->darkColor.g * tempG);
-            darkColor.b = (uint32_t)(colorData->darkColor.b * tempB);
-            darkColor.a = _premultipliedAlpha ? 255 : 0;
+			darkColor.r = (colorData->darkColor.r * tempR) / 255.0f;
+            darkColor.g = (colorData->darkColor.g * tempG) / 255.0f;
+            darkColor.b = (colorData->darkColor.b * tempB) / 255.0f;
+            darkColor.a = _premultipliedAlpha ? 1.0f : 0.0f;
         };
         
         handleColor(nowColor);
@@ -308,14 +330,11 @@ namespace spine {
             // batch handle
             if (_batch) {
                 cc::Vec3* point = nullptr;
-                float tempZ = 0.0f;
-                for (auto posIndex = 0; posIndex < vertexFloats; posIndex += vs)
-                {
+                for (auto posIndex = 0; posIndex < vertexFloats; posIndex += vs) {
                     point = (cc::Vec3*)(dstVertexBuffer + posIndex);
-                    tempZ = point->z;
+					// force z value to zero
                     point->z = 0;
                     nodeWorldMat.transformPoint(point);
-                    point->z = tempZ;
                 }
             }
             
@@ -330,8 +349,8 @@ namespace spine {
                             handleColor(nowColor);
                             maxVFOffset = nowColor->vertexFloatOffset;
                         }
-                        memcpy(dstColorBuffer + colorIndex + 4, &finalColor, sizeof(finalColor));
-                        memcpy(dstColorBuffer + colorIndex + 5, &darkColor, sizeof(darkColor));
+                        memcpy(dstColorBuffer + colorIndex + 5, &finalColor, sizeof(finalColor));
+                        memcpy(dstColorBuffer + colorIndex + 9, &darkColor, sizeof(darkColor));
                     }
                 } else {
                     for (auto colorIndex = 0; colorIndex < vertexFloats; colorIndex += vs, srcVertexFloatOffset += vs2)
@@ -341,7 +360,7 @@ namespace spine {
                             handleColor(nowColor);
                             maxVFOffset = nowColor->vertexFloatOffset;
                         }
-                        memcpy(dstColorBuffer + colorIndex + 4, &finalColor, sizeof(finalColor));
+                        memcpy(dstColorBuffer + colorIndex + 5, &finalColor, sizeof(finalColor));
                     }
                 }
             }
@@ -381,8 +400,6 @@ namespace spine {
 		if (_useAttach) {
 			auto &bonesData = frameData->getBones();
 			auto boneCount = frameData->getBoneCount();
-			attachInfo->checkSpace(sizeof(float), true);
-			attachInfo->writeFloat32(boneCount);
 
 			for (int i = 0, n = boneCount; i < n; i++) {
 				auto bone = bonesData[i];
@@ -450,6 +467,7 @@ namespace spine {
     }
     
     void SkeletonCacheAnimation::setBatchEnabled (bool enabled) {
+		// disable switch batch mode, force to enable batch, it may be changed in future version
         // _batch = enabled;
     }
     
@@ -467,6 +485,11 @@ namespace spine {
     
     void SkeletonCacheAnimation::stopSchedule() {
         MiddlewareManager::getInstance()->removeTimer(this);
+
+		if (_sharedBufferOffset) {
+			_sharedBufferOffset->reset();
+			_sharedBufferOffset->clear();
+		}
     }
     
     void SkeletonCacheAnimation::onEnable() {
