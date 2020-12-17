@@ -58,8 +58,8 @@ namespace spine {
         };
         
         struct ColorData {
-            cc::Color4F finalColor;
-            cc::Color4F darkColor;
+            cc::middleware::Color4F finalColor;
+            cc::middleware::Color4F darkColor;
             int vertexFloatOffset = 0;
         };
         

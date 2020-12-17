@@ -29,15 +29,13 @@
 
 #pragma once
 #include "spine/spine.h"
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include "MiddlewareManager.h"
-#include "renderer/scene/NodeProxy.hpp"
 #include "SkeletonCache.h"
+#include "middleware-adapter.h"
 #include <queue>
 
 namespace spine {
-    
-    class CacheModeAttachUtil;
     
     class SkeletonCacheAnimation : public cc::middleware::IMiddleware, public cc::Ref {
     public:
@@ -64,12 +62,10 @@ namespace spine {
         Attachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
         bool setAttachment (const std::string& slotName, const std::string& attachmentName);
         bool setAttachment (const std::string& slotName, const char* attachmentName);
-        void setAttachUtil(CacheModeAttachUtil* attachUtil);
-        void bindNodeProxy(cc::renderer::NodeProxy* node);
-        void setEffect(cc::renderer::EffectVariant* effect);
-        void setColor (cc::Color4B& color);
+        void setColor (cc::middleware::Color4B& color);
         void setBatchEnabled (bool enabled);
-        
+		void setAttachEnabled(bool enabled);
+
         void setOpacityModifyRGB (bool value);
         bool isOpacityModifyRGB () const;
         
@@ -93,16 +89,25 @@ namespace spine {
         void setToSetupPose ();
         void setBonesToSetupPose ();
         void setSlotsToSetupPose ();
+       
+		/**
+         * @return shared buffer offset, it's a Uint32Array
+		 * format |render info offset|attach info offset|
+         */
+        se_object_ptr getSharedBufferOffset() const;
+        /**
+         * @return js send to cpp parameters, it's a Uint32Array
+		 * format |render order|world matrix|
+         */
+        se_object_ptr getParamsBuffer() const;
+
     private:
         float _timeScale = 1;
         bool _paused = false;
-        
+		bool _useAttach = false;
         bool _batch = false;
-        cc::Color4F _nodeColor = cc::Color4F::WHITE;
+        cc::middleware::Color4F _nodeColor = cc::middleware::Color4F::WHITE;
         bool _premultipliedAlpha = false;
-        
-        cc::renderer::NodeProxy* _nodeProxy = nullptr;
-        cc::renderer::EffectVariant* _effect = nullptr;
         
         CacheFrameEvent _startListener = nullptr;
         CacheFrameEvent _endListener = nullptr;
@@ -126,6 +131,9 @@ namespace spine {
         };
         std::queue<AniQueueData*> _animationQueue;
         AniQueueData* _headAnimation = nullptr;
-        CacheModeAttachUtil* _attachUtil = nullptr;
+
+		cc::middleware::IOTypedArray *_sharedBufferOffset = nullptr;
+        // Js fill this buffer to send parameter to cpp, avoid to call jsb function.
+        cc::middleware::IOTypedArray *_paramsBuffer = nullptr;
     };
 }

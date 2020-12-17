@@ -29,7 +29,7 @@
 
 #include "spine-creator-support/AttachmentVertices.h"
 
-using namespace cocos2d;
+using namespace cc;
 
 namespace spine {
     
@@ -38,7 +38,7 @@ namespace spine {
         if (_texture) _texture->retain();
         
         _triangles = new middleware::Triangles();
-        _triangles->verts = new middleware::V2F_T2F_C4B[verticesCount];
+        _triangles->verts = new middleware::V2F_T2F_C4F[verticesCount];
         _triangles->vertCount = verticesCount;
         _triangles->indices = triangles;
         _triangles->indexCount = trianglesCount;

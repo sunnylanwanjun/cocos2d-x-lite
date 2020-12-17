@@ -43,7 +43,6 @@
 namespace spine {
 
     class AttachmentVertices;
-    class RealTimeAttachUtil;
     
     /** Draws a skeleton.
      */
@@ -106,24 +105,23 @@ namespace spine {
          */
         se_object_ptr getDebugData() const;
         /**
-         * @return render info offset, it's a Uint32Array
-		 * format |render info offset|
+         * @return shared buffer offset, it's a Uint32Array
+		 * format |render info offset|attach info offset|
          */
-        se_object_ptr getRenderInfoOffset() const;
+        se_object_ptr getSharedBufferOffset() const;
         /**
          * @return js send to cpp parameters, it's a Uint32Array
 		 * format |render order|world matrix|
          */
         se_object_ptr getParamsBuffer() const;
 
-		// TODO
-        // void setAttachUtil(RealTimeAttachUtil* attachUtil);
-        void setColor (cc::middleware::Color4B& color);
+        void setColor (float r, float g, float b, float a);
         void setBatchEnabled (bool enabled);
         void setDebugBonesEnabled (bool enabled);
         void setDebugSlotsEnabled (bool enabled);
         void setDebugMeshEnabled (bool enabled);
-        
+		void setAttachEnabled(bool enabled);
+
         void setOpacityModifyRGB (bool value);
         bool isOpacityModifyRGB () const;
         
@@ -163,6 +161,7 @@ namespace spine {
         bool                _paused = false;
         
         bool                _batch = true;
+		bool				_useAttach = false;
         bool                _debugMesh = false;
         bool                _debugSlots = false;
         bool                _debugBones = false;
@@ -175,13 +174,10 @@ namespace spine {
         int                 _startSlotIndex = -1;
         int                 _endSlotIndex = -1;
         
-		cc::middleware::IOTypedArray* _renderInfoOffset = nullptr;
+		cc::middleware::IOTypedArray* _sharedBufferOffset = nullptr;
         cc::middleware::IOTypedArray* _debugBuffer = nullptr;
 		// Js fill this buffer to send parameter to cpp, avoid to call jsb function.
 		cc::middleware::IOTypedArray* _paramsBuffer = nullptr;
-
-		// TODO
-        // RealTimeAttachUtil* _attachUtil = nullptr;
     };
 
 }

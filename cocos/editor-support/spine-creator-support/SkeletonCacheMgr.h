@@ -29,7 +29,7 @@
 
 #pragma once
 #include "SkeletonCache.h"
-#include "base/CCMap.h"
+#include "base/Map.h"
 
 namespace spine {
 

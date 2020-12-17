@@ -30,7 +30,7 @@
 #pragma once
 
 #include "middleware-adapter.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 namespace spine{
     /**

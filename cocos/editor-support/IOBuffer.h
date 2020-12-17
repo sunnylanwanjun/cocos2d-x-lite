@@ -220,7 +220,7 @@ public:
 
         if (_bufferSize < needLen)
         {
-            std::size_t fitSize = ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
+            std::size_t fitSize = (std::size_t)ceil(needLen / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
             resize(fitSize, needCopy);
             if (_resizeCallback)
             {

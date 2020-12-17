@@ -31,16 +31,16 @@
 //
 //
 
-#include "base/ccConfig.h"
-#include "jsb_spine_manual.hpp"
+#include "base/Config.h"
+#include "jsb_spine_manual.h"
 
 #if USE_SPINE > 0
 
-#include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
-#include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
-#include "cocos/scripting/js-bindings/manual/jsb_global.h"
-#include "cocos/scripting/js-bindings/manual/jsb_helper.hpp"
-#include "cocos/scripting/js-bindings/auto/jsb_cocos2dx_spine_auto.hpp"
+#include "cocos/bindings/jswrapper/SeApi.h"
+#include "cocos/bindings/manual/jsb_conversions.h"
+#include "cocos/bindings/manual/jsb_global.h"
+#include "cocos/bindings/manual/jsb_helper.h"
+#include "cocos/bindings/auto/jsb_cocos2dx_spine_auto.h"
 
 #include "middleware-adapter.h"
 #include "spine-creator-support/SkeletonDataMgr.h"
@@ -51,10 +51,10 @@
 #include "cocos/editor-support/spine/spine.h"
 #include "cocos/editor-support/spine-creator-support/spine-cocos2dx.h"
 
-using namespace cocos2d;
+using namespace cc;
 
 static spine::Cocos2dTextureLoader textureLoader;
-static cocos2d::Map<std::string, middleware::Texture2D*>* _preloadedAtlasTextures = nullptr;
+static cc::Map<std::string, middleware::Texture2D*>* _preloadedAtlasTextures = nullptr;
 static middleware::Texture2D* _getPreloadedAtlasTexture(const char* path)
 {
     assert(_preloadedAtlasTextures);
@@ -92,7 +92,7 @@ static bool js_register_spine_initSkeletonData (se::State& s)
     ok = seval_to_std_string(args[2], &atlasText);
     SE_PRECONDITION2(ok, false, "js_register_spine_initSkeletonData: Invalid atlas content!");
     
-    cocos2d::Map<std::string, middleware::Texture2D*> textures;
+    cc::Map<std::string, middleware::Texture2D*> textures;
     ok = seval_to_Map_string_key(args[3], &textures);
     SE_PRECONDITION2(ok, false, "js_register_spine_initSkeletonData: Invalid textures!");
     
@@ -118,10 +118,10 @@ static bool js_register_spine_initSkeletonData (se::State& s)
     if (binPos == std::string::npos) binPos = skeletonDataFile.find(".bin", length - 4);
 
     if (binPos != std::string::npos) {
-        auto fileUtils = cocos2d::FileUtils::getInstance();
+        auto fileUtils = cc::FileUtils::getInstance();
         if (fileUtils->isFileExist(skeletonDataFile))
         {
-            cocos2d::Data cocos2dData;
+            cc::Data cocos2dData;
             const auto fullpath = fileUtils->fullPathForFilename(skeletonDataFile);
             fileUtils->getContents(fullpath, &cocos2dData);
             

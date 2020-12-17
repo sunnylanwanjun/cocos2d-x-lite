@@ -82,6 +82,7 @@ void MeshBuffer::uploadIB()
     if (length == 0) return;
     
     auto rIB = _ibArr[_bufferPos];
+	rIB->reset();
     rIB->writeBytes((const char *)_ib.getBuffer(), _ib.length());
 }
 

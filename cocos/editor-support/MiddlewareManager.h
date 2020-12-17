@@ -24,10 +24,11 @@
 #pragma once
 
 #include "MeshBuffer.h"
+#include "MiddlewareMacro.h"
+#include "base/Ref.h"
 #include <map>
 #include <vector>
-#include "base/Ref.h"
-#include "MiddlewareMacro.h"
+#include "SharedBufferManager.h"
 
 MIDDLEWARE_BEGIN
 
@@ -49,73 +50,76 @@ public:
  */
 class MiddlewareManager {
 public:
-    static MiddlewareManager* getInstance()
-    {
-        if (_instance == nullptr)
-        {
+    static MiddlewareManager *getInstance() {
+        if (_instance == nullptr) {
             _instance = new MiddlewareManager;
         }
-        
+
         return _instance;
     }
-    
-    static void destroyInstance()
-    {
-        if (_instance)
-        {
+
+    static void destroyInstance() {
+        if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
     }
-    
-    static uint8_t generateModuleID()
-    {
+
+    static uint8_t generateModuleID() {
         static uint8_t uniqueId = 0;
         uniqueId++;
         return uniqueId;
     }
-    
+
     /**
      * @brief update all elements
      * @param[in] dt Delta time.
      */
     void update(float dt);
-    
+
     /**
      * @brief render all elements
      */
     void render(float dt);
-    
+
     /**
      * @brief Third party module add in _updateMap,it will update perframe.
      * @param[in] editor Module must implement IMiddleware interface.
      */
-    void addTimer(IMiddleware* editor);
-    
+    void addTimer(IMiddleware *editor);
+
     /**
      * @brief Third party module remove from _updateMap,it will stop update.
      * @param[in] editor Module must implement IMiddleware interface.
      */
-    void removeTimer(IMiddleware* editor);
-    
-    MeshBuffer* getMeshBuffer(int format);
-    
-	se_object_ptr getVBTypedArray(int format, int bufferPos);
+    void removeTimer(IMiddleware *editor);
+
+    MeshBuffer *getMeshBuffer(int format);
+
+    se_object_ptr getVBTypedArray(int format, int bufferPos);
     se_object_ptr getIBTypedArray(int format, int bufferPos);
+
+    SharedBufferManager *getRenderInfoMgr();
+    SharedBufferManager *getAttachInfoMgr();
 
     MiddlewareManager();
     ~MiddlewareManager();
-    
+
     // If manager is traversing _updateMap, will set the flag untill traverse is finished.
     bool isRendering = false;
     bool isUpdating = false;
+
 private:
     void _clearRemoveList();
+
 private:
-    std::vector<IMiddleware*> _updateList;
-    std::vector<IMiddleware*> _removeList;
-    std::map<int, MeshBuffer*> _mbMap;
-    
-    static MiddlewareManager* _instance;
+    std::vector<IMiddleware *> _updateList;
+    std::vector<IMiddleware *> _removeList;
+    std::map<int, MeshBuffer *> _mbMap;
+
+    SharedBufferManager _renderInfo;
+    SharedBufferManager _attachInfo;
+
+    static MiddlewareManager *_instance;
 };
 MIDDLEWARE_END

@@ -134,6 +134,7 @@ inspect_values(
     USE_SE_JSC
     USE_VIDEO
     USE_WEBVIEW
+	USE_MIDDLEWARE
     USE_DRAGONBONES
     USE_SPINE
     USE_WEBSOCKET_SERVER
@@ -869,6 +870,20 @@ if(USE_WEBVIEW)
     )
 endif()
 
+if(USE_MIDDLEWARE)
+    cocos_source_files(
+        cocos/bindings/auto/jsb_cocos2dx_editor_support_auto.cpp
+        cocos/bindings/auto/jsb_cocos2dx_editor_support_auto.h
+    )
+
+	if(USE_SPINE)
+		cocos_source_files(
+			cocos/bindings/auto/jsb_cocos2dx_spine_auto.cpp
+			cocos/bindings/auto/jsb_cocos2dx_spine_auto.h
+		)
+	endif()
+endif()
+
 ######## manual
 cocos_source_files(
     cocos/bindings/manual/jsb_classtype.cpp
@@ -904,6 +919,14 @@ if(USE_SOCKET)
     )
 endif()
 
+if(USE_MIDDLEWARE)
+	if(USE_SPINE)
+		cocos_source_files(
+			cocos/bindings/manual/jsb_spine_manual.cpp
+			cocos/bindings/manual/jsb_spine_manual.h
+		)
+	endif()
+endif()
 
 if(NOT IOS AND USE_WEBSOCKET_SERVER)
     cocos_source_files(
@@ -1160,8 +1183,8 @@ if(USE_MIDDLEWARE)
 		cocos/editor-support/MiddlewareMacro.h
 		cocos/editor-support/MiddlewareManager.cpp
 		cocos/editor-support/MiddlewareManager.h
-		cocos/editor-support/RenderInfoMgr.cpp
-		cocos/editor-support/RenderInfoMgr.h
+		cocos/editor-support/SharedBufferManager.cpp
+		cocos/editor-support/SharedBufferManager.h
 		cocos/editor-support/TypedArrayPool.cpp
 		cocos/editor-support/TypedArrayPool.h
 	)
@@ -1315,8 +1338,6 @@ if(USE_MIDDLEWARE)
 			 cocos/editor-support/spine/Vertices.h
 			 Cocos/editor-support/spine-creator-support/AttachmentVertices.cpp
 			 Cocos/editor-support/spine-creator-support/AttachmentVertices.h
-			 Cocos/editor-support/spine-creator-support/AttachUtil.cpp
-			 Cocos/editor-support/spine-creator-support/AttachUtil.h
 			 Cocos/editor-support/spine-creator-support/SkeletonAnimation.cpp
 			 Cocos/editor-support/spine-creator-support/SkeletonAnimation.h
 			 Cocos/editor-support/spine-creator-support/SkeletonCache.cpp
@@ -1393,6 +1414,7 @@ target_include_directories(cocos2d
         ${CWD}/cocos/platform
         ${CWD}/cocos/renderer/core
         ${CWD}/external/sources/khronos
+		${CWD}/cocos/editor-support
         $<$<BOOL:USE_SE_JSC>:${CWD}/cocos/bindings/jswrapper>
     PRIVATE
         ${CC_EXTERNAL_PRIVATE_INCLUDES}

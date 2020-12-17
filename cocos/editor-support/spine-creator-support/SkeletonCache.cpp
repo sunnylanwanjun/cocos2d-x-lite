@@ -29,11 +29,9 @@
 
 #include "SkeletonCache.h"
 #include "spine-creator-support/AttachmentVertices.h"
-#include "renderer/gfx/Texture.h"
 
 USING_NS_MW;
-using namespace cocos2d;
-using namespace cc::renderer;
+using namespace cc;
 
 namespace spine {
     
@@ -259,7 +257,7 @@ namespace spine {
         middleware::IOBuffer& ib = frameData->ib;
         
         // vertex size int bytes with two color
-        int vbs2 = sizeof(V2F_T2F_C4B_C4B);
+        int vbs2 = sizeof(V2F_T2F_C4F_C4F);
         // verex size in floats with two color
         int vs2 = vbs2 / sizeof(float);
         
@@ -267,8 +265,8 @@ namespace spine {
         int ibSize = 0;
         
         int preBlendMode = -1;
-        GLuint preTextureIndex = -1;
-        GLuint curTextureIndex = -1;
+        int preTextureIndex = -1;
+        int curTextureIndex = -1;
         
         int preISegWritePos = -1;
         int curISegLen = 0;
@@ -347,9 +345,9 @@ namespace spine {
                 }
                 
                 trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
-                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
+                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4F_C4F);
                 vb.checkSpace(vbSize, true);
-                trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
+                trianglesTwoColor.verts = (V2F_T2F_C4F_C4F*)vb.getCurBuffer();
                 for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                     trianglesTwoColor.verts[ii].texCoord = attachmentVertices->_triangles->verts[ii].texCoord;
                 }
@@ -377,9 +375,9 @@ namespace spine {
                 }
                 
                 trianglesTwoColor.vertCount = attachmentVertices->_triangles->vertCount;
-                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
+                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4F_C4F);
                 vb.checkSpace(vbSize, true);
-                trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
+                trianglesTwoColor.verts = (V2F_T2F_C4F_C4F*)vb.getCurBuffer();
                 for (int ii = 0; ii < trianglesTwoColor.vertCount; ii++) {
                     trianglesTwoColor.verts[ii].texCoord = attachmentVertices->_triangles->verts[ii].texCoord;
                 }
@@ -454,9 +452,9 @@ namespace spine {
                 }
                 
                 trianglesTwoColor.vertCount = (int)_clipper->getClippedVertices().size() >> 1;
-                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4B_C4B);
+                vbSize = trianglesTwoColor.vertCount * sizeof(V2F_T2F_C4F_C4F);
                 vb.checkSpace(vbSize, true);
-                trianglesTwoColor.verts = (V2F_T2F_C4B_C4B*)vb.getCurBuffer();
+                trianglesTwoColor.verts = (V2F_T2F_C4F_C4F*)vb.getCurBuffer();
                 
                 trianglesTwoColor.indexCount = (int)_clipper->getClippedTriangles().size();
                 ibSize = trianglesTwoColor.indexCount * sizeof(unsigned short);
@@ -468,36 +466,36 @@ namespace spine {
                 float* uvs = _clipper->getClippedUVs().buffer();
                 
                 for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
-                    V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
+                    V2F_T2F_C4F_C4F* vertex = trianglesTwoColor.verts + v;
                     vertex->vertex.x = verts[vv];
                     vertex->vertex.y = verts[vv + 1];
                     vertex->texCoord.u = uvs[vv];
                     vertex->texCoord.v = uvs[vv + 1];
-                    vertex->color.r = (GLubyte)color.r;
-                    vertex->color.g = (GLubyte)color.g;
-                    vertex->color.b = (GLubyte)color.b;
-                    vertex->color.a = (GLubyte)color.a;
-                    vertex->color2.r = (GLubyte)darkColor.r;
-                    vertex->color2.g = (GLubyte)darkColor.g;
-                    vertex->color2.b = (GLubyte)darkColor.b;
-                    vertex->color2.a = (GLubyte)darkColor.a;
+                    vertex->color.r = color.r / 255.0f;
+                    vertex->color.g = color.g / 255.0f;
+                    vertex->color.b = color.b / 255.0f;
+                    vertex->color.a = color.a / 255.0f;
+                    vertex->color2.r = darkColor.r / 255.0f;
+                    vertex->color2.g = darkColor.g / 255.0f;
+                    vertex->color2.b = darkColor.b / 255.0f;
+                    vertex->color2.a = darkColor.a / 255.0f;
                 }
             } else {
                 for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
-                    V2F_T2F_C4B_C4B* vertex = trianglesTwoColor.verts + v;
-                    vertex->color.r = (GLubyte)color.r;
-                    vertex->color.g = (GLubyte)color.g;
-                    vertex->color.b = (GLubyte)color.b;
-                    vertex->color.a = (GLubyte)color.a;
-                    vertex->color2.r = (GLubyte)darkColor.r;
-                    vertex->color2.g = (GLubyte)darkColor.g;
-                    vertex->color2.b = (GLubyte)darkColor.b;
-                    vertex->color2.a = (GLubyte)darkColor.a;
+                    V2F_T2F_C4F_C4F* vertex = trianglesTwoColor.verts + v;
+                    vertex->color.r = color.r / 255.0f;
+                    vertex->color.g = color.g / 255.0f;
+                    vertex->color.b = color.b / 255.0f;
+                    vertex->color.a = color.a / 255.0f;
+                    vertex->color2.r = darkColor.r / 255.0f;
+                    vertex->color2.g = darkColor.g / 255.0f;
+                    vertex->color2.b = darkColor.b / 255.0f;
+                    vertex->color2.a = darkColor.a / 255.0f;
                 }
             }
             
             texture = attachmentVertices->_texture;
-            curTextureIndex = attachmentVertices->_texture->getNativeTexture()->getHandle();
+            curTextureIndex = attachmentVertices->_texture->getRealTextureIndex();
             // If texture or blendMode change,will change material.
             if (preTextureIndex != curTextureIndex || preBlendMode != slot->getData().getBlendMode()) {
                 flush();

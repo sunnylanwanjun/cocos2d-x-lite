@@ -22,29 +22,28 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "RenderInfoMgr.h"
+#include "SharedBufferManager.h"
 #include "base/Macros.h"
 
 MIDDLEWARE_BEGIN
-RenderInfoMgr *RenderInfoMgr::_instance = nullptr;
 
-RenderInfoMgr::RenderInfoMgr() {
+SharedBufferManager::SharedBufferManager() {
     init();
 }
 
-RenderInfoMgr::~RenderInfoMgr() {
+SharedBufferManager::~SharedBufferManager() {
     CC_SAFE_DELETE(_buffer);
 }
 
-void RenderInfoMgr::afterCleanupHandle() {
+void SharedBufferManager::afterCleanupHandle() {
     if (_buffer) {
         delete _buffer;
         _buffer = nullptr;
     }
-    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&RenderInfoMgr::init, this));
+    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&SharedBufferManager::init, this));
 }
 
-void RenderInfoMgr::init() {
+void SharedBufferManager::init() {
     if (!_buffer) {
         _buffer = new IOTypedArray(se::Object::TypedArrayType::UINT32, INIT_RENDER_INFO_BUFFER_SIZE);
         _buffer->setResizeCallback([this] {
@@ -53,7 +52,7 @@ void RenderInfoMgr::init() {
             }
         });
     }
-    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&RenderInfoMgr::afterCleanupHandle, this));
+    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&SharedBufferManager::afterCleanupHandle, this));
 }
 
 MIDDLEWARE_END

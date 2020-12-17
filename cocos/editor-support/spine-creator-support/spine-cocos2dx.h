@@ -33,11 +33,9 @@
 #include "spine-creator-support/SkeletonRenderer.h"
 #include "spine-creator-support/SkeletonAnimation.h"
 #include "spine-creator-support/SkeletonDataMgr.h"
+#include "spine-creator-support/SkeletonCacheMgr.h"
+#include "spine-creator-support/SkeletonCacheAnimation.h"
 #include "middleware-adapter.h"
-// TODO
-//#include "spine-creator-support/SkeletonCacheMgr.h"
-//#include "spine-creator-support/SkeletonCacheAnimation.h"
-//#include "spine-creator-support/AttachUtil.h"
 
 namespace spine {
     typedef cc::middleware::Texture2D* (*CustomTextureLoader)(const char* path);

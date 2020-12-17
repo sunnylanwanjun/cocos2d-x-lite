@@ -37,6 +37,22 @@ Color4B::Color4B() {}
 Color4B::Color4B(uint32_t _r, uint32_t _g, uint32_t _b, uint32_t _a)
 : r(_r), g(_g), b(_b), a(_a) {}
 
+bool Color4B::operator==(const Color4B &right) const {
+    return (r == right.r && g == right.g && b == right.b && a == right.a);
+}
+
+bool Color4B::operator!=(const Color4B &right) const {
+    return (r != right.r || g != right.g || b != right.b || a != right.a);
+}
+
+bool Color4F::operator==(const Color4F &right) const {
+    return (r == right.r && g == right.g && b == right.b && a == right.a);
+}
+
+bool Color4F::operator!=(const Color4F &right) const {
+    return (r != right.r || g != right.g || b != right.b || a != right.a);
+}
+
 Texture2D::Texture2D() {
 }
 

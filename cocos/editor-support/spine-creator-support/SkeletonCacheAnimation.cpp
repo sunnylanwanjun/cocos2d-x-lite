@@ -30,15 +30,16 @@
 #include "SkeletonCacheAnimation.h"
 #include "MiddlewareMacro.h"
 #include "SkeletonCacheMgr.h"
-#include "renderer/renderer/Pass.h"
-#include "renderer/renderer/Technique.h"
-#include "renderer/scene/assembler/CustomAssembler.hpp"
-#include "renderer/gfx/Texture.h"
-#include "spine-creator-support/AttachUtil.h"
+#include "SharedBufferManager.h"
+#include "base/TypeDef.h"
+#include "base/TypeDef.h"
+#include "math/Math.h"
+#include "core/gfx/GFXDef.h"
 
 USING_NS_MW;
-using namespace cocos2d;
-using namespace cc::renderer;
+
+using namespace cc;
+using namespace cc::gfx;
 static const std::string techStage = "opaque";
 static const std::string textureKey = "texture";
 
@@ -67,9 +68,6 @@ namespace spine {
             _animationQueue.pop();
             delete ani;
         }
-        CC_SAFE_RELEASE_NULL(_attachUtil);
-        CC_SAFE_RELEASE(_nodeProxy);
-        CC_SAFE_RELEASE(_effect);
         stopSchedule();
     }
     
@@ -140,18 +138,6 @@ namespace spine {
     }
     
     void SkeletonCacheAnimation::render(float dt) {
-        
-        if (!_nodeProxy || !_effect) {
-            return;
-        }
-        
-        CustomAssembler* assembler = (CustomAssembler*)_nodeProxy->getAssembler();
-        if (assembler == nullptr) {
-            return;
-        }
-        assembler->reset();
-        assembler->setUseModel(!_batch);
-        
         if (!_animationData) return;
         SkeletonCache::FrameData* frameData = _animationData->getFrameData(_curFrameIndex);
         if (!frameData) return;
@@ -162,10 +148,32 @@ namespace spine {
         
         auto mgr = MiddlewareManager::getInstance();
         if (!mgr->isRendering) return;
+
+        _sharedBufferOffset->reset();
+        _sharedBufferOffset->clear();
         
-        _nodeColor.a = _nodeProxy->getRealOpacity() / (float)255;
-        
-        auto vertexFormat = _useTint? VF_XYUVCC : VF_XYUVC;
+		auto renderMgr = mgr->getRenderInfoMgr();
+        auto renderInfo = renderMgr->getBuffer();
+        if (!renderInfo) return;
+
+		auto attachMgr = mgr->getAttachInfoMgr();
+        auto attachInfo = attachMgr->getBuffer();
+        if (!attachInfo) return;
+
+        //  store render info offset
+        _sharedBufferOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
+        // store attach info offset
+        _sharedBufferOffset->writeUint32((uint32_t)attachInfo->getCurPos() / sizeof(uint32_t));
+
+        // check enough space
+        renderInfo->checkSpace(sizeof(uint32_t) * 2, true);
+        // write border
+        renderInfo->writeUint32(0xffffffff);
+
+        // matieral len
+        renderInfo->writeUint32(segments.size());
+
+        auto vertexFormat = _useTint? VF_XYZUVCC : VF_XYZUVC;
         middleware::MeshBuffer* mb = mgr->getMeshBuffer(vertexFormat);
         middleware::IOBuffer& vb = mb->getVB();
         middleware::IOBuffer& ib = mb->getIB();
@@ -173,18 +181,19 @@ namespace spine {
         const auto& srcIB = frameData->ib;
         
         // vertex size int bytes with one color
-        int vbs1 = sizeof(V2F_T2F_C4B);
+        int vbs1 = sizeof(V2F_T2F_C4F);
         // vertex size in floats with one color
         int vs1 = vbs1 / sizeof(float);
         // vertex size int bytes with two color
-        int vbs2 = sizeof(V2F_T2F_C4B_C4B);
+        int vbs2 = sizeof(V2F_T2F_C4F_C4F);
         // vertex size in floats with two color
         int vs2 = vbs2 / sizeof(float);
         
         int vs = _useTint ? vs2 : vs1;
         int vbs = _useTint ? vbs2 : vbs1;
         
-        const cc::Mat4& nodeWorldMat = _nodeProxy->getWorldMatrix();
+        auto paramsBuffer = _paramsBuffer->getBuffer();
+        const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[1];
 
         int colorOffset = 0;
         SkeletonCache::ColorData* nowColor = colors[colorOffset++];
@@ -201,16 +210,17 @@ namespace spine {
         int tintBytes = 0;
         int srcIndexBytesOffset = 0;
         int indexBytes = 0;
-        GLuint textureHandle = 0;
+        int curTextureIndex = 0;
         double effectHash = 0;
         int blendMode = 0;
         int dstVertexOffset = 0;
+        int dstIndexOffset = 0;
         float* dstVertexBuffer = nullptr;
         unsigned int* dstColorBuffer = nullptr;
         unsigned short* dstIndexBuffer = nullptr;
         bool needColor = false;
-        BlendFactor curBlendSrc = BlendFactor::ONE;
-        BlendFactor curBlendDst = BlendFactor::ZERO;
+        int curBlendSrc = -1;
+        int curBlendDst = -1;
         
         if (abs(_nodeColor.r - 1.0f) > 0.0001f ||
             abs(_nodeColor.g - 1.0f) > 0.0001f ||
@@ -227,14 +237,14 @@ namespace spine {
             tempG = _nodeColor.g * multiplier;
             tempB = _nodeColor.b * multiplier;
             
-            finalColor.a = (GLubyte)tempA;
-            finalColor.r = (GLubyte)(colorData->finalColor.r * tempR);
-            finalColor.g = (GLubyte)(colorData->finalColor.g * tempG);
-            finalColor.b = (GLubyte)(colorData->finalColor.b * tempB);
+            finalColor.a = (uint32_t)tempA;
+            finalColor.r = (uint32_t)(colorData->finalColor.r * tempR);
+            finalColor.g = (uint32_t)(colorData->finalColor.g * tempG);
+            finalColor.b = (uint32_t)(colorData->finalColor.b * tempB);
             
-            darkColor.r = (GLubyte)(colorData->darkColor.r * tempR);
-            darkColor.g = (GLubyte)(colorData->darkColor.g * tempG);
-            darkColor.b = (GLubyte)(colorData->darkColor.b * tempB);
+            darkColor.r = (uint32_t)(colorData->darkColor.r * tempR);
+            darkColor.g = (uint32_t)(colorData->darkColor.g * tempG);
+            darkColor.b = (uint32_t)(colorData->darkColor.b * tempB);
             darkColor.a = _premultipliedAlpha ? 255 : 0;
         };
         
@@ -252,6 +262,35 @@ namespace spine {
                 vertexFloats = segment->vertexFloatCount;
             }
 
+			// check enough space
+            renderInfo->checkSpace(sizeof(uint32_t) * 9, true);
+
+			// fill new texture index
+            curTextureIndex = segment->getTexture()->getRealTextureIndex();
+            renderInfo->writeUint32(curTextureIndex);
+
+			blendMode = segment->blendMode;
+            switch (blendMode) {
+                case BlendMode_Additive:
+                    curBlendSrc = (int)(_premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA);
+                    curBlendDst = (int)BlendFactor::ONE;
+                    break;
+                case BlendMode_Multiply:
+                    curBlendSrc = (int)BlendFactor::DST_COLOR;
+                    curBlendDst = (int)BlendFactor::ONE_MINUS_SRC_ALPHA;
+                    break;
+                case BlendMode_Screen:
+                    curBlendSrc = (int)BlendFactor::ONE;
+                    curBlendDst = (int)BlendFactor::ONE_MINUS_SRC_COLOR;
+                    break;
+                default:
+                    curBlendSrc = (int)(_premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA);
+                    curBlendDst = (int)BlendFactor::ONE_MINUS_SRC_ALPHA;
+            }
+            // fill new blend src and dst
+            renderInfo->writeUint32(curBlendSrc);
+            renderInfo->writeUint32(curBlendDst);
+
             // fill vertex buffer
             vb.checkSpace(vertexBytes, true);
             dstVertexOffset = (int)vb.getCurPos() / vbs;
@@ -265,7 +304,7 @@ namespace spine {
             } else {
                 vb.writeBytes((char*)srcVB.getBuffer() + srcVertexBytesOffset, vertexBytes);
             }
-            
+
             // batch handle
             if (_batch) {
                 cc::Vec3* point = nullptr;
@@ -313,7 +352,7 @@ namespace spine {
             // fill index buffer
             indexBytes = segment->indexCount * sizeof(unsigned short);
             ib.checkSpace(indexBytes, true);
-            assembler->updateIARange(segIndex, (int)ib.getCurPos() / sizeof(unsigned short), segment->indexCount);
+            dstIndexOffset = (int)ib.getCurPos() / sizeof(unsigned short);
             dstIndexBuffer = (unsigned short*)ib.getCurBuffer();
             ib.writeBytes((char*)srcIB.getBuffer() + srcIndexBytesOffset, indexBytes);
             for (auto indexPos = 0; indexPos < segment->indexCount; indexPos ++) {
@@ -321,61 +360,36 @@ namespace spine {
             }
             srcIndexBytesOffset += indexBytes;
             
-            // set assembler glvb and glib
-            assembler->updateIABuffer(segIndex, mb->getGLVB(), mb->getGLIB());
-            
-            // handle material
-            textureHandle = segment->getTexture()->getNativeTexture()->getHandle();
-            blendMode = segment->blendMode;
-            effectHash = textureHandle + (blendMode << 16) + ((int)_useTint << 24) + ((int)_batch << 25) + ((int)_effect->getHash() << 26);
-            EffectVariant* renderEffect = assembler->getEffect(segIndex);
-            bool needUpdate = false;
-            if (renderEffect) {
-                double renderHash = renderEffect->getHash();
-                if (abs(renderHash - effectHash) >= 0.01) {
-                    needUpdate = true;
-                }
-            }
-            else {
-                auto effect = new cc::renderer::EffectVariant();
-                effect->autorelease();
-                effect->copy(_effect);
-                
-                assembler->updateEffect(segIndex, effect);
-                renderEffect = effect;
-                needUpdate = true;
-            }
+            // fill new index and vertex buffer id
+            auto rIB = mb->getBufferPos();
+            // because of use typedarray instead of gpu buffer, so index buffer handle same to vertex buffer handle
+            auto rVB = rIB;
+            renderInfo->writeUint32(rIB);
+            renderInfo->writeUint32(rVB);
 
-            if (needUpdate) {
-                renderEffect->setProperty(textureKey, segment->getTexture()->getNativeTexture());
-                switch (blendMode) {
-                    case BlendMode_Additive:
-                        curBlendSrc = _premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA;
-                        curBlendDst = BlendFactor::ONE;
-                        break;
-                    case BlendMode_Multiply:
-                        curBlendSrc = BlendFactor::DST_COLOR;
-                        curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
-                        break;
-                    case BlendMode_Screen:
-                        curBlendSrc = BlendFactor::ONE;
-                        curBlendDst = BlendFactor::ONE_MINUS_SRC_COLOR;
-                        break;
-                    default:
-                        curBlendSrc = _premultipliedAlpha ? BlendFactor::ONE : BlendFactor::SRC_ALPHA;
-                        curBlendDst = BlendFactor::ONE_MINUS_SRC_ALPHA;
-                }
-                renderEffect->setBlend(true, BlendOp::ADD, curBlendSrc, curBlendDst,
-                               BlendOp::ADD, curBlendSrc, curBlendDst);
-            }
-            
-            renderEffect->updateHash(effectHash);
+			// fill new index offset
+            renderInfo->writeUint32(dstIndexOffset);
+            // fill new indice segamentation count
+            renderInfo->writeUint32(segment->indexCount);
+
+            // fill new vertex offset
+            renderInfo->writeUint32(dstVertexOffset / vs);
+            // reserve vertices segamentation count
+            renderInfo->writeUint32(segment->vertexFloatCount);
         }
-        
-        if (_attachUtil)
-        {
-            _attachUtil->syncAttachedNode(_nodeProxy, frameData);
-        }
+
+		if (_useAttach) {
+			auto &bonesData = frameData->getBones();
+			auto boneCount = frameData->getBoneCount();
+			attachInfo->checkSpace(sizeof(float), true);
+			attachInfo->writeFloat32(boneCount);
+
+			for (int i = 0, n = boneCount; i < n; i++) {
+				auto bone = bonesData[i];
+				attachInfo->checkSpace(sizeof(cc::Mat4), true);
+				attachInfo->writeBytes((const char *)&bone->globalTransformMatrix, sizeof(cc::Mat4));
+			}
+		}
     }
     
     Skeleton* SkeletonCacheAnimation::getSkeleton() const {
@@ -428,7 +442,7 @@ namespace spine {
         return ret;
     }
     
-    void SkeletonCacheAnimation::setColor (cc::Color4B& color) {
+    void SkeletonCacheAnimation::setColor (cc::middleware::Color4B& color) {
         _nodeColor.r = color.r / 255.0f;
         _nodeColor.g = color.g / 255.0f;
         _nodeColor.b = color.b / 255.0f;
@@ -436,7 +450,7 @@ namespace spine {
     }
     
     void SkeletonCacheAnimation::setBatchEnabled (bool enabled) {
-        _batch = enabled;
+        // _batch = enabled;
     }
     
     void SkeletonCacheAnimation::setOpacityModifyRGB (bool value) {
@@ -466,6 +480,10 @@ namespace spine {
     void SkeletonCacheAnimation::setUseTint(bool enabled) {
         _useTint = enabled;
     }
+
+	void SkeletonCacheAnimation::setAttachEnabled(bool enabled) {
+		_useAttach = enabled;
+	}
     
     void SkeletonCacheAnimation::setAnimation (const std::string& name, bool loop) {
         _playTimes = loop ? 0 : 1;
@@ -509,30 +527,26 @@ namespace spine {
         _skeletonCache->resetAllAnimationData();
     }
     
-    void SkeletonCacheAnimation::setAttachUtil(CacheModeAttachUtil* attachUtil) {
-        if (attachUtil == _attachUtil) return;
-        CC_SAFE_RELEASE(_attachUtil);
-        _attachUtil = attachUtil;
-        CC_SAFE_RETAIN(_attachUtil);
+    se_object_ptr SkeletonCacheAnimation::getSharedBufferOffset() const {
+        if (_sharedBufferOffset) {
+            return _sharedBufferOffset->getTypeArray();
+        }
+        return nullptr;
     }
-    
-    void SkeletonCacheAnimation::bindNodeProxy(cc::renderer::NodeProxy* node) {
-        if (node == _nodeProxy) return;
-        CC_SAFE_RELEASE(_nodeProxy);
-        _nodeProxy = node;
-        CC_SAFE_RETAIN(_nodeProxy);
+
+    se_object_ptr SkeletonCacheAnimation::getParamsBuffer() const {
+        if (_paramsBuffer) {
+            return _paramsBuffer->getTypeArray();
+        }
+        return nullptr;
     }
-    
-    void SkeletonCacheAnimation::setEffect(cc::renderer::EffectVariant* effect) {
-        if (effect == _effect) return;
-        CC_SAFE_RELEASE(_effect);
-        _effect = effect;
-        CC_SAFE_RETAIN(_effect);
-    }
-    
+
     uint32_t SkeletonCacheAnimation::getRenderOrder() const {
-        if (!_nodeProxy) return 0;
-        return _nodeProxy->getRenderOrder();
+        if (_paramsBuffer) {
+            auto buffer = _paramsBuffer->getBuffer();
+            return (uint32_t)buffer[0];
+        }
+        return 0;
     }
     
     void SkeletonCacheAnimation::setToSetupPose () {

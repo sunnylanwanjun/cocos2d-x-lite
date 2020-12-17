@@ -34,6 +34,8 @@ MIDDLEWARE_BEGIN
 struct Color4B {
     Color4B(uint32_t _r, uint32_t _g, uint32_t _b, uint32_t _a);
     Color4B();
+	bool operator==(const Color4B &right) const;
+    bool operator!=(const Color4B &right) const;
 
     uint32_t r = 0;
     uint32_t g = 0;
@@ -46,6 +48,8 @@ struct Color4B {
 struct Color4F {
     Color4F(float _r, float _g, float _b, float _a);
     Color4F();
+    bool operator==(const Color4F &right) const;
+    bool operator!=(const Color4F &right) const;
 
     float r = 0.0f;
     float g = 0.0f;
@@ -66,37 +70,37 @@ struct Tex2F {
 /**
  *  Vertex Format with x y z u v color.
  */
-struct V2F_T2F_C4B {
+struct V2F_T2F_C4F {
     // vertices (3F)
     cc::Vec3 vertex;
 
     // tex coords (2F)
     Tex2F texCoord;
 
-    // colors (4B)
-    Color4B color;
+    // colors (4F)
+    Color4F color;
 };
 
 /**
  *  Vertex Format with x y u v color1 color2.
  */
-struct V2F_T2F_C4B_C4B {
+struct V2F_T2F_C4F_C4F {
     // vertices (3F)
     cc::Vec3 vertex;
 
     // tex coords (2F)
     Tex2F texCoord;
 
-    // colors (4B)
-    Color4B color;
+    // colors (4F)
+    Color4F color;
 
-    // colors (4B)
-    Color4B color2;
+    // colors (4F)
+    Color4F color2;
 };
 
 struct Triangles {
     /**Vertex data pointer.*/
-    V2F_T2F_C4B *verts = nullptr;
+    V2F_T2F_C4F *verts = nullptr;
     /**Index data pointer.*/
     unsigned short *indices = nullptr;
     /**The number of vertices.*/
@@ -107,7 +111,7 @@ struct Triangles {
 
 struct TwoColorTriangles {
     /**Vertex data pointer.*/
-    V2F_T2F_C4B_C4B *verts = nullptr;
+    V2F_T2F_C4F_C4F *verts = nullptr;
     /**Index data pointer.*/
     unsigned short *indices = nullptr;
     /**The number of vertices.*/

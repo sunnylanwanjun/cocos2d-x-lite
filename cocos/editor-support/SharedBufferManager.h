@@ -29,28 +29,10 @@
 
 MIDDLEWARE_BEGIN
 
-class RenderInfoMgr {
+class SharedBufferManager {
 public:
-    static RenderInfoMgr* getInstance ()
-    {
-        if (_instance == nullptr)
-        {
-            _instance = new RenderInfoMgr();
-        }
-        return _instance;
-    }
-
-    static void destroyInstance ()
-    {
-        if (_instance)
-        {
-            delete _instance;
-            _instance = nullptr;
-        }
-    }
-
-    RenderInfoMgr ();
-    virtual ~RenderInfoMgr ();
+    SharedBufferManager();
+    virtual ~SharedBufferManager();
     
     void reset ()
     {
@@ -68,7 +50,7 @@ public:
         _resizeCallback = callback;
     }
 
-    se_object_ptr getRenderInfo()
+    se_object_ptr getSharedBuffer() const
     {
         return _buffer->getTypeArray();
     }
@@ -76,7 +58,6 @@ private:
     void init();
     void afterCleanupHandle();
 private:
-    static RenderInfoMgr* _instance;
     IOTypedArray* _buffer = nullptr;
     resizeCallback _resizeCallback = nullptr;
 };

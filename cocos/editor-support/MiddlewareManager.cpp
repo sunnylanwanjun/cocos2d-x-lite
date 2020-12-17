@@ -29,25 +29,20 @@ MIDDLEWARE_BEGIN
 
 MiddlewareManager *MiddlewareManager::_instance = nullptr;
 
-MiddlewareManager::MiddlewareManager() 
-{
+MiddlewareManager::MiddlewareManager() {
 }
 
-MiddlewareManager::~MiddlewareManager() 
-{
-    for (auto it : _mbMap) 
-	{
+MiddlewareManager::~MiddlewareManager() {
+    for (auto it : _mbMap) {
         auto buffer = it.second;
-        if (buffer) 
-		{
+        if (buffer) {
             delete buffer;
         }
     }
     _mbMap.clear();
 }
 
-MeshBuffer *MiddlewareManager::getMeshBuffer(int format) 
-{
+MeshBuffer *MiddlewareManager::getMeshBuffer(int format) {
     MeshBuffer *mb = _mbMap[format];
     if (!mb) {
         mb = new MeshBuffer(format);
@@ -56,14 +51,11 @@ MeshBuffer *MiddlewareManager::getMeshBuffer(int format)
     return mb;
 }
 
-void MiddlewareManager::_clearRemoveList() 
-{
-    for (std::size_t i = 0; i < _removeList.size(); i++) 
-	{
+void MiddlewareManager::_clearRemoveList() {
+    for (std::size_t i = 0; i < _removeList.size(); i++) {
         auto editor = _removeList[i];
         auto it = std::find(_updateList.begin(), _updateList.end(), editor);
-        if (it != _updateList.end()) 
-		{
+        if (it != _updateList.end()) {
             _updateList.erase(it);
         }
     }
@@ -71,23 +63,29 @@ void MiddlewareManager::_clearRemoveList()
     _removeList.clear();
 }
 
-void MiddlewareManager::update(float dt) 
-{
+void MiddlewareManager::update(float dt) {
     isUpdating = true;
 
-    for (std::size_t i = 0, n = _updateList.size(); i < n; i++) 
-	{
+	_renderInfo.reset();
+	auto renderBuffer = _renderInfo.getBuffer();
+	if (renderBuffer) {
+		renderBuffer->writeUint32(0);
+	}
+
+	_attachInfo.reset();
+	auto attachBuffer = _attachInfo.getBuffer();
+	if (attachBuffer) {
+		attachBuffer->writeUint32(0);
+	}
+
+    for (std::size_t i = 0, n = _updateList.size(); i < n; i++) {
         auto editor = _updateList[i];
-        if (_removeList.size() > 0) 
-		{
+        if (_removeList.size() > 0) {
             auto removeIt = std::find(_removeList.begin(), _removeList.end(), editor);
-            if (removeIt == _removeList.end()) 
-			{
+            if (removeIt == _removeList.end()) {
                 editor->update(dt);
             }
-        } 
-		else 
-		{
+        } else {
             editor->update(dt);
         }
     }
@@ -97,13 +95,10 @@ void MiddlewareManager::update(float dt)
     _clearRemoveList();
 }
 
-void MiddlewareManager::render(float dt) 
-{
-    for (auto it : _mbMap) 
-	{
+void MiddlewareManager::render(float dt) {
+    for (auto it : _mbMap) {
         auto buffer = it.second;
-        if (buffer) 
-		{
+        if (buffer) {
             buffer->reset();
         }
     }
@@ -112,42 +107,32 @@ void MiddlewareManager::render(float dt)
 
     auto isOrderDirty = false;
     uint32_t maxRenderOrder = 0;
-    for (std::size_t i = 0, n = _updateList.size(); i < n; i++) 
-	{
+    for (std::size_t i = 0, n = _updateList.size(); i < n; i++) {
         auto editor = _updateList[i];
         uint32_t renderOrder = maxRenderOrder;
-        if (_removeList.size() > 0) 
-		{
+        if (_removeList.size() > 0) {
             auto removeIt = std::find(_removeList.begin(), _removeList.end(), editor);
-            if (removeIt == _removeList.end()) 
-			{
+            if (removeIt == _removeList.end()) {
                 editor->render(dt);
                 renderOrder = editor->getRenderOrder();
             }
-        } 
-		else 
-		{
+        } else {
             editor->render(dt);
             renderOrder = editor->getRenderOrder();
         }
 
-        if (maxRenderOrder > renderOrder) 
-		{
+        if (maxRenderOrder > renderOrder) {
             isOrderDirty = true;
-        } 
-		else 
-		{
+        } else {
             maxRenderOrder = renderOrder;
         }
     }
 
     isRendering = false;
 
-    for (auto it : _mbMap) 
-	{
+    for (auto it : _mbMap) {
         auto buffer = it.second;
-        if (buffer) 
-		{
+        if (buffer) {
             buffer->uploadIB();
             buffer->uploadVB();
         }
@@ -155,59 +140,55 @@ void MiddlewareManager::render(float dt)
 
     _clearRemoveList();
 
-    if (isOrderDirty) 
-	{
-        std::sort(_updateList.begin(), _updateList.end(), [](IMiddleware *it1, IMiddleware *it2)
-		{
+    if (isOrderDirty) {
+        std::sort(_updateList.begin(), _updateList.end(), [](IMiddleware *it1, IMiddleware *it2) {
             return it1->getRenderOrder() < it2->getRenderOrder();
         });
     }
 }
 
-void MiddlewareManager::addTimer(IMiddleware *editor) 
-{
+void MiddlewareManager::addTimer(IMiddleware *editor) {
     auto it0 = std::find(_updateList.begin(), _updateList.end(), editor);
-    if (it0 != _updateList.end()) 
-	{
+    if (it0 != _updateList.end()) {
         return;
     }
 
     auto it1 = std::find(_removeList.begin(), _removeList.end(), editor);
-    if (it1 != _removeList.end()) 
-	{
+    if (it1 != _removeList.end()) {
         _removeList.erase(it1);
     }
     _updateList.push_back(editor);
 }
 
-void MiddlewareManager::removeTimer(IMiddleware *editor) 
-{
-    if (isUpdating || isRendering) 
-	{
+void MiddlewareManager::removeTimer(IMiddleware *editor) {
+    if (isUpdating || isRendering) {
         _removeList.push_back(editor);
-    } 
-	else 
-	{
+    } else {
         auto it = std::find(_updateList.begin(), _updateList.end(), editor);
-        if (it != _updateList.end()) 
-		{
+        if (it != _updateList.end()) {
             _updateList.erase(it);
         }
     }
 }
 
-se_object_ptr MiddlewareManager::getVBTypedArray(int vfmt, int bufferPos) 
-{
+se_object_ptr MiddlewareManager::getVBTypedArray(int vfmt, int bufferPos) {
     MeshBuffer *mb = _mbMap[vfmt];
     if (!mb) return nullptr;
     return mb->getVBTypedArray(bufferPos);
 }
 
-se_object_ptr MiddlewareManager::getIBTypedArray(int vfmt, int bufferPos) 
-{
+se_object_ptr MiddlewareManager::getIBTypedArray(int vfmt, int bufferPos) {
     MeshBuffer *mb = _mbMap[vfmt];
     if (!mb) return nullptr;
     return mb->getIBTypedArray(bufferPos);
+}
+
+SharedBufferManager *MiddlewareManager::getRenderInfoMgr() {
+    return &_renderInfo;
+}
+
+SharedBufferManager *MiddlewareManager::getAttachInfoMgr() {
+	return &_attachInfo;
 }
 
 MIDDLEWARE_END

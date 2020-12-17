@@ -30,8 +30,8 @@
 #include "spine-creator-support/spine-cocos2dx.h"
 #include "spine-creator-support/AttachmentVertices.h"
 #include "middleware-adapter.h"
-#include "base/CCData.h"
-#include "platform/CCFileUtils.h"
+#include "base/Data.h"
+#include "platform/FileUtils.h"
 
 namespace spine {
     static CustomTextureLoader _customTextureLoader = nullptr;
@@ -46,7 +46,7 @@ namespace spine {
 }
 
 USING_NS_MW;
-using namespace cocos2d;
+using namespace cc;
 using namespace spine;
 
 static void deleteAttachmentVertices (void* vertices) {
@@ -58,7 +58,7 @@ static unsigned short quadTriangles[6] = {0, 1, 2, 2, 3, 0};
 static void setAttachmentVertices(RegionAttachment* attachment) {
     AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
     AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(), 4, quadTriangles, 6);
-    V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+    V2F_T2F_C4F* vertices = attachmentVertices->_triangles->verts;
     for (int i = 0, ii = 0; i < 4; ++i, ii += 2) {
         vertices[i].texCoord.u = attachment->getUVs()[ii];
         vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
@@ -70,7 +70,7 @@ static void setAttachmentVertices(MeshAttachment* attachment) {
     AtlasRegion* region = (AtlasRegion*)attachment->getRendererObject();
     AttachmentVertices* attachmentVertices = new AttachmentVertices((Texture2D*)region->page->getRendererObject(),
                                                                     attachment->getWorldVerticesLength() >> 1, attachment->getTriangles().buffer(), attachment->getTriangles().size());
-    V2F_T2F_C4B* vertices = attachmentVertices->_triangles->verts;
+    V2F_T2F_C4F* vertices = attachmentVertices->_triangles->verts;
     for (size_t i = 0, ii = 0, nn = attachment->getWorldVerticesLength(); ii < nn; ++i, ii += 2) {
         vertices[i].texCoord.u = attachment->getUVs()[ii];
         vertices[i].texCoord.v = attachment->getUVs()[ii + 1];
@@ -91,30 +91,12 @@ void Cocos2dAtlasAttachmentLoader::configureAttachment(Attachment* attachment) {
     }
 }
 
-GLuint wrap (TextureWrap wrap) {
-    return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+int wrap (TextureWrap wrap) {
+    return wrap;
 }
 
-GLuint filter (TextureFilter filter) {
-    switch (filter) {
-    case TextureFilter_Unknown:
-        break;
-    case TextureFilter_Nearest:
-        return GL_NEAREST;
-    case TextureFilter_Linear:
-        return GL_LINEAR;
-    case TextureFilter_MipMap:
-        return GL_LINEAR_MIPMAP_LINEAR;
-    case TextureFilter_MipMapNearestNearest:
-        return GL_NEAREST_MIPMAP_NEAREST;
-    case TextureFilter_MipMapLinearNearest:
-        return GL_LINEAR_MIPMAP_NEAREST;
-    case TextureFilter_MipMapNearestLinear:
-        return GL_NEAREST_MIPMAP_LINEAR;
-    case TextureFilter_MipMapLinearLinear:
-        return GL_LINEAR_MIPMAP_LINEAR;
-    }
-    return GL_LINEAR;
+int filter (TextureFilter filter) {
+    return filter;
 }
 
 Cocos2dTextureLoader::Cocos2dTextureLoader() : TextureLoader() { }
