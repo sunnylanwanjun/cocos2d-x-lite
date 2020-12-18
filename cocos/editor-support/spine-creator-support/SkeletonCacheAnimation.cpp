@@ -392,9 +392,13 @@ namespace spine {
             renderInfo->writeUint32(segment->indexCount);
 
             // fill new vertex offset
-            renderInfo->writeUint32(dstVertexOffset / vs);
-            // reserve vertices segamentation count
-            renderInfo->writeUint32(segment->vertexFloatCount);
+            renderInfo->writeUint32(dstVertexOffset * vs);
+			// fill vertices segamentation count
+			if (_useTint) {
+				renderInfo->writeUint32(segment->vertexFloatCount);
+			} else {
+				renderInfo->writeUint32(segment->vertexFloatCount / vs2 * vs1);
+			}
         }
 
 		if (_useAttach) {
@@ -459,12 +463,12 @@ namespace spine {
         return ret;
     }
     
-    void SkeletonCacheAnimation::setColor (cc::middleware::Color4B& color) {
-        _nodeColor.r = color.r / 255.0f;
-        _nodeColor.g = color.g / 255.0f;
-        _nodeColor.b = color.b / 255.0f;
-        _nodeColor.a = color.a / 255.0f;
-    }
+	void SkeletonCacheAnimation::setColor(float r, float g, float b, float a) {
+		_nodeColor.r = r / 255.0f;
+		_nodeColor.g = g / 255.0f;
+		_nodeColor.b = b / 255.0f;
+		_nodeColor.a = a / 255.0f;
+	}
     
     void SkeletonCacheAnimation::setBatchEnabled (bool enabled) {
 		// disable switch batch mode, force to enable batch, it may be changed in future version
@@ -501,7 +505,8 @@ namespace spine {
     }
     
     void SkeletonCacheAnimation::setUseTint(bool enabled) {
-        _useTint = enabled;
+		// cache mode default enable use tint
+        // _useTint = enabled;
     }
 
 	void SkeletonCacheAnimation::setAttachEnabled(bool enabled) {

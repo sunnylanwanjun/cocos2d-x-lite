@@ -62,7 +62,7 @@ namespace spine {
         Attachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
         bool setAttachment (const std::string& slotName, const std::string& attachmentName);
         bool setAttachment (const std::string& slotName, const char* attachmentName);
-        void setColor (cc::middleware::Color4B& color);
+		void setColor(float r, float g, float b, float a);
         void setBatchEnabled (bool enabled);
 		void setAttachEnabled(bool enabled);
 
@@ -122,7 +122,7 @@ namespace spine {
         int _playTimes = 0;
         bool _isAniComplete = true;
         std::string _animationName = "";
-        bool _useTint = false;
+        bool _useTint = true;
         
         struct AniQueueData {
             std::string animationName = "";
