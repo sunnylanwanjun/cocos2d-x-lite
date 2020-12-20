@@ -32,7 +32,7 @@
 #include "SkeletonCacheMgr.h"
 #include "SharedBufferManager.h"
 #include "base/TypeDef.h"
-#include "base/TypeDef.h"
+#include "base/memory/Memory.h"
 #include "math/Math.h"
 #include "core/gfx/GFXDef.h"
 
@@ -285,7 +285,7 @@ namespace spine {
             }
 
 			// check enough space
-            renderInfo->checkSpace(sizeof(uint32_t) * 9, true);
+            renderInfo->checkSpace(sizeof(uint32_t) * 6, true);
 
 			// fill new texture index
             curTextureIndex = segment->getTexture()->getRealTextureIndex();
@@ -334,7 +334,8 @@ namespace spine {
                     point = (cc::Vec3*)(dstVertexBuffer + posIndex);
 					// force z value to zero
                     point->z = 0;
-                    nodeWorldMat.transformPoint(point);
+					point->x = point->x * nodeWorldMat.m[0] + point->y * nodeWorldMat.m[4] + nodeWorldMat.m[12]; // x
+					point->y = point->y * nodeWorldMat.m[1] + point->y * nodeWorldMat.m[5] + nodeWorldMat.m[13]; // y
                 }
             }
             
@@ -380,25 +381,13 @@ namespace spine {
             srcIndexBytesOffset += indexBytes;
             
             // fill new index and vertex buffer id
-            auto rIB = mb->getBufferPos();
-            // because of use typedarray instead of gpu buffer, so index buffer handle same to vertex buffer handle
-            auto rVB = rIB;
-            renderInfo->writeUint32(rIB);
-            renderInfo->writeUint32(rVB);
+            auto bufferIndex = mb->getBufferPos();
+            renderInfo->writeUint32(bufferIndex);
 
 			// fill new index offset
             renderInfo->writeUint32(dstIndexOffset);
             // fill new indice segamentation count
             renderInfo->writeUint32(segment->indexCount);
-
-            // fill new vertex offset
-            renderInfo->writeUint32(dstVertexOffset * vs);
-			// fill vertices segamentation count
-			if (_useTint) {
-				renderInfo->writeUint32(segment->vertexFloatCount);
-			} else {
-				renderInfo->writeUint32(segment->vertexFloatCount / vs2 * vs1);
-			}
         }
 
 		if (_useAttach) {

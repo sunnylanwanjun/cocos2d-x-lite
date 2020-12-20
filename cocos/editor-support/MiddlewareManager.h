@@ -98,6 +98,9 @@ public:
 
     se_object_ptr getVBTypedArray(int format, int bufferPos);
     se_object_ptr getIBTypedArray(int format, int bufferPos);
+	std::size_t getBufferCount(int format);
+	std::size_t getVBTypedArrayLength(int format, std::size_t bufferPos);
+	std::size_t getIBTypedArrayLength(int format, std::size_t bufferPos);
 
     SharedBufferManager *getRenderInfoMgr();
     SharedBufferManager *getAttachInfoMgr();

@@ -37,30 +37,39 @@ public:
 
     virtual ~MeshBuffer();
 
-    se_object_ptr getVBTypedArray(std::size_t bufferPos)
-    {
+    se_object_ptr getVBTypedArray(std::size_t bufferPos) {
         if (_vbArr.size() <= bufferPos) return nullptr;
         return _vbArr[bufferPos]->getTypeArray();
     }
     
-    se_object_ptr getIBTypedArray(std::size_t bufferPos)
-    {
+    se_object_ptr getIBTypedArray(std::size_t bufferPos) {
         if (_ibArr.size() <= bufferPos) return nullptr;
         return _ibArr[bufferPos]->getTypeArray();
     }
+
+	std::size_t getVBTypedArrayLength(std::size_t bufferPos) {
+		if (_vbArr.size() <= bufferPos) return 0;
+		return _vbArr[bufferPos]->length();
+	}
+
+	std::size_t getIBTypedArrayLength(std::size_t bufferPos) {
+		if (_ibArr.size() <= bufferPos) return 0;
+		return _ibArr[bufferPos]->length();
+	}
+
+	std::size_t getBufferCount() {
+		return _bufferPos + 1;
+	}
     
-	std::size_t getBufferPos()
-	{
+	std::size_t getBufferPos() {
 		return _bufferPos;
 	}
 
-    IOBuffer& getVB()
-    {
+    IOBuffer& getVB() {
         return _vb;
     }
     
-    IOBuffer& getIB()
-    {
+    IOBuffer& getIB() {
         return _ib;
     }
     

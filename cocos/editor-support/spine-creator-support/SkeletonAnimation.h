@@ -46,20 +46,9 @@ class SkeletonAnimation: public SkeletonRenderer {
 public:
     static SkeletonAnimation* create();
     static SkeletonAnimation* createWithData (SkeletonData* skeletonData, bool ownsSkeletonData = false);
-    static SkeletonAnimation* createWithJsonFile (const std::string& skeletonJsonFile, Atlas* atlas, float scale = 1);
     static SkeletonAnimation* createWithJsonFile (const std::string& skeletonJsonFile, const std::string& atlasFile, float scale = 1);
-    static SkeletonAnimation* createWithBinaryFile (const std::string& skeletonBinaryFile, Atlas* atlas, float scale = 1);
     static SkeletonAnimation* createWithBinaryFile (const std::string& skeletonBinaryFile, const std::string& atlasFile, float scale = 1);
     static void setGlobalTimeScale(float timeScale);
-    
-    // Use createWithJsonFile instead
-    CC_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, Atlas* atlas, float scale = 1) {
-        return SkeletonAnimation::createWithJsonFile(skeletonJsonFile, atlas, scale);
-    }
-    // Use createWithJsonFile instead
-    CC_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, const std::string& atlasFile, float scale = 1) {
-        return SkeletonAnimation::createWithJsonFile(skeletonJsonFile, atlasFile, scale);
-    }
 
     virtual void update (float deltaTime) override;
 

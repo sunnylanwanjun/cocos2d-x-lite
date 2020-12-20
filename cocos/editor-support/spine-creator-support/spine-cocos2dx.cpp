@@ -91,12 +91,12 @@ void Cocos2dAtlasAttachmentLoader::configureAttachment(Attachment* attachment) {
     }
 }
 
-int wrap (TextureWrap wrap) {
-    return wrap;
+uint32_t wrap (TextureWrap _wrap) {
+    return (uint32_t)_wrap;
 }
 
-int filter (TextureFilter filter) {
-    return filter;
+uint32_t filter (TextureFilter _filter) {
+    return (uint32_t)_filter;
 }
 
 Cocos2dTextureLoader::Cocos2dTextureLoader() : TextureLoader() { }

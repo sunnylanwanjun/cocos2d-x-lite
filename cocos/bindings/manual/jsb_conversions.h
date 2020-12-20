@@ -761,22 +761,23 @@ constexpr bool is_jsb_object_v = _is_jsb_object<typename std::remove_const<T>::t
 #if HAS_CONSTEXPR
 
 template<typename Out, typename In>
-constexpr Out holder_convert_to(In& input) {
+constexpr inline Out& holder_convert_to(In& input)
+{
     if CC_CONSTEXPR (std::is_same< Out, In>::value)
     {
-        return (Out)(input);
+        return input;
     }
     else if CC_CONSTEXPR (std::is_same<Out, std::add_pointer_t<In>>::value)
     {
-        return (Out)(&input);
+        return &input;
     } 
     else if CC_CONSTEXPR (std::is_same<Out, std::remove_pointer_t<In>>::value)
     {
-        return (Out)(*input);
+        return *input;
     }
     else if CC_CONSTEXPR (std::is_enum<In>::value)
     {
-        return (Out)input;
+        return input;
     }
     else {
         assert(false); // "types are not convertiable!");
@@ -810,7 +811,11 @@ struct HolderType {
     using local_type = typename std::conditional_t<is_reference && is_jsb_object_v<T>, std::add_pointer_t<type>, type>;
     local_type data;
     type *ptr = nullptr;
-    constexpr inline type value()
+#if HAS_CONSTEXPR
+    constexpr inline type& value()
+#else
+	constexpr inline type value()
+#endif
     {
         if(ptr) return *ptr;
         return holder_convert_to<type, local_type>(data);

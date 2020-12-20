@@ -51,7 +51,6 @@ namespace spine {
         static SkeletonRenderer* create ();
         static SkeletonRenderer* createWithSkeleton(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
         static SkeletonRenderer* createWithData (SkeletonData* skeletonData, bool ownsSkeletonData = false);
-        static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
         static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
         
         virtual void update (float deltaTime) override {}
@@ -133,7 +132,6 @@ namespace spine {
         SkeletonRenderer ();
         SkeletonRenderer(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false, bool ownsAtlas = false);
         SkeletonRenderer (SkeletonData* skeletonData, bool ownsSkeletonData = false);
-        SkeletonRenderer (const std::string& skeletonDataFile, Atlas* atlas, float scale = 1);
         SkeletonRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
         virtual ~SkeletonRenderer ();

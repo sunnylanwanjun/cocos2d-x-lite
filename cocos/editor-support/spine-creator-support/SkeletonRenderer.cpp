@@ -32,8 +32,8 @@
 #include "SharedBufferManager.h"
 #include "SkeletonDataMgr.h"
 #include "base/TypeDef.h"
-#include "base/TypeDef.h"
 #include "math/Math.h"
+#include "base/memory/Memory.h"
 #include "core/gfx/GFXDef.h"
 #include "math/Vec3.h"
 #include "spine-creator-support/AttachmentVertices.h"
@@ -73,12 +73,6 @@ SkeletonRenderer *SkeletonRenderer::createWithSkeleton(Skeleton *skeleton, bool 
 
 SkeletonRenderer *SkeletonRenderer::createWithData(SkeletonData *skeletonData, bool ownsSkeletonData) {
     SkeletonRenderer *node = new SkeletonRenderer(skeletonData, ownsSkeletonData);
-    node->autorelease();
-    return node;
-}
-
-SkeletonRenderer *SkeletonRenderer::createWithFile(const std::string &skeletonDataFile, Atlas *atlas, float scale) {
-    SkeletonRenderer *node = new SkeletonRenderer(skeletonDataFile, atlas, scale);
     node->autorelease();
     return node;
 }
@@ -151,10 +145,6 @@ SkeletonRenderer::SkeletonRenderer(Skeleton *skeleton, bool ownsSkeleton, bool o
 
 SkeletonRenderer::SkeletonRenderer(SkeletonData *skeletonData, bool ownsSkeletonData) {
     initWithData(skeletonData, ownsSkeletonData);
-}
-
-SkeletonRenderer::SkeletonRenderer(const std::string &skeletonDataFile, Atlas *atlas, float scale) {
-    initWithJsonFile(skeletonDataFile, atlas, scale);
 }
 
 SkeletonRenderer::SkeletonRenderer(const std::string &skeletonDataFile, const std::string &atlasFile, float scale) {
@@ -356,8 +346,6 @@ void SkeletonRenderer::render(float deltaTime) {
 
     int preISegWritePos = -1;
     int curISegLen = 0;
-    int preVSegWritePos = -1;
-    int curVSegLen = 0;
 
     int materialLen = 0;
     Slot *slot = nullptr;
@@ -375,11 +363,6 @@ void SkeletonRenderer::render(float deltaTime) {
         // fill pre segment indices count field
         if (preISegWritePos != -1) {
             renderInfo->writeUint32(preISegWritePos, curISegLen);
-        }
-
-        // fill pre segment vertices count field
-        if (preVSegWritePos != -1) {
-            renderInfo->writeUint32(preVSegWritePos, curVSegLen);
         }
 
         // prepare to fill new segment field
@@ -403,7 +386,7 @@ void SkeletonRenderer::render(float deltaTime) {
         }
 
         // check enough space
-        renderInfo->checkSpace(sizeof(uint32_t) * 9, true);
+        renderInfo->checkSpace(sizeof(uint32_t) * 6, true);
 
         // fill new texture index
         renderInfo->writeUint32(curTextureIndex);
@@ -411,11 +394,8 @@ void SkeletonRenderer::render(float deltaTime) {
         renderInfo->writeUint32(curBlendSrc);
         renderInfo->writeUint32(curBlendDst);
         // fill new index and vertex buffer id
-        auto rIB = mb->getBufferPos();
-        // because of use typedarray instead of gpu buffer, so index buffer handle same to vertex buffer handle
-        auto rVB = rIB;
-        renderInfo->writeUint32(rIB);
-        renderInfo->writeUint32(rVB);
+        auto bufferIndex = mb->getBufferPos();
+        renderInfo->writeUint32(bufferIndex);
 
         // fill new index offset
         renderInfo->writeUint32((uint32_t)ib.getCurPos() / sizeof(unsigned short));
@@ -424,21 +404,12 @@ void SkeletonRenderer::render(float deltaTime) {
         // reserve indice segamentation count
         renderInfo->writeUint32(0);
 
-		// fill new vertex offset
-        renderInfo->writeUint32((uint32_t)vb.getCurPos() / sizeof(float));
-        // save new segment vertices count pos field
-        preVSegWritePos = (int)renderInfo->getCurPos();
-        // reserve vertices segamentation count
-        renderInfo->writeUint32(0);
-
         // reset pre blend mode to current
         preBlendMode = (int)slot->getData().getBlendMode();
         // reset pre texture index to current
         preTextureIndex = curTextureIndex;
         // reset index segmentation count
         curISegLen = 0;
-        // reset vertex segmentation count
-        curVSegLen = 0;
         // material length increased
         materialLen++;
     };
@@ -867,7 +838,8 @@ void SkeletonRenderer::render(float deltaTime) {
                     point = (cc::Vec3 *)(vbBuffer + ii);
 					// force z value to zero
                     point->z = 0;
-                    nodeWorldMat.transformPoint(point);                    
+					point->x = point->x * nodeWorldMat.m[0] + point->y * nodeWorldMat.m[4] + nodeWorldMat.m[12]; // x
+					point->y = point->y * nodeWorldMat.m[1] + point->y * nodeWorldMat.m[5] + nodeWorldMat.m[13]; // y
                 }
             }
 
@@ -882,7 +854,6 @@ void SkeletonRenderer::render(float deltaTime) {
 
             // Record this turn index segmentation count,it will store in material buffer in the end.
             curISegLen += ibSize / sizeof(unsigned short);
-            curVSegLen += vbSize / sizeof(float);
         }
 
         _clipper->clipEnd(*slot);
@@ -896,10 +867,6 @@ void SkeletonRenderer::render(float deltaTime) {
     if (preISegWritePos != -1) {
         renderInfo->writeUint32(preISegWritePos, curISegLen);
     }
-
-    if (preVSegWritePos != -1) {
-        renderInfo->writeUint32(preVSegWritePos, curVSegLen);
-	}
 
 	if (_useAttach || _debugBones) {
 		auto &bones = _skeleton->getBones();
