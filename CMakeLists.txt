@@ -872,14 +872,14 @@ endif()
 
 if(USE_MIDDLEWARE)
     cocos_source_files(
-        cocos/bindings/auto/jsb_cocos2dx_editor_support_auto.cpp
-        cocos/bindings/auto/jsb_cocos2dx_editor_support_auto.h
+        cocos/bindings/auto/jsb_editor_support_auto.cpp
+        cocos/bindings/auto/jsb_editor_support_auto.h
     )
 
 	if(USE_SPINE)
 		cocos_source_files(
-			cocos/bindings/auto/jsb_cocos2dx_spine_auto.cpp
-			cocos/bindings/auto/jsb_cocos2dx_spine_auto.h
+			cocos/bindings/auto/jsb_spine_auto.cpp
+			cocos/bindings/auto/jsb_spine_auto.h
 		)
 	endif()
 endif()

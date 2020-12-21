@@ -1459,13 +1459,6 @@ inline bool nativevalue_to_se(const int32_t &from, se::Value &to, se::Object *)
 }
 
 template<>
-inline bool nativevalue_to_se(const std::size_t &from, se::Value &to, se::Object *)
-{
-	to.setUint32(from);
-	return true;
-}
-
-template<>
 inline bool nativevalue_to_se(const uint32_t &from, se::Value &to, se::Object *)
 {
     to.setUint32(from);
