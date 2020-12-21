@@ -27,38 +27,31 @@
 MIDDLEWARE_BEGIN
 
 MeshBuffer::MeshBuffer(int vertexFormat)
-    :MeshBuffer(vertexFormat, INIT_INDEX_BUFFER_SIZE, MAX_VERTEX_BUFFER_SIZE)
-{
+: MeshBuffer(vertexFormat, INIT_INDEX_BUFFER_SIZE, MAX_VERTEX_BUFFER_SIZE) {
 }
 
 MeshBuffer::MeshBuffer(int vertexFormat, size_t indexSize, size_t vertexSize)
-: _vertexFormat(vertexFormat)
-, _ib(indexSize)
-, _vb(vertexSize * vertexFormat * sizeof(float))
-{
+: _vertexFormat(vertexFormat), _ib(indexSize), _vb(vertexSize * vertexFormat * sizeof(float)) {
     _vb.setMaxSize(MAX_VERTEX_BUFFER_SIZE * _vertexFormat * sizeof(float));
     _ib.setMaxSize(INIT_INDEX_BUFFER_SIZE);
-    _vb.setFullCallback([this]
-    {
+    _vb.setFullCallback([this] {
         uploadVB();
         uploadIB();
         _vb.reset();
         _ib.reset();
         next();
     });
-    
+
     auto rIB = new IOTypedArray(se::Object::TypedArrayType::UINT16, _ib.getCapacity());
     _ibArr.push_back(rIB);
-    
+
     auto rVB = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, _vb.getCapacity());
     _vbArr.push_back(rVB);
 }
 
-MeshBuffer::~MeshBuffer()
-{
+MeshBuffer::~MeshBuffer() {
     auto num = _vbArr.size();
-    for (auto i = 0; i < num; i++)
-    {
+    for (auto i = 0; i < num; i++) {
         delete _ibArr[i];
         delete _vbArr[i];
     }
@@ -66,44 +59,38 @@ MeshBuffer::~MeshBuffer()
     _vbArr.clear();
 }
 
-void MeshBuffer::uploadVB()
-{
+void MeshBuffer::uploadVB() {
     auto length = _vb.length();
     if (length == 0) return;
 
     auto rVB = _vbArr[_bufferPos];
     rVB->reset();
-    rVB->writeBytes((const char*)_vb.getBuffer(), _vb.length());
+    rVB->writeBytes((const char *)_vb.getBuffer(), _vb.length());
 }
 
-void MeshBuffer::uploadIB()
-{
+void MeshBuffer::uploadIB() {
     auto length = _ib.length();
     if (length == 0) return;
-    
+
     auto rIB = _ibArr[_bufferPos];
-	rIB->reset();
+    rIB->reset();
     rIB->writeBytes((const char *)_ib.getBuffer(), _ib.length());
 }
 
-void MeshBuffer::next()
-{
+void MeshBuffer::next() {
     _bufferPos++;
-    if (_ibArr.size() <= _bufferPos)
-    {
+    if (_ibArr.size() <= _bufferPos) {
         auto rIB = new IOTypedArray(se::Object::TypedArrayType::UINT16, _ib.getCapacity());
         _ibArr.push_back(rIB);
     }
-    
-    if (_vbArr.size() <= _bufferPos)
-    {
+
+    if (_vbArr.size() <= _bufferPos) {
         auto rVB = new IOTypedArray(se::Object::TypedArrayType::FLOAT32, _vb.getCapacity());
         _vbArr.push_back(rVB);
     }
 }
 
-void MeshBuffer::reset()
-{
+void MeshBuffer::reset() {
     _bufferPos = 0;
     _vb.reset();
     _ib.reset();

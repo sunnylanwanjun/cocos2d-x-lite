@@ -35,25 +35,26 @@ namespace spine {
 
 class SkeletonCacheMgr {
 public:
-    static SkeletonCacheMgr* getInstance () {
+    static SkeletonCacheMgr *getInstance() {
         if (_instance == nullptr) {
             _instance = new SkeletonCacheMgr();
         }
         return _instance;
     }
-    
-    static void destroyInstance () {
+
+    static void destroyInstance() {
         if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
     }
-    
-    void removeSkeletonCache (const std::string& uuid);
-    SkeletonCache* buildSkeletonCache (const std::string& uuid);
+
+    void removeSkeletonCache(const std::string &uuid);
+    SkeletonCache *buildSkeletonCache(const std::string &uuid);
+
 private:
-    static SkeletonCacheMgr* _instance;
-    cc::Map<std::string, SkeletonCache*> _caches;
+    static SkeletonCacheMgr *_instance;
+    cc::Map<std::string, SkeletonCache *> _caches;
 };
 
-}
+} // namespace spine

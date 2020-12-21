@@ -22,64 +22,60 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "TypedArrayPool.h"
+#include "MiddlewareMacro.h"
 #include "base/Log.h"
 #include "base/Macros.h"
 #include <functional>
-#include "MiddlewareMacro.h"
 
 #define POOL_DEBUG 0
 
 #if POOL_DEBUG > 0
-#define PoolLog(...) do { fprintf(stdout, __VA_ARGS__); fflush(stdout); } while (false)
+#define PoolLog(...)                  \
+    do {                              \
+        fprintf(stdout, __VA_ARGS__); \
+        fflush(stdout);               \
+    } while (false)
 #else
 #define PoolLog(...)
 #endif
 
 MIDDLEWARE_BEGIN
-    
+
 const static std::size_t maxPoolSize = 50;
 
-TypedArrayPool* TypedArrayPool::_instance = nullptr;
+TypedArrayPool *TypedArrayPool::_instance = nullptr;
 
-TypedArrayPool::TypedArrayPool()
-{
-    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypedArrayPool::afterCleanupHandle,this));
+TypedArrayPool::TypedArrayPool() {
+    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypedArrayPool::afterCleanupHandle, this));
 }
 
-TypedArrayPool::~TypedArrayPool()
-{
+TypedArrayPool::~TypedArrayPool() {
     clearPool();
 }
 
-void TypedArrayPool::afterCleanupHandle()
-{
+void TypedArrayPool::afterCleanupHandle() {
     this->allowPush = false;
     clearPool();
-    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&TypedArrayPool::afterInitHandle,this));
+    se::ScriptEngine::getInstance()->addAfterInitHook(std::bind(&TypedArrayPool::afterInitHandle, this));
 }
 
-void TypedArrayPool::afterInitHandle()
-{
+void TypedArrayPool::afterInitHandle() {
     this->allowPush = true;
-    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypedArrayPool::afterCleanupHandle,this));
+    se::ScriptEngine::getInstance()->addAfterCleanupHook(std::bind(&TypedArrayPool::afterCleanupHandle, this));
 }
 
-void TypedArrayPool::clearPool()
-{
+void TypedArrayPool::clearPool() {
     PoolLog("*****clearPool TypeArray pool begin");
-    
+
     //map
-    for (auto it = _pool.begin(); it != _pool.end(); it++)
-    {
+    for (auto it = _pool.begin(); it != _pool.end(); it++) {
         //map
-        fitMap& mapPool = *(it->second);
-        for (auto itMapPool = mapPool.begin(); itMapPool != mapPool.end(); itMapPool++)
-        {
+        fitMap &mapPool = *(it->second);
+        for (auto itMapPool = mapPool.begin(); itMapPool != mapPool.end(); itMapPool++) {
             //vector
-            objPool& itFitPool = *(itMapPool->second);
+            objPool &itFitPool = *(itMapPool->second);
             PoolLog("clear arrayType:%d,fitSize:%lu,objSize:%lu\n", it->first, itMapPool->first, itFitPool.size());
-            for (auto itFit = itFitPool.begin(); itFit != itFitPool.end(); itFit++)
-            {
+            for (auto itFit = itFitPool.begin(); itFit != itFitPool.end(); itFit++) {
                 (*itFit)->unroot();
                 (*itFit)->decRef();
             }
@@ -88,39 +84,34 @@ void TypedArrayPool::clearPool()
         delete &mapPool;
     }
     _pool.clear();
-    
+
     PoolLog("*****clearPool TypeArray pool end");
 }
 
-void TypedArrayPool::dump()
-{
+void TypedArrayPool::dump() {
     //map
-    for (auto it = _pool.begin(); it != _pool.end(); it++)
-    {
+    for (auto it = _pool.begin(); it != _pool.end(); it++) {
         //map
-        fitMap& mapPool = *(it->second);
-        for (auto itMapPool = mapPool.begin(); itMapPool != mapPool.end(); itMapPool++)
-        {
+        fitMap &mapPool = *(it->second);
+        for (auto itMapPool = mapPool.begin(); itMapPool != mapPool.end(); itMapPool++) {
             //vector
-            CC_UNUSED objPool& itFitPool = *(itMapPool->second);
+            CC_UNUSED objPool &itFitPool = *(itMapPool->second);
             PoolLog("arrayType:%d,fitSize:%lu,objSize:%lu\n", it->first, itMapPool->first, itFitPool.size());
         }
     }
 }
 
-se::Object* TypedArrayPool::pop(arrayType type, std::size_t size)
-{
+se::Object *TypedArrayPool::pop(arrayType type, std::size_t size) {
     std::size_t fitSize = ceil(size / float(MIN_TYPE_ARRAY_SIZE)) * MIN_TYPE_ARRAY_SIZE;
-    objPool* objPoolPtr = getObjPool(type, fitSize);
-    
-    if (objPoolPtr->size() > 0)
-    {
-        se::Object* obj = objPoolPtr->back();
+    objPool *objPoolPtr = getObjPool(type, fitSize);
+
+    if (objPoolPtr->size() > 0) {
+        se::Object *obj = objPoolPtr->back();
         objPoolPtr->pop_back();
         PoolLog("TypedArrayPool:pop result:success,type:%d,fitSize:%lu,objSize:%lu\n", (int)type, fitSize, objPoolPtr->size());
         return obj;
     }
-    
+
     PoolLog("TypedArrayPool:pop result:empty,type:%d,fitSize:%lu,objSize:%lu\n", (int)type, fitSize, objPoolPtr->size());
     se::AutoHandleScope hs;
     auto typeArray = se::Object::createTypedArray(type, nullptr, fitSize);
@@ -128,63 +119,51 @@ se::Object* TypedArrayPool::pop(arrayType type, std::size_t size)
     return typeArray;
 }
 
-TypedArrayPool::objPool* TypedArrayPool::getObjPool(arrayType type, std::size_t fitSize)
-{
+TypedArrayPool::objPool *TypedArrayPool::getObjPool(arrayType type, std::size_t fitSize) {
     auto it = _pool.find(type);
-    fitMap* fitMapPtr = nullptr;
-    if (it == _pool.end())
-    {
+    fitMap *fitMapPtr = nullptr;
+    if (it == _pool.end()) {
         fitMapPtr = new fitMap();
         _pool[type] = fitMapPtr;
-    }
-    else
-    {
+    } else {
         fitMapPtr = it->second;
     }
-    
+
     auto itPool = fitMapPtr->find(fitSize);
-    objPool* objPoolPtr = nullptr;
-    if (itPool == fitMapPtr->end())
-    {
+    objPool *objPoolPtr = nullptr;
+    if (itPool == fitMapPtr->end()) {
         objPoolPtr = new objPool();
         (*fitMapPtr)[fitSize] = objPoolPtr;
-    }
-    else
-    {
+    } else {
         objPoolPtr = itPool->second;
     }
-    
+
     return objPoolPtr;
 }
 
-void TypedArrayPool::push(arrayType type, std::size_t arrayCapacity, se::Object* object)
-{
+void TypedArrayPool::push(arrayType type, std::size_t arrayCapacity, se::Object *object) {
     if (object == nullptr) return;
-    
+
     // If script engine is cleaning,delete object directly
-    if (!allowPush)
-    {
+    if (!allowPush) {
         object->unroot();
         object->decRef();
         object = nullptr;
         PoolLog("TypedArrayPool:push result:not allow,type:%d,arrayCapacity:%lu\n", (int)type, arrayCapacity);
         return;
     }
-    
-    objPool* objPoolPtr = getObjPool(type, arrayCapacity);
+
+    objPool *objPoolPtr = getObjPool(type, arrayCapacity);
     auto it = std::find(objPoolPtr->begin(), objPoolPtr->end(), object);
-    if (it != objPoolPtr->end())
-    {
+    if (it != objPoolPtr->end()) {
         PoolLog("TypedArrayPool:push result:repeat\n");
         return;
     }
-    
-    if (objPoolPtr->size() < maxPoolSize)
-    {
+
+    if (objPoolPtr->size() < maxPoolSize) {
         objPoolPtr->push_back(object);
         PoolLog("TypedArrayPool:push result:success,type:%d,arrayCapacity:%lu,objSize:%lu\n", (int)type, arrayCapacity, objPoolPtr->size());
-    }
-    else{
+    } else {
         object->unroot();
         object->decRef();
         object = nullptr;

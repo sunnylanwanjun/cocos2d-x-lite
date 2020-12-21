@@ -25,16 +25,13 @@
 
 MIDDLEWARE_BEGIN
 
-void IOBuffer::resize (std::size_t newLen, bool needCopy)
-{
-    if (_bufferSize < newLen)
-    {
-        uint8_t* newBuffer = new uint8_t[newLen];
-        if (needCopy)
-        {
+void IOBuffer::resize(std::size_t newLen, bool needCopy) {
+    if (_bufferSize < newLen) {
+        uint8_t *newBuffer = new uint8_t[newLen];
+        if (needCopy) {
             memcpy(newBuffer, _buffer, _bufferSize);
         }
-        
+
         delete[] _buffer;
         _buffer = newBuffer;
         _bufferSize = newLen;

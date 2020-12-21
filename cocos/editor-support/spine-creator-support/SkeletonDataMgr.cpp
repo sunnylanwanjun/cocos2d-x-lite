@@ -64,19 +64,19 @@ public:
 
 } // namespace spine
 
-SkeletonDataMgr* SkeletonDataMgr::_instance = nullptr;
+SkeletonDataMgr *SkeletonDataMgr::_instance = nullptr;
 
-bool SkeletonDataMgr::hasSkeletonData (const std::string& uuid) {
+bool SkeletonDataMgr::hasSkeletonData(const std::string &uuid) {
     auto it = _dataMap.find(uuid);
     return it != _dataMap.end();
 }
 
-void SkeletonDataMgr::setSkeletonData (const std::string& uuid, SkeletonData* data, Atlas* atlas, AttachmentLoader* attachmentLoader, const std::vector<int>& texturesIndex) {
+void SkeletonDataMgr::setSkeletonData(const std::string &uuid, SkeletonData *data, Atlas *atlas, AttachmentLoader *attachmentLoader, const std::vector<int> &texturesIndex) {
     auto it = _dataMap.find(uuid);
     if (it != _dataMap.end()) {
         releaseByUUID(uuid);
     }
-    SkeletonDataInfo* info = new SkeletonDataInfo();
+    SkeletonDataInfo *info = new SkeletonDataInfo();
     info->data = data;
     info->atlas = atlas;
     info->attachmentLoader = attachmentLoader;
@@ -84,7 +84,7 @@ void SkeletonDataMgr::setSkeletonData (const std::string& uuid, SkeletonData* da
     _dataMap[uuid] = info;
 }
 
-SkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid) {
+SkeletonData *SkeletonDataMgr::retainByUUID(const std::string &uuid) {
     auto dataIt = _dataMap.find(uuid);
     if (dataIt == _dataMap.end()) {
         return nullptr;
@@ -93,17 +93,17 @@ SkeletonData* SkeletonDataMgr::retainByUUID (const std::string& uuid) {
     return dataIt->second->data;
 }
 
-void SkeletonDataMgr::releaseByUUID (const std::string& uuid) {
+void SkeletonDataMgr::releaseByUUID(const std::string &uuid) {
     auto dataIt = _dataMap.find(uuid);
     if (dataIt == _dataMap.end()) {
         return;
     }
-    SkeletonDataInfo* info = dataIt->second;
+    SkeletonDataInfo *info = dataIt->second;
     // If info reference count is 1, then info will be destroy.
     if (info->getReferenceCount() == 1) {
         _dataMap.erase(dataIt);
         if (_destroyCallback) {
-            auto& texturesIndex = info->texturesIndex;
+            auto &texturesIndex = info->texturesIndex;
             for (auto it = texturesIndex.begin(); it != texturesIndex.end(); it++) {
                 _destroyCallback(*it);
             }

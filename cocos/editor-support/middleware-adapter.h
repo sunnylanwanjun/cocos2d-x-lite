@@ -34,7 +34,7 @@ MIDDLEWARE_BEGIN
 struct Color4B {
     Color4B(uint32_t _r, uint32_t _g, uint32_t _b, uint32_t _a);
     Color4B();
-	bool operator==(const Color4B &right) const;
+    bool operator==(const Color4B &right) const;
     bool operator!=(const Color4B &right) const;
 
     uint32_t r = 0;
@@ -42,7 +42,7 @@ struct Color4B {
     uint32_t b = 0;
     uint32_t a = 0;
 
-	static const Color4B WHITE;
+    static const Color4B WHITE;
 };
 
 struct Color4F {
@@ -56,7 +56,7 @@ struct Color4F {
     float b = 0.0f;
     float a = 0.0f;
 
-	static const Color4F WHITE;
+    static const Color4F WHITE;
 };
 
 /**

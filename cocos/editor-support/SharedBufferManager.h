@@ -33,33 +33,31 @@ class SharedBufferManager {
 public:
     SharedBufferManager(se::Object::TypedArrayType arrayType);
     virtual ~SharedBufferManager();
-    
-    void reset ()
-    {
+
+    void reset() {
         _buffer->reset();
     }
 
-    IOTypedArray* getBuffer()
-    {
+    IOTypedArray *getBuffer() {
         return _buffer;
     }
 
     typedef std::function<void()> resizeCallback;
-    void setResizeCallback(resizeCallback callback)
-    {
+    void setResizeCallback(resizeCallback callback) {
         _resizeCallback = callback;
     }
 
-    se_object_ptr getSharedBuffer() const
-    {
+    se_object_ptr getSharedBuffer() const {
         return _buffer->getTypeArray();
     }
+
 private:
     void init();
     void afterCleanupHandle();
+
 private:
-	se::Object::TypedArrayType _arrayType;
-    IOTypedArray* _buffer = nullptr;
+    se::Object::TypedArrayType _arrayType;
+    IOTypedArray *_buffer = nullptr;
     resizeCallback _resizeCallback = nullptr;
 };
 

@@ -32,10 +32,10 @@
 #include "SharedBufferManager.h"
 #include "SkeletonDataMgr.h"
 #include "base/TypeDef.h"
-#include "math/Math.h"
 #include "base/memory/Memory.h"
-#include "core/gfx/GFXDef.h"
+#include "math/Math.h"
 #include "math/Vec3.h"
+#include "core/gfx/GFXDef.h"
 #include "spine-creator-support/AttachmentVertices.h"
 #include "spine-creator-support/spine-cocos2dx.h"
 #include <algorithm>
@@ -283,13 +283,13 @@ void SkeletonRenderer::render(float deltaTime) {
     auto renderInfo = renderMgr->getBuffer();
     if (!renderInfo) return;
 
-	auto attachMgr = mgr->getAttachInfoMgr();
+    auto attachMgr = mgr->getAttachInfoMgr();
     auto attachInfo = attachMgr->getBuffer();
-	if (!attachInfo) return;
+    if (!attachInfo) return;
 
     //  store render info offset
     _sharedBufferOffset->writeUint32((uint32_t)renderInfo->getCurPos() / sizeof(uint32_t));
-	// store attach info offset
+    // store attach info offset
     _sharedBufferOffset->writeUint32((uint32_t)attachInfo->getCurPos() / sizeof(uint32_t));
 
     // check enough space
@@ -325,14 +325,14 @@ void SkeletonRenderer::render(float deltaTime) {
     // verex size in floats with two color
     int vs2 = vbs2 / sizeof(float);
 
-	auto vbs = vbs1;
+    auto vbs = vbs1;
     if (_useTint) {
         vbs = vbs2;
     }
 
     auto paramsBuffer = _paramsBuffer->getBuffer();
-	// data store in buffer which 0 to 3 is render order, left data is node world matrix
-	const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[4];
+    // data store in buffer which 0 to 3 is render order, left data is node world matrix
+    const cc::Mat4 &nodeWorldMat = *(cc::Mat4 *)&paramsBuffer[4];
 
     int vbSize = 0;
     int ibSize = 0;
@@ -639,13 +639,13 @@ void SkeletonRenderer::render(float deltaTime) {
                 float *verts = _clipper->getClippedVertices().buffer();
                 float *uvs = _clipper->getClippedUVs().buffer();
 
-				Color light;
-				Color dark;
-				light.r = color.r / 255.0f;
-				light.g = color.g / 255.0f;
-				light.b = color.b / 255.0f;
-				light.a = color.a / 255.0f;
-				dark.r = dark.g = dark.b = dark.a = 0;
+                Color light;
+                Color dark;
+                light.r = color.r / 255.0f;
+                light.g = color.g / 255.0f;
+                light.b = color.b / 255.0f;
+                light.a = color.a / 255.0f;
+                dark.r = dark.g = dark.b = dark.a = 0;
 
                 if (effect) {
                     for (int v = 0, vn = triangles.vertCount, vv = 0; v < vn; ++v, vv += 2) {
@@ -678,11 +678,11 @@ void SkeletonRenderer::render(float deltaTime) {
                 // No cliping logic
             } else {
 
-				Color light;
-				light.r = color.r / 255.0f;
-				light.g = color.g / 255.0f;
-				light.b = color.b / 255.0f;
-				light.a = color.a / 255.0f;
+                Color light;
+                light.r = color.r / 255.0f;
+                light.g = color.g / 255.0f;
+                light.b = color.b / 255.0f;
+                light.a = color.a / 255.0f;
 
                 if (effect) {
                     Color dark;
@@ -731,16 +731,16 @@ void SkeletonRenderer::render(float deltaTime) {
                 float *verts = _clipper->getClippedVertices().buffer();
                 float *uvs = _clipper->getClippedUVs().buffer();
 
-				Color light;
-				Color dark;
-				light.r = color.r / 255.0f;
-				light.g = color.g / 255.0f;
-				light.b = color.b / 255.0f;
-				light.a = color.a / 255.0f;
-				dark.r = darkColor.r / 255.0f;
-				dark.g = darkColor.g / 255.0f;
-				dark.b = darkColor.b / 255.0f;
-				dark.a = darkColor.a / 255.0f;
+                Color light;
+                Color dark;
+                light.r = color.r / 255.0f;
+                light.g = color.g / 255.0f;
+                light.b = color.b / 255.0f;
+                light.a = color.a / 255.0f;
+                dark.r = darkColor.r / 255.0f;
+                dark.g = darkColor.g / 255.0f;
+                dark.b = darkColor.b / 255.0f;
+                dark.a = darkColor.a / 255.0f;
 
                 if (effect) {
                     for (int v = 0, vn = trianglesTwoColor.vertCount, vv = 0; v < vn; ++v, vv += 2) {
@@ -779,8 +779,8 @@ void SkeletonRenderer::render(float deltaTime) {
                     }
                 }
             } else {
-			
-				Color light;
+
+                Color light;
                 Color dark;
                 light.r = color.r / 255.0f;
                 light.g = color.g / 255.0f;
@@ -790,7 +790,7 @@ void SkeletonRenderer::render(float deltaTime) {
                 dark.g = darkColor.g / 255.0f;
                 dark.b = darkColor.b / 255.0f;
                 dark.a = darkColor.a / 255.0f;
-			
+
                 if (effect) {
                     for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v) {
                         V2F_T2F_C4F_C4F *vertex = trianglesTwoColor.verts + v;
@@ -836,10 +836,10 @@ void SkeletonRenderer::render(float deltaTime) {
                 cc::Vec3 *point = nullptr;
                 for (int ii = 0, nn = vbSize; ii < nn; ii += vbs) {
                     point = (cc::Vec3 *)(vbBuffer + ii);
-					// force z value to zero
+                    // force z value to zero
                     point->z = 0;
-					point->x = point->x * nodeWorldMat.m[0] + point->y * nodeWorldMat.m[4] + nodeWorldMat.m[12]; // x
-					point->y = point->y * nodeWorldMat.m[1] + point->y * nodeWorldMat.m[5] + nodeWorldMat.m[13]; // y
+                    point->x = point->x * nodeWorldMat.m[0] + point->y * nodeWorldMat.m[4] + nodeWorldMat.m[12]; // x
+                    point->y = point->y * nodeWorldMat.m[1] + point->y * nodeWorldMat.m[5] + nodeWorldMat.m[13]; // y
                 }
             }
 
@@ -868,41 +868,41 @@ void SkeletonRenderer::render(float deltaTime) {
         renderInfo->writeUint32(preISegWritePos, curISegLen);
     }
 
-	if (_useAttach || _debugBones) {
-		auto &bones = _skeleton->getBones();
-		size_t bonesCount = bones.size();
+    if (_useAttach || _debugBones) {
+        auto &bones = _skeleton->getBones();
+        size_t bonesCount = bones.size();
 
-		cc::Mat4 boneMat = cc::Mat4::IDENTITY;
+        cc::Mat4 boneMat = cc::Mat4::IDENTITY;
 
-		if (_debugBones) {
-			_debugBuffer->writeFloat32(DebugType::Bones);
-			_debugBuffer->writeFloat32(bonesCount * 4);
-		}
+        if (_debugBones) {
+            _debugBuffer->writeFloat32(DebugType::Bones);
+            _debugBuffer->writeFloat32(bonesCount * 4);
+        }
 
-		for (size_t i = 0, n = bonesCount; i < n; i++) {
-			Bone *bone = bones[i];
+        for (size_t i = 0, n = bonesCount; i < n; i++) {
+            Bone *bone = bones[i];
 
-			boneMat.m[0] = bone->getA();
-			boneMat.m[1] = bone->getC();
-			boneMat.m[4] = bone->getB();
-			boneMat.m[5] = bone->getD();
-			boneMat.m[12] = bone->getWorldX();
-			boneMat.m[13] = bone->getWorldY();
-			attachInfo->checkSpace(sizeof(boneMat), true);
-			attachInfo->writeBytes((const char*)&boneMat, sizeof(boneMat));
+            boneMat.m[0] = bone->getA();
+            boneMat.m[1] = bone->getC();
+            boneMat.m[4] = bone->getB();
+            boneMat.m[5] = bone->getD();
+            boneMat.m[12] = bone->getWorldX();
+            boneMat.m[13] = bone->getWorldY();
+            attachInfo->checkSpace(sizeof(boneMat), true);
+            attachInfo->writeBytes((const char *)&boneMat, sizeof(boneMat));
 
-			if (_debugBones) {
-				float boneLength = bone->getData().getLength();
-				float x = boneLength * bone->getA() + bone->getWorldX();
-				float y = boneLength * bone->getC() + bone->getWorldY();
-				_debugBuffer->writeFloat32(bone->getWorldX());
-				_debugBuffer->writeFloat32(bone->getWorldY());
-				_debugBuffer->writeFloat32(x);
-				_debugBuffer->writeFloat32(y);
-			}
-		}
-	}
-    
+            if (_debugBones) {
+                float boneLength = bone->getData().getLength();
+                float x = boneLength * bone->getA() + bone->getWorldX();
+                float y = boneLength * bone->getC() + bone->getWorldY();
+                _debugBuffer->writeFloat32(bone->getWorldX());
+                _debugBuffer->writeFloat32(bone->getWorldY());
+                _debugBuffer->writeFloat32(x);
+                _debugBuffer->writeFloat32(y);
+            }
+        }
+    }
+
     // debug end
     if (_debugBuffer) {
         if (_debugBuffer->isOutRange()) {
@@ -955,7 +955,7 @@ void SkeletonRenderer::updateWorldTransform() {
 }
 
 void SkeletonRenderer::setAttachEnabled(bool enabled) {
-	_useAttach = enabled;
+    _useAttach = enabled;
 }
 
 void SkeletonRenderer::setToSetupPose() {
@@ -1067,7 +1067,7 @@ void SkeletonRenderer::setColor(float r, float g, float b, float a) {
 }
 
 void SkeletonRenderer::setBatchEnabled(bool enabled) {
-	// disable switch batch mode, force to enable batch, it may be changed in future version
+    // disable switch batch mode, force to enable batch, it may be changed in future version
     // _batch = enabled;
 }
 

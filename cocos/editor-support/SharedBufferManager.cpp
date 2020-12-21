@@ -27,8 +27,7 @@
 
 MIDDLEWARE_BEGIN
 
-SharedBufferManager::SharedBufferManager(se::Object::TypedArrayType arrayType):
-	_arrayType(arrayType){
+SharedBufferManager::SharedBufferManager(se::Object::TypedArrayType arrayType) : _arrayType(arrayType) {
     init();
 }
 

@@ -23,60 +23,58 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
+#include "MiddlewareMacro.h"
+#include "SeApi.h"
 #include <map>
 #include <vector>
-#include "SeApi.h"
-#include "MiddlewareMacro.h"
 
 MIDDLEWARE_BEGIN
 /** 
  * TypeArray Pool for IOTypedArray
  */
-class TypedArrayPool
-{
+class TypedArrayPool {
 private:
-    static TypedArrayPool* _instance;
+    static TypedArrayPool *_instance;
+
 public:
-    static TypedArrayPool* getInstance()
-    {
-        if (_instance == nullptr)
-        {
+    static TypedArrayPool *getInstance() {
+        if (_instance == nullptr) {
             _instance = new TypedArrayPool();
-            
         }
         return _instance;
     }
-    
-    static void destroyInstance()
-    {
-        if (_instance)
-        {
+
+    static void destroyInstance() {
+        if (_instance) {
             delete _instance;
             _instance = nullptr;
         }
     }
+
 private:
     typedef se::Object::TypedArrayType arrayType;
-    typedef std::vector<se::Object*> objPool;
-    typedef std::map<std::size_t, objPool*> fitMap;
-    typedef std::map<arrayType, fitMap*> typeMap;
-    
-    objPool* getObjPool(arrayType type, std::size_t size);
-    
+    typedef std::vector<se::Object *> objPool;
+    typedef std::map<std::size_t, objPool *> fitMap;
+    typedef std::map<arrayType, fitMap *> typeMap;
+
+    objPool *getObjPool(arrayType type, std::size_t size);
+
     TypedArrayPool();
     ~TypedArrayPool();
-    
+
     void clearPool();
     /**
      * @brief Print all pool data
      */
     void dump();
-    
+
     void afterCleanupHandle();
     void afterInitHandle();
+
 private:
     typeMap _pool;
     bool allowPush = true;
+
 public:
     /**
      * @brief pop a js TypeArray by given type and size
@@ -84,13 +82,13 @@ public:
      * @param[in] size.
      * @return a js TypeArray Object.
      */
-    se::Object* pop(arrayType type, std::size_t size);
+    se::Object *pop(arrayType type, std::size_t size);
     /**
      * @brief push a TypeArray back to pool.
      * @param[in] type TypeArray type.
      * @param[in] arrayCapacity TypeArray capacity.
      * @param[in] object TypeArray which want to put in pool.
      */
-    void push(arrayType type, std::size_t arrayCapacity, se::Object* object);
+    void push(arrayType type, std::size_t arrayCapacity, se::Object *object);
 };
 MIDDLEWARE_END

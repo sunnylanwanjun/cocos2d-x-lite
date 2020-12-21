@@ -29,19 +29,19 @@
 
 #pragma once
 
-#include "middleware-adapter.h"
 #include "base/Macros.h"
+#include "middleware-adapter.h"
 
-namespace spine{
-    /**
+namespace spine {
+/**
      *  Store attachment vertex and indice list
      */
-    class AttachmentVertices {
-    public:
-        AttachmentVertices (cc::middleware::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
-        virtual ~AttachmentVertices ();
-        
-        cc::middleware::Texture2D* _texture = nullptr;
-        cc::middleware::Triangles* _triangles = nullptr;
-    };
-}
+class AttachmentVertices {
+public:
+    AttachmentVertices(cc::middleware::Texture2D *texture, int verticesCount, unsigned short *triangles, int trianglesCount);
+    virtual ~AttachmentVertices();
+
+    cc::middleware::Texture2D *_texture = nullptr;
+    cc::middleware::Triangles *_triangles = nullptr;
+};
+} // namespace spine
