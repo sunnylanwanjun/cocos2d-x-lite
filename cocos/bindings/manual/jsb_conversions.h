@@ -812,7 +812,7 @@ struct HolderType {
     local_type data;
     type *ptr = nullptr;
 #if HAS_CONSTEXPR
-    constexpr inline type& value()
+	constexpr inline type& value()
 #else
 	constexpr inline type value()
 #endif
@@ -1672,5 +1672,5 @@ template <>
 bool sevalue_to_native(const se::Value &v, spine::Vector<spine::String> *ret, se::Object *);
 
 template <>
-bool seval_to_Map_string_key(const se::Value &v, cc::Map<std::string, cc::middleware::Texture2D*> *ret);
+bool seval_to_Map_string_key(const se::Value &v, cc::Map<std::string, cc::middleware::Texture2D *> *ret);
 #endif

@@ -1280,10 +1280,9 @@ bool sevalue_to_native(const se::Value &v, spine::Vector<spine::String> *ret, se
 }
 
 template <>
-bool nativevalue_to_se(const spine::String &obj, se::Value &val, se::Object *)
-{
+bool nativevalue_to_se(const spine::String &obj, se::Value &val, se::Object *) {
     val.setString(obj.buffer());
-	return true;
+    return true;
 }
 
 template <>
@@ -1308,8 +1307,8 @@ bool nativevalue_to_se(const spine::Vector<spine::String> &v, se::Value &ret, se
 
 template <>
 bool nativevalue_to_se(const se_object_ptr &obj, se::Value &val, se::Object *) {
-    val.setObject(const_cast<se::Object*>(obj));
-	return true;
+    val.setObject(const_cast<se::Object *>(obj));
+    return true;
 }
 
 template <>
