@@ -21,7 +21,7 @@ bool CCMTLBuffer::initialize(const BufferInfo &info) {
     _stride = std::max(info.stride, 1U);
     _count = _size / _stride;
     _flags = info.flags;
-    _indirectDrawSupported = static_cast<CCMTLDevice *>(_device)->isIndirectDrawSupported();
+    _isIndirectDrawSupported = static_cast<CCMTLDevice *>(_device)->isIndirectDrawSupported();
     if (_usage & BufferUsage::INDEX) {
         switch (_stride) {
             case 4: _indexType = MTLIndexTypeUInt32; break;
@@ -47,22 +47,13 @@ bool CCMTLBuffer::initialize(const BufferInfo &info) {
         _usage & BufferUsageBit::INDEX) {
         createMTLBuffer(_size, _memUsage);
     } else if (_usage & BufferUsageBit::INDIRECT) {
-        if (_indirectDrawSupported) {
+        if (_isIndirectDrawSupported) {
             createMTLBuffer(_size, _memUsage);
+            _primitiveIndirectArguments.resize(_count);
+            _indexedPrimitivesIndirectArguments.resize(_count);
         } else {
-            _indirects.resize(_count);
+            _drawInfos.resize(_count);
         }
-    } else if (_usage & BufferUsageBit::TRANSFER_SRC ||
-               _usage & BufferUsageBit::TRANSFER_DST) {
-        _transferBuffer = (uint8_t *)CC_MALLOC(_size);
-        if (!_transferBuffer) {
-            CCASSERT(false, "CCMTLBuffer: failed to create memory for transfer buffer.");
-            return false;
-        }
-        _device->getMemoryStatus().bufferSize += _size;
-    } else {
-        CCASSERT(false, "Unsupported BufferType, create buffer failed.");
-        return false;
     }
 
     return true;
@@ -102,18 +93,14 @@ void CCMTLBuffer::destroy() {
         _mtlBuffer = nil;
     }
 
-    if (_transferBuffer) {
-        CC_FREE(_transferBuffer);
-        _transferBuffer = nullptr;
-        _device->getMemoryStatus().bufferSize -= _size;
-    }
-
     if (_buffer) {
         CC_FREE(_buffer);
         _device->getMemoryStatus().bufferSize -= _size;
         _buffer = nullptr;
     }
-    _indirects.clear();
+    _indexedPrimitivesIndirectArguments.clear();
+    _primitiveIndirectArguments.clear();
+    _drawInfos.clear();
 
     _device->getMemoryStatus().bufferSize -= _size;
 }
@@ -136,13 +123,14 @@ void CCMTLBuffer::resize(uint size) {
     const uint oldSize = _size;
     _size = size;
     _count = _size / _stride;
-    resizeBuffer(&_transferBuffer, _size, oldSize);
     resizeBuffer(&_buffer, _size, oldSize);
     if (_usage & BufferUsageBit::INDIRECT) {
-        if (_indirectDrawSupported) {
+        if (_isIndirectDrawSupported) {
             createMTLBuffer(size, _memUsage);
+            _primitiveIndirectArguments.resize(_count);
+            _indexedPrimitivesIndirectArguments.resize(_count);
         } else {
-            _indirects.resize(_count);
+            _drawInfos.resize(_count);
         }
     }
 }
@@ -177,41 +165,49 @@ void CCMTLBuffer::update(void *buffer, uint offset, uint size) {
         memcpy(_buffer + offset, buffer, size);
 
     if (_usage & BufferUsageBit::INDIRECT) {
-        if (!_indirectDrawSupported) {
-            memcpy(_indirects.data() + offset, buffer, size);
-            return;
-        }
-        auto drawInfoCount = size / _stride;
-        auto *drawInfo = static_cast<DrawInfo *>(buffer);
-        if (drawInfoCount > 0) {
-            if (drawInfo->indexCount) {
-                vector<MTLDrawIndexedPrimitivesIndirectArguments> arguments(drawInfoCount);
-                for (auto &argument : arguments) {
-                    argument.indexCount = drawInfo->indexCount;
-                    argument.instanceCount = drawInfo->instanceCount == 0 ? 1 : drawInfo->instanceCount;
-                    argument.indexStart = drawInfo->firstIndex;
-                    argument.baseVertex = drawInfo->firstVertex;
-                    argument.baseInstance = drawInfo->firstInstance;
-                    drawInfo++;
-                }
-                memcpy((uint8_t *)(_mtlBuffer.contents) + offset, arguments.data(), drawInfoCount * sizeof(MTLDrawIndexedPrimitivesIndirectArguments));
-                _isDrawIndirectByIndex = true;
-            } else {
-                vector<MTLDrawPrimitivesIndirectArguments> arguments(drawInfoCount);
-                for (auto &argument : arguments) {
-                    argument.vertexCount = drawInfo->vertexCount;
-                    argument.instanceCount = drawInfo->instanceCount == 0 ? 1 : drawInfo->instanceCount;
-                    argument.vertexStart = drawInfo->firstVertex;
-                    argument.baseInstance = drawInfo->firstInstance;
-                    drawInfo++;
-                }
-                memcpy((uint8_t *)(_mtlBuffer.contents) + offset, arguments.data(), drawInfoCount * sizeof(MTLDrawPrimitivesIndirectArguments));
-                _isDrawIndirectByIndex = false;
-            }
-        }
-        return;
-    }
+        if (_isIndirectDrawSupported) {
+            uint drawInfoCount = size / _stride;
+            const DrawInfo *drawInfo = static_cast<const DrawInfo *>(buffer);
 
+            if (drawInfoCount > 0) {
+                if (drawInfo->indexCount) {
+                    _isDrawIndirectByIndex = true;
+                    uint stride = sizeof(MTLDrawIndexedPrimitivesIndirectArguments);
+
+                    for (uint i = 0; i < drawInfoCount; ++i) {
+                        auto &arguments = _indexedPrimitivesIndirectArguments[i];
+                        arguments.indexCount = drawInfo->indexCount;
+                        arguments.instanceCount = std::max(drawInfo->instanceCount, 1u);
+                        arguments.indexStart = drawInfo->firstIndex;
+                        arguments.baseVertex = drawInfo->firstVertex;
+                        arguments.baseInstance = drawInfo->firstInstance;
+                        ++drawInfo;
+                    }
+                    updateMTLBuffer(_indexedPrimitivesIndirectArguments.data(), offset, drawInfoCount * stride);
+                } else {
+                    _isDrawIndirectByIndex = false;
+                    uint stride = sizeof(MTLDrawIndexedPrimitivesIndirectArguments);
+
+                    for (uint i = 0; i < drawInfoCount; ++i) {
+                        auto &arguments = _primitiveIndirectArguments[i];
+                        arguments.vertexCount = drawInfo->vertexCount;
+                        arguments.instanceCount = std::max(drawInfo->instanceCount, 1u);
+                        arguments.vertexStart = drawInfo->firstVertex;
+                        arguments.baseInstance = drawInfo->firstInstance;
+                        ++drawInfo;
+                    }
+                    updateMTLBuffer(_primitiveIndirectArguments.data(), offset, drawInfoCount * stride);
+                }
+            }
+        } else {
+            memcpy(_drawInfos.data(), buffer, size);
+        }
+    } else {
+        updateMTLBuffer(buffer, offset, size);
+    }
+}
+
+void CCMTLBuffer::updateMTLBuffer(void *buffer, uint offset, uint size) {
     if (_mtlBuffer) {
         CommandBuffer *cmdBuffer = _device->getCommandBuffer();
         cmdBuffer->begin();
@@ -220,12 +216,6 @@ void CCMTLBuffer::update(void *buffer, uint offset, uint size) {
         if (_mtlResourceOptions == MTLResourceStorageModeManaged)
             [_mtlBuffer didModifyRange:NSMakeRange(0, _size)]; // Synchronize the managed buffer.
 #endif
-        return;
-    }
-
-    if (_transferBuffer) {
-        memcpy(_transferBuffer + offset, buffer, size);
-        return;
     }
 }
 
