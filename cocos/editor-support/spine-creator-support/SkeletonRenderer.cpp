@@ -917,7 +917,7 @@ void SkeletonRenderer::render(float deltaTime) {
 cc::Rect SkeletonRenderer::getBoundingBox() const {
     static IOBuffer buffer(1024);
     float *worldVertices = nullptr;
-    float minX = FLT_MAX, minY = FLT_MAX, maxX = -FLT_MAX, maxY = -FLT_MAX;
+    float minX = 999999.0f, minY = 999999.0f, maxX = -999999.0f, maxY = -999999.0;
     for (int i = 0; i < _skeleton->getSlots().size(); ++i) {
         Slot *slot = _skeleton->getSlots()[i];
         if (!slot->getAttachment()) continue;
@@ -944,7 +944,7 @@ cc::Rect SkeletonRenderer::getBoundingBox() const {
             maxY = max(maxY, y);
         }
     }
-    if (minX == FLT_MAX) minX = minY = maxX = maxY = 0;
+    if (minX == 999999.0f) minX = minY = maxX = maxY = 0;
     return cc::Rect(minX, minY, maxX - minX, maxY - minY);
 }
 
