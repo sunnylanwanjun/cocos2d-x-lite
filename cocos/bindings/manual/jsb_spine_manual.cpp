@@ -40,7 +40,7 @@
 #include "cocos/bindings/manual/jsb_conversions.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_helper.h"
-#include "cocos/bindings/auto/jsb_cocos2dx_spine_auto.h"
+#include "cocos/bindings/auto/jsb_spine_auto.h"
 
 #include "middleware-adapter.h"
 #include "spine-creator-support/SkeletonDataMgr.h"
