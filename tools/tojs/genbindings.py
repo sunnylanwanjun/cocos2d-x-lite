@@ -157,6 +157,7 @@ def main():
                     'pipeline.ini': ('pipeline', 'jsb_pipeline_auto'),
 					'cocos2dx_spine.ini': ('cocos2dx_spine','jsb_cocos2dx_spine_auto'),
                     'cocos2dx_editor_support.ini': ('cocos2dx_editor_support','jsb_cocos2dx_editor_support_auto')
+                    'dragonbones.ini': ('dragonbones','jsb_dragonbones_auto'),
                     }
         target = 'spidermonkey'
         generator_py = '%s/generator.py' % cxx_generator_root
