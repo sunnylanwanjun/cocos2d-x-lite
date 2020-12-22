@@ -19,6 +19,9 @@ option(USE_DRAGONBONES          "Enable Dragonbones"                ON)
 option(USE_SPINE                "Enable Spine"                      ON)
 option(USE_WEBSOCKET_SERVER     "Enable WebSocket Server"           OFF)
 
+if(NOT USE_DRAGONBONES AND NOT USE_SPINE)
+	set(USE_MIDDLEWARE OFF)
+endif()
 
 if(USE_SE_JSC AND APPLE)
     set(USE_SE_V8 OFF)

@@ -879,6 +879,8 @@ if(USE_MIDDLEWARE)
         cocos_source_files(
             cocos/bindings/auto/jsb_spine_auto.cpp
             cocos/bindings/auto/jsb_spine_auto.h
+			cocos/bindings/manual/jsb_spine_manual.cpp
+            cocos/bindings/manual/jsb_spine_manual.h
         )
     endif()
 endif()
@@ -916,15 +918,6 @@ if(USE_SOCKET)
         cocos/bindings/manual/jsb_websocket.cpp
         cocos/bindings/manual/jsb_websocket.h
     )
-endif()
-
-if(USE_MIDDLEWARE)
-    if(USE_SPINE)
-        cocos_source_files(
-            cocos/bindings/manual/jsb_spine_manual.cpp
-            cocos/bindings/manual/jsb_spine_manual.h
-        )
-    endif()
 endif()
 
 if(NOT IOS AND USE_WEBSOCKET_SERVER)
