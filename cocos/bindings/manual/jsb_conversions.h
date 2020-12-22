@@ -1574,6 +1574,8 @@ bool nativevalue_to_se(const cc::Size& from, se::Value& to, se::Object*);
 template<>
 bool nativevalue_to_se(const cc::extension::ManifestAsset& from, se::Value& to, se::Object*);
 
+template<>
+bool nativevalue_to_se(const cc::Rect& from, se::Value& to, se::Object*);
 
 #if __clang__
 #pragma clang diagnostic pop

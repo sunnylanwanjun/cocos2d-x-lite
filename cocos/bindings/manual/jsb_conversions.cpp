@@ -1248,6 +1248,11 @@ bool nativevalue_to_se(const cc::extension::ManifestAsset& from, se::Value& to, 
     return ManifestAsset_to_seval(from, &to);
 }
 
+template<>
+bool nativevalue_to_se(const cc::Rect& from, se::Value& to, se::Object*) {
+	return Rect_to_seval(from, &to);
+}
+
 #if USE_SPINE
 
 template <>
