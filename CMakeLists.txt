@@ -871,7 +871,7 @@ endif()
 
 if(USE_MIDDLEWARE)
     cocos_source_files(
-		cocos/editor-support/IOBuffer.cpp
+        cocos/editor-support/IOBuffer.cpp
         cocos/editor-support/IOBuffer.h
         cocos/editor-support/IOTypedArray.cpp
         cocos/editor-support/IOTypedArray.h
@@ -892,7 +892,7 @@ if(USE_MIDDLEWARE)
 
     if(USE_SPINE)
         cocos_source_files(
-			cocos/editor-support/spine/Animation.cpp
+            cocos/editor-support/spine/Animation.cpp
             cocos/editor-support/spine/Animation.h
             cocos/editor-support/spine/AnimationState.cpp
             cocos/editor-support/spine/AnimationState.h
@@ -1056,7 +1056,7 @@ if(USE_MIDDLEWARE)
             Cocos/editor-support/spine-creator-support/VertexEffectDelegate.h
             cocos/bindings/auto/jsb_spine_auto.cpp
             cocos/bindings/auto/jsb_spine_auto.h
-			cocos/bindings/manual/jsb_spine_manual.cpp
+            cocos/bindings/manual/jsb_spine_manual.cpp
             cocos/bindings/manual/jsb_spine_manual.h
         )
     endif()
@@ -1351,9 +1351,9 @@ target_compile_definitions(cocos2d PUBLIC
     $<IF:$<BOOL:${USE_WEBSOCKET_SERVER}>,USE_WEBSOCKET_SERVER=1,USE_WEBSOCKET_SERVER=0>
     $<IF:$<BOOL:${USE_EDIT_BOX}>,CC_USE_EDITBOX=1,CC_USE_EDITBOX=0>
     $<IF:$<BOOL:${USE_V8_DEBUGGER}>,USE_V8_DEBUGGER=1,USE_V8_DEBUGGER=0>
-	$<IF:$<BOOL:${USE_MIDDLEWARE}>,USE_MIDDLEWARE=1,USE_MIDDLEWARE=0>
-	$<IF:$<BOOL:${USE_SPINE}>,USE_SPINE=1,USE_SPINE=0>
-	$<IF:$<BOOL:${USE_DRAGONBONES}>,USE_DRAGONBONES=1,USE_DRAGONBONES=0>
+    $<IF:$<BOOL:${USE_MIDDLEWARE}>,USE_MIDDLEWARE=1,USE_MIDDLEWARE=0>
+    $<IF:$<BOOL:${USE_SPINE}>,USE_SPINE=1,USE_SPINE=0>
+    $<IF:$<BOOL:${USE_DRAGONBONES}>,USE_DRAGONBONES=1,USE_DRAGONBONES=0>
     $<$<BOOL:${USE_SE_JSC}>:SCRIPT_ENGINE_TYPE=3>
     $<$<CONFIG:Debug>:CC_DEBUG=1>
 )

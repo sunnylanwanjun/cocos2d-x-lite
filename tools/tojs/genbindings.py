@@ -155,7 +155,7 @@ def main():
                     'metal.ini': ('metal', 'jsb_mtl_auto'),
                     'vulkan.ini': ('vulkan', 'jsb_vk_auto'),
                     'pipeline.ini': ('pipeline', 'jsb_pipeline_auto'),
-					'spine.ini': ('spine','jsb_spine_auto'),
+                    'spine.ini': ('spine','jsb_spine_auto'),
                     'editor_support.ini': ('editor_support','jsb_editor_support_auto')
                     }
         target = 'spidermonkey'
