@@ -1036,24 +1036,24 @@ if(USE_MIDDLEWARE)
             cocos/editor-support/spine/VertexEffect.cpp
             cocos/editor-support/spine/VertexEffect.h
             cocos/editor-support/spine/Vertices.h
-            Cocos/editor-support/spine-creator-support/AttachmentVertices.cpp
-            Cocos/editor-support/spine-creator-support/AttachmentVertices.h
-            Cocos/editor-support/spine-creator-support/SkeletonAnimation.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonAnimation.h
-            Cocos/editor-support/spine-creator-support/SkeletonCache.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonCache.h
-            Cocos/editor-support/spine-creator-support/SkeletonCacheAnimation.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonCacheAnimation.h
-            Cocos/editor-support/spine-creator-support/SkeletonCacheMgr.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonCacheMgr.h
-            Cocos/editor-support/spine-creator-support/SkeletonDataMgr.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonDataMgr.h
-            Cocos/editor-support/spine-creator-support/SkeletonRenderer.cpp
-            Cocos/editor-support/spine-creator-support/SkeletonRenderer.h
-            Cocos/editor-support/spine-creator-support/spine-cocos2dx.cpp
-            Cocos/editor-support/spine-creator-support/spine-cocos2dx.h
-            Cocos/editor-support/spine-creator-support/VertexEffectDelegate.cpp
-            Cocos/editor-support/spine-creator-support/VertexEffectDelegate.h
+            cocos/editor-support/spine-creator-support/AttachmentVertices.cpp
+            cocos/editor-support/spine-creator-support/AttachmentVertices.h
+            cocos/editor-support/spine-creator-support/SkeletonAnimation.cpp
+            cocos/editor-support/spine-creator-support/SkeletonAnimation.h
+            cocos/editor-support/spine-creator-support/SkeletonCache.cpp
+            cocos/editor-support/spine-creator-support/SkeletonCache.h
+            cocos/editor-support/spine-creator-support/SkeletonCacheAnimation.cpp
+            cocos/editor-support/spine-creator-support/SkeletonCacheAnimation.h
+            cocos/editor-support/spine-creator-support/SkeletonCacheMgr.cpp
+            cocos/editor-support/spine-creator-support/SkeletonCacheMgr.h
+            cocos/editor-support/spine-creator-support/SkeletonDataMgr.cpp
+            cocos/editor-support/spine-creator-support/SkeletonDataMgr.h
+            cocos/editor-support/spine-creator-support/SkeletonRenderer.cpp
+            cocos/editor-support/spine-creator-support/SkeletonRenderer.h
+            cocos/editor-support/spine-creator-support/spine-cocos2dx.cpp
+            cocos/editor-support/spine-creator-support/spine-cocos2dx.h
+            cocos/editor-support/spine-creator-support/VertexEffectDelegate.cpp
+            cocos/editor-support/spine-creator-support/VertexEffectDelegate.h
             cocos/bindings/auto/jsb_spine_auto.cpp
             cocos/bindings/auto/jsb_spine_auto.h
             cocos/bindings/manual/jsb_spine_manual.cpp
